@@ -1,0 +1,27 @@
+ol, ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* Definition Lists */
+dl {
+	overflow: hidden;
+	margin: 0 0 $space;
+}
+
+dt {
+	float: left;
+	clear: left;
+	font-weight: bold;
+	margin-right: 0.3em;
+	
+	&:after {
+		content: ": ";
+	}
+}
+
+dd {
+	float: left;
+	margin: 0;
+}

@@ -1,0 +1,44 @@
+.tags {
+	margin-bottom: $space-half;
+}
+
+.page-title .tags {
+	@media all and (min-width: $bp-xl) {
+		display: none;
+	}
+}
+
+.tag {
+	font-family: Tahoma, Verdana, Segoe, sans-serif;
+	font-weight: bold;
+	@include font-size($font-size-sm, small);
+	line-height: 1;
+	display: inline-block;
+	background: $gray-dark;
+	color: $white;
+	padding: 0.5rem;
+	margin-right: $space-half;
+	position: relative;	
+
+	&:after {
+		content: "";
+	   position: absolute;
+	   top: 100%;
+	   left: 50%;
+	   display: inline-block;
+	   margin-left: -5px;
+	   border-top: 5px solid $gray-dark;
+	   border-top-color: $gray-dark; 
+	   border-left: 5px solid transparent;
+	   border-right: 5px solid transparent; 
+	}
+	
+	&:hover {
+		background: $gray;
+		color: $white;
+
+		&:after {
+			border-top-color: $gray;
+		}
+	}
+}

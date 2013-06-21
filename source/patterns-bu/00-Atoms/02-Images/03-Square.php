@@ -1,0 +1,1 @@
+<img src="<?php echo $absolutePath; ?>images/fpo_square.png" alt="Image" />

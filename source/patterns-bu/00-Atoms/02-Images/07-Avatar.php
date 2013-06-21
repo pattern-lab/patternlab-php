@@ -1,0 +1,1 @@
+<img src="<?php echo $absolutePath; ?>images/avatar-writer.png" alt="EW" />

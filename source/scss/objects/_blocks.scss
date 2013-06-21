@@ -1,0 +1,141 @@
+/* Generic Placeholder Brick: REMOVE FOR PRODUCTION */
+.brick {
+	background: #dcdddc;
+	padding: $pad-double;
+	text-align: center;
+	font-weight: bold;
+	border-bottom: 1px solid $gray-light-2;
+}
+
+/* Block */
+.block {
+	overflow: hidden;
+
+	.headline {
+		margin: 0;
+		@include font-size($font-size-norm,medium);
+	}
+
+	p:last-child {
+		margin-bottom: 0;
+	}
+}
+
+/* Hero Block */
+.block-hero {
+	.b-thumb {
+		img {
+			display: block;
+		}
+	}
+
+	.headline {
+		padding: $pad-half;
+	}
+}
+
+/* Block Thumbnail with Headline */
+.block-thumb {
+	display: table;
+	width: 100%;
+	border-collapse: collapse;
+
+	.b-inner {
+		display: table-row;
+  		overflow: hidden;
+	}
+
+	.b-thumb {
+		display: table-cell;
+  		vertical-align: middle;
+  		width: 30%;
+  		max-width: 10em;
+
+ 		img {
+ 			display: block;
+			  width: 100%;
+			  height: auto;
+ 		}
+	}
+
+	.b-text {
+		display: table-cell;
+		vertical-align: middle;
+		width: 70%;
+		padding: 0 $pad-half;
+	}
+}
+
+/* Block Small Thumbnail with Headline */
+.block-thumb-small {
+	.b-thumb {
+		width: 20%;
+		max-width: 6em;
+	}
+
+	.b-text {
+		width: 80%;
+	}
+}
+
+
+/* Headline-only block */
+.block-headline {
+	a {
+		display: block;
+		padding: $pad-half;
+	}
+
+	.headline, .byline {
+		display: inline;
+	}
+}
+
+/* Block Headline Summary */
+.block-headline-summary {
+	a {
+		display: block;
+		padding: $pad-half;
+	}
+}
+
+/* Block Inset */
+.block-inset {
+	position: relative;
+
+	.b-thumb {
+		position: relative;
+		z-index: 0;
+
+		img {
+			display: block;
+		}
+	}
+
+	.b-text {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		background: $dim;
+		color: $white;
+		padding: $pad-half;
+	}
+}
+
+/* Block Thumb with Summary */
+.block-thumb-summary {
+	.b-thumb {
+		float: left;
+		width: 50%;
+	}
+
+	.b-text {
+		margin-left: 50%;
+		padding: $pad-half;
+	}
+}
+
+
+ 
+

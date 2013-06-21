@@ -1,0 +1,38 @@
+{
+	"atoms": {
+		"images": {
+			"landscape-4x3": {
+				"src": "/images/fpo_landscape.png",
+				"alt": "4x3 Image"
+			},
+			"landscape-16x9": {
+				"src": "/images/fpo-landscape-16x9.png",
+				"alt": "16x9 Image"
+			},
+			"logo": {
+				"href": "#",
+				"src": "/images/logo.png",
+				"alt": "Logo for a Company"
+			},
+			"square": {
+				"src": "/images/fpo_square.png",
+				"alt": "Square Thumbnail"
+			}
+		},
+		"text": {
+			"h1": "Heading Level 1",
+			"h2": "Heading Level 2",
+			"h3": "Heading Level 3",
+			"h4": "Heading Level 4",
+			"h5": "Heading Level 5",
+			"h6": "Heading Level 6",
+			"paragraph": "A paragraph (from the Greek paragraphos, 'to write beside' or 'written beside') is a self-contained unit of a discourse in writing dealing with a particular point or idea. A paragraph consists of one or more sentences. The start of a paragraph is indicated by beginning on a new line.",
+			"blockquotep": "A block quotation (also known as a long quotation or extract) is a quotation in a written document, that is set off from the main text as a paragraph, or block of text, and typically distinguished visually using indentation and a different typeface or smaller size quotation.",
+			"address": "Address Name<br />1234 Main St.<br />Anywhere, US 101010"
+		}
+	},
+	"landscape-4x3": {
+		"src": "/images/fpo_landscape.png",
+		"alt": "4x3 Image"
+	}
+}

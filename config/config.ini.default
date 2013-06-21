@@ -1,0 +1,23 @@
+/*
+ * Configuration Options for Pattern Lab
+ * If config.ini doesn't exist Pattern Lab will try to create a new version
+ */
+
+// both the source and the public location of the patterns
+sp = "/../../source/patterns/";
+pp = "/../../public/patterns/";
+
+// permissions for files created by PatternLab
+dp = 0775;
+fp = 0664;
+
+// directories/files to ignore when iterating over the patterns directory. separate by commas
+if = ".,..,.DS_Store,d-wrapper";
+
+// files to watch updates, second var is for where they go. separate by commas
+wf = "/scss/style.css"
+mf = "/css/style.css"
+
+// choose which ports the websocket services should run on
+contentSyncPort  = "8002"
+navSyncPort      = "8003"

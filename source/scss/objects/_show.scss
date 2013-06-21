@@ -1,0 +1,18 @@
+.show-index .block-inset .block-title {
+	position: relative;
+	background-color: $gray-dark;
+	@media all and (min-width: $bp-large) {
+		background-color: $dim;
+		position: absolute;
+		bottom: 0.3em;
+	}
+}
+
+.show-index .block h2 {
+	margin-top: $pad-half;
+}
+
+.show-index .block-title h2 {
+	margin-top: 0em;
+	padding: $pad-quarter;
+}

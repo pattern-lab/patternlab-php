@@ -1,0 +1,51 @@
+/* Headings */
+/*Further Reading: http:/csswizardry.com/2012/02/pragmatic-practical-font-sizing-in-css/ */
+h1, .alpha   { 
+	@include font-size(2.4375, xx-large);
+}
+
+h2, .beta    { 
+	font-family: $font-secondary;
+	@include font-size(1.2, x-large);
+	line-height: 1.3;
+	margin: 0 0 $space-quarter;
+	
+	@media all and (min-width: $bp-med) {
+		@include font-size($font-size-large, x-large);
+		margin-bottom: $space;
+	}
+}
+
+h3, .gamma   { 
+	margin: 0 0 $space-quarter;
+	font-family: $font-secondary;
+	line-height: 1.3;
+	@include font-size(1, large);
+}
+
+h4, .delta   {
+	margin: 0 0 $space-quarter;
+	font-family: $font-secondary;
+	@include font-size(1, large);
+	line-height: 1.2;
+}
+
+h5, .epsilon { 
+	margin: 0 0 $space-quarter;
+	font-family: $font-secondary;
+	@include font-size(1, normal);
+}
+
+h6, .zeta    { 
+	margin: 0 0 $space-quarter;
+	font-family: $font-secondary;
+@include font-size(1.1, x-large);
+}
+
+hgroup {
+	margin-bottom: $space;
+}
+
+hgroup h1, hgroup h2, hgroup h3 {
+	margin: 0;
+}

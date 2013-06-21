@@ -1,0 +1,13 @@
+/*------------------------------------*\
+    $NAVIGATION
+\*------------------------------------*/
+
+.nav {
+	clear: both;
+	overflow: hidden;
+	max-height: 0;
+
+	&.active {
+		max-height: 40em;
+	}
+}

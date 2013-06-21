@@ -1,0 +1,378 @@
+/*------------------------------------*\
+    $STYLE GUIDE CONTAINER STYLES
+\*------------------------------------*/
+/**
+ * NOTE: These styles are specific to the style guide container and should not be modified. 
+ * Use style.scss for all content styles that don't pertain to the style guide container.
+ * 
+ * Second note: Any important declarations are to prevent brand styles from overriding style guide 
+ */
+/*------------------------------------*\
+    $CONTENTS
+\*------------------------------------*/
+/**
+ * STYLE GUIDE VARIABLES------------------Declarations of Sass variables 
+ * -----Font
+ * -----Colors
+ * -----Typography
+ * -----Defaults
+ * -----Breakpoints
+ * MIXINS---------------------------------Sass mixins 
+ * RESET----------------------------------Set reset defaults
+ * GLOBAL ELEMENTS------------------------Establish global styles
+ * -----Main
+ * -----Headings
+ * -----Text-related elements (p, blockquote, lists)
+ * -----Defaults
+ * -----Breakpoints
+ * STYLE GUIDE INTERFACE------------------CSS for the Style Guide Container. Should not influence the containing styles at all.
+ * -----Header
+ * -----Navigation
+ * -----Controls
+ * -----Main Container
+ * -----Viewport
+ * -----Section Headers
+ * -----Code View
+ */
+/*------------------------------------*\
+    $STYLE GUIDE VARIABLES 
+\*------------------------------------*/
+/*Fonts*/
+/* Style Guide Interface Colors */
+/* Typography */
+/* Defaults */
+/* Dimensions */
+/* Breakpoints */
+/*------------------------------------*\
+    $STYLE GUIDE MIXINS 
+\*------------------------------------*/
+/*------------------------------------*\
+    $STYLE GUIDE INTERFACE 
+\*------------------------------------*/
+html, body {
+  margin: 0;
+  padding: 0;
+  -webkit-text-size-adjust: 100%; }
+
+@media all and (min-width: 64em) {
+  body:after {
+    content: 'large';
+    display: none; } }
+
+/*------------------------------------*\
+    $STYLE GUIDE HEADER 
+\*------------------------------------*/
+/* Header */
+.sg-header {
+  background: #222222;
+  color: white;
+  font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+  text-transform: uppercase;
+  display: none; }
+  .sg-header * {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box; }
+  .sg-header ul, .sg-header ol {
+    padding: 0;
+    margin: 0; }
+  .sg-header li {
+    list-style: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+  .sg-header a {
+    font-size: 70%;
+    color: gray;
+    text-decoration: none;
+    display: block;
+    line-height: 1;
+    padding: 1em;
+    -webkit-transition: background 0.15s ease-out;
+    -moz-transition: background 0.15s ease-out;
+    -ms-transition: background 0.15s ease-out;
+    -o-transition: background 0.15s ease-out;
+    transition: background 0.15s ease-out;
+    -webkit-transition: color 0.15s ease-out;
+    -moz-transition: color 0.15s ease-out;
+    -ms-transition: color 0.15s ease-out;
+    -o-transition: color 0.15s ease-out;
+    transition: color 0.15s ease-out; }
+    .sg-header a:hover, .sg-header a:focus {
+      color: white;
+      background: rgba(255, 255, 255, 0.05); }
+  @media all and (min-width: 44em) {
+    .sg-header {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      width: 100%;
+      -webkit-transition: left 0.3s ease-out;
+      -moz-transition: left 0.3s ease-out;
+      -ms-transition: left 0.3s ease-out;
+      -o-transition: left 0.3s ease-out;
+      transition: left 0.3s ease-out; } }
+
+/* Navigation */
+.sg-header a.sg-nav-toggle {
+  padding: 1em;
+  position: relative;
+  z-index: 2; }
+  @media all and (min-width: 44em) {
+    .sg-header a.sg-nav-toggle {
+      display: none; } }
+
+@media all and (max-width: 44em) {
+  .sg-nav-container {
+    overflow: hidden;
+    max-height: 0;
+    -webkit-transition: max-height 0.5s ease-out;
+    -moz-transition: max-height 0.5s ease-out;
+    -ms-transition: max-height 0.5s ease-out;
+    -o-transition: max-height 0.5s ease-out;
+    transition: max-height 0.5s ease-out; }
+    .sg-nav-container.active {
+      max-height: 50em; } }
+
+.sg-nav {
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+  @media all and (min-width: 44em) {
+    .sg-nav > li {
+      border-bottom: 0;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      float: left;
+      position: relative; }
+      .sg-nav > li > ol {
+        position: absolute;
+        top: 2em;
+        left: 0; } }
+
+.sg-nav-Pages ol {
+  width: 24em; }
+.sg-nav-Pages li {
+  float: left;
+  width: 50%; }
+
+/* Accordion */
+.sg-acc-handle:after {
+  content: ' +';
+  float: right;
+  font-size: 70%; }
+  @media all and (min-width: 44em) {
+    .sg-acc-handle:after {
+      float: none; } }
+.sg-acc-handle.active {
+  color: white;
+  background: rgba(255, 255, 255, 0.05); }
+  .sg-acc-handle.active:after {
+    content: ' -'; }
+
+.sg-acc-panel {
+  overflow: hidden;
+  max-height: 0;
+  min-width: 10em;
+  background: #222222;
+  -webkit-transition: max-height 0.5s ease-out;
+  -moz-transition: max-height 0.5s ease-out;
+  -ms-transition: max-height 0.5s ease-out;
+  -o-transition: max-height 0.5s ease-out;
+  transition: max-height 0.5s ease-out; }
+  .sg-acc-panel.active {
+    max-height: 50em; }
+
+/* Controls (sizing, view mode) */
+.sg-controls {
+  background: #222222; }
+  .sg-controls .sg-acc-panel.active {
+    max-height: 16em; }
+  @media all and (min-width: 44em) {
+    .sg-controls {
+      border: 0;
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2; } }
+
+.sg-control-trigger {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+  @media all and (min-width: 44em) {
+    .sg-control-trigger {
+      border: 0; } }
+  @media all and (min-width: 64em) {
+    .sg-control-trigger {
+      float: left;
+      width: 6em; } }
+
+@media all and (min-width: 64em) {
+  .sg-control li {
+    float: left;
+    border-bottom: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.05); } }
+@media all and (min-width: 44em) {
+  .sg-control {
+    position: absolute;
+    top: 2em;
+    right: 0; } }
+@media all and (min-width: 64em) {
+  .sg-control {
+    position: static;
+    max-height: none;
+    float: left; } }
+
+@media all and (min-width: 64em) {
+  #sg-size-toggle {
+    display: none; } }
+
+.sg-size li {
+  float: left;
+  width: 25%;
+  text-align: center; }
+  @media all and (min-width: 64em) {
+    .sg-size li {
+      width: auto; } }
+.sg-size .sg-current-size {
+  font-size: 70%;
+  color: gray;
+  padding: 0.95em; }
+.sg-size li.sg-half {
+  width: 50%; }
+  @media all and (min-width: 64em) {
+    .sg-size li.sg-half {
+      width: auto; } }
+.sg-size li.sg-full {
+  width: 100%; }
+  @media all and (min-width: 64em) {
+    .sg-size li.sg-full {
+      width: 7em; } }
+.sg-size li.sg-size-input {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05); }
+.sg-size input {
+  display: block;
+  width: 100%;
+  padding: 0.75em 2em 0.75em 1em;
+  margin: 0;
+  color: #fff;
+  border: 0;
+  background: none;
+  text-transform: uppercase; }
+  .sg-size input:focus {
+    outline: 0;
+    background: rgba(255, 255, 255, 0.05); }
+
+/*------------------------------------*\
+    $STYLE GUIDE MAIN CONTAINER 
+\*------------------------------------*/
+/* Viewport */
+#sg-vp-wrap {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.2);
+  height: 100%;
+  width: 100%; }
+  @media all and (min-width: 44em) {
+    #sg-vp-wrap {
+      position: absolute;
+      top: 2em;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 0;
+      } 
+	#sg-vp-wrap.wrap-animate {
+		-webkit-transition: left 0.3s ease-out;
+	    -moz-transition: left 0.3s ease-out;
+	    -ms-transition: left 0.3s ease-out;
+	    -o-transition: left 0.3s ease-out;
+	    transition: left 0.3s ease-out;
+	}
+}
+
+#sg-viewport {
+  border: 0;
+  x-margin: 0 auto;
+  height: 100%;
+  width: 100%; 
+}
+
+.vp-animate {
+  -webkit-transition: width 0.8s ease-out;
+  -moz-transition: width 0.8s ease-out;
+  -ms-transition: width 0.8s ease-out;
+  -o-transition: width 0.8s ease-out;
+  transition: width 0.8s ease-out;
+}
+
+/* Section Head */
+.sg-head {
+  margin: 2em 0;
+  font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+  font-size: 70%;
+  font-weight: normal;
+  padding: 1em; }
+  .sg-head a {
+    display: block;
+    border-bottom: 1px solid #222222;
+    color: #222;
+    text-decoration: none; }
+    .sg-head a:hover {
+      color: gray;
+      border-bottom-color: gray; }
+
+/* Section Pattern */
+.sg-pattern {
+  margin-bottom: 2em;
+  padding: 0 1em;
+  overflow: hidden; }
+
+/* Section Sub-head */
+.sg-sub a:link {
+  color: gray;
+  border-bottom-color: gray; }
+  .sg-sub a:link:hover {
+    color: #222222;
+    border-bottom-color: #222222; }
+
+/* Clean View */
+.sg-clean .sg-main {
+  padding: 0; }
+
+/* Code View Blocks */
+.sg-code {
+  clear: both;
+  background: #dddddd;
+  color: #222222;
+  padding: 1em;
+  margin-bottom: 1em;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+  white-space: pre-wrap; }
+
+/* Demo to show grid system */
+.demo {
+  overflow: hidden;
+  margin-bottom: 1rem; }
+
+.demo .gi, .demo .demo-block {
+  background: #dddddd;
+  color: gray;
+  text-align: center;
+  margin-bottom: 0.5em;
+  padding: 1em !important; }
+  .demo .gi:nth-of-type(2n), .demo .demo-block:nth-of-type(2n) {
+    color: #dddddd;
+    background: gray; }
+  .demo .gi .gi, .demo .demo-block .gi {
+    background: rgba(0, 0, 0, 0.1);
+    color: #dddddd; }
+    .demo .gi .gi:nth-of-type(2n), .demo .demo-block .gi:nth-of-type(2n) {
+      background: rgba(0, 0, 0, 0.3); }
+
+#navSyncButton.connected, #contentSyncButton.connected {
+	color: #ccc;
+}
+

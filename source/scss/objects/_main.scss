@@ -1,0 +1,9 @@
+/*------------------------------------*\
+    $MAIN CONTENT AREA
+\*------------------------------------*/
+[role=main] {
+	padding: 0;
+	overflow: hidden;
+	@extend .lc;
+	@extend .cf;
+}

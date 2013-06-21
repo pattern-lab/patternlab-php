@@ -1,0 +1,97 @@
+.comments-btn {
+	display: block;
+	margin-bottom: $space;
+	
+	@media all and (min-width: $bp-med) {
+		display: none;
+	}
+}
+
+.comment-form {
+	margin-bottom: $space;
+}
+
+.fyre-stream-content {
+	margin-bottom: $space-double;
+}
+
+.fyre-comment-article {
+	overflow: hidden;
+	position: relative;
+	margin-bottom: $space-half;
+	font-size: 0.9rem;
+
+	&:last-child {
+		.fyre-comment-footer {
+			border-bottom: 0;
+		}
+	}
+}
+
+.fyre-comment-user {
+	float: left;
+	width: $offset-left-1;
+	padding-right: $pad;
+
+	img {
+		border-radius: 10px;
+	}
+}
+.fyre-comment-username {
+	color: $gray;
+	font-size: 1rem;
+}
+
+.fyre-comment-date {
+	position: absolute;
+	top: 0.23rem;
+	right: 0;
+	color: $gray-light-3;
+	font-size: 0.7rem;
+
+	&:hover, &:focus {
+		color: $gray;
+	}
+}	
+
+.fyre-comment-head {
+	margin: 0 0 $space-half $offset-left-1;
+}
+
+.fyre-comment {
+	margin-left: $offset-left-1;
+}
+
+.fyre-comment-footer {
+	margin-left: $offset-left-1;
+	@include font-size($font-size-sm, small);
+	overflow: hidden;
+	padding-bottom: $pad-half;
+	border-bottom: 1px solid $gray-light-2;
+
+	a {
+		color: $gray;
+		font-weight: bold;
+
+		&:hover, &:focus {
+			color: $gray;
+		}
+	}
+}
+
+.fyre-comment-actions {
+	float:left;
+}
+
+.fyre-flag-link {
+	padding: 0 $pad-half;
+}
+
+.fyre-comment-like {
+	float: right;
+}
+
+.fyre-comment-reply {
+	float: right;
+	padding: 0 $pad-half;
+}

@@ -1,0 +1,35 @@
+.header {
+	background: $white;
+	padding: 0;
+	border-bottom: 1px solid #dbdbdb;
+	@extend .lc;
+
+	.search-form {
+		overflow: hidden;
+		max-height: 0;
+
+		&.active {
+			max-height: 8em;
+		}
+	}
+}
+
+.logo {
+	float: left;
+	max-width: 11rem;
+	margin: 0.4rem;
+}
+
+.nav-toggle {
+	float: right;
+	display: block;
+	padding: 0.9rem 1rem 0.7rem;
+	font-size: 1.3rem;
+	line-height: 1;
+	border-left: 1px solid #dbdbdb;
+
+	&.active {
+		background: $gray-dark-2;
+		color: $white;
+	}
+}

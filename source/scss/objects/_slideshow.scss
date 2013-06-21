@@ -1,0 +1,17 @@
+.slideshow {
+	margin-bottom: $space;
+}
+
+.sideshow-nav {
+	overflow: hidden;
+	
+	ul {
+		width: 9999999em;
+	}
+	
+	li {
+		float: left;
+		max-width: 8em;
+		margin-right: $pad-half;
+	}
+}
