@@ -380,7 +380,7 @@ html, body {
   font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
   font-size: 70%;
   font-weight: normal;
-  padding: 1em; }
+  padding: 1em 0; }
   .sg-head a {
     display: block;
     border-bottom: 1px solid #222222;

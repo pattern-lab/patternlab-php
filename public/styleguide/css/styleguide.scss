@@ -540,12 +540,14 @@ html, body {
 	font-family: $sg-font;
 	font-size: $sg-font-size-sm;
 	font-weight: normal;
-	padding: $sg-pad;
+	padding: $sg-pad 0;
+
 	a {
 		display: block;
 		border-bottom: 1px solid $sg-primary;
 		color: #222;
 		text-decoration: none;
+		
 		&:hover {
 			color: $sg-secondary;
 			border-bottom-color: $sg-secondary;
