@@ -251,8 +251,7 @@ button, input[type="submit"] {
   padding: 0.5rem;
   background: #333333;
   border: 1px solid gray;
-  cursor: pointer;
-  text-transform: uppercase; }
+  cursor: pointer; }
 
 input[type="checkbox"],
 input[type="radio"] {
