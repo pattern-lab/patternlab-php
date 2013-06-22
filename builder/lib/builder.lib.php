@@ -212,8 +212,7 @@ class Builder {
 	protected function gatherData() {
 		
 		// gather the data from the main source data.json
-		if (file_exists(__DIR__."/../../
-		source/data/data.json")) {
+		if (file_exists(__DIR__."/../../source/data/data.json")) {
 			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/data/data.json")));
 		}
 		
