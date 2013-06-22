@@ -12,17 +12,18 @@
 <!--Style Guide Main Content-->
 <div class="sg-main" role="main">
 
-<!--Patterns-->
-<div id="patterns">
-	{{# partials }}
-		<div class="sg-pattern">
-			{{{ . }}}
-		</div>
-	{{/ partials }}
-</div> <!--end #patterns-->
-</div><!--End Style Guide Main Content-->
-	<script>
-		parent.postMessage(window.location.href,"http://"+window.location.host);
-	</script>
+	<!--Patterns-->
+	<div id="patterns">
+		{{# partials }}
+			<div class="sg-section">
+				<h2 class="sg-head sg-sub" id="#"><a href="#" class="sg-pop">Pattern Name</a></h2>
+				<div class="sg-pattern">
+					{{{ . }}}
+				</div><!--end .sg-pattern-->
+			</div><!--end .sg-section-->
+		{{/ partials }}
+	</div> <!--end #patterns-->
+	
+</div><!--end .sg-main-->
 </body>
 </html>

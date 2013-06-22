@@ -1,1 +1,0 @@
-<div class="byline">by <a href="#">A Great Author</a></div>

@@ -1,1 +1,0 @@
-<div class="byline">30 seconds ago</div>
