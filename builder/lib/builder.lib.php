@@ -76,9 +76,9 @@ class Builder {
 	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
 	*/
 	private function renderFile($f,$m) {
-		$h  = file_get_contents(__DIR__.$this->sp."d-wrapper/header.html");
+		$h  = file_get_contents(__DIR__.$this->sp."../templates/pattern-header-footer/header.html");
 		$rf = $this->renderPattern($f,$m);
-		$f  = file_get_contents(__DIR__.$this->sp."d-wrapper/footer.html");
+		$f  = file_get_contents(__DIR__.$this->sp."../templates/pattern-header-footer/footer.html");
 		return $h."\n".$rf."\n".$f;
 	}
 	
@@ -212,7 +212,8 @@ class Builder {
 	protected function gatherData() {
 		
 		// gather the data from the main source data.json
-		if (file_exists(__DIR__."/../../source/data/data.json")) {
+		if (file_exists(__DIR__."/../../
+		source/data/data.json")) {
 			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/data/data.json")));
 		}
 		
