@@ -195,7 +195,7 @@
 
 	$sizePx.on('keyup', function(e){
 		var val = Math.floor($(this).val());
-		updateSizeReading(val,'updateEmInput');
+		updateSizeReading(val,'px','updateEmInput');
 	});
 
 	//Em input

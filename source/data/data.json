@@ -2,11 +2,11 @@
 	"atoms": {
 		"images": {
 			"landscape-4x3": {
-				"src": "/images/fpo_landscape.png",
+				"src": "/images/fpo_4x3.png",
 				"alt": "4x3 Image"
 			},
 			"landscape-16x9": {
-				"src": "/images/fpo-landscape-16x9.png",
+				"src": "/images/fpo_16x9.png",
 				"alt": "16x9 Image"
 			},
 			"logo": {
