@@ -1,0 +1,15 @@
+<section class="comments section">
+	<div class="comments-container" id="comments-container">
+		<h2 class="section-title">59 Comments</h2>
+		<?php inc('molecule','comment-form'); ?>
+		{{> m-forms-comment-form }} 
+		<div class="comment-list">
+			{{> m-components-single-comment }} 
+			{{> m-components-single-comment }} 
+			{{> m-components-single-comment }} 
+			{{> m-components-single-comment }} 
+			{{> m-components-single-comment }} 
+		</div>
+	</div>
+	{{> m-navigation-pagination }} 
+</section>
