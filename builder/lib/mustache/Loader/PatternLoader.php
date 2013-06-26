@@ -115,8 +115,7 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
     {
         $fileName = $this->baseDir . '/' . $name;
         if (substr($fileName, 0 - strlen($this->extension)) !== $this->extension) {
-            preg_match('/\/(([amotp])\-([A-z0-9]{1,})\-([A-z0-9-]{1,}))$/',$fileName,$matches);
-            $fileName .= "/".$matches[1].$this->extension;
+            $fileName .= $this->extension;
         }
         return $fileName;
     }
