@@ -23,6 +23,7 @@ class Builder {
 	protected $websocketAddress; // for populating the websockets template partial
 	protected $contentSyncPort; // for populating the websockets template partial
 	protected $navSyncPort; // for populating the websockets template partial
+	protected $patternTypes; // a list of pattern types that match the directory structure
 	
 	/**
 	* When initializing the Builder class or the sub-classes make sure the base properties are configured
@@ -44,10 +45,13 @@ class Builder {
 		// populate some standard variables out of the config
 		foreach ($config as $key => $value) {
 			
-			// if the variables are array-like make sure the properties are validated/trimmed before saving
-			if (($key == "if") || ($key == "wf") || ($key == "mf")) {
+			// if the variables are array-like make sure the properties are validated/trimmed/lowercased before saving
+			if (($key == "if") || ($key == "wf") || ($key == "mf") || ($key == "patternTypes")) {
 				$values = explode(",",$value);
 				array_walk($values,'Builder::trim');
+				if ($key == "patternTypes") {
+					array_walk($values,'Builder::strtolower');
+				}
 				$this->$key = $values;
 			} else {
 				$this->$key = $value;
@@ -104,20 +108,25 @@ class Builder {
 		$m = $this->mustacheInstance();
 		
 		// scan the pattern source directory
-		foreach(glob(__DIR__.$this->sp."*/*.mustache") as $filename) {
+		foreach ($this->patternTypes as $patternType) {
 			
-			// render the file
-			$entry = $this->getEntry($filename,"m");
-			$r = $this->renderFile($entry."/".$entry.".mustache",$m);
-			
-			// if the pattern directory doesn't exist create it
-			if (!is_dir(__DIR__.$this->pp.$entry)) {
-				mkdir(__DIR__.$this->pp.$entry);
-				//chmod($this->pp.$entry,$this->dp);
-				file_put_contents(__DIR__.$this->pp.$entry."/pattern.html",$r);
-				//chmod($this->pp.$entry."/pattern.html",$this->fp);
-			} else {
-				file_put_contents(__DIR__.$this->pp.$entry."/pattern.html",$r);
+			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
+				
+				// render the file
+				$entry = $this->getEntry($filename,"m");
+				$r = $this->renderFile($entry.".mustache",$m);
+				
+				// if the pattern directory doesn't exist create it
+				$entry = str_replace("/","-",$entry);
+				if (!is_dir(__DIR__.$this->pp.$entry)) {
+					mkdir(__DIR__.$this->pp.$entry);
+					//chmod($this->pp.$entry,$this->dp);
+					file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
+					//chmod($this->pp.$entry."/pattern.html",$this->fp);
+				} else {
+					file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
+				}
+				
 			}
 			
 		}
@@ -219,16 +228,14 @@ class Builder {
 		// this makes link a reserved word but oh well...
 		$this->d->link = new stdClass();
 		
-		// gather data from pattern/data.json
-		foreach(glob(__DIR__.$this->sp."*/data.json") as $filename) {
+		// add the link names
+		foreach ($this->patternTypes as $patternType) {
 			
-			$entry = $this->getEntry($filename,"j");
-			$this->d->link->$entry = "/patterns/".$entry."/pattern.html";
-			
-			if (file_exists(__DIR__.$this->sp.$entry."/data.json")) {
-				$d = new stdClass();
-				$d->$entry = json_decode(file_get_contents(__DIR__.$this->sp.$entry."/data.json"));
-				$this->d = (object) array_merge((array) $this->d, (array) $d);
+			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
+				
+				$entry = $this->getEntry($filename,"m");
+				$this->d->link->$entry = "/patterns/".str_replace("/","-",$entry).".html";
+				
 			}
 			
 		}
@@ -348,17 +355,21 @@ class Builder {
 		$p = array("partials" => array());
 		
 		// scan the pattern source directory
-		foreach(glob(__DIR__.$this->sp."*/*.mustache") as $filename) {
+		foreach($this->patternTypes as $patternType) {
 			
-			$entry = $this->getEntry($filename,"m");
-			
-			// make sure 'pages' get ignored. templates will have to be added to the ignore as well
-			if ($entry[0] != "p") {
+			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
 				
-				if (file_exists(__DIR__."/".$this->sp.$entry."/".$entry.".mustache")) {
+				$entry = $this->getEntry($filename,"m");
+				
+				// make sure 'pages' get ignored. templates will have to be added to the ignore as well
+				if ($entry[0] != "p") {
 					
-					// render the partial and stick it in the array
-					$p["partials"][] = $this->renderPattern($entry."/".$entry.".mustache",$m);
+					if (file_exists(__DIR__."/".$this->sp.$entry.".mustache")) {
+						
+						// render the partial and stick it in the array
+						$p["partials"][] = $this->renderPattern($entry.".mustache",$m);
+						
+					}
 					
 				}
 				
@@ -382,18 +393,22 @@ class Builder {
 		$p = array("partials" => array());
 		
 		// scan the pattern source directory
-		foreach(glob(__DIR__.$this->sp."*/*.mustache") as $filename) {
+		foreach($this->patternTypes as $patternType) {
 			
-			$entry = $this->getEntry($filename,"m");
+			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
 			
-			// decide which files in the source directory might need to be ignored
-			if (($entry[0] != "p") && strstr($entry,$pathMatch)) {
-				if (file_exists(__DIR__."/".$this->sp.$entry."/".$entry.".mustache")) {
+				$entry = $this->getEntry($filename,"m");
+			
+				// decide which files in the source directory might need to be ignored
+				if (($entry[0] != "p") && strstr($entry,$pathMatch)) {
+					if (file_exists(__DIR__."/".$this->sp.$entry.".mustache")) {
 					
-					// render the partial and stick it in the array
-					$p["partials"][] = $this->renderPattern($entry."/".$entry.".mustache",$m);
+						// render the partial and stick it in the array
+						$p["partials"][] = $this->renderPattern($entry.".mustache",$m);
 					
+					}
 				}
+			
 			}
 			
 		}
@@ -410,10 +425,29 @@ class Builder {
 	* @return {String}       the directory for the pattern
 	*/
 	protected function getEntry($filepath,$type) {
-		$file = ($type == 'm') ? '(.*)\.mustache' : 'data\.json';
-		if (preg_match('/\/(([amotp])\-([A-z0-9]{1,})\-([A-z0-9-]{1,}))\/'.$file.'$/',$filepath,$matches)) {
+		$file = ($type == 'm') ? '\.mustache' : 'data\.json';
+		if (preg_match('/\/('.$this->getPatternTypesRegex().'\/([A-z0-9-]{1,})\/([A-z0-9-]{1,}))'.$file.'$/',$filepath,$matches)) {
 			return $matches[1];
 		}
+	}
+	
+	/**
+	* Get the directory for a given pattern by parsing the file path
+	*
+	* @return {String}       the final regex made up of pattern names
+	*/
+	protected function getPatternTypesRegex() {
+		
+		$i = 0;
+		$regex = "(";
+		foreach($this->patternTypes as $patternType) {
+			$regex .= ($i != 0) ? "|".$patternType : $patternType;
+			$i++;
+		}
+		$regex .= ")";
+		
+		return $regex;
+		
 	}
 	
 	/**
@@ -450,6 +484,16 @@ class Builder {
 	*/
 	public function trim(&$v) {
 		$v = trim($v);
+	}
+	
+	/**
+	* Lowercase the given string. Used in the array_walk() function in __construct as a sanity check
+	* @param  {String}       an entry from one of the list-based config entries
+	*
+	* @return {String}       lowercased version of the given $v var
+	*/
+	public function strtolower(&$v) {
+		$v = strtolower($v);
 	}
 
 }
