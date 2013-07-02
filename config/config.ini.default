@@ -21,6 +21,3 @@ mf = "/css/style.css"
 // choose which ports the websocket services should run on
 contentSyncPort  = "8002"
 navSyncPort      = "8003"
-
-// the pattern types
-patternTypes = "atoms,molecules,organisms,templates,pages"
