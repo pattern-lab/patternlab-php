@@ -29,6 +29,7 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
     private $baseDir;
     private $extension = '.mustache';
     private $templates = array();
+    private $patternPaths = array();
 
     /**
      * Mustache filesystem Loader constructor.
@@ -59,6 +60,10 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
             } else {
                 $this->extension = '.' . ltrim($options['extension'], '.');
             }
+        }
+
+        if (array_key_exists('patternPaths', $options)) {
+            $this->patternPaths = $options['patternPaths'];
         }
     }
 
@@ -113,11 +118,34 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
      */
     protected function getFileName($name)
     {
-        $fileName = $this->baseDir . '/' . $name;
-        if (substr($fileName, 0 - strlen($this->extension)) !== $this->extension) {
-            preg_match('/\/(([amotp])\-([A-z0-9]{1,})\-([A-z0-9-]{1,}))$/',$fileName,$matches);
-            $fileName .= "/".$matches[1].$this->extension;
+        
+        // test to see what kind of path was supplied
+        $posDash  = strpos($name,"-");
+        $posSlash = strpos($name,"/");
+        if (($posSlash === false) && ($posDash !== false)) {
+           list($patternType,$pattern) = explode("-",$name,2);
+           
+           // see if the pattern is an exact match for patternPaths. if not iterate over patternPaths to find a likely match
+           if (isset($this->patternPaths[$patternType][$pattern])) {
+              $fileName = $this->baseDir."/".$this->patternPaths[$patternType][$pattern];
+           } else {
+              foreach($this->patternPaths[$patternType] as $patternMatchKey=>$patternMatchValue) {
+                  $pos = strpos($patternMatchKey,$pattern);
+                  if ($pos !== false) {
+                      $fileName = $this->baseDir."/".$patternMatchValue;
+                      break;
+                  }
+              }
+           }
+        
+        } else {
+           $fileName = $this->baseDir."/".$name;
         }
+        
+        if (substr($fileName, 0 - strlen($this->extension)) !== $this->extension) {
+            $fileName .= $this->extension;
+        }
+        
         return $fileName;
     }
 }

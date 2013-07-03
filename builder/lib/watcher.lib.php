@@ -37,86 +37,85 @@ class Watcher extends Builder {
 		$m = false;          // does the index page need to be regenerated?
 		$o = new stdClass(); // create an object to hold the properties
 		
+		$patternTypesRegex = $this->getPatternTypesRegex(); // get the pattern types part of the regex. should only need to be fetched once
+		
 		// run forever
 		while (true) {
 			
-			// generate all of the patterns
-			$entries = scandir(__DIR__.$this->sp);
-			
-			foreach($entries as $entry) {
+			foreach ($this->patternTypes as $patternType) {
 				
-				if (!in_array($entry,$this->if)) {
+				// generate all of the patterns
+				$entries = glob(__DIR__.$this->sp.$patternType."/*/*.mustache");
+				
+				foreach($entries as $entry) {
 					
-					// figure out how to watch for new directories and new files
-					if (!isset($o->$entry)) {
-						$o->$entry = new stdClass();
-						$k = true;
-					}
-					
-					// figure out the md5 hash of a file so we can track changes
-					// runs well on a solid state drive. no idea if it thrashes regular disks
-					$ph = $this->md5File(__DIR__.$this->sp.$entry."/".$entry.".mustache");
-					$dh = $this->md5File(__DIR__.$this->sp.$entry."/data.json");
-					
-					// if the directory wasn't being checked already add the md5 sums
-					if ($k) {
+					if (!in_array($entry,$this->if)) {
 						
-						$o->$entry->ph = $ph;
-						$o->$entry->dh = $dh;
-						
-						// if we're through the first check make sure to note any new directories being added to Pattern Lab
-						// assuming a pattern actually exists
-						if ($c && ($o->$entry->ph != '')) {
-							print $entry."/".$entry.".mustache added to Pattern Lab...\n";
-							$t = true;
-							$m = true;
+						// figure out how to watch for new directories and new files
+						if (!isset($o->$entry)) {
+							$o->$entry = new stdClass();
+							$k = true;
 						}
 						
-						$k = false;
+						// figure out the md5 hash of a file so we can track changes
+						// runs well on a solid state drive. no idea if it thrashes regular disks
+						$ph = $this->md5File($entry);
 						
-					} else {
-						
-						if ($o->$entry->ph != $ph) {
+						// if the directory wasn't being checked already add the md5 sums
+						if ($k) {
 							
-							if ($c && ($o->$entry->ph == '')) {
-								print $entry."/".$entry.".mustache added to Pattern Lab...\n";
-								$m = true;
-							} else {
-								print $entry."/".$entry.".mustache changed...\n";
-							}
-							
-							$t = true;
 							$o->$entry->ph = $ph;
 							
+							// if we're through the first check make sure to note any new directories being added to Pattern Lab
+							// assuming a pattern actually exists
+							if ($c && ($o->$entry->ph != '')) {
+								preg_match('/\/('.$patternTypesRegex.'\/([A-z0-9-]{1,})\/([A-z0-9-]{1,})\.mustache)/',$entry,$matches);
+								print $matches[1]." added to Pattern Lab...\n";
+								$t = true;
+								$m = true;
+							}
+							
+							$k = false;
+							
+						} else {
+							
+							if ($o->$entry->ph != $ph) {
+								
+								preg_match('/\/('.$patternTypesRegex.'\/([A-z0-9-]{1,})\/([A-z0-9-]{1,})\.mustache)/',$entry,$matches);
+								if ($c && ($o->$entry->ph == '')) {
+									print $matches[1]." added to Pattern Lab...\n";
+									$m = true;
+								} else {
+									print $matches[1]." changed...\n";
+								}
+								
+								$t = true;
+								$o->$entry->ph = $ph;
+								
+							}
+							
 						}
 						
-						if ($o->$entry->dh != $dh) {
-							$t = true;
-							$o->$entry->dh = $dh;
-							print $entry."/data.json changed...\n";
+						// if a file has been added or changed then render & move the *entire* project (shakes fist at partials)
+						// if a new directory was added regenerate the main pages
+						// also update the change time so that content sync will work properly
+						if ($t) {
+							$this->gatherData();
+							$this->renderAndMove();
+							$this->generateViewAllPages();
+							$this->updateChangeTime();
+							if ($m) {
+								$this->generateMainPages();
+								$m = false;
+							}
+							$t = false;
 						}
 						
-					}
-					
-					// if a file has been added or changed then render & move the *entire* project (shakes fist at partials)
-					// if a new directory was added regenerate the main pages
-					// also update the change time so that content sync will work properly
-					if ($t) {
-						$this->gatherData();
-						$this->renderAndMove();
-						$this->generateViewAllPages();
-						$this->updateChangeTime();
-						if ($m) {
-							$this->generateMainPages();
-							$m = false;
-						}
-						$t = false;
 					}
 					
 				}
-				
 			}
-			
+				
 			// check the user-supplied watch files (e.g. css)
 			$i = 0;
 			foreach($this->wf as $wf) {
@@ -127,7 +126,7 @@ class Watcher extends Builder {
 				
 				// md5 hash the user-supplied filenames, if it's changed just move the single file
 				// update the change time so that content sync will work properly
-				$fh = $this->md5File(__DIR__."/../../../source".$wf);
+				$fh = $this->md5File(__DIR__."/../../source".$wf);
 				if (!isset($o->$wf->fh)) {
 					$o->$wf->fh = $fh;
 				} else {
@@ -159,6 +158,7 @@ class Watcher extends Builder {
 			}
 			
 			$c = true;
+			
 		}
 		
 	}
