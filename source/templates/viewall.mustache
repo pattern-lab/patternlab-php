@@ -15,12 +15,10 @@
 	<!--Patterns-->
 	<div id="patterns">
 		{{# partials }}
-			<div class="sg-section">
-				<h2 class="sg-head sg-sub" id="#"><a href="#" class="sg-pop">Pattern Name</a></h2>
-				<div class="sg-pattern">
-					{{{ . }}}
-				</div><!--end .sg-pattern-->
-			</div><!--end .sg-section-->
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="/patterns/{{ patternLink }}">{{ patternName }}</a></h2>
+				{{{ patternPartial }}}
+			</div>
 		{{/ partials }}
 	</div> <!--end #patterns-->
 	

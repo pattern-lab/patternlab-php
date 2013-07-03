@@ -296,8 +296,7 @@ class Builder {
 						// get the bits for a pattern and check to see if the first bit is a number
 						$patternClean = substr($pattern,strlen(__DIR__.$this->sp.$patternType."/".$dirClean."/"));
 						$patternClean = str_replace(".mustache","",$patternClean);
-						$patternBits  = explode("-",$patternClean);
-						$patternFinal = (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? str_replace("-"," ",$patternBits[1]) : str_replace("-"," ",$patternClean);
+						$patternFinal = $this->getPatternName($patternClean);
 						
 						// add a new pattern
 						$b["buckets"][$bi]["navItems"][$ni]["navSubItems"][] = array("patternPath" => $patternType."-".$dirClean."-".$patternClean."/".$patternType."-".$dirClean."-".$patternClean.".html",
@@ -380,8 +379,14 @@ class Builder {
 					
 					if (file_exists(__DIR__."/".$this->sp.$entry.".mustache")) {
 						
+						$patternParts = explode("/",$entry);
+						$patternName = $this->getPatternName($patternParts[2]);
+						
+						$patternLink    = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
+						$patternPartial = $this->renderPattern($entry.".mustache",$m);
+						
 						// render the partial and stick it in the array
-						$p["partials"][] = $this->renderPattern($entry.".mustache",$m);
+						$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
 						
 					}
 					
@@ -415,9 +420,15 @@ class Builder {
 				$entry = $this->getEntry($filename,"m");
 				
 				if (file_exists(__DIR__."/".$this->sp.$entry.".mustache")) {
-				
+					
+					$patternParts = explode("/",$entry);
+					$patternName = $this->getPatternName($patternParts[2]);
+					
+					$patternLink    = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
+					$patternPartial = $this->renderPattern($entry.".mustache",$m);
+					
 					// render the partial and stick it in the array
-					$p["partials"][] = $this->renderPattern($entry.".mustache",$m);
+					$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
 				
 				}
 				
@@ -441,6 +452,17 @@ class Builder {
 		if (preg_match('/\/('.$this->patternTypesRegex.'\/([A-z0-9-]{1,})\/([A-z0-9-]{1,}))'.$file.'$/',$filepath,$matches)) {
 			return $matches[1];
 		}
+	}
+	
+	/**
+	* Get the name for a given pattern
+	* @param  {String}       the pattern based on the filesystem name
+	*
+	* @return {String}       a lower-cased version of the pattern name
+	*/
+	protected function getPatternName($pattern) {
+		$patternBits  = explode("-",$pattern,2);
+		return (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? str_replace("-"," ",$patternBits[1]) : str_replace("-"," ",$pattern);
 	}
 	
 	/**
