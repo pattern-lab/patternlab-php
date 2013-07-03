@@ -15,7 +15,7 @@ fp = 0664;
 if = ".,..,.DS_Store,d-wrapper";
 
 // files to watch updates, second var is for where they go. separate by commas
-wf = "/scss/style.css"
+wf = "/css/style.css"
 mf = "/css/style.css"
 
 // choose which ports the websocket services should run on
