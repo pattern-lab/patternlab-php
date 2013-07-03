@@ -174,15 +174,4 @@ class Watcher extends Builder {
 		return $r;
 	}
 	
-	/**
-	* Copies a file from the given source path to the given public path
-	* @param  {String}       the source pattern name
-	* @param  {String}       the public pattern name
-	*
-	* @return {String}       copied file
-	*/
-	private function moveFile($s,$p) {
-		copy(__DIR__."/../../source".$s,__DIR__."/../../public".$p);
-	}
-	
 }

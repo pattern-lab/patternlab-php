@@ -502,6 +502,22 @@ class Builder {
 	}
 	
 	/**
+	* Copies a file from the given source path to the given public path
+	* @param  {String}       the source pattern name
+	* @param  {String}       the public pattern name
+	*
+	* @return {String}       copied file
+	*
+	* BUG: should probably check to see if the destination dir exists
+	*/
+	protected function moveFile($s,$p) {
+		if (file_exists(__DIR__."/../../source".$s)) {
+			copy(__DIR__."/../../source".$s,__DIR__."/../../public".$p);
+		}
+	}
+	
+	
+	/**
 	* Print out the data var. For debugging purposes
 	*
 	* @return {String}       the formatted version of the d object
