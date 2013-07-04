@@ -307,7 +307,7 @@ class Builder {
 				}
 				
 				// add a view all for the section
-				if (isset($b["buckets"][$bi]["navItems"][$ni]["navSubItems"])) {
+				if (($patternType != 'pages') && ($patternType != 'templates') && isset($b["buckets"][$bi]["navItems"][$ni]["navSubItems"])) {
 					$subItemsCount = count($b["buckets"][$bi]["navItems"][$ni]["navSubItems"]);
 					$b["buckets"][$bi]["navItems"][$ni]["navSubItems"][$subItemsCount] = array("patternPath" => $patternType."-".$dirClean."/index.html", "patternName" => "View All");
 				}
@@ -375,7 +375,7 @@ class Builder {
 				$entry = $this->getEntry($filename,"m");
 				
 				// make sure 'pages' get ignored. templates will have to be added to the ignore as well
-				if ($entry[0] != "p") {
+				if (($entry[0] != "p") || ($entry[0] == 't')) {
 					
 					if (file_exists(__DIR__."/".$this->sp.$entry.".mustache")) {
 						
@@ -413,7 +413,7 @@ class Builder {
 		// scan the pattern source directory
 		list($patternType,$patternSubType) = explode("-",$pathMatch);
 			
-		if ($patternType != 'pages') {
+		if (($patternType != 'pages') && ($patternType != 'templates')) {
 			
 			foreach(glob(__DIR__.$this->sp.$patternType."/".$patternSubType."/*.mustache") as $filename) {
 				
