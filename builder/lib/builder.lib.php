@@ -502,9 +502,10 @@ class Builder {
 	}
 	
 	/**
-	* Copies a file from the given source path to the given public path
-	* @param  {String}       the source pattern name
-	* @param  {String}       the public pattern name
+	* Copies a watch file from the given source path to the given public path.
+	* NOT for patterns. Is defined in config.ini and is for special files
+	* @param  {String}       the source watch file
+	* @param  {String}       the public watch file
 	*
 	* @return {String}       copied file
 	*
