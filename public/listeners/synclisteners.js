@@ -51,7 +51,7 @@ function connectNavSync() {
 			var vpLocation  = document.getElementById('sg-viewport').contentWindow.location.href;
 			var mLocation   = "http://"+window.location.host+event.data;
 			if (vpLocation != mLocation) {
-				$sgViewport.attr('src',mLocation);
+				$("#sg-viewport").attr('src',mLocation);
 			}
 		}
 		
@@ -101,7 +101,7 @@ function connectContentSync() {
 		// when receiving a message from WebSocket reload the current frame adding the received timestamp
 		// as a request var to, hopefully, bust caches... cachi(?)
 		wsc.onmessage = function (event) {
-			$sgViewport.attr('src',$sgViewport.attr('src')+'?'+event.data);
+			$("#sg-viewport").attr('src',$("#sg-viewport").attr('src')+'?'+event.data);
 		}
 		
 		// when there's an error update the pattern lab nav bar
