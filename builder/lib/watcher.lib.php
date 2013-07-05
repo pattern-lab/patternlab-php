@@ -50,7 +50,7 @@ class Watcher extends Builder {
 				
 				foreach($entries as $entry) {
 					
-					$patternParts = explode("/",$this->getEntry($entry,"m"));
+					$patternParts = explode("/",$this->getEntry($entry));
 					
 					// because we're globbing i need to check again to see if the pattern should be ignored
 					if ($patternParts[2][0] != "_") {
@@ -73,7 +73,7 @@ class Watcher extends Builder {
 							// if we're through the first check make sure to note any new directories being added to Pattern Lab
 							// assuming a pattern actually exists
 							if ($c && ($o->$entry->ph != '')) {
-								$patternName = $this->getEntry($entry,"m");
+								$patternName = $this->getEntry($entry);
 								print $patternName." added to Pattern Lab...\n";
 								$t = true;
 								$m = true;
@@ -85,7 +85,7 @@ class Watcher extends Builder {
 							
 							if ($o->$entry->ph != $ph) {
 								
-								$patternName = $this->getEntry($entry,"m");
+								$patternName = $this->getEntry($entry);
 								if ($c && ($o->$entry->ph == '')) {
 									print $patternName." added to Pattern Lab...\n";
 									$m = true;

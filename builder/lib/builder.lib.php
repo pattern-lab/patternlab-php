@@ -349,7 +349,7 @@ class Builder {
 				$patternBits = explode("-",$matches[1],2);
 				$pattern = (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? $patternBits[1] : $matches[1]; // if the first bit of a
 				if ($pattern[0] != "_") {
-					$patternTypePaths[$pattern] = $this->getEntry($filename,"m");
+					$patternTypePaths[$pattern] = $this->getEntry($filename);
 				}
 			}
 			$this->patternPaths[$patternType] = $patternTypePaths;
@@ -415,7 +415,7 @@ class Builder {
 			
 			foreach(glob(__DIR__.$this->sp.$patternType."/".$patternSubType."/*.mustache") as $filename) {
 				
-				$entry = $this->getEntry($filename,"m");
+				$entry = $this->getEntry($filename);
 				
 				if (file_exists(__DIR__."/".$this->sp.$entry.".mustache")) {
 					
@@ -448,7 +448,7 @@ class Builder {
 	*
 	* @return {String}       the directory for the pattern
 	*/
-	protected function getEntry($filepath,$type) {
+	protected function getEntry($filepath,$type = "m") {
 		$file = ($type == 'm') ? '\.mustache' : 'data\.json';
 		if (preg_match('/\/('.$this->patternTypesRegex.'\/([A-z0-9-]{1,})\/([A-z0-9-]{1,}))'.$file.'$/',$filepath,$matches)) {
 			return $matches[1];
@@ -456,7 +456,7 @@ class Builder {
 	}
 	
 	/**
-	* Get the name for a given pattern
+	* Get the space-delimited, english-looking name for a given pattern
 	* @param  {String}       the pattern based on the filesystem name
 	*
 	* @return {String}       a lower-cased version of the pattern name
