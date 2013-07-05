@@ -238,10 +238,10 @@ class Builder {
 		$this->d->link = new stdClass();
 		
 		// add the link names
-		foreach($this->patternPaths as $patternType) {
+		foreach($this->patternPaths as $patternTypeName => $patterns) {
 			
-			foreach($patternType as $pattern => $entry) {
-				$patternName = $patternType."-".$pattern;
+			foreach($patterns as $pattern => $entry) {
+				$patternName = $patternTypeName."-".$pattern;
 				$entry = str_replace("/","-",$entry);
 				$this->d->link->$patternName = "/patterns/".$entry."/".$entry.".html";
 			}
