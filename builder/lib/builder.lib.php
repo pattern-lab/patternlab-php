@@ -142,7 +142,6 @@ class Builder {
 				} else {
 					file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
 				}
-					
 				
 			}
 			
