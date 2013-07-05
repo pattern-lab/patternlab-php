@@ -367,23 +367,22 @@ class Builder {
 		$m = $this->mustachePatternLoaderInstance();
 		$p = array("partials" => array());
 		
-		// scan the pattern source directory
+		// loop through pattern paths
 		foreach($this->patternPaths as $patternType) {
 			
 			foreach($patternType as $pattern => $entry) {
 				
-				// make sure 'pages' get ignored. templates will have to be added to the ignore as well
-				if (($entry[0] != "p") || ($entry[0] == 't')) {
+				// make sure that pages & templates don't get added to the styleguide
+				if (($entry[0] != "p") && ($entry[0] != 't')) {
 					
+					// double-check the file exists
 					if (file_exists(__DIR__."/".$this->sp.$entry.".mustache")) {
 						
+						// create the pattern name & link, render the partial, and stick it all into the pattern array
 						$patternParts = explode("/",$entry);
 						$patternName = $this->getPatternName($patternParts[2]);
-						
 						$patternLink    = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
 						$patternPartial = $this->renderPattern($entry.".mustache",$m);
-						
-						// render the partial and stick it in the array
 						$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
 						
 					}
