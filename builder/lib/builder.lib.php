@@ -171,7 +171,6 @@ class Builder {
 		$f = $this->mustacheFileSystemLoaderInstance();
 		$r = $f->render('index',$nd);
 		file_put_contents(__DIR__."/../../public/index.html",$r);
-		
 		$s = $f->render('styleguide',$sd);
 		file_put_contents(__DIR__."/../../public/styleguide.html",$s);
 		
