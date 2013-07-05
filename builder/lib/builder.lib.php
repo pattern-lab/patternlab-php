@@ -64,10 +64,6 @@ class Builder {
 		// get nav items
 		$this->gatherNavItems();
 		
-		// instantiate mustache loaders
-		$this->mustachePatternLoaderInstance();
-		$this->mustacheFileSystemLoaderInstance();
-		
 	}
 	
 	/**
@@ -126,6 +122,9 @@ class Builder {
 	*/
 	protected function renderAndMove() {
 		
+		// make sure $this->mpl is refreshed on each render & move. for some reason the mustache instance dies
+		$this->mustachePatternLoaderInstance();
+		
 		// scan the pattern source directory
 		foreach($this->patternPaths as $patternType) {
 			
@@ -158,6 +157,9 @@ class Builder {
 	*/
 	protected function generateMainPages() {
 		
+		// make sure $this->mfs is refreshed on each generation of view all. for some reason the mustache instance dies
+		$this->mustacheFileSystemLoaderInstance();
+		
 		// render out the main pages and move them to public
 		$nd = $this->gatherNavItems();
 		$nd['contentsyncport'] = $this->contentSyncPort;
@@ -186,6 +188,9 @@ class Builder {
 		
 		// silly to do this again but makes sense in light of the fact that watcher needs to use this function too
 		$nd = $this->gatherNavItems();
+		
+		// make sure $this->mfs is refreshed on each generation of view all. for some reason the mustache instance dies
+		$this->mustacheFileSystemLoaderInstance();
 		
 		// add view all to each list
 		$i = 0; $k = 0;
@@ -363,6 +368,9 @@ class Builder {
 	*/
 	protected function gatherPartials() {
 		
+		// make sure $this->mpl is refreshed on each render & move. for some reason the mustache instance dies
+		$this->mustachePatternLoaderInstance();
+		
 		$p = array("partials" => array());
 		
 		// loop through pattern paths
@@ -401,6 +409,9 @@ class Builder {
 	* @return {Array}        an array of rendered partials that match the given path
 	*/
 	protected function gatherPartialsByMatch($pathMatch) {
+		
+		// make sure $this->mpl is refreshed on each render & move. for some reason the mustache instance dies
+		$this->mustachePatternLoaderInstance();
 		
 		$p = array("partials" => array());
 		
