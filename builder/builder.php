@@ -59,9 +59,9 @@ if (php_sapi_name() == 'cli') {
 		// when in doubt write out the usage
 		print "\n";
 		print "Usage:\n\n";
-		print "  php builder.php -g\n";
+		print "  php ".$_SERVER["PHP_SELF"]." -g\n";
 		print "    Iterates over the 'source' directories & files and generates the entire site a single time.\n\n";
-		print "  php builder.php -w\n";
+		print "  php ".$_SERVER["PHP_SELF"]." -w\n";
 		print "    Generates the site like the -g flag and then watches for changes in the 'source' directories &\n";
 		print "    files. Will re-generate files if they've changed.\n\n";
 		
