@@ -410,26 +410,25 @@ class Builder {
 		
 		// scan the pattern source directory
 		list($patternType,$patternSubType) = explode("-",$pathMatch);
-			
+		
+		// make sure that pages & templates don't get "view all" pages
 		if (($patternType != 'pages') && ($patternType != 'templates')) {
 			
+			// get matches based on pattern type and pattern sub-type
 			foreach(glob(__DIR__.$this->sp.$patternType."/".$patternSubType."/*.mustache") as $filename) {
 				
+				// get the directory match of the pattern
 				$entry = $this->getEntry($filename);
-				
-				if (file_exists(__DIR__."/".$this->sp.$entry.".mustache")) {
 					
-					$patternParts = explode("/",$entry);
-					$patternName = $this->getPatternName($patternParts[2]);
+				// because we're globbing we need to check again to see if the pattern should be ignored
+				$patternParts = explode("/",$entry);
+				if ($patternParts[2][0] != "_") {
 					
-					// because we're globbing i need to check again to see if the pattern should be ignored
-					if ($patternName[0] != "_") {
-						$patternLink    = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
-						$patternPartial = $this->renderPattern($entry.".mustache",$m);
-						
-						// render the partial and stick it in the array
-						$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
-					}
+					// create the pattern name & link, render the partial, and stick it all into the pattern array
+					$patternName     = $this->getPatternName($patternParts[2]);
+					$patternLink     = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
+					$patternPartial  = $this->renderPattern($entry.".mustache",$m);
+					$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
 					
 				}
 				
