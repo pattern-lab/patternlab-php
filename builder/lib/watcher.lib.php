@@ -74,7 +74,7 @@ class Watcher extends Builder {
 							// assuming a pattern actually exists
 							if ($c && ($o->$entry->ph != '')) {
 								$patternName = $this->getEntry($entry);
-								print $patternName." added to Pattern Lab...\n";
+								print $patternName." added to Pattern Lab. You should reload the page to see it in the nav...\n";
 								$t = true;
 								$m = true;
 							}
@@ -87,7 +87,7 @@ class Watcher extends Builder {
 								
 								$patternName = $this->getEntry($entry);
 								if ($c && ($o->$entry->ph == '')) {
-									print $patternName." added to Pattern Lab...\n";
+									print $patternName." added to Pattern Lab. You should reload the page to see it in the nav...\n";
 									$m = true;
 								} else {
 									print $patternName." changed...\n";
