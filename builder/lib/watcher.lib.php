@@ -49,7 +49,10 @@ class Watcher extends Builder {
 				
 				foreach($entries as $entry) {
 					
-					if (!in_array($entry,$this->if)) {
+					$patternParts = explode("/",$this->getEntry($entry,"m"));
+					
+					// because we're globbing i need to check again to see if the pattern should be ignored
+					if ($patternParts[2][0] != "_") {
 						
 						// figure out how to watch for new directories and new files
 						if (!isset($o->$entry)) {

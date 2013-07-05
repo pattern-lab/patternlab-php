@@ -17,7 +17,6 @@ class Builder {
 	protected $pp;                // public patterns dir
 	protected $dp;                // permissions for the public pattern dirs
 	protected $fp;                // permissions for the public pattern files
-	protected $if;                // directories/files to be ignored in source/patterns
 	protected $wf;                // files to be watched to see if they should be moved
 	protected $mf;                // where the files should be moved too
 	protected $websocketAddress;  // for populating the websockets template partial
@@ -49,7 +48,7 @@ class Builder {
 		foreach ($config as $key => $value) {
 			
 			// if the variables are array-like make sure the properties are validated/trimmed/lowercased before saving
-			if (($key == "if") || ($key == "wf") || ($key == "mf")) {
+			if (($key == "wf") || ($key == "mf")) {
 				$values = explode(",",$value);
 				array_walk($values,'Builder::trim');
 				$this->$key = $values;
@@ -242,7 +241,7 @@ class Builder {
 		// add the link names
 		foreach($this->patternPaths as $patternType) {
 			
-			foreach($patternPaths as $pattern => $entry) {
+			foreach($patternType as $pattern => $entry) {
 				$patternName = $patternType."-".$pattern;
 				$entry = str_replace("/","-",$entry);
 				$this->d->link->$patternName = "/patterns/".$entry."/".$entry.".html";
