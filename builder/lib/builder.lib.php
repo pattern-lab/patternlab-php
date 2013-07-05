@@ -408,7 +408,7 @@ class Builder {
 		$m = $this->mustachePatternLoaderInstance();
 		$p = array("partials" => array());
 		
-		// scan the pattern source directory
+		// separate the bits of the given path
 		list($patternType,$patternSubType) = explode("-",$pathMatch);
 		
 		// make sure that pages & templates don't get "view all" pages
