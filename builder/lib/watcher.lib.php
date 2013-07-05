@@ -37,7 +37,8 @@ class Watcher extends Builder {
 		$m = false;          // does the index page need to be regenerated?
 		$o = new stdClass(); // create an object to hold the properties
 		
-		$patternTypesRegex = $this->getPatternTypesRegex(); // get the pattern types part of the regex. should only need to be fetched once
+		// build patternTypesRegex for getEntry
+		$this->getPatternTypesRegex(); 
 		
 		// run forever
 		while (true) {
