@@ -126,30 +126,23 @@ class Builder {
 		$p = $this->mustachePatternLoaderInstance();
 		
 		// scan the pattern source directory
-		foreach ($this->patternTypes as $patternType) {
+		foreach($this->patternPaths as $patternType) {
 			
-			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
+			foreach($patternType as $pattern => $entry) {
 				
-				// render the file
-				$entry = $this->getEntry($filename,"m");
+				$r = $this->renderFile($entry.".mustache",$p);
 				
-				$patternBits = explode("/",$entry);
-				if ($patternBits[2][0] != "_") {
-					
-					$r = $this->renderFile($entry.".mustache",$p);
-					
-					// if the pattern directory doesn't exist create it
-					$entry = str_replace("/","-",$entry);
-					if (!is_dir(__DIR__.$this->pp.$entry)) {
-						mkdir(__DIR__.$this->pp.$entry);
-						//chmod($this->pp.$entry,$this->dp);
-						file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
-						//chmod($this->pp.$entry."/pattern.html",$this->fp);
-					} else {
-						file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
-					}
-					
+				// if the pattern directory doesn't exist create it
+				$entry = str_replace("/","-",$entry);
+				if (!is_dir(__DIR__.$this->pp.$entry)) {
+					mkdir(__DIR__.$this->pp.$entry);
+					//chmod($this->pp.$entry,$this->dp);
+					file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
+					//chmod($this->pp.$entry."/pattern.html",$this->fp);
+				} else {
+					file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
 				}
+					
 				
 			}
 			
@@ -247,13 +240,12 @@ class Builder {
 		$this->d->link = new stdClass();
 		
 		// add the link names
-		foreach ($this->patternTypes as $patternType) {
+		foreach($this->patternPaths as $patternType) {
 			
-			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
-				
-				$entry = $this->getEntry($filename,"m");
-				$this->d->link->$entry = "/patterns/".str_replace("/","-",$entry).".html";
-				
+			foreach($patternPaths as $pattern => $entry) {
+				$patternName = $patternType."-".$pattern;
+				$entry = str_replace("/","-",$entry);
+				$this->d->link->$patternName = "/patterns/".$entry."/".$entry.".html";
 			}
 			
 		}
@@ -357,7 +349,9 @@ class Builder {
 				preg_match('/\/([A-z0-9-_]{1,})\.mustache$/',$filename,$matches);
 				$patternBits = explode("-",$matches[1],2);
 				$pattern = (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? $patternBits[1] : $matches[1]; // if the first bit of a
-				$patternTypePaths[$pattern] = $this->getEntry($filename,"m");
+				if ($pattern[0] != "_") {
+					$patternTypePaths[$pattern] = $this->getEntry($filename,"m");
+				}
 			}
 			$this->patternPaths[$patternType] = $patternTypePaths;
 		}
@@ -375,11 +369,9 @@ class Builder {
 		$p = array("partials" => array());
 		
 		// scan the pattern source directory
-		foreach($this->patternTypes as $patternType) {
+		foreach($this->patternPaths as $patternType) {
 			
-			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
-				
-				$entry = $this->getEntry($filename,"m");
+			foreach($patternType as $pattern => $entry) {
 				
 				// make sure 'pages' get ignored. templates will have to be added to the ignore as well
 				if (($entry[0] != "p") || ($entry[0] == 't')) {
@@ -389,13 +381,11 @@ class Builder {
 						$patternParts = explode("/",$entry);
 						$patternName = $this->getPatternName($patternParts[2]);
 						
-						if ($patternName[0] != "_") {
-							$patternLink    = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
-							$patternPartial = $this->renderPattern($entry.".mustache",$m);
-							
-							// render the partial and stick it in the array
-							$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
-						}
+						$patternLink    = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
+						$patternPartial = $this->renderPattern($entry.".mustache",$m);
+						
+						// render the partial and stick it in the array
+						$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
 						
 					}
 					
@@ -433,6 +423,7 @@ class Builder {
 					$patternParts = explode("/",$entry);
 					$patternName = $this->getPatternName($patternParts[2]);
 					
+					// because we're globbing i need to check again to see if the pattern should be ignored
 					if ($patternName[0] != "_") {
 						$patternLink    = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
 						$patternPartial = $this->renderPattern($entry.".mustache",$m);
