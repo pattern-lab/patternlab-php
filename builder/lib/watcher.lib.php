@@ -161,6 +161,22 @@ class Watcher extends Builder {
 				};
 			}
 			
+			// check the listitems.json file for changes, if it's changed render & move the *entire* project
+			// update the change time so that content sync will work properly
+			$lh = $this->md5File(__DIR__."/../../source/data/listitems.json");
+			if (!isset($o->lh)) {
+				$o->lh = $lh;
+			} else {
+				if ($o->lh != $lh) {
+					$o->lh = $lh;
+					$this->gatherData();
+					$this->renderAndMove();
+					$this->generateViewAllPages();
+					$this->updateChangeTime();
+					print "data/listitems.json changed...\n";
+				};
+			}
+			
 			$c = true;
 			
 		}

@@ -238,6 +238,36 @@ class Builder {
 			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/data/data.json")));
 		}
 		
+		if (file_exists(__DIR__."/../../source/data/listitems.json")) {
+			
+			$listItems = json_decode(file_get_contents(__DIR__."/../../source/data/listitems.json"));
+			$numbers = array("one","two","three","four","five","six","seven","eight","nine","ten");
+			
+			$i = 0;
+			$k = 1;
+			$c = count( (array) $listItems)+1;
+			
+			$this->d->listItems = new stdClass();
+			
+			while ($k < $c) {
+				
+				$itemsArray             = array();
+				$this->d->listItems->$k = new stdClass();
+				
+				while ($i < $k) {
+					$i++;
+					$itemsArray[] = (array) $listItems->$i;
+				}
+				
+				$this->d->listItems->$numbers[$k-1] = $itemsArray;
+				
+				$i = 0;
+				$k++;
+				
+			}
+			
+		}
+		
 		// this makes link a reserved word but oh well...
 		$this->d->link = new stdClass();
 		
