@@ -513,8 +513,8 @@ class Builder {
 	* BUG: should probably check to see if the destination dir exists
 	*/
 	protected function moveFile($s,$p) {
-		if (file_exists(__DIR__."/../../source".$s)) {
-			copy(__DIR__."/../../source".$s,__DIR__."/../../public".$p);
+		if (file_exists(__DIR__."/../../source/".$s)) {
+			copy(__DIR__."/../../source/".$s,__DIR__."/../../public/".$p);
 		}
 	}
 	
