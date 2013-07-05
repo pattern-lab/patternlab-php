@@ -467,9 +467,9 @@ class Builder {
 	}
 	
 	/**
-	* Get the directory for a given pattern by parsing the file path
+	* Create a regex based on pattern types
 	*
-	* @return {String}       the final regex made up of pattern names
+	* @return {String}       the final regex
 	*/
 	protected function getPatternTypesRegex() {
 		
