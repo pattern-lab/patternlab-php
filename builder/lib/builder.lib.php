@@ -11,7 +11,8 @@
 class Builder {
 
 	// i was lazy when i started this project & kept (mainly) to two letter vars. sorry.
-	protected $m;                 // mustache instance
+	protected $mpl;               // mustache pattern loader instance
+	protected $mfs;               // mustache file system loader instance
 	protected $d;                 // data from data.json files
 	protected $sp;                // source patterns dir
 	protected $pp;                // public patterns dir
@@ -63,6 +64,10 @@ class Builder {
 		// get nav items
 		$this->gatherNavItems();
 		
+		// instantiate mustache loaders
+		$this->mustachePatternLoaderInstance();
+		$this->mustacheFileSystemLoaderInstance();
+		
 	}
 	
 	/**
@@ -71,9 +76,9 @@ class Builder {
 	* @return {Object}       an instance of the Mustache engine
 	*/
 	protected function mustachePatternLoaderInstance() {
-		return new Mustache_Engine(array(
-			'loader' => new Mustache_Loader_PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths)),
-			"partials_loader" => new Mustache_Loader_PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths))
+		$this->mpl = new Mustache_Engine(array(
+						"loader" => new Mustache_Loader_PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths)),
+						"partials_loader" => new Mustache_Loader_PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths))
 		));
 	}
 	
@@ -83,9 +88,9 @@ class Builder {
 	* @return {Object}       an instance of the Mustache engine
 	*/
 	protected function mustacheFileSystemLoaderInstance() {
-		return new Mustache_Engine(array(
-			'loader' => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/templates/"),
-			"partials_loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/templates/partials/")
+		$this->mfs = new Mustache_Engine(array(
+						"loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/templates/"),
+						"partials_loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/templates/partials/")
 		));
 	}
 	
@@ -96,9 +101,9 @@ class Builder {
 	*
 	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
 	*/
-	private function renderFile($f,$m) {
+	private function renderFile($f) {
 		$h  = file_get_contents(__DIR__.$this->sp."../templates/pattern-header-footer/header.html");
-		$rf = $this->renderPattern($f,$m);
+		$rf = $this->renderPattern($f);
 		$f  = file_get_contents(__DIR__.$this->sp."../templates/pattern-header-footer/footer.html");
 		return $h."\n".$rf."\n".$f;
 	}
@@ -110,8 +115,8 @@ class Builder {
 	*
 	* @return {String}       the mark-up as rendered by Mustache
 	*/
-	protected function renderPattern($f,$m) {
-		return $m->render($f,$this->d);
+	protected function renderPattern($f) {
+		return $this->mpl->render($f,$this->d);
 	}
 	
 	/**
@@ -121,15 +126,12 @@ class Builder {
 	*/
 	protected function renderAndMove() {
 		
-		// initiate a mustache instance
-		$p = $this->mustachePatternLoaderInstance();
-		
 		// scan the pattern source directory
 		foreach($this->patternPaths as $patternType) {
 			
 			foreach($patternType as $pattern => $entry) {
 				
-				$r = $this->renderFile($entry.".mustache",$p);
+				$r = $this->renderFile($entry.".mustache");
 				
 				// if the pattern directory doesn't exist create it
 				$entry = str_replace("/","-",$entry);
@@ -168,10 +170,9 @@ class Builder {
 		$this->generateViewAllPages();
 		
 		// render the index page and the style guide
-		$f = $this->mustacheFileSystemLoaderInstance();
-		$r = $f->render('index',$nd);
+		$r = $this->mfs->render('index',$nd);
 		file_put_contents(__DIR__."/../../public/index.html",$r);
-		$s = $f->render('styleguide',$sd);
+		$s = $this->mfs->render('styleguide',$sd);
 		file_put_contents(__DIR__."/../../public/styleguide.html",$s);
 		
 	}
@@ -199,8 +200,7 @@ class Builder {
 						$sid = $this->gatherPartialsByMatch($patternSubType);
 						
 						// render the viewall template
-						$f = $this->mustacheFileSystemLoaderInstance();
-						$v = $f->render('viewall',$sid);
+						$v = $this->mfs->render('viewall',$sid);
 						
 						// if the pattern directory doesn't exist create it
 						if (!is_dir(__DIR__.$this->pp.$patternSubType)) {
@@ -363,7 +363,6 @@ class Builder {
 	*/
 	protected function gatherPartials() {
 		
-		$m = $this->mustachePatternLoaderInstance();
 		$p = array("partials" => array());
 		
 		// loop through pattern paths
@@ -381,7 +380,7 @@ class Builder {
 						$patternParts = explode("/",$entry);
 						$patternName = $this->getPatternName($patternParts[2]);
 						$patternLink    = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
-						$patternPartial = $this->renderPattern($entry.".mustache",$m);
+						$patternPartial = $this->renderPattern($entry.".mustache");
 						$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
 						
 					}
@@ -403,7 +402,6 @@ class Builder {
 	*/
 	protected function gatherPartialsByMatch($pathMatch) {
 		
-		$m = $this->mustachePatternLoaderInstance();
 		$p = array("partials" => array());
 		
 		// separate the bits of the given path
@@ -425,7 +423,7 @@ class Builder {
 					// create the pattern name & link, render the partial, and stick it all into the pattern array
 					$patternName     = $this->getPatternName($patternParts[2]);
 					$patternLink     = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
-					$patternPartial  = $this->renderPattern($entry.".mustache",$m);
+					$patternPartial  = $this->renderPattern($entry.".mustache");
 					$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
 					
 				}
