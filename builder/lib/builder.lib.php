@@ -20,7 +20,6 @@ class Builder {
 	protected $fp;                // permissions for the public pattern files
 	protected $wf;                // files to be watched to see if they should be moved
 	protected $mf;                // where the files should be moved too
-	protected $websocketAddress;  // for populating the websockets template partial
 	protected $contentSyncPort;   // for populating the websockets template partial
 	protected $navSyncPort;       // for populating the websockets template partial
 	protected $patternTypes;      // a list of pattern types that match the directory structure
