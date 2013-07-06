@@ -239,23 +239,24 @@ class Builder {
 		
 		if (file_exists(__DIR__."/../../source/data/listitems.json")) {
 			
-			$listItems = json_decode(file_get_contents(__DIR__."/../../source/data/listitems.json"));
-			$numbers = array("one","two","three","four","five","six","seven","eight","nine","ten");
+			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/data/listitems.json"));
+			$numbers   = array("one","two","three","four","five","six","seven","eight","nine","ten");
 			
 			$i = 0;
 			$k = 1;
-			$c = count( (array) $listItems)+1;
+			$c = count($listItems)+1;
 			
 			$this->d->listItems = new stdClass();
 			
 			while ($k < $c) {
 				
-				$itemsArray             = array();
-				$this->d->listItems->$k = new stdClass();
+				shuffle($listItems);
+				$itemsArray = array();
+				$this->d->listItems->$numbers[$k-1] = new stdClass();
 				
 				while ($i < $k) {
+					$itemsArray[] = $listItems[$i];
 					$i++;
-					$itemsArray[] = (array) $listItems->$i;
 				}
 				
 				$this->d->listItems->$numbers[$k-1] = $itemsArray;
