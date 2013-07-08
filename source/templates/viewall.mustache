@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Style Guide for a Specific Pattern</title>
+    <title>Style Guide for a Specific Pattern Sub-Type</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="/styleguide/css/styleguide.css" media="all" />
@@ -23,5 +23,11 @@
 	</div> <!--end #patterns-->
 	
 </div><!--end .sg-main-->
+<script>
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage('body-click',"http://"+window.location.host)
+	};
+</script>
 </body>
 </html>
