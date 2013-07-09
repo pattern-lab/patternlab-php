@@ -98,14 +98,6 @@
 		killHay();
 		sizeiframe(getRandom(800,1200));
 	});
-	
-	//Click Size Extra Large Button
-	$('#sg-size-xl').on("click", function(e){
-		e.preventDefault();
-		killDisco();
-		killHay();
-		sizeiframe(getRandom(1200,maxViewportWidth));
-	});
 
 	//Click Full Width Button
 	$('#sg-size-full').on("click", function(e){ //Resets 
