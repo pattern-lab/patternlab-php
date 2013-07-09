@@ -159,9 +159,8 @@ class Builder {
 		$this->mustacheFileSystemLoaderInstance();
 		
 		// render out the main pages and move them to public
-		$nd = $this->gatherNavItems();
-		$nd['contentsyncport'] = $this->contentSyncPort;
-		$nd['navsyncport'] = $this->navSyncPort;
+		$this->navItems['contentsyncport'] = $this->contentSyncPort;
+		$this->navItems['navsyncport'] = $this->navSyncPort;
 		
 		// grab the partials into a data object for the style guide
 		$sd = $this->gatherPartials();
@@ -184,15 +183,12 @@ class Builder {
 	*/
 	protected function generateViewAllPages() {
 		
-		// silly to do this again but makes sense in light of the fact that watcher needs to use this function too
-		$nd = $this->gatherNavItems();
-		
 		// make sure $this->mfs is refreshed on each generation of view all. for some reason the mustache instance dies
 		$this->mustacheFileSystemLoaderInstance();
 		
 		// add view all to each list
 		$i = 0; $k = 0;
-		foreach ($nd['buckets'] as $bucket) {
+		foreach ($this->navItems['buckets'] as $bucket) {
 			
 			foreach ($bucket["navItems"] as $navItem) {
 				
@@ -351,7 +347,7 @@ class Builder {
 			
 		}
 		
-		return $b;
+		$this->navItems = $b;
 		
 	}
 	
