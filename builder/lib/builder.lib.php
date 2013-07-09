@@ -368,7 +368,9 @@ class Builder {
 		
 		// get the pattern types
 		foreach(glob(__DIR__.$this->sp."/*",GLOB_ONLYDIR) as $patternType) {
-			$this->patternTypes[] = substr($patternType,strlen(__DIR__.$this->sp)+1);
+			$patternType = substr($patternType,strlen(__DIR__.$this->sp)+1);
+			$patternTypeBits = explode("-",$patternType,2);
+			$this->patternTypes[] = (((int)$patternTypeBits[0] != 0) || ($patternTypeBits[0] == '00')) ? $patternTypeBits[1] : $patternType; // if the first bit of a
 		}
 		
 		// set-up the regex for getEntry()
