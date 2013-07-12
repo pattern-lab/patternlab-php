@@ -2,12 +2,15 @@
 	
 	<!-- DO NOT MODIFY -->
 	<script>
-		parent.postMessage(window.location.href,"http://"+window.location.host);
-		
-		var body = document.getElementsByTagName('body');
-		body[0].onclick = function() {
-			parent.postMessage('body-click',"http://"+window.location.host)
-		};
+		var host = window.location.host;
+		if (host != '') {
+			parent.postMessage(host,"http://"+host);
+			
+			var body = document.getElementsByTagName('body');
+			body[0].onclick = function() {
+				parent.postMessage('body-click',"http://"+host)
+			};
+		}
 	</script>
 	<!-- /DO NOT MODIFY -->
 	

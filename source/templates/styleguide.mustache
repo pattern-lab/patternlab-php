@@ -4,8 +4,8 @@
     <title>Style Guide</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="/styleguide/css/styleguide.css" media="all" />
-    <link rel="stylesheet" href="/css/style.css" media="all" />
+    <link rel="stylesheet" href="../../styleguide/css/styleguide.css" media="all" />
+    <link rel="stylesheet" href="../../css/style.css" media="all" />
 </head>
 <body>
 
@@ -16,17 +16,19 @@
 <div id="patterns">
 	{{# partials }}
 		<div class="sg-pattern">
-			<h2 class="sg-head sg-sub" ><a href="/patterns/{{ patternLink }}">{{ patternName }}</a></h2>
+			<h2 class="sg-head sg-sub" ><a href="../../patterns/{{ patternLink }}">{{ patternName }}</a></h2>
 			{{{ patternPartial }}}
 		</div>
 	{{/ partials }}
 </div> <!--end #patterns-->
 </div><!--End Style Guide Main Content-->
 <script>
-	var body = document.getElementsByTagName('body');
-	body[0].onclick = function() {
-		parent.postMessage('body-click',"http://"+window.location.host)
-	};
+	if (window.location.host != '') {
+		var body = document.getElementsByTagName('body');
+		body[0].onclick = function() {
+			parent.postMessage('body-click',"http://"+window.location.host)
+		};
+	}
 </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 .DS_Store
 public/index.html
-public/styleguide.html
+public/styleguide/html/styleguide.html
 public/css/*.css
 public/patterns/*
 config.ini

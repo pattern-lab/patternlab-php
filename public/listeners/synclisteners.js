@@ -18,7 +18,7 @@ var wsnConnected = false;
 var wsc;
 var wscConnected = false;
 var dataPrevious = 0;
-var host = window.location.host;
+var host = (window.location.host != "") ? window.location.host : "127.0.0.1";
 
 // handle page updates from one browser to another
 function connectNavSync() {
@@ -49,7 +49,7 @@ function connectNavSync() {
 		// when receiving a message from WebSocket update the iframe source
 		wsn.onmessage = function (event) {
 			var vpLocation  = document.getElementById('sg-viewport').contentWindow.location.href;
-			var mLocation   = "http://"+window.location.host+event.data;
+			var mLocation   = "http://"+host+event.data;
 			if (vpLocation != mLocation) {
 				$("#sg-viewport").attr('src',mLocation);
 			}

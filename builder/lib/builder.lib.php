@@ -172,7 +172,7 @@ class Builder {
 		$r = $this->mfs->render('index',$this->navItems);
 		file_put_contents(__DIR__."/../../public/index.html",$r);
 		$s = $this->mfs->render('styleguide',$sd);
-		file_put_contents(__DIR__."/../../public/styleguide.html",$s);
+		file_put_contents(__DIR__."/../../public/styleguide/html/styleguide.html",$s);
 		
 	}
 	
