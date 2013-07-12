@@ -118,17 +118,19 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
      */
     protected function getFileName($name)
     {
-        
+        $fileName = "";
+
         // test to see what kind of path was supplied
         $posDash  = strpos($name,"-");
         $posSlash = strpos($name,"/");
         if (($posSlash === false) && ($posDash !== false)) {
-           list($patternType,$pattern) = explode("-",$name,2);
+           
+           list($patternType,$pattern) = $this->getPatternInfo($name);
            
            // see if the pattern is an exact match for patternPaths. if not iterate over patternPaths to find a likely match
            if (isset($this->patternPaths[$patternType][$pattern])) {
               $fileName = $this->baseDir."/".$this->patternPaths[$patternType][$pattern];
-           } else {
+           } else if (isset($this->patternPaths[$patternType])) {
               foreach($this->patternPaths[$patternType] as $patternMatchKey=>$patternMatchValue) {
                   $pos = strpos($patternMatchKey,$pattern);
                   if ($pos !== false) {
@@ -148,4 +150,26 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
         
         return $fileName;
     }
+
+    private function getPatternInfo($name) {
+	
+		$patternBits = explode("-",$name);
+		
+		$i = 1;
+		$k = 2;
+		$c = count($patternBits);
+		$patternType = $patternBits[0];
+		while (!isset($this->patternPaths[$patternType]) && ($i < $c)) {
+			$patternType .= "-".$patternBits[$i];
+			$i++;
+			$k++;
+		}
+		
+		$patternBits = explode("-",$name,$k);
+		$pattern = $patternBits[count($patternBits)-1];
+		
+		return array($patternType, $pattern);
+		
+	}
+	
 }

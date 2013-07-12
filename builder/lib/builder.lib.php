@@ -169,7 +169,7 @@ class Builder {
 		$this->generateViewAllPages();
 		
 		// render the index page and the style guide
-		$r = $this->mfs->render('index',$nd);
+		$r = $this->mfs->render('index',$this->navItems);
 		file_put_contents(__DIR__."/../../public/index.html",$r);
 		$s = $this->mfs->render('styleguide',$sd);
 		file_put_contents(__DIR__."/../../public/styleguide.html",$s);
@@ -194,21 +194,24 @@ class Builder {
 				
 				foreach ($navItem["navSubItems"] as $subItem) {
 					if ($subItem["patternName"] == "View All") {
-						$patternSubType = str_replace("/index.html","",$subItem["patternPath"]);
+						//$patternSubType = str_replace("/index.html","",$subItem["patternPath"]);
+						$patternType    = $subItem["patternType"];
+						$patternSubType = $subItem["patternSubType"];
 						// get all the rendered partials that match
-						$sid = $this->gatherPartialsByMatch($patternSubType);
+						$sid = $this->gatherPartialsByMatch($patternType, $patternSubType);
 						
 						// render the viewall template
 						$v = $this->mfs->render('viewall',$sid);
 						
 						// if the pattern directory doesn't exist create it
-						if (!is_dir(__DIR__.$this->pp.$patternSubType)) {
-							mkdir(__DIR__.$this->pp.$patternSubType);
+						$patternPath = $patternType."-".$patternSubType;
+						if (!is_dir(__DIR__.$this->pp.$patternPath)) {
+							mkdir(__DIR__.$this->pp.$patternPath);
 							//chmod($this->pp.$entry,$this->dp);
-							file_put_contents(__DIR__.$this->pp.$patternSubType."/index.html",$v);
+							file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
 							//chmod($this->pp.$entry."/pattern.html",$this->fp);
 						} else {
-							file_put_contents(__DIR__.$this->pp.$patternSubType."/index.html",$v);
+							file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
 						}
 					}
 				}
@@ -334,9 +337,9 @@ class Builder {
 				}
 				
 				// add a view all for the section
-				if (($patternType != 'pages') && ($patternType != 'templates') && isset($b["buckets"][$bi]["navItems"][$ni]["navSubItems"])) {
+				if (($bucket != 'pages') && ($bucket != 'templates') && isset($b["buckets"][$bi]["navItems"][$ni]["navSubItems"])) {
 					$subItemsCount = count($b["buckets"][$bi]["navItems"][$ni]["navSubItems"]);
-					$b["buckets"][$bi]["navItems"][$ni]["navSubItems"][$subItemsCount] = array("patternPath" => $patternType."-".$dirClean."/index.html", "patternName" => "View All");
+					$b["buckets"][$bi]["navItems"][$ni]["navSubItems"][$subItemsCount] = array("patternPath" => $patternType."-".$dirClean."/index.html", "patternName" => "View All", "patternType" => $patternType, "patternSubType" => $dirClean);
 				}
 				
 				$ni++;
@@ -364,9 +367,7 @@ class Builder {
 		
 		// get the pattern types
 		foreach(glob(__DIR__.$this->sp."/*",GLOB_ONLYDIR) as $patternType) {
-			$patternType = substr($patternType,strlen(__DIR__.$this->sp)+1);
-			$patternTypeBits = explode("-",$patternType,2);
-			$this->patternTypes[] = (((int)$patternTypeBits[0] != 0) || ($patternTypeBits[0] == '00')) ? $patternTypeBits[1] : $patternType; // if the first bit of a
+			$this->patternTypes[] = substr($patternType,strlen(__DIR__.$this->sp)+1);
 		}
 		
 		// set-up the regex for getEntry()
@@ -383,7 +384,9 @@ class Builder {
 					$patternTypePaths[$pattern] = $this->getEntry($filename);
 				}
 			}
-			$this->patternPaths[$patternType] = $patternTypePaths;
+			$patternTypeBits = explode("-",$patternType,2);
+			$patternTypeClean = (((int)$patternTypeBits[0] != 0) || ($patternTypeBits[0] == '00')) ? $patternTypeBits[1] : $patternType;
+			$this->patternPaths[$patternTypeClean] = $patternTypePaths;
 		}
 		
 	}
@@ -435,18 +438,18 @@ class Builder {
 	*
 	* @return {Array}        an array of rendered partials that match the given path
 	*/
-	protected function gatherPartialsByMatch($pathMatch) {
+	protected function gatherPartialsByMatch($patternType, $patternSubType) {
 		
 		// make sure $this->mpl is refreshed on each render & move. for some reason the mustache instance dies
 		$this->mustachePatternLoaderInstance();
 		
 		$p = array("partials" => array());
 		
-		// separate the bits of the given path
-		list($patternType,$patternSubType) = explode("-",$pathMatch);
+		$patternTypeBits = explode("-",$patternType,2);
+		$patternTypeClean = (((int)$patternTypeBits[0] != 0) || ($patternTypeBits[0] == '00')) ? $patternTypeBits[1] : $patternType;
 		
 		// make sure that pages & templates don't get "view all" pages
-		if (($patternType != 'pages') && ($patternType != 'templates')) {
+		if (($patternTypeClean != 'pages') && ($patternTypeClean != 'templates')) {
 			
 			// get matches based on pattern type and pattern sub-type
 			foreach(glob(__DIR__.$this->sp.$patternType."/".$patternSubType."/*.mustache") as $filename) {
