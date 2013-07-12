@@ -11,12 +11,11 @@ pp = "/../../public/patterns/";
 dp = 0775;
 fp = 0664;
 
-// directories/files to ignore when iterating over the patterns directory. separate by commas
-if = ".,..,.DS_Store,d-wrapper";
-
-// files to watch updates, second var is for where they go. separate by commas
-wf = "/scss/style.css"
-mf = "/css/style.css"
+// 'wf' is for files that pattern lab should watch for changes, 'mf' is for 
+// where those files should be moved when they are changed. to add files to the watch simply 
+// separate them with commas
+wf = "css/style.css"
+mf = "css/style.css"
 
 // choose which ports the websocket services should run on
 contentSyncPort  = "8002"

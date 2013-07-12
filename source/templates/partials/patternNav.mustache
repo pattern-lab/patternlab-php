@@ -4,10 +4,14 @@
 		{{# navItems }}
 			<li class="sg-nav-{{ sectionNameLC }}"><a class="sg-acc-handle">{{ sectionNameUC }}</a><ol class="sg-acc-panel">
 			{{# navSubItems }}
-				<li><a href="patterns/{{ patternPath }}/pattern.html" class="sg-pop">{{ patternName }}</a></li>
+				<li><a href="patterns/{{ patternPath }}" class="sg-pop">{{ patternName }}</a></li>
 			{{/ navSubItems }}
 			</ol></li>
 		{{/ navItems }}
 		</ol></li>
 	{{/ buckets }}
 </ol>
+<ul class="sg-control">
+	<li><a href="#" id="navSyncButton" data-state="off">Page Follow Disabled</a></li>
+	<li><a href="#" id="contentSyncButton" data-state="off">Auto-reload Disabled</a></li>
+</ul>

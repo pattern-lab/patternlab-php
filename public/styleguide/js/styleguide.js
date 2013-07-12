@@ -98,14 +98,6 @@
 		killHay();
 		sizeiframe(getRandom(800,1200));
 	});
-	
-	//Click Size Extra Large Button
-	$('#sg-size-xl').on("click", function(e){
-		e.preventDefault();
-		killDisco();
-		killHay();
-		sizeiframe(getRandom(1200,maxViewportWidth));
-	});
 
 	//Click Full Width Button
 	$('#sg-size-full').on("click", function(e){ //Resets 
@@ -285,10 +277,6 @@
 	    return Math.random() * (max - min) + min;
 	}
 	
-	
-	
-	
-
 	function updateViewportWidth(size) {
 	
 		$("#sg-viewport").width(size);
@@ -413,13 +401,72 @@
 			$vp.find('.sg-annotations').show();
 		}
 		
-		//Pattern Click
+		// Pattern Click
+		// this doesn't work because patternlab-php assumes the iframe is being refreshed. not the overall app
+		/*
 		$vp.find('.sg-head a').on("click", function(e){
 			e.preventDefault();
 			var thisHref = $(this).attr('href');
 			window.location = thisHref;
 		});
+		*/
 	});
 	
 })(this);
 
+// update the iframe with the source from clicked element in pull down menu. also close the menu
+// having it outside fixes an auto-close bug i ran into
+$('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
+	
+	// update the iframe
+	$("#sg-viewport").attr('src',this.href);
+	
+	// close up the menu
+	$(this).parents('.sg-acc-panel').toggleClass('active');
+	$(this).parents('.sg-acc-panel').siblings('.sg-acc-handle').toggleClass('active');
+	
+	e.stopPropagation();
+	
+	return false;
+	
+});
+
+// handle when someone clicks on the grey area of the viewport so it auto-closes the nav
+function closePanels() {
+	// close up the menu
+	$('.sg-acc-panel').each(function() {
+		if ($(this).hasClass('active')) {
+			$(this).toggleClass('active');
+		}
+	});
+	
+	$('.sg-acc-handle').each(function() {
+		if ($(this).hasClass('active')) {
+			$(this).toggleClass('active');
+		}
+	});
+}
+
+$('#sg-vp-wrap').click(function(e) {
+	
+	closePanels();
+	
+});
+
+// watch the iframe source so that it can be sent back to everyone else.
+// based on the great MDN docs at https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
+function receiveIframeMessage(event) {
+		
+	// does the origin sending the message match the current host? if not dev/null the request
+	if (event.origin !== "http://"+window.location.host) {
+		return;
+	}
+	
+	if (event.data == 'body-click') {
+		closePanels();
+	} else if (wsnConnected) {
+		wsn.send(event.data);
+	}
+	
+}
+window.addEventListener("message", receiveIframeMessage, false);

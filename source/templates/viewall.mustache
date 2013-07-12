@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Style Guide for a Specific Pattern</title>
+    <title>Style Guide for a Specific Pattern Sub-Type</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="/styleguide/css/styleguide.css" media="all" />
@@ -15,15 +15,19 @@
 	<!--Patterns-->
 	<div id="patterns">
 		{{# partials }}
-			<div class="sg-section">
-				<h2 class="sg-head sg-sub" id="#"><a href="#" class="sg-pop">Pattern Name</a></h2>
-				<div class="sg-pattern">
-					{{{ . }}}
-				</div><!--end .sg-pattern-->
-			</div><!--end .sg-section-->
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="/patterns/{{ patternLink }}">{{ patternName }}</a></h2>
+				{{{ patternPartial }}}
+			</div>
 		{{/ partials }}
 	</div> <!--end #patterns-->
 	
 </div><!--end .sg-main-->
+<script>
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage('body-click',"http://"+window.location.host)
+	};
+</script>
 </body>
 </html>

@@ -16,8 +16,8 @@
 <div id="patterns">
 	{{# partials }}
 		<div class="sg-pattern">
-			<h2 class="sg-head sg-sub" ><a href="#">Pattern Title</a></h2>
-			{{{ . }}}
+			<h2 class="sg-head sg-sub" ><a href="/patterns/{{ patternLink }}">{{ patternName }}</a></h2>
+			{{{ patternPartial }}}
 		</div>
 	{{/ partials }}
 </div> <!--end #patterns-->

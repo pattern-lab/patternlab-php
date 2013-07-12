@@ -38,6 +38,13 @@ class Generator extends Builder {
 		// render out the index and style guide
 		$this->generateMainPages();
 		
+		// check the user-supplied watch files (e.g. css)
+		$i = 0;
+		foreach($this->wf as $wf) {
+			$this->moveFile($wf,$this->mf[$i]);
+			$i++;
+		}
+		
 		// update the change time so the auto-reload will fire (doesn't work for the index and style guide)
 		$this->updateChangeTime();
 		

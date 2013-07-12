@@ -37,86 +37,89 @@ class Watcher extends Builder {
 		$m = false;          // does the index page need to be regenerated?
 		$o = new stdClass(); // create an object to hold the properties
 		
+		// build patternTypesRegex for getEntry
+		$this->getPatternTypesRegex(); 
+		
 		// run forever
 		while (true) {
 			
-			// generate all of the patterns
-			$entries = scandir(__DIR__.$this->sp);
-			
-			foreach($entries as $entry) {
+			foreach ($this->patternTypes as $patternType) {
 				
-				if (!in_array($entry,$this->if)) {
+				// generate all of the patterns
+				$entries = glob(__DIR__.$this->sp.$patternType."/*/*.mustache");
+				
+				foreach($entries as $entry) {
 					
-					// figure out how to watch for new directories and new files
-					if (!isset($o->$entry)) {
-						$o->$entry = new stdClass();
-						$k = true;
-					}
+					$patternParts = explode("/",$this->getEntry($entry));
 					
-					// figure out the md5 hash of a file so we can track changes
-					// runs well on a solid state drive. no idea if it thrashes regular disks
-					$ph = $this->md5File(__DIR__.$this->sp.$entry."/".$entry.".mustache");
-					$dh = $this->md5File(__DIR__.$this->sp.$entry."/data.json");
-					
-					// if the directory wasn't being checked already add the md5 sums
-					if ($k) {
+					// because we're globbing i need to check again to see if the pattern should be ignored
+					if ($patternParts[2][0] != "_") {
 						
-						$o->$entry->ph = $ph;
-						$o->$entry->dh = $dh;
-						
-						// if we're through the first check make sure to note any new directories being added to Pattern Lab
-						// assuming a pattern actually exists
-						if ($c && ($o->$entry->ph != '')) {
-							print $entry."/".$entry.".mustache added to Pattern Lab...\n";
-							$t = true;
-							$m = true;
+						// figure out how to watch for new directories and new files
+						if (!isset($o->$entry)) {
+							$o->$entry = new stdClass();
+							$k = true;
 						}
 						
-						$k = false;
+						// figure out the md5 hash of a file so we can track changes
+						// runs well on a solid state drive. no idea if it thrashes regular disks
+						$ph = $this->md5File($entry);
 						
-					} else {
-						
-						if ($o->$entry->ph != $ph) {
+						// if the directory wasn't being checked already add the md5 sums
+						if ($k) {
 							
-							if ($c && ($o->$entry->ph == '')) {
-								print $entry."/".$entry.".mustache added to Pattern Lab...\n";
-								$m = true;
-							} else {
-								print $entry."/".$entry.".mustache changed...\n";
-							}
-							
-							$t = true;
 							$o->$entry->ph = $ph;
 							
+							// if we're through the first check make sure to note any new directories being added to Pattern Lab
+							// assuming a pattern actually exists
+							if ($c && ($o->$entry->ph != '')) {
+								$patternName = $this->getEntry($entry);
+								print $patternName." added to Pattern Lab. You should reload the page to see it in the nav...\n";
+								$t = true;
+								$m = true;
+							}
+							
+							$k = false;
+							
+						} else {
+							
+							if ($o->$entry->ph != $ph) {
+								
+								$patternName = $this->getEntry($entry);
+								if ($c && ($o->$entry->ph == '')) {
+									print $patternName." added to Pattern Lab. You should reload the page to see it in the nav...\n";
+									$m = true;
+								} else {
+									print $patternName." changed...\n";
+								}
+								
+								$t = true;
+								$o->$entry->ph = $ph;
+								
+							}
+							
 						}
 						
-						if ($o->$entry->dh != $dh) {
-							$t = true;
-							$o->$entry->dh = $dh;
-							print $entry."/data.json changed...\n";
+						// if a file has been added or changed then render & move the *entire* project (shakes fist at partials)
+						// if a new directory was added regenerate the main pages
+						// also update the change time so that content sync will work properly
+						if ($t) {
+							$this->gatherData();
+							$this->renderAndMove();
+							$this->generateViewAllPages();
+							$this->updateChangeTime();
+							if ($m) {
+								$this->generateMainPages();
+								$m = false;
+							}
+							$t = false;
 						}
 						
-					}
-					
-					// if a file has been added or changed then render & move the *entire* project (shakes fist at partials)
-					// if a new directory was added regenerate the main pages
-					// also update the change time so that content sync will work properly
-					if ($t) {
-						$this->gatherData();
-						$this->renderAndMove();
-						$this->generateViewAllPages();
-						$this->updateChangeTime();
-						if ($m) {
-							$this->generateMainPages();
-							$m = false;
-						}
-						$t = false;
 					}
 					
 				}
-				
 			}
-			
+				
 			// check the user-supplied watch files (e.g. css)
 			$i = 0;
 			foreach($this->wf as $wf) {
@@ -127,7 +130,7 @@ class Watcher extends Builder {
 				
 				// md5 hash the user-supplied filenames, if it's changed just move the single file
 				// update the change time so that content sync will work properly
-				$fh = $this->md5File(__DIR__."/../../../source".$wf);
+				$fh = $this->md5File(__DIR__."/../../source/".$wf);
 				if (!isset($o->$wf->fh)) {
 					$o->$wf->fh = $fh;
 				} else {
@@ -158,7 +161,24 @@ class Watcher extends Builder {
 				};
 			}
 			
+			// check the listitems.json file for changes, if it's changed render & move the *entire* project
+			// update the change time so that content sync will work properly
+			$lh = $this->md5File(__DIR__."/../../source/data/listitems.json");
+			if (!isset($o->lh)) {
+				$o->lh = $lh;
+			} else {
+				if ($o->lh != $lh) {
+					$o->lh = $lh;
+					$this->gatherData();
+					$this->renderAndMove();
+					$this->generateViewAllPages();
+					$this->updateChangeTime();
+					print "data/listitems.json changed...\n";
+				};
+			}
+			
 			$c = true;
+			
 		}
 		
 	}
@@ -172,17 +192,6 @@ class Watcher extends Builder {
 	private function md5File($f) {
 		$r = file_exists($f) ? md5_file($f) : '';
 		return $r;
-	}
-	
-	/**
-	* Copies a file from the given source path to the given public path
-	* @param  {String}       the source pattern name
-	* @param  {String}       the public pattern name
-	*
-	* @return {String}       copied file
-	*/
-	private function moveFile($s,$p) {
-		copy(__DIR__."/../../source".$s,__DIR__."/../../public".$p);
 	}
 	
 }
