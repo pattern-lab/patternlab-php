@@ -84,8 +84,8 @@ class Builder {
 	*/
 	protected function mustacheFileSystemLoaderInstance() {
 		$this->mfs = new Mustache_Engine(array(
-						"loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/templates/"),
-						"partials_loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/templates/partials/")
+						"loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/patternlab-files/"),
+						"partials_loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/patternlab-files/partials/")
 		));
 	}
 	
@@ -97,9 +97,9 @@ class Builder {
 	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
 	*/
 	private function renderFile($f) {
-		$h  = file_get_contents(__DIR__.$this->sp."../templates/pattern-header-footer/header.html");
+		$h  = file_get_contents(__DIR__.$this->sp."../patternlab-files/pattern-header-footer/header.html");
 		$rf = $this->renderPattern($f);
-		$f  = file_get_contents(__DIR__.$this->sp."../templates/pattern-header-footer/footer.html");
+		$f  = file_get_contents(__DIR__.$this->sp."../patternlab-files/pattern-header-footer/footer.html");
 		return $h."\n".$rf."\n".$f;
 	}
 	
