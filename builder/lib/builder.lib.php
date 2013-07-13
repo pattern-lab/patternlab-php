@@ -111,7 +111,11 @@ class Builder {
 	* @return {String}       the mark-up as rendered by Mustache
 	*/
 	protected function renderPattern($f) {
-		return $this->mpl->render($f,$this->d);
+		$d = $this->d;
+		if (array_key_exists($f,$d->patternSpecific)) {
+			$d = (object) array_merge((array) $d, (array) $d->patternSpecific->$f);
+		}
+		return $this->mpl->render($f,$d);
 	}
 	
 	/**
@@ -247,6 +251,7 @@ class Builder {
 			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/data/data.json")));
 		}
 		
+		// add list item data, makes 'listItems' a reserved word
 		if (file_exists(__DIR__."/../../source/data/listitems.json")) {
 			
 			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/data/listitems.json"));
@@ -278,16 +283,43 @@ class Builder {
 			
 		}
 		
-		// this makes link a reserved word but oh well...
+		// add the link names for easy reference, makes 'link' a reserved word
 		$this->d->link = new stdClass();
-		
-		// add the link names
 		foreach($this->patternPaths as $patternTypeName => $patterns) {
 			
 			foreach($patterns as $pattern => $entry) {
 				$patternName = $patternTypeName."-".$pattern;
 				$entry = str_replace("/","-",$entry);
 				$this->d->link->$patternName = "/patterns/".$entry."/".$entry.".html";
+			}
+			
+		}
+		
+		// add pattern specific data so it can override when a pattern (not partial!) is rendered
+		// makes 'patternSpecific' a reserved word
+		$this->d->patternSpecifc = new stdClass();
+		foreach($this->patternTypes as $patternType) {
+			
+			// $this->d->patternSpecific["pattern-name-that-matches-render.mustache"] = array of data;
+			$patternTypeBits  = explode("-",$patternType,2);
+			$patternTypeClean = (((int)$patternTypeBits[0] != 0) || ($patternTypeBits[0] == '00')) ? $patternTypeBits[1] : $patternType;
+			
+			// find pattern data for pattern subtypes*/
+			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.json") as $filename) {
+				$entry = $this->getEntry($filename,"j");
+				if (in_array($entry,$this->patternPaths[$patternTypeClean])) {
+					$patternName = $entry.".mustache";
+					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/patterns/".$entry.".json"));
+				}
+			}
+			
+			// find pattern data for pattern types that are flat (e.g. pages & templates)
+			foreach(glob(__DIR__.$this->sp.$patternType."/*.json") as $filename) {
+				$entry = $this->getEntry($filename,"j");
+				if (in_array($entry,$this->patternPaths[$patternTypeClean])) {
+					$patternName = $entry.".mustache";
+					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/patterns/".$entry.".json"));
+				}
 			}
 			
 		}
@@ -536,7 +568,7 @@ class Builder {
 	* @return {String}       the directory for the pattern
 	*/
 	protected function getEntry($filepath,$type = "m") {
-		$file = ($type == 'm') ? '\.mustache' : 'data\.json';
+		$file = ($type == 'm') ? '\.mustache' : '\.json';
 		if (preg_match('/\/('.$this->patternTypesRegex.'\/(([A-z0-9-]{1,})\/|)([A-z0-9-]{1,}))'.$file.'$/',$filepath,$matches)) {
 			return $matches[1];
 		}
