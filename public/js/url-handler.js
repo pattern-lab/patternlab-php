@@ -19,7 +19,7 @@ function getFileName(name) {
 	var patternType = bits[0];
 	var pattern     = bits[1];
 	
-	if (patternPaths[patternType][pattern] != undefined) {
+	if ((patternPaths[patternType] != undefined) && (patternPaths[patternType][pattern] != undefined)) {
 		
 		fileName = patternPaths[patternType][pattern];
 		
