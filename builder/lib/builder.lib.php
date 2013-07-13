@@ -247,6 +247,7 @@ class Builder {
 			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/data/data.json")));
 		}
 		
+		// add list item data, makes 'listItems' a reserved word
 		if (file_exists(__DIR__."/../../source/data/listitems.json")) {
 			
 			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/data/listitems.json"));
@@ -278,10 +279,8 @@ class Builder {
 			
 		}
 		
-		// this makes link a reserved word but oh well...
+		// add the link names for easy reference, makes 'link' a reserved word
 		$this->d->link = new stdClass();
-		
-		// add the link names
 		foreach($this->patternPaths as $patternTypeName => $patterns) {
 			
 			foreach($patterns as $pattern => $entry) {
