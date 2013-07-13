@@ -160,7 +160,8 @@ class Builder {
 		
 		// render out the main pages and move them to public
 		$this->navItems['contentsyncport'] = $this->contentSyncPort;
-		$this->navItems['navsyncport'] = $this->navSyncPort;
+		$this->navItems['navsyncport']     = $this->navSyncPort;
+		$this->navItems['patternpaths']    = json_encode($this->patternPaths);
 		
 		// grab the partials into a data object for the style guide
 		$sd = $this->gatherPartials();
