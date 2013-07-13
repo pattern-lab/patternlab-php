@@ -325,16 +325,16 @@ class Builder {
 					
 					$patternPathBits = explode("/",$pattern);
 					if ($patternPathBits[count($patternPathBits) - 1][0] != "_") {
-					
+						
 						// get the bits for a pattern and check to see if the first bit is a number
 						$patternClean = substr($pattern,strlen(__DIR__.$this->sp.$patternType."/"));
 						$patternClean = str_replace(".mustache","",$patternClean);
 						$patternFinal = $this->getPatternName($patternClean);
-					
+						
 						// add a new pattern
 						$b["buckets"][$bi]["patternItems"][] = array("patternPath" => $patternType."-".$patternClean."/".$patternType."-".$patternClean.".html",
 																	 "patternName" => ucwords($patternFinal));
-					
+						
 					}
 					
 				}
@@ -343,33 +343,33 @@ class Builder {
 				
 				// iterate over pattern sub-types
 				foreach($patternSubTypes as $dir) {
-				
+					
 					// get the bits for a directory and check to see if the first bit is a number
 					$dirClean = substr($dir,strlen(__DIR__.$this->sp.$patternType."/"));
 					$dirBits  = explode("-",$dirClean,2);
 					$dirFinal = (((int)$dirBits[0] != 0) || ($dirBits[0] == '00')) ? str_replace("-"," ",$dirBits[1]) : str_replace("-"," ",$dirClean);
-				
+					
 					// add a new section
 					$b["buckets"][$bi]["navItems"][$ni] = array("sectionNameLC" => strtolower($dirFinal),
 																"sectionNameUC" => ucwords($dirFinal));
-				
+					
 					// iterate over patterns
 					foreach(glob(__DIR__.$this->sp.$patternType."/".$dirClean."/*.mustache") as $pattern) {
-					
+						
 						$patternPathBits = explode("/",$pattern);
 						if ($patternPathBits[count($patternPathBits) - 1][0] != "_") {
-						
+							
 							// get the bits for a pattern and check to see if the first bit is a number
 							$patternClean = substr($pattern,strlen(__DIR__.$this->sp.$patternType."/".$dirClean."/"));
 							$patternClean = str_replace(".mustache","",$patternClean);
 							$patternFinal = $this->getPatternName($patternClean);
-						
+							
 							// add a new pattern
 							$b["buckets"][$bi]["navItems"][$ni]["navSubItems"][] = array("patternPath" => $patternType."-".$dirClean."-".$patternClean."/".$patternType."-".$dirClean."-".$patternClean.".html",
 																						 "patternName" => ucwords($patternFinal));
 						
 						}
-					
+						
 					}
 				
 					// add a view all for the section
@@ -377,7 +377,7 @@ class Builder {
 						$subItemsCount = count($b["buckets"][$bi]["navItems"][$ni]["navSubItems"]);
 						$b["buckets"][$bi]["navItems"][$ni]["navSubItems"][$subItemsCount] = array("patternPath" => $patternType."-".$dirClean."/index.html", "patternName" => "View All", "patternType" => $patternType, "patternSubType" => $dirClean);
 					}
-				
+					
 					$ni++;
 				}
 			}
@@ -413,6 +413,8 @@ class Builder {
 		// find the patterns for the types
 		foreach($this->patternTypes as $patternType) {
 			$patternTypePaths = array();
+			
+			// find pattern paths for pattern subtypes
 			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
 				preg_match('/\/([A-z0-9-_]{1,})\.mustache$/',$filename,$matches);
 				$patternBits = explode("-",$matches[1],2);
@@ -421,6 +423,8 @@ class Builder {
 					$patternTypePaths[$pattern] = $this->getEntry($filename);
 				}
 			}
+			
+			// find pattern paths for pattern types that are flat (e.g. pages & templates)
 			foreach(glob(__DIR__.$this->sp.$patternType."/*.mustache") as $filename) {
 				preg_match('/\/([A-z0-9-_]{1,})\.mustache$/',$filename,$matches);
 				$patternBits = explode("-",$matches[1],2);
@@ -429,9 +433,11 @@ class Builder {
 					$patternTypePaths[$pattern] = $this->getEntry($filename);
 				}
 			}
+			
 			$patternTypeBits = explode("-",$patternType,2);
 			$patternTypeClean = (((int)$patternTypeBits[0] != 0) || ($patternTypeBits[0] == '00')) ? $patternTypeBits[1] : $patternType;
 			$this->patternPaths[$patternTypeClean] = $patternTypePaths;
+			
 		}
 		
 	}
@@ -459,10 +465,10 @@ class Builder {
 					if (file_exists(__DIR__."/".$this->sp.$entry.".mustache")) {
 						
 						// create the pattern name & link, render the partial, and stick it all into the pattern array
-						$patternParts = explode("/",$entry);
-						$patternName = $this->getPatternName($patternParts[2]);
-						$patternLink    = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
-						$patternPartial = $this->renderPattern($entry.".mustache");
+						$patternParts    = explode("/",$entry);
+						$patternName     = $this->getPatternName($patternParts[2]);
+						$patternLink     = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
+						$patternPartial  = $this->renderPattern($entry.".mustache");
 						$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
 						
 					}
@@ -479,6 +485,8 @@ class Builder {
 	
 	/**
 	* Renders the patterns that match a given string so they can be used in the view all styleguides
+	* @param  {String}       the pattern type for the pattern
+	* @param  {String}       the pattern sub-type
 	*
 	* @return {Array}        an array of rendered partials that match the given path
 	*/
@@ -489,8 +497,7 @@ class Builder {
 		
 		$p = array("partials" => array());
 		
-		$patternTypeBits = explode("-",$patternType,2);
-		$patternTypeClean = (((int)$patternTypeBits[0] != 0) || ($patternTypeBits[0] == '00')) ? $patternTypeBits[1] : $patternType;
+		$patternTypeClean = $this->getPatternName($patternType);
 		
 		// make sure that pages & templates don't get "view all" pages
 		if (($patternTypeClean != 'pages') && ($patternTypeClean != 'templates')) {
