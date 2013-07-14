@@ -55,6 +55,7 @@ function getPatternInfo(name) {
 	pattern = name.slice(patternType.length+1,name.length);
 	
 	return [patternType, pattern];
+	
 }
 
 // the following is taken from https://developer.mozilla.org/en-US/docs/Web/API/window.location
