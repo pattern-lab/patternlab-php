@@ -364,9 +364,9 @@ class Builder {
 						$patternFinal = $this->getPatternName($patternClean);
 						
 						// add a new pattern
-						$b["buckets"][$bi]["patternItems"][] = array("patternPath" => $patternType."-".$patternClean."/".$patternType."-".$patternClean.".html",
-																	 "patternName" => ucwords($patternFinal));
-						
+						$b["buckets"][$bi]["patternItems"][] = array("patternPath"    => $patternType."-".$patternClean."/".$patternType."-".$patternClean.".html",
+																	 "patternName"    => ucwords($patternFinal),
+																	 "patternPartial" => str_replace(" ","-",$bucket)."-".str_replace(" ","-",$patternFinal));
 					}
 					
 				}
@@ -397,8 +397,9 @@ class Builder {
 							$patternFinal = $this->getPatternName($patternClean);
 							
 							// add a new pattern
-							$b["buckets"][$bi]["navItems"][$ni]["navSubItems"][] = array("patternPath" => $patternType."-".$dirClean."-".$patternClean."/".$patternType."-".$dirClean."-".$patternClean.".html",
-																						 "patternName" => ucwords($patternFinal));
+							$b["buckets"][$bi]["navItems"][$ni]["navSubItems"][] = array("patternPath"    => $patternType."-".$dirClean."-".$patternClean."/".$patternType."-".$dirClean."-".$patternClean.".html",
+																						 "patternName"    => ucwords($patternFinal),
+																						 "patternPartial" => str_replace(" ","-",$bucket)."-".str_replace(" ","-",$patternFinal));
 						
 						}
 						

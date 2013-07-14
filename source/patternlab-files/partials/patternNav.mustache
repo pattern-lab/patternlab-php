@@ -4,12 +4,12 @@
 		{{# navItems }}
 			<li class="sg-nav-{{ sectionNameLC }}"><a class="sg-acc-handle">{{ sectionNameUC }}</a><ol class="sg-acc-panel">
 			{{# navSubItems }}
-				<li><a href="patterns/{{ patternPath }}" class="sg-pop">{{ patternName }}</a></li>
+				<li><a href="patterns/{{ patternPath }}" class="sg-pop" data-patternpartial="{{ patternPartial }}">{{ patternName }}</a></li>
 			{{/ navSubItems }}
 			</ol></li>
 		{{/ navItems }}
 		{{# patternItems }}
-			<li><a href="patterns/{{ patternPath }}" class="sg-pop">{{ patternName }}</a></li>
+			<li><a href="patterns/{{ patternPath }}" class="sg-pop" data-patternpartial="{{ patternPartial }}">{{ patternName }}</a></li>
 		{{/ patternItems }}
 		</ol></li>
 	{{/ buckets }}
