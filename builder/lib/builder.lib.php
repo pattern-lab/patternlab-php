@@ -112,7 +112,7 @@ class Builder {
 	*/
 	protected function renderPattern($f) {
 		$d = $this->d;
-		if (array_key_exists($f,$d->patternSpecific)) {
+		if (isset($d->patternSpecific) && array_key_exists($f,$d->patternSpecific)) {
 			$d = (object) array_merge((array) $d, (array) $d->patternSpecific->$f);
 		}
 		return $this->mpl->render($f,$d);
