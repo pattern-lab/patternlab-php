@@ -23,10 +23,18 @@ Patterns are the core element of Pattern Lab. Understanding how they work is the
 * [Including One Pattern Within Another](https://github.com/pattern-lab/patternlab-php/wiki/Including-One-Pattern-Within-Another)
 * [Managing the Images and JavaScript for a Pattern](https://github.com/pattern-lab/patternlab-php/wiki/Managing-the-Images-and-JavaScript-for-a-Pattern)
 * [Modifying the Styles for a Pattern](https://github.com/pattern-lab/patternlab-php/wiki/Modifying-the-Styles-for-a-Pattern)
-* [Creating & Working With Dynamic Data for a Pattern](https://github.com/pattern-lab/patternlab-php/wiki/Creating-&-Working-With-Dynamic-Data-for-a-Pattern)
 * [Modifying the Standard Header & Footer for Patterns](https://github.com/pattern-lab/patternlab-php/wiki/Modifying-the-Standard-Header-&-Footer-for-Patterns)
 
-## Using the Advanced Features
+## Creating & Working With Dynamic Data for a Pattern
+
+The PHP version of Pattern Lab utilizes Mustache as the template language for patterns. In addition to allowing for the [inclusion of one pattern within another](https://github.com/pattern-lab/patternlab-php/wiki/Including-One-Pattern-Within-Another) it also gives pattern developers the ability to include variables. This means that attributes like image sources can be centralized in one file for easy modification across one or more patterns. The PHP version of Pattern Lab uses a JSON file, `source/data/data.json`, to centralize many of these attributes.
+
+* [Introduction to JSON & Mustache Variables](http://github.com/pattern-lab/patternlab-php/wiki/Introduction-to-JSON-&-Mustache-Variables)
+* [Overriding the Central `data.json` Variables with Pattern-specific Variables](https://github.com/pattern-lab/patternlab-php/wiki/Overriding-the-Central-%60data.json%60-Variables-with-Pattern-specific-Variables)
+* [Linking to Patterns with Pattern Lab's Default `link` Variable](https://github.com/pattern-lab/patternlab-php/wiki/Linking-to-Patterns-with-Pattern-Lab's-Default-%60link%60-Variable)
+* [Creating Lists with Pattern Lab's Default `listItems` Variable](https://github.com/pattern-lab/patternlab-php/wiki/Creating-Lists-with-Pattern-Lab's-Default-%60listItems%60-Variable)
+
+## Using Pattern Lab's Advanced Features
 
 By default, the Pattern Lab assets can be manually generated and the Pattern Lab site manually refreshed but who wants to waste time doing that? Here are some ways that the PHP version of Pattern Lab can make your development workflow a little smoother:
 
