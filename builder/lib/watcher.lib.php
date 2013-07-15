@@ -162,13 +162,21 @@ class Watcher extends Builder {
 					}
 					
 					// check to see if it's a new file or a file that has changed
-					$mt = $object->getMTime();
-					if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists(__DIR__."/../../public/".$fileName)) {
-						$o->$fileName = $mt;
-						$this->moveStaticFile($fileName,"added");
-					} else if (!$ignoreDir && $object->isFile() && isset($o->$fileName) && ($o->$fileName != $mt)) {
-						$o->$fileName = $mt;
-						$this->moveStaticFile($fileName,"changed");
+					if (file_exists($name)) {
+						
+						$mt = $object->getMTime();
+						if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists(__DIR__."/../../public/".$fileName)) {
+							$o->$fileName = $mt;
+							$this->moveStaticFile($fileName,"added");
+						} else if (!$ignoreDir && $object->isFile() && isset($o->$fileName) && ($o->$fileName != $mt)) {
+							$o->$fileName = $mt;
+							$this->moveStaticFile($fileName,"changed");
+						} else if (!isset($o->fileName)) {
+							$o->$fileName = $mt;
+						}
+						
+					} else {
+						unset($o->$fileName);
 					}
 					
 				}
