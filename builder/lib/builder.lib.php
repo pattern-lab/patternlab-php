@@ -84,8 +84,8 @@ class Builder {
 	*/
 	protected function mustacheFileSystemLoaderInstance() {
 		$this->mfs = new Mustache_Engine(array(
-						"loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/patternlab-files/"),
-						"partials_loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/patternlab-files/partials/")
+						"loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/_patternlab-files/"),
+						"partials_loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/_patternlab-files/partials/")
 		));
 	}
 	
@@ -97,9 +97,9 @@ class Builder {
 	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
 	*/
 	private function renderFile($f) {
-		$h  = file_get_contents(__DIR__.$this->sp."../patternlab-files/pattern-header-footer/header.html");
+		$h  = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
 		$rf = $this->renderPattern($f);
-		$f  = file_get_contents(__DIR__.$this->sp."../patternlab-files/pattern-header-footer/footer.html");
+		$f  = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
 		return $h."\n".$rf."\n".$f;
 	}
 	
@@ -247,14 +247,14 @@ class Builder {
 	protected function gatherData() {
 		
 		// gather the data from the main source data.json
-		if (file_exists(__DIR__."/../../source/data/data.json")) {
-			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/data/data.json")));
+		if (file_exists(__DIR__."/../../source/_data/data.json")) {
+			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/_data/data.json")));
 		}
 		
 		// add list item data, makes 'listItems' a reserved word
-		if (file_exists(__DIR__."/../../source/data/listitems.json")) {
+		if (file_exists(__DIR__."/../../source/_data/listitems.json")) {
 			
-			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/data/listitems.json"));
+			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/_data/listitems.json"));
 			$numbers   = array("one","two","three","four","five","six","seven","eight","nine","ten");
 			
 			$i = 0;
@@ -309,7 +309,7 @@ class Builder {
 				$entry = $this->getEntry($filename,"j");
 				if (in_array($entry,$this->patternPaths[$patternTypeClean])) {
 					$patternName = $entry.".mustache";
-					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/patterns/".$entry.".json"));
+					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/_patterns/".$entry.".json"));
 				}
 			}
 			
@@ -318,7 +318,7 @@ class Builder {
 				$entry = $this->getEntry($filename,"j");
 				if (in_array($entry,$this->patternPaths[$patternTypeClean])) {
 					$patternName = $entry.".mustache";
-					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/patterns/".$entry.".json"));
+					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/_patterns/".$entry.".json"));
 				}
 			}
 			
