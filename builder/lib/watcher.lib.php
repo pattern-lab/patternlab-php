@@ -119,6 +119,10 @@ class Watcher extends Builder {
 					
 				}
 			}
+			
+			// iterate over the data files and regenerate the entire site if they've changed
+			$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/_data/"), RecursiveIteratorIterator::SELF_FIRST);
+			foreach($objects as $name => $object) {
 				
 			// check the user-supplied watch files (e.g. css)
 			$i = 0;
@@ -127,54 +131,36 @@ class Watcher extends Builder {
 				if (!isset($o->$wf)) {
 					$o->$wf = new stdClass();
 				}
+				// md5 hash the file to be *sure* its changed
+				$dh = $this->md5File($name);
+				$fileName = str_replace(__DIR__."/../../source/_data/","",$name);
 				
 				// md5 hash the user-supplied filenames, if it's changed just move the single file
 				// update the change time so that content sync will work properly
 				$fh = $this->md5File(__DIR__."/../../source/".$wf);
 				if (!isset($o->$wf->fh)) {
 					$o->$wf->fh = $fh;
+				if (!isset($o->$fileName)) {
+					$o->$fileName = $dh;
 				} else {
 					if ($o->$wf->fh != $fh) {
 						$o->$wf->fh = $fh;
 						$this->moveFile($wf,$this->mf[$i]);
+					if ($o->$fileName != $dh) {
+						$o->$fileName = $dh;
+						$this->gatherData();
+						$this->renderAndMove();
+						$this->generateViewAllPages();
 						$this->updateChangeTime();
 						print $wf." changed...\n";
 					};
 					$i++;
+						print "_data/".$fileName." changed...\n";
+					}
 				}
 				
 			}
 			
-			// check the main data.json file for changes, if it's changed render & move the *entire* project
-			// update the change time so that content sync will work properly
-			$dh = $this->md5File(__DIR__."/../../source/data/data.json");
-			if (!isset($o->dh)) {
-				$o->dh = $dh;
-			} else {
-				if ($o->dh != $dh) {
-					$o->dh = $dh;
-					$this->gatherData();
-					$this->renderAndMove();
-					$this->generateViewAllPages();
-					$this->updateChangeTime();
-					print "data/data.json changed...\n";
-				};
-			}
-			
-			// check the listitems.json file for changes, if it's changed render & move the *entire* project
-			// update the change time so that content sync will work properly
-			$lh = $this->md5File(__DIR__."/../../source/data/listitems.json");
-			if (!isset($o->lh)) {
-				$o->lh = $lh;
-			} else {
-				if ($o->lh != $lh) {
-					$o->lh = $lh;
-					$this->gatherData();
-					$this->renderAndMove();
-					$this->generateViewAllPages();
-					$this->updateChangeTime();
-					print "data/listitems.json changed...\n";
-				};
 			}
 			
 			$c = true;
