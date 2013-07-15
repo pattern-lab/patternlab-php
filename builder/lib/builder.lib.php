@@ -16,8 +16,6 @@ class Builder {
 	protected $d;                 // data from data.json files
 	protected $sp;                // source patterns dir
 	protected $pp;                // public patterns dir
-	protected $dp;                // permissions for the public pattern dirs
-	protected $fp;                // permissions for the public pattern files
 	protected $ie;                // extensions to ignore
 	protected $id;                // directories to ignore
 	protected $contentSyncPort;   // for populating the websockets template partial
@@ -139,9 +137,7 @@ class Builder {
 				$entry = str_replace("/","-",$entry);
 				if (!is_dir(__DIR__.$this->pp.$entry)) {
 					mkdir(__DIR__.$this->pp.$entry);
-					//chmod($this->pp.$entry,$this->dp);
 					file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
-					//chmod($this->pp.$entry."/pattern.html",$this->fp);
 				} else {
 					file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
 				}
@@ -218,9 +214,7 @@ class Builder {
 							$patternPath = $patternType."-".$patternSubType;
 							if (!is_dir(__DIR__.$this->pp.$patternPath)) {
 								mkdir(__DIR__.$this->pp.$patternPath);
-								//chmod($this->pp.$entry,$this->dp);
 								file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
-								//chmod($this->pp.$entry."/pattern.html",$this->fp);
 							} else {
 								file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
 							}
