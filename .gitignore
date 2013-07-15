@@ -2,7 +2,10 @@
 public/index.html
 public/styleguide.html
 public/styleguide/html/styleguide.html
-public/css/*.css
+public/css/*
+public/fonts/*
+public/js/*
+public/images/*
 public/patterns/*
 config.ini
 latest-change.txt
