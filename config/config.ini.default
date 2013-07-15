@@ -11,11 +11,11 @@ pp = "/../../public/patterns/";
 dp = 0775;
 fp = 0664;
 
-// 'wf' is for files that pattern lab should watch for changes, 'mf' is for 
-// where those files should be moved when they are changed. to add files to the watch simply 
-// separate them with commas
-wf = "css/style.css"
-mf = "css/style.css"
+// file extensions to ignore when building or watching the source dir, separate with a comma
+ie = "scss,DS_Store,less"
+
+// directories and files to ignore when building or watching the source dir, separate with a comma
+id = "scss"
 
 // choose which ports the websocket services should run on
 contentSyncPort  = "8002"

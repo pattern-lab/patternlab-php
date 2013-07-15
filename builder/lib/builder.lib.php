@@ -18,8 +18,8 @@ class Builder {
 	protected $pp;                // public patterns dir
 	protected $dp;                // permissions for the public pattern dirs
 	protected $fp;                // permissions for the public pattern files
-	protected $wf;                // files to be watched to see if they should be moved
-	protected $mf;                // where the files should be moved too
+	protected $ie;                // extensions to ignore
+	protected $id;                // directories to ignore
 	protected $contentSyncPort;   // for populating the websockets template partial
 	protected $navSyncPort;       // for populating the websockets template partial
 	protected $patternTypes;      // a list of pattern types that match the directory structure
@@ -48,7 +48,7 @@ class Builder {
 		foreach ($config as $key => $value) {
 			
 			// if the variables are array-like make sure the properties are validated/trimmed/lowercased before saving
-			if (($key == "wf") || ($key == "mf")) {
+			if (($key == "ie") || ($key == "id")) {
 				$values = explode(",",$value);
 				array_walk($values,'Builder::trim');
 				$this->$key = $values;
