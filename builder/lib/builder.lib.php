@@ -16,10 +16,8 @@ class Builder {
 	protected $d;                 // data from data.json files
 	protected $sp;                // source patterns dir
 	protected $pp;                // public patterns dir
-	protected $dp;                // permissions for the public pattern dirs
-	protected $fp;                // permissions for the public pattern files
-	protected $wf;                // files to be watched to see if they should be moved
-	protected $mf;                // where the files should be moved too
+	protected $ie;                // extensions to ignore
+	protected $id;                // directories to ignore
 	protected $contentSyncPort;   // for populating the websockets template partial
 	protected $navSyncPort;       // for populating the websockets template partial
 	protected $patternTypes;      // a list of pattern types that match the directory structure
@@ -48,7 +46,7 @@ class Builder {
 		foreach ($config as $key => $value) {
 			
 			// if the variables are array-like make sure the properties are validated/trimmed/lowercased before saving
-			if (($key == "wf") || ($key == "mf")) {
+			if (($key == "ie") || ($key == "id")) {
 				$values = explode(",",$value);
 				array_walk($values,'Builder::trim');
 				$this->$key = $values;
@@ -84,8 +82,8 @@ class Builder {
 	*/
 	protected function mustacheFileSystemLoaderInstance() {
 		$this->mfs = new Mustache_Engine(array(
-						"loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/patternlab-files/"),
-						"partials_loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/patternlab-files/partials/")
+						"loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/_patternlab-files/"),
+						"partials_loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/_patternlab-files/partials/")
 		));
 	}
 	
@@ -97,9 +95,9 @@ class Builder {
 	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
 	*/
 	private function renderFile($f) {
-		$h  = file_get_contents(__DIR__.$this->sp."../patternlab-files/pattern-header-footer/header.html");
+		$h  = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
 		$rf = $this->renderPattern($f);
-		$f  = file_get_contents(__DIR__.$this->sp."../patternlab-files/pattern-header-footer/footer.html");
+		$f  = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
 		return $h."\n".$rf."\n".$f;
 	}
 	
@@ -139,9 +137,7 @@ class Builder {
 				$entry = str_replace("/","-",$entry);
 				if (!is_dir(__DIR__.$this->pp.$entry)) {
 					mkdir(__DIR__.$this->pp.$entry);
-					//chmod($this->pp.$entry,$this->dp);
 					file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
-					//chmod($this->pp.$entry."/pattern.html",$this->fp);
 				} else {
 					file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
 				}
@@ -218,9 +214,7 @@ class Builder {
 							$patternPath = $patternType."-".$patternSubType;
 							if (!is_dir(__DIR__.$this->pp.$patternPath)) {
 								mkdir(__DIR__.$this->pp.$patternPath);
-								//chmod($this->pp.$entry,$this->dp);
 								file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
-								//chmod($this->pp.$entry."/pattern.html",$this->fp);
 							} else {
 								file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
 							}
@@ -247,14 +241,14 @@ class Builder {
 	protected function gatherData() {
 		
 		// gather the data from the main source data.json
-		if (file_exists(__DIR__."/../../source/data/data.json")) {
-			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/data/data.json")));
+		if (file_exists(__DIR__."/../../source/_data/data.json")) {
+			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/_data/data.json")));
 		}
 		
 		// add list item data, makes 'listItems' a reserved word
-		if (file_exists(__DIR__."/../../source/data/listitems.json")) {
+		if (file_exists(__DIR__."/../../source/_data/listitems.json")) {
 			
-			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/data/listitems.json"));
+			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/_data/listitems.json"));
 			$numbers   = array("one","two","three","four","five","six","seven","eight","nine","ten");
 			
 			$i = 0;
@@ -309,7 +303,7 @@ class Builder {
 				$entry = $this->getEntry($filename,"j");
 				if (in_array($entry,$this->patternPaths[$patternTypeClean])) {
 					$patternName = $entry.".mustache";
-					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/patterns/".$entry.".json"));
+					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/_patterns/".$entry.".json"));
 				}
 			}
 			
@@ -318,7 +312,7 @@ class Builder {
 				$entry = $this->getEntry($filename,"j");
 				if (in_array($entry,$this->patternPaths[$patternTypeClean])) {
 					$patternName = $entry.".mustache";
-					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/patterns/".$entry.".json"));
+					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/_patterns/".$entry.".json"));
 				}
 			}
 			
@@ -638,6 +632,36 @@ class Builder {
 		}
 	}
 	
+	/**
+	* Moves static files that aren't directly related to Pattern Lab
+	* @param  {String}       file name to be moved
+	* @param  {String}       copy for the message to be printed out
+	*/
+	protected function moveStaticFile($fileName,$copy = "") {
+		$this->moveFile($fileName,$fileName);
+		$this->updateChangeTime();
+		if ($copy != "") {
+			print $fileName." ".$copy."...\n";
+		}
+	}
+	
+	/**
+	* Moves static files that aren't directly related to Pattern Lab
+	* @param  {String}       file name to be checked
+	*
+	* @return {Boolean}      whether the directory should be ignored
+	*/
+	protected function ignoreDir($fileName) {
+		$y = false;
+		foreach($this->id as $dir) {
+			$pos = strpos($fileName,"/".$dir."/");
+			if ($pos !== false) {
+				$y = true;
+				break;
+			}
+		}
+		return $y;
+	}
 	
 	/**
 	* Print out the data var. For debugging purposes

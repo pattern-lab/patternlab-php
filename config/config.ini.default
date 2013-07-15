@@ -4,18 +4,14 @@
  */
 
 // both the source and the public location of the patterns
-sp = "/../../source/patterns/";
+sp = "/../../source/_patterns/";
 pp = "/../../public/patterns/";
 
-// permissions for files created by PatternLab
-dp = 0775;
-fp = 0664;
+// file extensions to ignore when building or watching the source dir, separate with a comma
+ie = "scss,DS_Store,less"
 
-// 'wf' is for files that pattern lab should watch for changes, 'mf' is for 
-// where those files should be moved when they are changed. to add files to the watch simply 
-// separate them with commas
-wf = "css/style.css"
-mf = "css/style.css"
+// directories and files to ignore when building or watching the source dir, separate with a comma
+id = "scss"
 
 // choose which ports the websocket services should run on
 contentSyncPort  = "8002"

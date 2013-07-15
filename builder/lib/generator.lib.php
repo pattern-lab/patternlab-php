@@ -38,11 +38,29 @@ class Generator extends Builder {
 		// render out the index and style guide
 		$this->generateMainPages();
 		
-		// check the user-supplied watch files (e.g. css)
-		$i = 0;
-		foreach($this->wf as $wf) {
-			$this->moveFile($wf,$this->mf[$i]);
-			$i++;
+		// iterate over all of the other files in the source directory and move them if their modified time has changed
+		$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/"), RecursiveIteratorIterator::SELF_FIRST);
+		foreach($objects as $name => $object) {
+			
+			// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
+			$fileName = str_replace(__DIR__."/../../source/","",$name);
+			if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
+				
+				// catch directories that have the ignored dir in their path
+				$ignoreDir = $this->ignoreDir($fileName);
+				
+				// check to see if it's a new directory
+				if (!$ignoreDir && $object->isDir() && !is_dir(__DIR__."/../../public/".$fileName)) {
+					mkdir(__DIR__."/../../public/".$fileName);
+				}
+				
+				// check to see if it's a new file or a file that has changed
+				if (!$ignoreDir && $object->isFile() && (!file_exists(__DIR__."/../../public/".$fileName) || ($object->getMTime() > filemtime(__DIR__."/../../public/".$fileName)))) {
+					$this->moveStaticFile($fileName);
+				}
+				
+			}
+			
 		}
 		
 		// update the change time so the auto-reload will fire (doesn't work for the index and style guide)

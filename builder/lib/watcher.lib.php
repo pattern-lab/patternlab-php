@@ -119,62 +119,68 @@ class Watcher extends Builder {
 					
 				}
 			}
+			
+			// iterate over the data files and regenerate the entire site if they've changed
+			$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/_data/"), RecursiveIteratorIterator::SELF_FIRST);
+			foreach($objects as $name => $object) {
 				
-			// check the user-supplied watch files (e.g. css)
-			$i = 0;
-			foreach($this->wf as $wf) {
+				// md5 hash the file to be *sure* its changed
+				$dh = $this->md5File($name);
+				$fileName = str_replace(__DIR__."/../../source/_data/","",$name);
 				
-				if (!isset($o->$wf)) {
-					$o->$wf = new stdClass();
-				}
-				
-				// md5 hash the user-supplied filenames, if it's changed just move the single file
-				// update the change time so that content sync will work properly
-				$fh = $this->md5File(__DIR__."/../../source/".$wf);
-				if (!isset($o->$wf->fh)) {
-					$o->$wf->fh = $fh;
+				if (!isset($o->$fileName)) {
+					$o->$fileName = $dh;
 				} else {
-					if ($o->$wf->fh != $fh) {
-						$o->$wf->fh = $fh;
-						$this->moveFile($wf,$this->mf[$i]);
+					if ($o->$fileName != $dh) {
+						$o->$fileName = $dh;
+						$this->gatherData();
+						$this->renderAndMove();
+						$this->generateViewAllPages();
 						$this->updateChangeTime();
-						print $wf." changed...\n";
-					};
-					$i++;
+						print "_data/".$fileName." changed...\n";
+					}
 				}
 				
 			}
 			
-			// check the main data.json file for changes, if it's changed render & move the *entire* project
-			// update the change time so that content sync will work properly
-			$dh = $this->md5File(__DIR__."/../../source/data/data.json");
-			if (!isset($o->dh)) {
-				$o->dh = $dh;
-			} else {
-				if ($o->dh != $dh) {
-					$o->dh = $dh;
-					$this->gatherData();
-					$this->renderAndMove();
-					$this->generateViewAllPages();
-					$this->updateChangeTime();
-					print "data/data.json changed...\n";
-				};
-			}
-			
-			// check the listitems.json file for changes, if it's changed render & move the *entire* project
-			// update the change time so that content sync will work properly
-			$lh = $this->md5File(__DIR__."/../../source/data/listitems.json");
-			if (!isset($o->lh)) {
-				$o->lh = $lh;
-			} else {
-				if ($o->lh != $lh) {
-					$o->lh = $lh;
-					$this->gatherData();
-					$this->renderAndMove();
-					$this->generateViewAllPages();
-					$this->updateChangeTime();
-					print "data/listitems.json changed...\n";
-				};
+			// iterate over all of the other files in the source directory and move them if their modified time has changed
+			$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/"), RecursiveIteratorIterator::SELF_FIRST);
+			foreach($objects as $name => $object) {
+				
+				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
+				$fileName = str_replace(__DIR__."/../../source/","",$name);
+				if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
+					
+					// catch directories that have the ignored dir in their path
+					$ignoreDir = $this->ignoreDir($fileName);
+					
+					// check to see if it's a new directory
+					if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir(__DIR__."/../../public/".$fileName)) {
+						mkdir(__DIR__."/../../public/".$fileName);
+						$o->$fileName = "dir created"; // placeholder
+						print $fileName."/ directory was created...\n";
+					}
+					
+					// check to see if it's a new file or a file that has changed
+					if (file_exists($name)) {
+						
+						$mt = $object->getMTime();
+						if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists(__DIR__."/../../public/".$fileName)) {
+							$o->$fileName = $mt;
+							$this->moveStaticFile($fileName,"added");
+						} else if (!$ignoreDir && $object->isFile() && isset($o->$fileName) && ($o->$fileName != $mt)) {
+							$o->$fileName = $mt;
+							$this->moveStaticFile($fileName,"changed");
+						} else if (!isset($o->fileName)) {
+							$o->$fileName = $mt;
+						}
+						
+					} else {
+						unset($o->$fileName);
+					}
+					
+				}
+				
 			}
 			
 			$c = true;
