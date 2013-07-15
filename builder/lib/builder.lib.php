@@ -651,6 +651,23 @@ class Builder {
 		}
 	}
 	
+	/**
+	* Moves static files that aren't directly related to Pattern Lab
+	* @param  {String}       file name to be checked
+	*
+	* @return {Boolean}      whether the directory should be ignored
+	*/
+	protected function ignoreDir($fileName) {
+		$y = false;
+		foreach($this->id as $dir) {
+			$pos = strpos($fileName,"/".$dir."/");
+			if ($pos !== false) {
+				$y = true;
+				break;
+			}
+		}
+		return $y;
+	}
 	
 	/**
 	* Print out the data var. For debugging purposes
