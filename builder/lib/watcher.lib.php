@@ -158,7 +158,7 @@ class Watcher extends Builder {
 					if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir(__DIR__."/../../public/".$fileName)) {
 						mkdir(__DIR__."/../../public/".$fileName);
 						$o->$fileName = "dir created"; // placeholder
-						print $fileName." directory was created...\n";
+						print $fileName."/ directory was created...\n";
 					}
 					
 					// check to see if it's a new file or a file that has changed
