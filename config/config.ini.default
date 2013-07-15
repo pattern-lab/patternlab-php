@@ -4,7 +4,7 @@
  */
 
 // both the source and the public location of the patterns
-sp = "/../../source/patterns/";
+sp = "/../../source/_patterns/";
 pp = "/../../public/patterns/";
 
 // permissions for files created by PatternLab
