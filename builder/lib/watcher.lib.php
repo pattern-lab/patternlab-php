@@ -31,114 +31,110 @@ class Watcher extends Builder {
 	*/
 	public function watch() {
 		
-		$c = false;          // have the files been added to the overall object?
-		$t = false;          // was their a change found? re-render
-		$k = false;          // was the entry not a part of the $o object? make sure it's hashes are added
-		$m = false;          // does the index page need to be regenerated?
-		$o = new stdClass(); // create an object to hold the properties
+		$c  = false;          // track that one loop through the pattern file listing has completed
+		$o  = new stdClass(); // create an object to hold the properties
+		$cp = new StdClass(); // create an object to hold a clone of $o
 		
-		// build patternTypesRegex for getEntry
-		$this->getPatternTypesRegex(); 
+		$o->patterns = new stdClass();
 		
 		// run forever
 		while (true) {
 			
-			foreach ($this->patternTypes as $patternType) {
-				
-				// generate all of the patterns
-				$entries = glob(__DIR__.$this->sp.$patternType."/*/*.mustache");
-				
-				foreach($entries as $entry) {
+			// clone the patterns so they can be checked in case something gets deleted
+			$cp = clone $o->patterns;
+			
+			// iterate over the patterns & related data and regenerate the entire site if they've changed
+			$patternObjects  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/_patterns/"), RecursiveIteratorIterator::SELF_FIRST);
+			foreach($patternObjects as $name => $object) {
 					
-					$patternParts = explode("/",$this->getEntry($entry));
+				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
+				$fileName      = str_replace(__DIR__."/../../source/_patterns/","",$name);
+				$fileNameClean = str_replace("/_","/",$fileName);
+				
+				if ($object->isFile() && (($object->getExtension() == "mustache") || ($object->getExtension() == "json"))) {
 					
-					// because we're globbing i need to check again to see if the pattern should be ignored
-					if ($patternParts[2][0] != "_") {
+					// make sure this isn't a hidden pattern
+					$patternParts = explode("/",$fileName);
+					$pattern      = isset($patternParts[2]) ? $patternParts[2] : $patternParts[1];
+					if ($pattern[0] != "_") {
 						
-						// figure out how to watch for new directories and new files
-						if (!isset($o->$entry)) {
-							$o->$entry = new stdClass();
-							$k = true;
-						}
-						
-						// figure out the md5 hash of a file so we can track changes
-						// runs well on a solid state drive. no idea if it thrashes regular disks
-						$ph = $this->md5File($entry);
-						
-						// if the directory wasn't being checked already add the md5 sums
-						if ($k) {
+						// make sure the pattern still exists in source just in case it's been deleted during the iteration
+						if (file_exists($name)) {
 							
-							$o->$entry->ph = $ph;
-							
-							// if we're through the first check make sure to note any new directories being added to Pattern Lab
-							// assuming a pattern actually exists
-							if ($c && ($o->$entry->ph != '')) {
-								$patternName = $this->getEntry($entry);
-								print $patternName." added to Pattern Lab. You should reload the page to see it in the nav...\n";
-								$t = true;
-								$m = true;
+							$mt = $object->getMTime();
+							if (isset($o->patterns->$fileName) && ($o->patterns->$fileName != $mt)) {
+								$o->patterns->$fileName = $mt;
+								$this->updateSite($fileName,"changed");
+							} else if (!isset($o->patterns->$fileName) && $c) {
+								$o->patterns->$fileName = $mt;
+								$this->updateSite($fileName,"added");
+								if ($object->getExtension() == "mustache") {
+									$this->patternPaths[$patternParts[0]][$pattern] = str_replace(".mustache","",$fileName);
+								}
+							} else if (!isset($o->patterns->$fileName)) {
+								$o->patterns->$fileName = $mt;
 							}
 							
-							$k = false;
+							if ($c && isset($o->patterns->$fileName)) {
+								unset($cp->$fileName);
+							}
 							
 						} else {
 							
-							if ($o->$entry->ph != $ph) {
-								
-								$patternName = $this->getEntry($entry);
-								if ($c && ($o->$entry->ph == '')) {
-									print $patternName." added to Pattern Lab. You should reload the page to see it in the nav...\n";
-									$m = true;
-								} else {
-									print $patternName." changed...\n";
-								}
-								
-								$t = true;
-								$o->$entry->ph = $ph;
-								
-							}
+							// the file was removed during the iteration so remove references to the item
+							unset($o->patterns->$fileName);
+							unset($cp->$fileName);
+							unset($this->patternPaths[$patternParts[0]][$pattern]);
+							$this->updateSite($fileName,"removed");
 							
 						}
 						
-						// if a file has been added or changed then render & move the *entire* project (shakes fist at partials)
-						// if a new directory was added regenerate the main pages
-						// also update the change time so that content sync will work properly
-						if ($t) {
-							$this->gatherData();
-							$this->renderAndMove();
-							$this->generateViewAllPages();
-							$this->updateChangeTime();
-							if ($m) {
-								$this->generateMainPages();
-								$m = false;
-							}
-							$t = false;
-						}
+					} elseif (isset($o->patterns->$fileNameClean)) {
+						
+						// the file was hidden so remove references to the item
+						$patternParts = explode("/",$fileNameClean);
+						$pattern      = isset($patternParts[2]) ? $patternParts[2] : $patternParts[1];
+						
+						unset($o->patterns->$fileNameClean);
+						unset($cp->$fileNameClean);
+						unset($this->patternPaths[$patternParts[0]][$pattern]);
+						$this->updateSite($fileNameClean,"hidden");
 						
 					}
 					
 				}
+				
+			}
+			
+			// make sure old entries are deleted
+			// will throw "pattern not found" errors if an entire directory is removed at once
+			if ($c) {
+				
+				foreach($cp as $fileName => $mt) {
+					
+					unset($o->patterns->$fileName);
+					$patternParts = explode("/",$fileName);
+					$pattern = isset($patternParts[2]) ? $patternParts[2] : $patternParts[1];
+					
+					unset($this->patternPaths[$patternParts[0]][$pattern]);
+					$this->updateSite($fileName,"removed");
+					
+				}
+				
 			}
 			
 			// iterate over the data files and regenerate the entire site if they've changed
 			$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/_data/"), RecursiveIteratorIterator::SELF_FIRST);
 			foreach($objects as $name => $object) {
 				
-				// md5 hash the file to be *sure* its changed
-				$dh = $this->md5File($name);
 				$fileName = str_replace(__DIR__."/../../source/_data/","",$name);
+				$mt = $object->getMTime();
 				
 				if (!isset($o->$fileName)) {
-					$o->$fileName = $dh;
-				} else {
-					if ($o->$fileName != $dh) {
-						$o->$fileName = $dh;
-						$this->gatherData();
-						$this->renderAndMove();
-						$this->generateViewAllPages();
-						$this->updateChangeTime();
-						print "_data/".$fileName." changed...\n";
-					}
+					$o->$fileName = $mt;
+				} else if ($o->$fileName != $mt) {
+					$o->$fileName = $mt;
+					$this->updateSite($fileName,"changed");
 				}
 				
 			}
@@ -190,14 +186,28 @@ class Watcher extends Builder {
 	}
 	
 	/**
-	* Converts a given file into an md5 string
-	* @param  {String}       file name to be hashed
+	* Updates the Pattern Lab Website and prints the appropriate message
+	* @param  {String}       file name to included in the message
+	* @param  {String}       a switch for decided which message isn't printed
 	*
-	* @return {String}       md5 string of the file or an empty string if the file wasn't found
+	* @return {String}       the final message
 	*/
-	private function md5File($f) {
-		$r = file_exists($f) ? md5_file($f) : '';
-		return $r;
+	private function updateSite($fileName,$message) {
+		$this->gatherData();
+		$this->gatherNavItems();
+		$this->renderAndMove();
+		$this->generateViewAllPages();
+		$this->updateChangeTime();
+		$this->generateMainPages();
+		if ($message == "added") {
+			print $fileName." was added to Pattern Lab. Reload the website to see this change in the navigation...\n";
+		} elseif ($message == "removed") {
+			print $fileName." was removed from Pattern Lab. Reload the website to see this change reflected in the navigation...\n";
+		} elseif ($message == "hidden") {
+			print $fileName." was hidden from Pattern Lab. Reload the website to see this change reflected in the navigation...\n";
+		} else {
+			print $fileName." changed...\n";
+		}
 	}
 	
 }
