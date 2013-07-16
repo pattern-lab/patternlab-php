@@ -22,8 +22,7 @@ Patterns are the core element of Pattern Lab. Understanding how they work is the
 * ["Hiding" Patterns in the Navigation](https://github.com/pattern-lab/patternlab-php/wiki/Hiding-Patterns-in-the-Navigation)
 * [Including One Pattern Within Another](https://github.com/pattern-lab/patternlab-php/wiki/Including-One-Pattern-Within-Another)
 * [Linking Directly to a Pattern](https://github.com/pattern-lab/patternlab-php/wiki/Linking-Directly-to-a-Pattern)
-* [Managing the Images and JavaScript for a Pattern](https://github.com/pattern-lab/patternlab-php/wiki/Managing-the-Images-and-JavaScript-for-a-Pattern)
-* [Modifying the Styles for a Pattern](https://github.com/pattern-lab/patternlab-php/wiki/Modifying-the-Styles-for-a-Pattern)
+* [Managing Assets for a Pattern: Javascript, images, CSS, etc.](https://github.com/pattern-lab/patternlab-php/wiki/Managing-Assets-for-a-Pattern)
 * [Modifying the Standard Header & Footer for Patterns](https://github.com/pattern-lab/patternlab-php/wiki/Modifying-the-Standard-Header-&-Footer-for-Patterns)
 
 ## Creating & Working With Dynamic Data for a Pattern
