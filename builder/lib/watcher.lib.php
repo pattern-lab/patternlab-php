@@ -6,8 +6,8 @@
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
- * Watches the source/patterns dir for any changes so they can be automagically
- * moved to the public/patterns dir.
+ * Watches the source/ dir for any changes so those changes can be automagically
+ * moved to the public/ dir. Watches static files, patterns, and data files
  *
  * This is not the most efficient implementation of a directory watch but I hope
  * it's the most platform agnostic.
@@ -27,7 +27,7 @@ class Watcher extends Builder {
 	}
 	
 	/**
-	* Watch the source directory for any changes to existing files. Will run forever if given the chance
+	* Watch the source/ directory for any changes to existing files. Will run forever if given the chance.
 	*/
 	public function watch() {
 		
@@ -107,7 +107,7 @@ class Watcher extends Builder {
 			}
 			
 			// make sure old entries are deleted
-			// will throw "pattern not found" errors if an entire directory is removed at once
+			// will throw "pattern not found" errors if an entire directory is removed at once but that shouldn't be a big deal
 			if ($c) {
 				
 				foreach($cp as $fileName => $mt) {
@@ -200,7 +200,7 @@ class Watcher extends Builder {
 	private function updateSite($fileName,$message) {
 		$this->gatherData();
 		$this->gatherNavItems();
-		$this->renderAndMove();
+		$this->generatePatterns();
 		$this->generateViewAllPages();
 		$this->updateChangeTime();
 		$this->generateMainPages();
