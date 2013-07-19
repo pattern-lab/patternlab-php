@@ -182,8 +182,6 @@ class Builder {
 	
 	/**
 	* Generates the view all pages
-	*
-	* @return {String}        writes out each view all page
 	*/
 	protected function generateViewAllPages() {
 		
@@ -239,12 +237,13 @@ class Builder {
 	
 	/**
 	* Gather data from source/_data/data.json, source/_data/listitems.json, and pattern-specific json files
-	* Throws all the data into the Builder class scoped d var
+	*
 	* Reserved attributes: 
 	*    - $this->d->listItems : listItems from listitems.json, duplicated into separate arrays for $this->d->listItems->one, $this->d->listItems->two, $this->d->listItems->three... etc.
 	*    - $this->d->link : the links to each pattern
 	*    - $this->d->patternSpecific : holds attributes from the pattern-specific data files
 	*
+	* @return {Array}        populates $this->d
 	*/
 	protected function gatherData() {
 		
@@ -330,7 +329,7 @@ class Builder {
 	/**
 	* Gathers the partials for the nav drop down in Pattern Lab
 	*
-	* @return {Array}        the nav items organized by type
+	* @return {Array}        populates $this->navItems
 	*/
 	protected function gatherNavItems() {
 		
@@ -426,7 +425,8 @@ class Builder {
 	/**
 	* Pulls together all of the pattern paths for use with mustache and the simplified partial matching
 	*
-	* @return {Array}        an array of pattern paths
+	* @return {Array}        populates $this->patternPaths
+	* @return {Array}        populates $this->patternTypes
 	*/
 	protected function gatherPatternPaths() {
 		
@@ -572,8 +572,9 @@ class Builder {
 	}
 	
 	/**
-	* Get the name for a given pattern sans any possible digits
+	* Get the name for a given pattern sans any possible digits used for reordering
 	* @param  {String}       the pattern based on the filesystem name
+	* @param  {Boolean}      whether or not to strip slashes from the pattern name
 	*
 	* @return {String}       a lower-cased version of the pattern name
 	*/
@@ -584,9 +585,9 @@ class Builder {
 	}
 	
 	/**
-	* Create a regex based on pattern types
+	* Create a regex based on $this->patternTypes
 	*
-	* @return {String}       sets the final regex into the var $this->patternTypesRegex
+	* @return {String}       populates $this->patternTypesRegex
 	*/
 	protected function getPatternTypesRegex() {
 		
