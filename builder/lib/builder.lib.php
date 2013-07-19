@@ -21,8 +21,8 @@ class Builder {
 	protected $contentSyncPort;   // for populating the websockets template partial
 	protected $navSyncPort;       // for populating the websockets template partial
 	protected $patternTypes;      // a list of pattern types that match the directory structure
-	protected $patternPaths;      // the paths to patterns for use with mustache
-	protected $patternTypesRegex; // the simple regex for the pattern types. used in getEntry()
+	protected $patternPaths;      // the paths to patterns for use with mustache partials
+	protected $patternTypesRegex; // the simple regex for the pattern types. used in getPath()
 	protected $navItems;          // the items for the nav. includes view all links
 	
 	/**
@@ -35,7 +35,7 @@ class Builder {
 		if (!($config = @parse_ini_file(__DIR__."/../../config/config.ini"))) {
 			// config.ini didn't exist so attempt to create it using the default file
 			if (!@copy(__DIR__."/../../config/config.ini.default", __DIR__."/../../config/config.ini")) {
-				print "Please make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically.";
+				print "Please make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically. Check permissions of config/.";
 				exit;
 			} else {
 				$config = parse_ini_file(__DIR__."/../../config/config.ini");
@@ -64,11 +64,11 @@ class Builder {
 	}
 	
 	/**
-	* Simply returns a new Mustache instance that uses the Pattern Loader
+	* Load a new Mustache instance that uses the Pattern Loader
 	*
 	* @return {Object}       an instance of the Mustache engine
 	*/
-	protected function mustachePatternLoaderInstance() {
+	protected function loadMustachePatternLoaderInstance() {
 		$this->mpl = new Mustache_Engine(array(
 						"loader" => new Mustache_Loader_PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths)),
 						"partials_loader" => new Mustache_Loader_PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths))
@@ -76,29 +76,15 @@ class Builder {
 	}
 	
 	/**
-	* Simply returns a new Mustache instance that uses the File System Loader
+	* Load a new Mustache instance that uses the File System Loader
 	*
 	* @return {Object}       an instance of the Mustache engine
 	*/
-	protected function mustacheFileSystemLoaderInstance() {
+	protected function loadMustacheFileSystemLoaderInstance() {
 		$this->mfs = new Mustache_Engine(array(
 						"loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/_patternlab-files/"),
 						"partials_loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/_patternlab-files/partials/")
 		));
-	}
-	
-	/**
-	* Renders a pattern within the context of spitting out a finished pattern w/ header & footer
-	* @param  {String}       the filename of the file to be rendered
-	* @param  {Object}       the instance of mustache to be used in the rendering
-	*
-	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
-	*/
-	private function renderFile($f) {
-		$h  = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
-		$rf = $this->renderPattern($f);
-		$f  = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
-		return $h."\n".$rf."\n".$f;
 	}
 	
 	/**
@@ -109,54 +95,24 @@ class Builder {
 	* @return {String}       the mark-up as rendered by Mustache
 	*/
 	protected function renderPattern($f) {
+		
+		// if there is pattern-specific data make sure to override the default in $this->d
 		$d = $this->d;
 		if (isset($d->patternSpecific) && array_key_exists($f,$d->patternSpecific)) {
 			$d = (object) array_merge((array) $d, (array) $d->patternSpecific->$f);
 		}
+		
 		return $this->mpl->render($f,$d);
-	}
-	
-	/**
-	* Initiates a mustache instance, renders out a full pattern file and places it in the public directory
-	*
-	* @return {String}       the mark-up placed in it's appropriate location in the public directory
-	*/
-	protected function renderAndMove() {
-		
-		// make sure $this->mpl is refreshed on each render & move. for some reason the mustache instance dies
-		$this->mustachePatternLoaderInstance();
-		
-		// scan the pattern source directory
-		foreach($this->patternPaths as $patternType) {
-			
-			foreach($patternType as $pattern => $entry) {
-				
-				$r = $this->renderFile($entry.".mustache");
-				
-				// if the pattern directory doesn't exist create it
-				$entry = str_replace("/","-",$entry);
-				if (!is_dir(__DIR__.$this->pp.$entry)) {
-					mkdir(__DIR__.$this->pp.$entry);
-					file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
-				} else {
-					file_put_contents(__DIR__.$this->pp.$entry."/".$entry.".html",$r);
-				}
-				
-			}
-			
-		}
 		
 	}
 	
 	/**
-	* Render the index page and style guide
-	*
-	* @return {String}        writes out the index and style guides
+	* Generates the index page and style guide
 	*/
 	protected function generateMainPages() {
 		
 		// make sure $this->mfs is refreshed on each generation of view all. for some reason the mustache instance dies
-		$this->mustacheFileSystemLoaderInstance();
+		$this->loadMustacheFileSystemLoaderInstance();
 		
 		// render out the main pages and move them to public
 		$this->navItems['contentsyncport'] = $this->contentSyncPort;
@@ -181,14 +137,58 @@ class Builder {
 	}
 	
 	/**
-	* Renders the view all pages
+	* Generates all of the patterns and puts them in the public directory
+	*/
+	protected function generatePatterns() {
+		
+		// make sure $this->mpl is refreshed on each generate & move. for some reason the mustache instance dies
+		$this->loadMustachePatternLoaderInstance();
+		
+		// scan the pattern source directory
+		foreach($this->patternPaths as $patternType) {
+			
+			foreach($patternType as $pattern => $path) {
+				
+				$r = $this->generatePatternFile($path.".mustache");
+				
+				// if the pattern directory doesn't exist create it
+				$path = str_replace("/","-",$path);
+				if (!is_dir(__DIR__.$this->pp.$path)) {
+					mkdir(__DIR__.$this->pp.$path);
+					file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$r);
+				} else {
+					file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$r);
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	/**
+	* Generates a pattern with a header & footer
+	* @param  {String}       the filename of the file to be rendered
+	* @param  {Object}       the instance of mustache to be used in the rendering
+	*
+	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
+	*/
+	private function generatePatternFile($f) {
+		$h  = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
+		$rf = $this->renderPattern($f);
+		$f  = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
+		return $h."\n".$rf."\n".$f;
+	}
+	
+	/**
+	* Generates the view all pages
 	*
 	* @return {String}        writes out each view all page
 	*/
 	protected function generateViewAllPages() {
 		
 		// make sure $this->mfs is refreshed on each generation of view all. for some reason the mustache instance dies
-		$this->mustacheFileSystemLoaderInstance();
+		$this->loadMustacheFileSystemLoaderInstance();
 		
 		// add view all to each list
 		$i = 0; $k = 0;
@@ -238,8 +238,13 @@ class Builder {
 	}
 	
 	/**
-	* Gather data from source/data/data.json
+	* Gather data from source/_data/data.json, source/_data/listitems.json, and pattern-specific json files
 	* Throws all the data into the Builder class scoped d var
+	* Reserved attributes: 
+	*    - $this->d->listItems : listItems from listitems.json, duplicated into separate arrays for $this->d->listItems->one, $this->d->listItems->two, $this->d->listItems->three... etc.
+	*    - $this->d->link : the links to each pattern
+	*    - $this->d->patternSpecific : holds attributes from the pattern-specific data files
+	*
 	*/
 	protected function gatherData() {
 		
@@ -284,10 +289,10 @@ class Builder {
 		$this->d->link = new stdClass();
 		foreach($this->patternPaths as $patternTypeName => $patterns) {
 			
-			foreach($patterns as $pattern => $entry) {
+			foreach($patterns as $pattern => $path) {
 				$patternName = $patternTypeName."-".$pattern;
-				$entry = str_replace("/","-",$entry);
-				$this->d->link->$patternName = "/patterns/".$entry."/".$entry.".html";
+				$path = str_replace("/","-",$path);
+				$this->d->link->$patternName = "/patterns/".$path."/".$path.".html";
 			}
 			
 		}
@@ -298,24 +303,23 @@ class Builder {
 		foreach($this->patternTypes as $patternType) {
 			
 			// $this->d->patternSpecific["pattern-name-that-matches-render.mustache"] = array of data;
-			$patternTypeBits  = explode("-",$patternType,2);
-			$patternTypeClean = (((int)$patternTypeBits[0] != 0) || ($patternTypeBits[0] == '00')) ? $patternTypeBits[1] : $patternType;
+			$patternTypeClean = $this->getPatternName($patternType,false);
 			
 			// find pattern data for pattern subtypes*/
 			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.json") as $filename) {
-				$entry = $this->getEntry($filename,"j");
-				if (in_array($entry,$this->patternPaths[$patternTypeClean])) {
-					$patternName = $entry.".mustache";
-					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/_patterns/".$entry.".json"));
+				$path = $this->getPath($filename,"j");
+				if (in_array($path,$this->patternPaths[$patternTypeClean])) {
+					$patternName = $path.".mustache";
+					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/_patterns/".$path.".json"));
 				}
 			}
 			
 			// find pattern data for pattern types that are flat (e.g. pages & templates)
 			foreach(glob(__DIR__.$this->sp.$patternType."/*.json") as $filename) {
-				$entry = $this->getEntry($filename,"j");
-				if (in_array($entry,$this->patternPaths[$patternTypeClean])) {
-					$patternName = $entry.".mustache";
-					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/_patterns/".$entry.".json"));
+				$path = $this->getPath($filename,"j");
+				if (in_array($path,$this->patternPaths[$patternTypeClean])) {
+					$patternName = $path.".mustache";
+					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/_patterns/".$path.".json"));
 				}
 			}
 			
@@ -334,12 +338,11 @@ class Builder {
 		$bi = 0;                           // track the number for the bucket array
 		$ni = 0;                           // track the number for the nav items array
 		
-		// iterate through each pattern and add them to the as buckets
+		// iterate through each pattern type and add them to the as buckets
 		foreach($this->patternTypes as $patternType) {
 			
 			// get the bits for a bucket and check to see if the first bit is a number
-			$bucketBits = explode("-",$patternType,2);
-			$bucket = (((int)$bucketBits[0] != 0) || ($bucketBits[0] == '00')) ? str_replace("-"," ",$bucketBits[1]) : str_replace("-"," ",$patternType);
+			$bucket = $this->getPatternName($patternType); // ok, it's not a pattern name but same functionality
 			
 			// add a new bucket
 			$b["buckets"][$bi] = array("bucketNameLC" => strtolower($bucket),
@@ -375,8 +378,7 @@ class Builder {
 					
 					// get the bits for a directory and check to see if the first bit is a number
 					$dirClean = substr($dir,strlen(__DIR__.$this->sp.$patternType."/"));
-					$dirBits  = explode("-",$dirClean,2);
-					$dirFinal = (((int)$dirBits[0] != 0) || ($dirBits[0] == '00')) ? str_replace("-"," ",$dirBits[1]) : str_replace("-"," ",$dirClean);
+					$dirFinal = $this->getPatternName($dirClean); // ok, it's not a pattern name but same functionality
 					
 					// add a new section
 					$b["buckets"][$bi]["navItems"][$ni] = array("sectionNameLC" => strtolower($dirFinal),
@@ -437,7 +439,7 @@ class Builder {
 			$this->patternTypes[] = substr($patternType,strlen(__DIR__.$this->sp)+1);
 		}
 		
-		// set-up the regex for getEntry()
+		// set-up the regex for getPath()
 		$this->getPatternTypesRegex();
 		
 		// find the patterns for the types
@@ -447,25 +449,22 @@ class Builder {
 			// find pattern paths for pattern subtypes
 			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
 				preg_match('/\/([A-z0-9-_]{1,})\.mustache$/',$filename,$matches);
-				$patternBits = explode("-",$matches[1],2);
-				$pattern = (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? $patternBits[1] : $matches[1]; // if the first bit of a
+				$pattern = $this->getPatternName($matches[1], false);
 				if ($pattern[0] != "_") {
-					$patternTypePaths[$pattern] = $this->getEntry($filename);
+					$patternTypePaths[$pattern] = $this->getPath($filename);
 				}
 			}
 			
 			// find pattern paths for pattern types that are flat (e.g. pages & templates)
 			foreach(glob(__DIR__.$this->sp.$patternType."/*.mustache") as $filename) {
 				preg_match('/\/([A-z0-9-_]{1,})\.mustache$/',$filename,$matches);
-				$patternBits = explode("-",$matches[1],2);
-				$pattern = (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? $patternBits[1] : $matches[1]; // if the first bit of a
+				$pattern = $this->getPatternName($matches[1], false);
 				if ($pattern[0] != "_") {
-					$patternTypePaths[$pattern] = $this->getEntry($filename);
+					$patternTypePaths[$pattern] = $this->getPath($filename);
 				}
 			}
 			
-			$patternTypeBits = explode("-",$patternType,2);
-			$patternTypeClean = (((int)$patternTypeBits[0] != 0) || ($patternTypeBits[0] == '00')) ? $patternTypeBits[1] : $patternType;
+			$patternTypeClean = $this->getPatternName($patternType, false);
 			$this->patternPaths[$patternTypeClean] = $patternTypePaths;
 			
 		}
@@ -480,7 +479,7 @@ class Builder {
 	protected function gatherPartials() {
 		
 		// make sure $this->mpl is refreshed on each render & move. for some reason the mustache instance dies
-		$this->mustachePatternLoaderInstance();
+		$this->loadMustachePatternLoaderInstance();
 		
 		$p = array("partials" => array());
 		
@@ -489,16 +488,16 @@ class Builder {
 			
 			if (($patternType != "pages") && ($patternType != "templates")) {
 				
-				foreach($patternTypeValues as $pattern => $entry) {
+				foreach($patternTypeValues as $pattern => $path) {
 					
 					// double-check the file exists
-					if (file_exists(__DIR__."/".$this->sp.$entry.".mustache")) {
+					if (file_exists(__DIR__."/".$this->sp.$path.".mustache")) {
 						
 						// create the pattern name & link, render the partial, and stick it all into the pattern array
-						$patternParts    = explode("/",$entry);
+						$patternParts    = explode("/",$path);
 						$patternName     = $this->getPatternName($patternParts[2]);
-						$patternLink     = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
-						$patternPartial  = $this->renderPattern($entry.".mustache");
+						$patternLink     = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
+						$patternPartial  = $this->renderPattern($path.".mustache");
 						$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
 						
 					}
@@ -523,7 +522,7 @@ class Builder {
 	protected function gatherPartialsByMatch($patternType, $patternSubType) {
 		
 		// make sure $this->mpl is refreshed on each render & move. for some reason the mustache instance dies
-		$this->mustachePatternLoaderInstance();
+		$this->loadMustachePatternLoaderInstance();
 		
 		$p = array("partials" => array());
 		
@@ -536,16 +535,16 @@ class Builder {
 			foreach(glob(__DIR__.$this->sp.$patternType."/".$patternSubType."/*.mustache") as $filename) {
 				
 				// get the directory match of the pattern
-				$entry = $this->getEntry($filename);
+				$path = $this->getPath($filename);
 					
 				// because we're globbing we need to check again to see if the pattern should be ignored
-				$patternParts = explode("/",$entry);
+				$patternParts = explode("/",$path);
 				if ($patternParts[2][0] != "_") {
 					
 					// create the pattern name & link, render the partial, and stick it all into the pattern array
 					$patternName     = $this->getPatternName($patternParts[2]);
-					$patternLink     = str_replace("/","-",$entry)."/".str_replace("/","-",$entry).".html";
-					$patternPartial  = $this->renderPattern($entry.".mustache");
+					$patternLink     = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
+					$patternPartial  = $this->renderPattern($path.".mustache");
 					$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
 					
 				}
@@ -559,13 +558,13 @@ class Builder {
 	}
 	
 	/**
-	* Get the directory for a given pattern by parsing the file path
+	* Get the directory path for a given pattern or json file by parsing the file path
 	* @param  {String}       the filepath for a directory that contained the match
-	* @param  {String}       the the type of match for the pattern matching
+	* @param  {String}       the type of match for the pattern matching, defaults to mustache
 	*
 	* @return {String}       the directory for the pattern
 	*/
-	protected function getEntry($filepath,$type = "m") {
+	protected function getPath($filepath,$type = "m") {
 		$file = ($type == 'm') ? '\.mustache' : '\.json';
 		if (preg_match('/\/('.$this->patternTypesRegex.'\/(([A-z0-9-]{1,})\/|)([A-z0-9-]{1,}))'.$file.'$/',$filepath,$matches)) {
 			return $matches[1];
@@ -573,20 +572,21 @@ class Builder {
 	}
 	
 	/**
-	* Get the space-delimited, english-looking name for a given pattern
+	* Get the name for a given pattern sans any possible digits
 	* @param  {String}       the pattern based on the filesystem name
 	*
 	* @return {String}       a lower-cased version of the pattern name
 	*/
-	protected function getPatternName($pattern) {
+	protected function getPatternName($pattern, $clean = true) {
 		$patternBits  = explode("-",$pattern,2);
-		return (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? str_replace("-"," ",$patternBits[1]) : str_replace("-"," ",$pattern);
+		$patternName = (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? $patternBits[1] : $pattern;
+		return ($clean) ? (str_replace("-"," ",$patternName)) : $patternName;
 	}
 	
 	/**
 	* Create a regex based on pattern types
 	*
-	* @return {String}       the final regex
+	* @return {String}       sets the final regex into the var $this->patternTypesRegex
 	*/
 	protected function getPatternTypesRegex() {
 		
@@ -605,8 +605,6 @@ class Builder {
 	/**
 	* Write out the time tracking file so the content sync service will work. A holdover
 	* from how I put together the original AJAX polling set-up.
-	*
-	* @return {String}       file containing a timestamp
 	*/
 	protected function updateChangeTime() {
 		
@@ -620,14 +618,10 @@ class Builder {
 	}
 	
 	/**
-	* Copies a watch file from the given source path to the given public path.
-	* NOT for patterns. Is defined in config.ini and is for special files
-	* @param  {String}       the source watch file
-	* @param  {String}       the public watch file
-	*
-	* @return {String}       copied file
-	*
-	* BUG: should probably check to see if the destination dir exists
+	* Copies a file from the given source path to the given public path.
+	* THIS IS NOT FOR PATTERNS 
+	* @param  {String}       the source file
+	* @param  {String}       the public file
 	*/
 	protected function moveFile($s,$p) {
 		if (file_exists(__DIR__."/../../source/".$s)) {
@@ -649,7 +643,7 @@ class Builder {
 	}
 	
 	/**
-	* Moves static files that aren't directly related to Pattern Lab
+	* Check to see if a given filename is in a directory that should be ignored
 	* @param  {String}       file name to be checked
 	*
 	* @return {Boolean}      whether the directory should be ignored

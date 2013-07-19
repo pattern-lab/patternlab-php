@@ -6,7 +6,7 @@
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
- * Compiles and moves all files in the source/patterns dir to public/patterns dir.
+ * Compiles and moves all files in the source/patterns dir to public/patterns dir ONCE.
  * Vast majority of logic is in builder.lib.php
  *
  */
@@ -24,8 +24,7 @@ class Generator extends Builder {
 	}
 	
 	/**
-	* Main logic. Gathers data, gets partials, and generates patterns
-	* Also generates the main index file and styleguide
+	* Pulls together a bunch of functions from builder.lib.php in an order that makes sense
 	*/
 	public function generate() {
 		
@@ -33,7 +32,7 @@ class Generator extends Builder {
 		$this->gatherData();
 		
 		// render out the patterns and move them to public/patterns
-		$this->renderAndMove();
+		$this->generatePatterns();
 		
 		// render out the index and style guide
 		$this->generateMainPages();

@@ -9,6 +9,7 @@ The PHP version of Pattern Lab should be relatively easy for anyone to get up an
 * [Requirements](https://github.com/pattern-lab/patternlab-php/wiki/Requirements)
 * [Installing the PHP Version of Pattern Lab](https://github.com/pattern-lab/patternlab-php/wiki/Installing-the-PHP-Version-of-Pattern-Lab)
 * [Generating the Pattern Lab Website for the First Time](https://github.com/pattern-lab/patternlab-php/wiki/Generating-the-Pattern-Lab-Website-for-the-First-Time)
+* [Editing the Pattern Lab Website Source Files](https://github.com/pattern-lab/patternlab-php/wiki/Editing-the-Pattern-Lab-Website-Source-Files)
 * Setting Up Apache to use the Advanced Features
 * [Using the Command-line Options](https://github.com/pattern-lab/patternlab-php/wiki/Using-the-Command-line-Options)
 
@@ -20,9 +21,9 @@ Patterns are the core element of Pattern Lab. Understanding how they work is the
 * Adding New Patterns
 * [Reorganizing Patterns](https://github.com/pattern-lab/patternlab-php/wiki/Reorganizing-Patterns)
 * ["Hiding" Patterns in the Navigation](https://github.com/pattern-lab/patternlab-php/wiki/Hiding-Patterns-in-the-Navigation)
-* [Including One Pattern Within Another](https://github.com/pattern-lab/patternlab-php/wiki/Including-One-Pattern-Within-Another)
+* [Including One Pattern Within Another via Partials](https://github.com/pattern-lab/patternlab-php/wiki/Including-One-Pattern-Within-Another)
 * [Linking Directly to a Pattern](https://github.com/pattern-lab/patternlab-php/wiki/Linking-Directly-to-a-Pattern)
-* [Managing Assets for a Pattern: Javascript, images, CSS, etc.](https://github.com/pattern-lab/patternlab-php/wiki/Managing-Assets-for-a-Pattern)
+* [Managing Assets for a Pattern: JavaScript, images, CSS, etc.](https://github.com/pattern-lab/patternlab-php/wiki/Managing-Assets-for-a-Pattern)
 * [Modifying the Standard Header & Footer for Patterns](https://github.com/pattern-lab/patternlab-php/wiki/Modifying-the-Standard-Header-&-Footer-for-Patterns)
 
 ## Creating & Working With Dynamic Data for a Pattern
