@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Guide for a Specific Pattern Sub-Type</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../../styleguide/css/styleguide.css" media="all" />
+    <link rel="stylesheet" href="../../css/style.css" media="all" />
+</head>
+<body>
+
+<!--Style Guide Main Content-->
+<div class="sg-main" role="main">
+
+	<!--Patterns-->
+	<div id="patterns">
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/02-organisms-components-carousel/02-organisms-components-carousel.html">Carousel</a></h2>
+				<div class="carousel-list-carousel">
+	<div class="carousel-container">
+		<div class="block block-inset">
+		    <a href="#" class="inner">
+				<div class="b-thumb">
+			<img src="../../images/fpo_4x3.png" alt="4x3 Image" />				</div>
+				<div class="b-text">
+					<h2 class="headline">Headline: Lorem ipsum dolor sit amet, consectetur adipisicing</h2>
+				</div>
+			</a>
+		</div>	<div>
+	<div class="carousel-controls">
+		<a href="#" class="carousel-prev">&larr;</a>
+		<div class="carousel-pagination">1/5</div>
+		<a href="#" class="carousel-next">&rarr;</a>
+	</div>
+</div>
+			</div>
+	</div> <!--end #patterns-->
+	
+</div><!--end .sg-main-->
+<script>
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage('body-click',"http://"+window.location.host)
+	};
+</script>
+</body>
+</html>

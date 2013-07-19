@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Guide for a Specific Pattern Sub-Type</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../../styleguide/css/styleguide.css" media="all" />
+    <link rel="stylesheet" href="../../css/style.css" media="all" />
+</head>
+<body>
+
+<!--Style Guide Main Content-->
+<div class="sg-main" role="main">
+
+	<!--Patterns-->
+	<div id="patterns">
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/00-atoms-tables-table/00-atoms-tables-table.html">Table</a></h2>
+				<table>
+	<thead>
+		<tr>
+			<th>Table Heading 1</th>
+			<th>Table Heading 2</th>
+			<th>Table Heading 3</th>
+			<th>Table Heading 3</th>
+			<th>Table Heading 4</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<th>Table Footer 1</th>
+			<th>Table Footer 2</th>
+			<th>Table Footer 3</th>
+			<th>Table Footer 3</th>
+			<th>Table Footer 4</th>
+		</tr>
+	</tfoot>
+	<tbody>
+	<tr>
+		<td>Table Cell 1</td>
+		<td>Table Cell 2</td>
+		<td>Table Cell 3</td>
+		<td>Table Cell 4</td>
+		<td>Table Cell 5</td>
+	</tr>
+	<tr>
+		<td>Table Cell 1</td>
+		<td>Table Cell 2</td>
+		<td>Table Cell 3</td>
+		<td>Table Cell 4</td>
+		<td>Table Cell 5</td>
+	</tr>
+	<tr>
+		<td>Table Cell 1</td>
+		<td>Table Cell 2</td>
+		<td>Table Cell 3</td>
+		<td>Table Cell 4</td>
+		<td>Table Cell 5</td>
+	</tr>
+	<tr>
+		<td>Table Cell 1</td>
+		<td>Table Cell 2</td>
+		<td>Table Cell 3</td>
+		<td>Table Cell 4</td>
+		<td>Table Cell 5</td>
+	</tr>
+	</tbody>
+</table>
+			</div>
+	</div> <!--end #patterns-->
+	
+</div><!--end .sg-main-->
+<script>
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage('body-click',"http://"+window.location.host)
+	};
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pattern Lab Pattern</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width" />
+	
+	<!--
+		Remember that patterns are displayed from two-levels deep (e.g. patterns/patterntype-patternsubtype-patternname/patterntype-patternsubtype-patternname.html)
+		Therefore all calls to assets should have the ../../ in order to work in an apache-less environment
+	-->
+	<link rel="stylesheet" href="../../css/style.css" media="all" />
+	<script src="../../js/modernizr.js"></script>
+</head>
+<body>
+	
+	<!-- Start of Pattern -->
+<h1><a href="#">Heading 1 with link</a></h1>
+<h2><a href="#">Heading 2 with link</a></h2>
+<h3><a href="#">Heading 3 with link</a></h3>  
+<h4><a href="#">Heading 4 with link</a></h4>
+<h5><a href="#">Heading 5 with link</a></h5> 
+<h6><a href="#">Heading 6 with link</a></h6>
+	<!-- End of Pattern -->
+	
+	<!--
+		Remember that patterns are displayed from two-levels deep (e.g. patterns/patterntype-patternsubtype-patternname/patterntype-patternsubtype-patternname.html)
+		Therefore all calls to assets should have the ../../ in order to work in an apache-less environment
+	-->
+	
+	<!-- DO NOT MODIFY -->
+	<script>
+	
+		// run only if we're running under apache
+		var host = window.location.host;
+		if (host != '') {
+			
+			// alert the iframe parent that the pattern has loaded. for page follow.
+			parent.postMessage(host,"http://"+host);
+			
+			// if there are clicks on the iframe make sure the nav in the iframe parent closes
+			var body = document.getElementsByTagName('body');
+			body[0].onclick = function() {
+				parent.postMessage('body-click',"http://"+host)
+			};
+			
+		}
+		
+	</script>
+	<!-- /DO NOT MODIFY -->
+	
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Guide for a Specific Pattern Sub-Type</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../../styleguide/css/styleguide.css" media="all" />
+    <link rel="stylesheet" href="../../css/style.css" media="all" />
+</head>
+<body>
+
+<!--Style Guide Main Content-->
+<div class="sg-main" role="main">
+
+	<!--Patterns-->
+	<div id="patterns">
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-text-address/01-molecules-text-address.html">Address</a></h2>
+				<div class="vcard">
+	<div class="org">Company Name</div>
+	<div class="adr">
+		<div class="street-address">1234 Main St.</div>
+		<span class="locality">Anywhere</span>,
+		<span class="postal-code">101010</span>,
+		<abbr class="region" title="California">CA</abbr>
+		<div class="country-name">U.S.A</div>
+	</div>
+	<div class="tel">+1.888.123.4567</div>
+</div>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-text-blockquote-with-citation/01-molecules-text-blockquote-with-citation.html">Blockquote With Citation</a></h2>
+				<blockquote>
+   	<p>A block quotation (also known as a long quotation or extract) is a quotation in a written document, that is set off from the main text as a paragraph, or block of text, and typically distinguished visually using indentation and a different typeface or smaller size quotation. </p>
+	<cite class="citation">Quote Source</cite>
+</blockquote>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-text-byline-author-only/01-molecules-text-byline-author-only.html">Byline Author Only</a></h2>
+				<div class="byline">by Author Name</div>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-text-byline-author-time/01-molecules-text-byline-author-time.html">Byline Author Time</a></h2>
+				<div class="byline">by Author Name on <time datetime="2013-04-06T12:32+00:00">June 3rd</time></div>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-text-caption/01-molecules-text-caption.html">Caption</a></h2>
+				<p class="caption">A caption can be applied to an image, quote, form field, etc.</p>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-text-heading-group/01-molecules-text-heading-group.html">Heading Group</a></h2>
+				<div class="hgroup">
+   	<h2>This is the heading group's main heading</h2>
+   	<h3>This is the heading group's subheading</h3>
+</div>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-text-intro-text/01-molecules-text-intro-text.html">Intro Text</a></h2>
+				<p class="intro">The intro text may be a lead-in to the passage of text, or it may just be used to create a visual distinction between the rest of the passage of text.</p>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-text-pullquote/01-molecules-text-pullquote.html">Pullquote</a></h2>
+				<blockquote class="pullquote">
+   	<p>A pull quote is a quotation or excerpt from an article</p>
+</blockquote>
+			</div>
+	</div> <!--end #patterns-->
+	
+</div><!--end .sg-main-->
+<script>
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage('body-click',"http://"+window.location.host)
+	};
+</script>
+</body>
+</html>

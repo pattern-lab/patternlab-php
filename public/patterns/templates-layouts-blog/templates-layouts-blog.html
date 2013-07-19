@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pattern Lab</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width" />
+	<link rel="stylesheet" href="/styleguide/css/styleguide.css" media="all" />
+	<link rel="stylesheet" href="/css/style.css" media="all" />
+	<script src="/js/modernizr.js"></script>
+</head>
+<body>
+	
+	<!-- Start of Pattern -->
+<div class="page" id="page">
+	<div role="main">
+		<h1>Latest Posts</h1>
+		<div class="l-two-col">
+			<div class="l-main">
+			</div><!--end l-main-->
+
+			<div class="l-sidebar">
+				
+			</div><!--end l-sidebar-->
+		</div><!--end two-col-->
+	</div><!--End role=main-->
+</div>
+	<!-- End of Pattern -->
+	
+	<script>
+		parent.postMessage(window.location.href,"http://"+window.location.host);
+		
+		var body = document.getElementsByTagName('body');
+		body[0].onclick = function() {
+			parent.postMessage('body-click',"http://"+window.location.host)
+		};
+	</script>
+</body>
+</html>

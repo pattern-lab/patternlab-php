@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Guide for a Specific Pattern Sub-Type</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../../styleguide/css/styleguide.css" media="all" />
+    <link rel="stylesheet" href="../../css/style.css" media="all" />
+</head>
+<body>
+
+<!--Style Guide Main Content-->
+<div class="sg-main" role="main">
+
+	<!--Patterns-->
+	<div id="patterns">
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/00-atoms-global-animations/00-atoms-global-animations.html">Animations</a></h2>
+				<div class="demo-animate animate-fade"><strong>Fade:</strong> Duration: 0.3s Easing: ease-out (Hover to see effect)</div>
+
+<div class="demo-animate animate-move"><div class="demo-shape"></div><strong>Movement:</strong> Duration: 0.8s  Easing: ease-in-out; (Hover to see effect)</div>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/00-atoms-global-colors/00-atoms-global-colors.html">Colors</a></h2>
+				<ul class="sg-colors">
+	<li>
+		<span class="sg-swatch" style="background: #ff0000;"></span>
+		<span class="sg-label">#ff0000</span>
+	</li>
+	<li>
+		<span class="sg-swatch" style="background: #00ff00;"></span>
+		<span class="sg-label">#00ff00</span>
+	</li>
+	<li>
+		<span class="sg-swatch" style="background: #0000ff;"></span>
+		<span class="sg-label">#0000ff</span>
+	</li>
+	<li>
+		<span class="sg-swatch" style="background: #ffff00;"></span>
+		<span class="sg-label">#ffff00</span>
+	</li>
+	<li>
+		<span class="sg-swatch" style="background: #00ffff;"></span>
+		<span class="sg-label">#00ffff</span>
+	</li>
+	<li>
+		<span class="sg-swatch" style="background: #ff00ff;"></span>
+		<span class="sg-label">#ff00ff</span>
+	</li>
+	<li>
+		<span class="sg-swatch" style="background: #ffffff;"></span>
+		<span class="sg-label">#ffffff</span>
+	</li>
+	<li>
+		<span class="sg-swatch" style="background: #808080;"></span>
+		<span class="sg-label">#808080</span>
+	</li>
+	<li>
+		<span class="sg-swatch" style="background: #000000;"></span>
+		<span class="sg-label">#000000</span>
+	</li>
+</ul>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/00-atoms-global-fonts/00-atoms-global-fonts.html">Fonts</a></h2>
+				<p>Primary font: "HelveticaNeue", "Helvetica", "Arial", sans-serif;</p>
+<p><em>Primary font italic: "HelveticaNeue", "Helvetica", "Arial", sans-serif;</em></p>
+<p><strong>Primary font bold: "HelveticaNeue", "Helvetica", "Arial", sans-serif;</strong></p>
+<p class="font-secondary">Secondary font: Georgia, Times, "Times New Roman", serif;</p>
+<p class="font-secondary"><em>Secondary font italic: Georgia, Times, "Times New Roman", serif;</em></p>
+<p class="font-secondary"><strong>Secondary font bold: Georgia, Times, "Times New Roman", serif;</strong></p>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/00-atoms-global-visibility/00-atoms-global-visibility.html">Visibility</a></h2>
+				<p class="hide-small">This text is hidden on smaller screens</p>
+
+<p class="hide-med hide-large"><em>This text is only visible on smaller screens</em></p>
+
+<p class="hide-med">This text is hidden on medium screens only</p>
+
+<p class="hide-small hide-large"><em>This text is only visible on medium screens</em></p>
+
+<p class="hide-large">This text is hidden on large screens</p>
+
+<p class="hide-small hide-med"><em>This text is only visible on large screens</em></p>
+			</div>
+	</div> <!--end #patterns-->
+	
+</div><!--end .sg-main-->
+<script>
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage('body-click',"http://"+window.location.host)
+	};
+</script>
+</body>
+</html>

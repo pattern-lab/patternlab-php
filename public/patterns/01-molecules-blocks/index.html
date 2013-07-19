@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Guide for a Specific Pattern Sub-Type</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../../styleguide/css/styleguide.css" media="all" />
+    <link rel="stylesheet" href="../../css/style.css" media="all" />
+</head>
+<body>
+
+<!--Style Guide Main Content-->
+<div class="sg-main" role="main">
+
+	<!--Patterns-->
+	<div id="patterns">
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-blocks-block-hero/01-molecules-blocks-block-hero.html">Block Hero</a></h2>
+				<div class="block block-hero">
+	<a href="" class="inner">
+		<div class="b-thumb">
+			<img src="../../images/fpo_4x3.png" alt="4x3 Image" />		</div>
+		<div class="b-text">
+			<h2 class="headline"></h2>
+		</div>
+	</a>
+</div>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-blocks-block-thumb-headline/01-molecules-blocks-block-thumb-headline.html">Block Thumb Headline</a></h2>
+				<div class="block block-thumb">
+    <a href="#" class="b-inner">
+		<div class="b-thumb">
+			<img src="../../images/fpo_square.png" alt="Square Thumbnail" />		</div>
+		<div class="b-text">
+			<h2 class="headline">Headline: Lorem Ipsum Dolor Amet Sit</h2>
+		</div>
+	</a>
+</div>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-blocks-headline-byline/01-molecules-blocks-headline-byline.html">Headline Byline</a></h2>
+				<div class="block block-headline">
+    <a href="#">
+		<h2 class="headline">Headline: Lorem Ipsum Dolor Amet Sit</h2>
+		<time datetime="2013-04-06T12:32+00:00">2 weeks ago</time>	</a>
+</div>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-blocks-headline-only/01-molecules-blocks-headline-only.html">Headline Only</a></h2>
+				<div class="block block-headline">
+    <a href="#">
+		<h2 class="headline">Headline: Lorem ipsum dolor sit amet, consectetur adipiscing elit</h2>
+	</a>
+</div>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-blocks-inset-block/01-molecules-blocks-inset-block.html">Inset Block</a></h2>
+				<div class="block block-inset">
+    <a href="#" class="inner">
+		<div class="b-thumb">
+		</div>
+		<div class="b-text">
+			<h2 class="headline">Headline: Lorem ipsum dolor sit amet, consectetur adipisicing</h2>
+		</div>
+	</a>
+</div>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-blocks-media-block/01-molecules-blocks-media-block.html">Media Block</a></h2>
+				<div class="block block-thumb">
+    <a href="#" class="b-inner">
+		<div class="b-thumb">
+		</div>
+		<div class="b-text">
+			<h2 class="headline">Headline: Lorem Ipsum Dolor Amet Sit</h2>
+		</div>
+	</a>
+</div>
+			</div>
+	</div> <!--end #patterns-->
+	
+</div><!--end .sg-main-->
+<script>
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage('body-click',"http://"+window.location.host)
+	};
+</script>
+</body>
+</html>

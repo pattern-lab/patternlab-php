@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Guide for a Specific Pattern Sub-Type</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../../styleguide/css/styleguide.css" media="all" />
+    <link rel="stylesheet" href="../../css/style.css" media="all" />
+</head>
+<body>
+
+<!--Style Guide Main Content-->
+<div class="sg-main" role="main">
+
+	<!--Patterns-->
+	<div id="patterns">
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-navigation-breadcrumbs/01-molecules-navigation-breadcrumbs.html">Breadcrumbs</a></h2>
+				<ul class="breadcrumbs">
+	<li><a href="#">Grandparent</a></li>
+	<li><a href="#">Parent</a></li>
+	<li><a href="#">Child</a></li>
+	<li><a href="#">Grandchild</a></li>
+	<li><a href="#">Great-Grandchild</a></li>
+</ul>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-navigation-footer-nav/01-molecules-navigation-footer-nav.html">Footer Nav</a></h2>
+				<ul class="nav-footer">
+	<li><a href="#">Home</a></li>
+	<li><a href="#">About</a></li>
+	<li><a href="#">Blog</a></li>
+	<li><a href="#">Contact</a></li>
+</ul>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-navigation-pagination/01-molecules-navigation-pagination.html">Pagination</a></h2>
+				<ol class="pagination">
+	<li class="current"><a href="#">1</a></li>
+	<li><a href="#">2</a></li>
+	<li><a href="#">3</a></li>
+	<li><a href="#">4</a></li>
+	<li><a href="#">5</a></li>
+	<li><a href="#">6</a></li>
+	<li><a href="#">7</a></li>
+</ol>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-navigation-primary-nav/01-molecules-navigation-primary-nav.html">Primary Nav</a></h2>
+				<nav id="nav" class="nav">
+	<ul>
+		<li><a href="#">Home</a></li>
+		<li><a href="#">About</a></li>
+		<li><a href="#">Blog</a></li>
+		<li><a href="#">Contact</a></li>
+	</ul>
+</nav><!--end .nav-->
+
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-navigation-tabs/01-molecules-navigation-tabs.html">Tabs</a></h2>
+				<div class="tabs">
+	<ul class="tab-list">
+		<li><a href="#" class="active">Tab 1</a></li>
+		<li><a href="#">Tab 2</a></li>
+		<li><a href="#">Tab 3</a></li>
+	</ul>
+</div>
+			</div>
+	</div> <!--end #patterns-->
+	
+</div><!--end .sg-main-->
+<script>
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage('body-click',"http://"+window.location.host)
+	};
+</script>
+</body>
+</html>

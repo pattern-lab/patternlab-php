@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Guide for a Specific Pattern Sub-Type</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../../styleguide/css/styleguide.css" media="all" />
+    <link rel="stylesheet" href="../../css/style.css" media="all" />
+</head>
+<body>
+
+<!--Style Guide Main Content-->
+<div class="sg-main" role="main">
+
+	<!--Patterns-->
+	<div id="patterns">
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-layouts-four-up/01-molecules-layouts-four-up.html">Four Up</a></h2>
+				<div class="demo">
+	<!--Grid 4up-->
+	<div class="g g-4up">
+		<div class="gi">1/4</div>
+		<div class="gi">1/4</div>
+		<div class="gi">1/4</div>
+		<div class="gi">1/4</div>
+	</div>
+</div>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-layouts-one-up/01-molecules-layouts-one-up.html">One Up</a></h2>
+				<div class="demo">
+	<!--Grid 1up-->
+	<div class="g g-1up">
+		<div class="gi">1/1</div>
+	</div>
+	<!--End Grid 1up-->		
+</div><!--end .demo-->
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-layouts-three-up/01-molecules-layouts-three-up.html">Three Up</a></h2>
+				<div class="demo">
+	<!--Grid 3up-->
+	<div class="g g-3up">
+		<div class="gi">1/3</div>
+		<div class="gi">1/3</div>
+		<div class="gi">1/3</div>
+	</div>
+</div>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/01-molecules-layouts-two-up/01-molecules-layouts-two-up.html">Two Up</a></h2>
+				<div class="demo">
+	<!--Grid 2up-->
+	<div class="g g-2up">
+		<div class="gi">1/2</div>
+		<div class="gi">1/2</div>
+	</div>
+</div>
+			</div>
+	</div> <!--end #patterns-->
+	
+</div><!--end .sg-main-->
+<script>
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage('body-click',"http://"+window.location.host)
+	};
+</script>
+</body>
+</html>

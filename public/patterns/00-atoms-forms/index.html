@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Guide for a Specific Pattern Sub-Type</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../../styleguide/css/styleguide.css" media="all" />
+    <link rel="stylesheet" href="../../css/style.css" media="all" />
+</head>
+<body>
+
+<!--Style Guide Main Content-->
+<div class="sg-main" role="main">
+
+	<!--Patterns-->
+	<div id="patterns">
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/00-atoms-forms-checkbox/00-atoms-forms-checkbox.html">Checkbox</a></h2>
+				<form action="#">
+    <fieldset class="options">
+        <legend>Checkbox <abbr title="Required">*</abbr></legend>
+        <ul>
+            <li><label for="checkbox1"><input id="checkbox1" name="checkbox" type="checkbox" checked="checked"> Choice A</label></li>
+            <li><label for="checkbox2"><input id="checkbox2" name="checkbox" type="checkbox"> Choice B</label></li>
+            <li><label for="checkbox3"><input id="checkbox3" name="checkbox" type="checkbox"> Choice C</label></li>
+        </ul>
+    </fieldset>
+</form>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/00-atoms-forms-html5-inputs/00-atoms-forms-html5-inputs.html">Html5 Inputs</a></h2>
+				<fieldset>
+    <div class="field-container"><label for="ic">Color input</label> <input type="color" id="ic" value="#000000"></div>
+    <div class="field-container"><label for="in">Number input</label> <input type="number" id="in" min="0" max="10" value="5"></div>
+    <div class="field-container"><label for="ir">Range input</label> <input type="range" id="ir" value="10"></div>
+    <div class="field-container"><label for="idd">Date input</label> <input type="date" id="idd" value="1970-01-01"></div>
+    <div class="field-container"><label for="idm">Month input</label> <input type="month" id="idm" value="1970-01"></div>
+    <div class="field-container"><label for="idw">Week input</label> <input type="week" id="idw" value="1970-W01"></div>
+    <div class="field-container"><label for="idt">Datetime input</label> <input type="datetime" id="idt" value="1970-01-01T00:00:00Z"></div>
+    <div class="field-container"><label for="idtl">Datetime-local input</label> <input type="datetime-local" id="idtl" value="1970-01-01T00:00"></div>
+</fieldset>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/00-atoms-forms-radio-buttons/00-atoms-forms-radio-buttons.html">Radio Buttons</a></h2>
+				<form action="#">
+    <fieldset class="options">
+        <legend>Radio</legend>
+        <ul>
+            <li><label for="radio1"><input id="radio1" name="radio" type="radio" class="radio" checked="checked"> Option 1</label></li>
+            <li><label for="radio2"><input id="radio2" name="radio" type="radio" class="radio"> Option 2</label></li>
+            <li><label for="radio3"><input id="radio3" name="radio" type="radio" class="radio"> Option 3</label></li>
+        </ul>
+    </fieldset>
+</form>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/00-atoms-forms-select-menu/00-atoms-forms-select-menu.html">Select Menu</a></h2>
+				<fieldset>
+    <div class="field-container">
+        <label for="select">Select</label>
+        <select id="select">
+            <optgroup label="Option Group">
+                <option>Option One</option>
+                <option>Option Two</option>
+                <option>Option Three</option>
+            </optgroup>
+        </select>
+    </div>
+</fieldset>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/00-atoms-forms-text-fields/00-atoms-forms-text-fields.html">Text Fields</a></h2>
+				<fieldset>
+    <div class="field-container">
+        <label for="text">Text Input <abbr title="Required">*</abbr></label>
+        <input id="text" type="text" placeholder="Text Input">
+    </div>
+    <div class="field-container">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Type your Password">
+    </div>
+    <div class="field-container">
+        <label for="password">Web Address</label>
+        <input id="password" type="url" placeholder="http://yoursite.com">
+    </div>
+    <div class="field-container">
+        <label for="password">Email Address</label>
+        <input id="password" type="email" placeholder="name@email.com">
+    </div>
+    <div class="field-container">
+        <label for="search">Search</label>
+        <input id="search" type="search" placeholder="Enter Search Term">
+    </div>
+    <div class="field-container">
+        <label for="text">Number Input <abbr title="Required">*</abbr></label>
+        <input id="text" type="number" placeholder="Enter a Number" pattern="[0-9]*">
+    </div>
+    <div class="field-container">
+        <label for="textarea">Textarea</label>
+        <textarea id="textarea" rows="8" cols="48" placeholder="Enter your message here"></textarea>
+    </div>
+    <div class="field-container">
+        <label class="error">Error Input</label>
+        <input class="is-error" type="text" placeholder="Text Input">
+    </div>
+    <div class="field-container">
+        <label  class="valid">Valid</label>
+        <input  class="is-valid" type="text" placeholder="Text Input">
+    </div>
+</fieldset>
+			</div>
+	</div> <!--end #patterns-->
+	
+</div><!--end .sg-main-->
+<script>
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage('body-click',"http://"+window.location.host)
+	};
+</script>
+</body>
+</html>

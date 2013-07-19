@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Guide for a Specific Pattern Sub-Type</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../../styleguide/css/styleguide.css" media="all" />
+    <link rel="stylesheet" href="../../css/style.css" media="all" />
+</head>
+<body>
+
+<!--Style Guide Main Content-->
+<div class="sg-main" role="main">
+
+	<!--Patterns-->
+	<div id="patterns">
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/00-atoms-media-audio/00-atoms-media-audio.html">Audio</a></h2>
+				<audio controls="controls">  
+   <source src="#" />  
+   <source src="#" />  
+</audio>
+			</div>
+			<div class="sg-pattern">
+				<h2 class="sg-head sg-sub" ><a href="../../patterns/00-atoms-media-video/00-atoms-media-video.html">Video</a></h2>
+				<video width="640" height="360" controls="">
+	<source src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" type="video/mp4">
+	<source src="http://clips.vorwaerts-gmbh.de/VfE.webm" type="video/webm">
+	<source src="http://clips.vorwaerts-gmbh.de/VfE.ogv" type="video/ogg">
+	<img src="" width="640" height="360" alt="Big Buck Bunny" title="No video playback capabilities, please download">
+</video>
+			</div>
+	</div> <!--end #patterns-->
+	
+</div><!--end .sg-main-->
+<script>
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage('body-click',"http://"+window.location.host)
+	};
+</script>
+</body>
+</html>
