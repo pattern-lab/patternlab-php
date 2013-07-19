@@ -6,6 +6,8 @@
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
+ * Does the vast majority of heavy lifting for the Generator and Watch classes
+ *
  */
 
 class Builder {
@@ -111,7 +113,7 @@ class Builder {
 	*/
 	protected function generateMainPages() {
 		
-		// make sure $this->mfs is refreshed on each generation of view all. for some reason the mustache instance dies
+		// make sure $this->mfs is refreshed
 		$this->loadMustacheFileSystemLoaderInstance();
 		
 		// render out the main pages and move them to public
@@ -141,10 +143,10 @@ class Builder {
 	*/
 	protected function generatePatterns() {
 		
-		// make sure $this->mpl is refreshed on each generate & move. for some reason the mustache instance dies
+		// make sure $this->mpl is refreshed
 		$this->loadMustachePatternLoaderInstance();
 		
-		// scan the pattern source directory
+		// loop over the pattern paths to generate patterns for each
 		foreach($this->patternPaths as $patternType) {
 			
 			foreach($patternType as $pattern => $path) {
@@ -169,7 +171,6 @@ class Builder {
 	/**
 	* Generates a pattern with a header & footer
 	* @param  {String}       the filename of the file to be rendered
-	* @param  {Object}       the instance of mustache to be used in the rendering
 	*
 	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
 	*/
@@ -337,7 +338,7 @@ class Builder {
 		$bi = 0;                           // track the number for the bucket array
 		$ni = 0;                           // track the number for the nav items array
 		
-		// iterate through each pattern type and add them to the as buckets
+		// iterate through each pattern type and add them as buckets
 		foreach($this->patternTypes as $patternType) {
 			
 			// get the bits for a bucket and check to see if the first bit is a number
@@ -478,7 +479,7 @@ class Builder {
 	*/
 	protected function gatherPartials() {
 		
-		// make sure $this->mpl is refreshed on each render & move. for some reason the mustache instance dies
+		// make sure $this->mpl is refreshed
 		$this->loadMustachePatternLoaderInstance();
 		
 		$p = array("partials" => array());
@@ -521,7 +522,7 @@ class Builder {
 	*/
 	protected function gatherPartialsByMatch($patternType, $patternSubType) {
 		
-		// make sure $this->mpl is refreshed on each render & move. for some reason the mustache instance dies
+		// make sure $this->mpl is refreshed
 		$this->loadMustachePatternLoaderInstance();
 		
 		$p = array("partials" => array());
