@@ -240,10 +240,10 @@
 	}
 	
 	function saveSize(size) {
-		if (!findValue('vpWidth')) {
-			addValue("vpWidth",size);
+		if (!DataSaver.findValue('vpWidth')) {
+			DataSaver.addValue("vpWidth",size);
 		} else {
-			updateValue("vpWidth",size);
+			DataSaver.updateValue("vpWidth",size);
 		}
 	}
 	
@@ -305,10 +305,10 @@
 			
 			if (viewportWidth > minViewportWidth) {
 				
-				if (!findValue('vpWidth')) {
-					addValue("vpWidth",viewportWidth);
+				if (!DataSaver.findValue('vpWidth')) {
+					DataSaver.addValue("vpWidth",viewportWidth);
 				} else {
-					updateValue("vpWidth",viewportWidth);
+					DataSaver.updateValue("vpWidth",viewportWidth);
 				}
 				
 				sizeiframe(viewportWidth,false);
@@ -330,7 +330,7 @@
 	// pre-load the viewport width
 	var vpWidth = 0;
 	var trackViewportWidth = true; // can toggle this feature on & off
-	if (trackViewportWidth && (vpWidth = findValue("vpWidth"))) {
+	if (trackViewportWidth && (vpWidth = DataSaver.findValue("vpWidth"))) {
 		updateViewportWidth(vpWidth);
 	}
 

@@ -77,63 +77,68 @@
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  */
-var plCookieName = "patternlab";
 
-function addValue(name,val) {
-	var cookieVal = $.cookie(plCookieName);
-	if ((cookieVal == null) || (cookieVal == "")) {
-		cookieVal = name+"~"+val;
-	} else {
-		cookieVal = cookieVal+"|"+name+"~"+val;
-	}
-	$.cookie(plCookieName,cookieVal);
-}
-
-function updateValue(name,val) {
-	var updateCookieVals = "";
-	var cookieVals = $.cookie(plCookieName).split("|");
-	for (var i = 0; i < cookieVals.length; i++) {
-    	var fieldVals = cookieVals[i].split("~");
-    	if (fieldVals[0] == name) {
-			fieldVals[1] = val;
-		}
-		if (i > 0) {
-				updateCookieVals += "|"+fieldVals[0]+"~"+fieldVals[1];
+var DataSaver = {
+	
+	cookieName: "patternlab",
+	
+	addValue: function (name,val) {
+		var cookieVal = $.cookie(this.cookieName);
+		if ((cookieVal == null) || (cookieVal == "")) {
+			cookieVal = name+"~"+val;
 		} else {
-				updateCookieVals += fieldVals[0]+"~"+fieldVals[1];
-		}	
-	}
-	$.cookie(plCookieName,updateCookieVals);
-}
-
-function removeValue(name) {
-	var updateCookieVals = "";
-	var cookieVals = $.cookie(plCookieName).split("|");
-	var k = 0;
-	for (var i = 0; i < cookieVals.length; i++) {
-    	var fieldVals = cookieVals[i].split("~");
-    	if (fieldVals[0] != name) {
-			if (k == 0) {
-				updateCookieVals += fieldVals[0]+"~"+fieldVals[1];
-			} else {
-				updateCookieVals += "|"+fieldVals[0]+"~"+fieldVals[1];
-			}
-			k++;
+			cookieVal = cookieVal+"|"+name+"~"+val;
 		}
-	}
-	$.cookie(plCookieName,updateCookieVals);
-}
-
-function findValue(name) {
-	if ($.cookie(plCookieName)) {
-		var cookieVals = $.cookie(plCookieName).split("|");
+		$.cookie(this.cookieName,cookieVal);
+	},
+	
+	updateValue: function (name,val) {
+		var updateCookieVals = "";
+		var cookieVals = $.cookie(this.cookieName).split("|");
+		for (var i = 0; i < cookieVals.length; i++) {
+			var fieldVals = cookieVals[i].split("~");
+ 			if (fieldVals[0] == name) {
+				fieldVals[1] = val;
+			}
+			if (i > 0) {
+					updateCookieVals += "|"+fieldVals[0]+"~"+fieldVals[1];
+			} else {
+					updateCookieVals += fieldVals[0]+"~"+fieldVals[1];
+			}	
+		}
+		$.cookie(this.cookieName,updateCookieVals);
+	},
+	
+	removeValue: function (name) {
+		var updateCookieVals = "";
+		var cookieVals = $.cookie(this.cookieName).split("|");
 		var k = 0;
 		for (var i = 0; i < cookieVals.length; i++) {
 	    	var fieldVals = cookieVals[i].split("~");
-	    	if (fieldVals[0] == name) {
-				return fieldVals[1];
+	    	if (fieldVals[0] != name) {
+				if (k == 0) {
+					updateCookieVals += fieldVals[0]+"~"+fieldVals[1];
+				} else {
+					updateCookieVals += "|"+fieldVals[0]+"~"+fieldVals[1];
+				}
+				k++;
 			}
 		}
-	} 
-	return false;
-}
+		$.cookie(this.cookieName,updateCookieVals);
+	},
+	
+	findValue: function (name) {
+		if ($.cookie(this.cookieName)) {
+			var cookieVals = $.cookie(this.cookieName).split("|");
+			var k = 0;
+			for (var i = 0; i < cookieVals.length; i++) {
+		    	var fieldVals = cookieVals[i].split("~");
+		    	if (fieldVals[0] == name) {
+					return fieldVals[1];
+				}
+			}
+		} 
+		return false;
+	}
+	
+};
