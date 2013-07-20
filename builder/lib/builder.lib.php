@@ -198,29 +198,34 @@ class Builder {
 				
 				foreach ($bucket["navItems"] as $navItem) {
 					
-					foreach ($navItem["navSubItems"] as $subItem) {
+					// make sure the navSubItems index exists. catches issues with empty folders
+					if (isset($navItem["navSubItems"])) {
 						
-						if ($subItem["patternName"] == "View All") {
+						foreach ($navItem["navSubItems"] as $subItem) {
 							
-							// get the pattern parts
-							$patternType    = $subItem["patternType"];
-							$patternSubType = $subItem["patternSubType"];
-							
-							// get all the rendered partials that match
-							$sid = $this->gatherPartialsByMatch($patternType, $patternSubType);
-							
-							// render the viewall template
-							$v = $this->mfs->render('viewall',$sid);
-							
-							// if the pattern directory doesn't exist create it
-							$patternPath = $patternType."-".$patternSubType;
-							if (!is_dir(__DIR__.$this->pp.$patternPath)) {
-								mkdir(__DIR__.$this->pp.$patternPath);
-								file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
-							} else {
-								file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
+							if ($subItem["patternName"] == "View All") {
+								
+								// get the pattern parts
+								$patternType    = $subItem["patternType"];
+								$patternSubType = $subItem["patternSubType"];
+								
+								// get all the rendered partials that match
+								$sid = $this->gatherPartialsByMatch($patternType, $patternSubType);
+								
+								// render the viewall template
+								$v = $this->mfs->render('viewall',$sid);
+								
+								// if the pattern directory doesn't exist create it
+								$patternPath = $patternType."-".$patternSubType;
+								if (!is_dir(__DIR__.$this->pp.$patternPath)) {
+									mkdir(__DIR__.$this->pp.$patternPath);
+									file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
+								} else {
+									file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
+								}
+								
 							}
-						
+							
 						}
 						
 					}
