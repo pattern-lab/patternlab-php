@@ -257,7 +257,7 @@ class Builder {
 		if (file_exists(__DIR__."/../../source/_data/listitems.json")) {
 			
 			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/_data/listitems.json"));
-			$numbers   = array("one","two","three","four","five","six","seven","eight","nine","ten");
+			$numbers   = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
 			
 			$i = 0;
 			$k = 1;
