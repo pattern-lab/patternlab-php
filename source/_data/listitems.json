@@ -25,7 +25,10 @@
 			"last": "Koolen",
 			"lasti": "K"
 		},
-		"year": "2013",
+		"year": {
+			"long": "2013",
+			"short": "13"
+		},
 		"month": {
 			"long": "January",
 			"short": "Jan",
@@ -78,7 +81,10 @@
 			"last": "Hanigan",
 			"lasti": "H"
 		},
-		"year": "2013",
+		"year": {
+			"long": "2013",
+			"short": "13"
+		},
 		"month": {
 			"long": "February",
 			"short": "Feb",
@@ -131,7 +137,10 @@
 			"last": "Richard",
 			"lasti": "R"
 		},
-		"year": "2013",
+		"year": {
+			"long": "2013",
+			"short": "13"
+		},
 		"month": {
 			"long": "March",
 			"short": "Mar",
@@ -184,7 +193,10 @@
 			"last": "Wilms",
 			"lasti": "W"
 		},
-		"year": "2013",
+		"year": {
+			"long": "2013",
+			"short": "13"
+		},
 		"month": {
 			"long": "April",
 			"short": "Apr",
@@ -237,7 +249,10 @@
 			"last": "Keegan",
 			"lasti": "K"
 		},
-		"year": "2013",
+		"year": {
+			"long": "2013",
+			"short": "13"
+		},
 		"month": {
 			"long": "May",
 			"short": "May",
@@ -290,7 +305,10 @@
 			"last": "Althuis",
 			"lasti": "A"
 		},
-		"year": "2013",
+		"year": {
+			"long": "2013",
+			"short": "13"
+		},
 		"month": {
 			"long": "June",
 			"short": "Jun",
@@ -343,7 +361,10 @@
 			"last": "Aaij",
 			"lasti": "A"
 		},
-		"year": "2013",
+		"year": {
+			"long": "2013",
+			"short": "13"
+		},
 		"month": {
 			"long": "July",
 			"short": "Jul",
@@ -396,7 +417,10 @@
 			"last": "Hines",
 			"lasti": "H"
 		},
-		"year": "2013",
+		"year": {
+			"long": "2013",
+			"short": "13"
+		},
 		"month": {
 			"long": "August",
 			"short": "Aug",
@@ -449,7 +473,10 @@
 			"last": "Sneiders",
 			"lasti": "S"
 		},
-		"year": "2013",
+		"year": {
+			"long": "2013",
+			"short": "13"
+		},
 		"month": {
 			"long": "September",
 			"short": "Sep",
@@ -502,7 +529,10 @@
 			"last": "Sloane",
 			"lasti": "S"
 		},
-		"year": "2013",
+		"year": {
+			"long": "2013",
+			"short": "13"
+		},
 		"month": {
 			"long": "October",
 			"short": "Oct",
@@ -555,7 +585,10 @@
 			"last": "Macguinness",
 			"lasti": "M"
 		},
-		"year": "2013",
+		"year": {
+			"long": "2013",
+			"short": "13"
+		},
 		"month": {
 			"long": "November",
 			"short": "Nov",
@@ -608,7 +641,10 @@
 			"last": "Achterkamp",
 			"lasti": "A"
 		},
-		"year": "2013",
+		"year": {
+			"long": "2013",
+			"short": "13"
+		},
 		"month": {
 			"long": "December",
 			"short": "Dec",
