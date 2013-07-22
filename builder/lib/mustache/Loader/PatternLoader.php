@@ -86,6 +86,8 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
             } catch (Exception $e) {
                 print "The partial, ".$name.", wasn't found so a pattern failed to build.\n";
             }
+        } else {
+           return $this->templates[$name];
         }
     }
 

@@ -10,52 +10,56 @@
  *
  */
 
-function getFileName(name) {
+var urlHandler = {
 	
-	var baseDir     = "patterns";
-	var fileName    = "";
+	getFileName: function (name) {
 	
-	var bits = getPatternInfo(name);
-	var patternType = bits[0];
-	var pattern     = bits[1];
+		var baseDir     = "patterns";
+		var fileName    = "";
 	
-	if ((patternPaths[patternType] != undefined) && (patternPaths[patternType][pattern] != undefined)) {
+		var bits        = this.getPatternInfo(name);
+		var patternType = bits[0];
+		var pattern     = bits[1];
+	
+		if ((patternPaths[patternType] != undefined) && (patternPaths[patternType][pattern] != undefined)) {
 		
-		fileName = patternPaths[patternType][pattern];
+			fileName = patternPaths[patternType][pattern];
 		
-	} else if (patternPaths[patternType] != undefined) {
+		} else if (patternPaths[patternType] != undefined) {
 		
-		for (patternMatchKey in patternPaths[patternType]) {
-			if (patternMatchKey.indexOf(pattern) != -1) {
-				fileName = patternPaths[patternType][patternMatchKey];
-				break;
+			for (patternMatchKey in patternPaths[patternType]) {
+				if (patternMatchKey.indexOf(pattern) != -1) {
+					fileName = patternPaths[patternType][patternMatchKey];
+					break;
+				}
 			}
-		}
 		
+		}
+	
+		var regex = /\//g;
+		return (fileName == "") ? fileName : baseDir+"/"+fileName.replace(regex,"-")+"/"+fileName.replace(regex,"-")+".html";
+	
+	},
+	
+	getPatternInfo: function (name) {
+	
+		var patternBits = name.split("-");
+	
+		var i = 1;
+		var c = patternBits.length;
+	
+		var patternType = patternBits[0];
+		while ((patternPaths[patternType] == undefined) && (i < c)) {
+			patternType += "-"+patternBits[i];
+			i++;
+		}
+	
+		pattern = name.slice(patternType.length+1,name.length);
+	
+		return [patternType, pattern];
+	
 	}
-	
-	var regex = /\//g;
-	return (fileName == "") ? fileName : baseDir+"/"+fileName.replace(regex,"-")+"/"+fileName.replace(regex,"-")+".html";
-	
-}
 
-function getPatternInfo(name) {
-	
-	var patternBits = name.split("-");
-	
-	var i = 1;
-	var c = patternBits.length;
-	
-	var patternType = patternBits[0];
-	while ((patternPaths[patternType] == undefined) && (i < c)) {
-		patternType += "-"+patternBits[i];
-		i++;
-	}
-	
-	pattern = name.slice(patternType.length+1,name.length);
-	
-	return [patternType, pattern];
-	
 }
 
 // the following is taken from https://developer.mozilla.org/en-US/docs/Web/API/window.location
@@ -71,7 +75,7 @@ var oGetVars = new (function (sSearch) {
 var iFramePath = "";
 if ((oGetVars.p != undefined) || (oGetVars.pattern != undefined)) {
 	patternName = (oGetVars.p != undefined) ? oGetVars.p : oGetVars.pattern;
-	iFramePath = getFileName(patternName);
+	iFramePath = urlHandler.getFileName(patternName);
 }
 
 iFramePath = (iFramePath != "") ? iFramePath : "styleguide/html/styleguide.html";

@@ -6,6 +6,8 @@
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
+ * Does the vast majority of heavy lifting for the Generator and Watch classes
+ *
  */
 
 class Builder {
@@ -111,7 +113,7 @@ class Builder {
 	*/
 	protected function generateMainPages() {
 		
-		// make sure $this->mfs is refreshed on each generation of view all. for some reason the mustache instance dies
+		// make sure $this->mfs is refreshed
 		$this->loadMustacheFileSystemLoaderInstance();
 		
 		// render out the main pages and move them to public
@@ -141,10 +143,10 @@ class Builder {
 	*/
 	protected function generatePatterns() {
 		
-		// make sure $this->mpl is refreshed on each generate & move. for some reason the mustache instance dies
+		// make sure $this->mpl is refreshed
 		$this->loadMustachePatternLoaderInstance();
 		
-		// scan the pattern source directory
+		// loop over the pattern paths to generate patterns for each
 		foreach($this->patternPaths as $patternType) {
 			
 			foreach($patternType as $pattern => $path) {
@@ -169,7 +171,6 @@ class Builder {
 	/**
 	* Generates a pattern with a header & footer
 	* @param  {String}       the filename of the file to be rendered
-	* @param  {Object}       the instance of mustache to be used in the rendering
 	*
 	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
 	*/
@@ -197,29 +198,34 @@ class Builder {
 				
 				foreach ($bucket["navItems"] as $navItem) {
 					
-					foreach ($navItem["navSubItems"] as $subItem) {
+					// make sure the navSubItems index exists. catches issues with empty folders
+					if (isset($navItem["navSubItems"])) {
 						
-						if ($subItem["patternName"] == "View All") {
+						foreach ($navItem["navSubItems"] as $subItem) {
 							
-							// get the pattern parts
-							$patternType    = $subItem["patternType"];
-							$patternSubType = $subItem["patternSubType"];
-							
-							// get all the rendered partials that match
-							$sid = $this->gatherPartialsByMatch($patternType, $patternSubType);
-							
-							// render the viewall template
-							$v = $this->mfs->render('viewall',$sid);
-							
-							// if the pattern directory doesn't exist create it
-							$patternPath = $patternType."-".$patternSubType;
-							if (!is_dir(__DIR__.$this->pp.$patternPath)) {
-								mkdir(__DIR__.$this->pp.$patternPath);
-								file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
-							} else {
-								file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
+							if ($subItem["patternName"] == "View All") {
+								
+								// get the pattern parts
+								$patternType    = $subItem["patternType"];
+								$patternSubType = $subItem["patternSubType"];
+								
+								// get all the rendered partials that match
+								$sid = $this->gatherPartialsByMatch($patternType, $patternSubType);
+								
+								// render the viewall template
+								$v = $this->mfs->render('viewall',$sid);
+								
+								// if the pattern directory doesn't exist create it
+								$patternPath = $patternType."-".$patternSubType;
+								if (!is_dir(__DIR__.$this->pp.$patternPath)) {
+									mkdir(__DIR__.$this->pp.$patternPath);
+									file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
+								} else {
+									file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
+								}
+								
 							}
-						
+							
 						}
 						
 					}
@@ -256,7 +262,7 @@ class Builder {
 		if (file_exists(__DIR__."/../../source/_data/listitems.json")) {
 			
 			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/_data/listitems.json"));
-			$numbers   = array("one","two","three","four","five","six","seven","eight","nine","ten");
+			$numbers   = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
 			
 			$i = 0;
 			$k = 1;
@@ -337,7 +343,7 @@ class Builder {
 		$bi = 0;                           // track the number for the bucket array
 		$ni = 0;                           // track the number for the nav items array
 		
-		// iterate through each pattern type and add them to the as buckets
+		// iterate through each pattern type and add them as buckets
 		foreach($this->patternTypes as $patternType) {
 			
 			// get the bits for a bucket and check to see if the first bit is a number
@@ -478,7 +484,7 @@ class Builder {
 	*/
 	protected function gatherPartials() {
 		
-		// make sure $this->mpl is refreshed on each render & move. for some reason the mustache instance dies
+		// make sure $this->mpl is refreshed
 		$this->loadMustachePatternLoaderInstance();
 		
 		$p = array("partials" => array());
@@ -521,7 +527,7 @@ class Builder {
 	*/
 	protected function gatherPartialsByMatch($patternType, $patternSubType) {
 		
-		// make sure $this->mpl is refreshed on each render & move. for some reason the mustache instance dies
+		// make sure $this->mpl is refreshed
 		$this->loadMustachePatternLoaderInstance();
 		
 		$p = array("partials" => array());
