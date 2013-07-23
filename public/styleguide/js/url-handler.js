@@ -12,6 +12,12 @@
 
 var urlHandler = {
 	
+	/**
+	* get the real file name for a given pattern name
+	* @param  {String}       the shorthand partials syntax for a given pattern
+	*
+	* @return {String}       the real file path
+	*/
 	getFileName: function (name) {
 	
 		var baseDir     = "patterns";
@@ -41,6 +47,12 @@ var urlHandler = {
 	
 	},
 	
+	/**
+	* break up a pattern into its parts, pattern type and pattern name
+	* @param  {String}       the shorthand partials syntax for a given pattern
+	*
+	* @return {Array}        the pattern type and pattern name
+	*/
 	getPatternInfo: function (name) {
 	
 		var patternBits = name.split("-");
@@ -57,6 +69,8 @@ var urlHandler = {
 		pattern = name.slice(patternType.length+1,name.length);
 	
 		return [patternType, pattern];
+	
+	},
 	
 	/**
 	* search the request vars for a particular item
