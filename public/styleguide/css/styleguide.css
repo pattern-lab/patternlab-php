@@ -497,3 +497,47 @@ html, body {
   width: 100%;
   padding: 1em;
   background: red; }
+
+@font-face {
+  font-family: 'icons';
+  src: url("../assets/icons.eot");
+  src: url("../assets/icons.eot?#iefix") format("embedded-opentype"), url("../assets/icons.woff") format("woff"), url("../assets/icons.ttf") format("truetype"), url("../assets/icons.svg#icons") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+/* Use the following CSS code if you want to have a class per icon */
+/*
+Instead of a list of all class selectors,
+you can use the generic selector below, but it's slower:
+[class*="icon-"] {
+*/
+.icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-checkbox-unchecked, .icon-checkbox-checked {
+  font-family: 'icons';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased; }
+
+.icon-reload:before {
+  content: "\e002"; }
+
+.icon-cog:before {
+  content: "\e000"; }
+
+.icon-minus:before {
+  content: "\e003"; }
+
+.icon-plus:before {
+  content: "\e004"; }
+
+.icon-menu:before {
+  content: "\e005"; }
+
+.icon-checkbox-unchecked:before {
+  content: "\e006"; }
+
+.icon-checkbox-checked:before {
+  content: "\e007"; }
