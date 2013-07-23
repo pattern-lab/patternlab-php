@@ -80,13 +80,3 @@ var urlHandler = {
 	}
 
 }
-
-var iFramePath = "";
-if ((oGetVars.p != undefined) || (oGetVars.pattern != undefined)) {
-	patternName = (oGetVars.p != undefined) ? oGetVars.p : oGetVars.pattern;
-	iFramePath = urlHandler.getFileName(patternName);
-}
-
-iFramePath = (iFramePath != "") ? iFramePath : "styleguide/html/styleguide.html";
-
-$("#sg-viewport").attr("src",iFramePath);
