@@ -340,6 +340,20 @@
 		updateViewportWidth(vpWidth);
 	}
 
+	
+	// load the iframe source
+	var patternName = "";
+	var iFramePath  = "styleguide/html/styleguide.html";
+	var trackiFrame = true; // can toggle this feature on & off
+	if ((oGetVars.p != undefined) || (oGetVars.pattern != undefined)) {
+		patternName = (oGetVars.p != undefined) ? oGetVars.p : oGetVars.pattern;
+		iFramePath  = urlHandler.getFileName(patternName);
+	} else if (trackiFrame && (patternName = DataSaver.findValue("patternName"))) {
+		iFramePath  = patternName;
+	}
+	DataSaver.updateValue("patternName",iFramePath);
+	$("#sg-viewport").attr("src",iFramePath);
+	
 	//IFrame functionality
 
 	//Scripts to run after the page has loaded into the iframe
