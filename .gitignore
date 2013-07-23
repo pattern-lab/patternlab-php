@@ -11,3 +11,5 @@ config.ini
 latest-change.txt
 /public/styleguide/js/styleguide-ck.js
 /public/listeners/synclisteners-ck.js
+/public/styleguide/js/data-saver-ck.js
+/public/styleguide/js/url-handler-ck.js
