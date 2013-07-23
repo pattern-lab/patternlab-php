@@ -331,6 +331,12 @@
 	var vpWidth = 0;
 	var trackViewportWidth = true; // can toggle this feature on & off
 	if (trackViewportWidth && (vpWidth = DataSaver.findValue("vpWidth"))) {
+	if ((oGetVars.w != undefined) || (oGetVars.width != undefined)) {
+		vpWidth = (oGetVars.w != undefined) ? oGetVars.w : oGetVars.width;
+		vpWidth = (vpWidth.indexOf("em") != -1) ? Math.floor(Math.floor(vpWidth.replace("em",""))*$bodySize) : Math.floor(vpWidth.replace("px",""));
+		DataSaver.updateValue("vpWidth",vpWidth);
+		updateViewportWidth(vpWidth);
+	} else if (trackViewportWidth && (vpWidth = DataSaver.findValue("vpWidth"))) {
 		updateViewportWidth(vpWidth);
 	}
 
