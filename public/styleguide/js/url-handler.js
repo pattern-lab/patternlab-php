@@ -58,19 +58,28 @@ var urlHandler = {
 	
 		return [patternType, pattern];
 	
+	/**
+	* search the request vars for a particular item
+	*
+	* @return {Object}       a search of the window.location.search vars
+	*/
+	getRequestVars: function() {
+		
+		// the following is taken from https://developer.mozilla.org/en-US/docs/Web/API/window.location
+		var oGetVars = new (function (sSearch) {
+		  if (sSearch.length > 1) {
+		    for (var aItKey, nKeyId = 0, aCouples = sSearch.substr(1).split("&"); nKeyId < aCouples.length; nKeyId++) {
+		      aItKey = aCouples[nKeyId].split("=");
+		      this[unescape(aItKey[0])] = aItKey.length > 1 ? unescape(aItKey[1]) : "";
+		    }
+		  }
+		})(window.location.search);
+		
+		return oGetVars;
+		
 	}
 
 }
-
-// the following is taken from https://developer.mozilla.org/en-US/docs/Web/API/window.location
-var oGetVars = new (function (sSearch) {
-  if (sSearch.length > 1) {
-    for (var aItKey, nKeyId = 0, aCouples = sSearch.substr(1).split("&"); nKeyId < aCouples.length; nKeyId++) {
-      aItKey = aCouples[nKeyId].split("=");
-      this[unescape(aItKey[0])] = aItKey.length > 1 ? unescape(aItKey[1]) : "";
-    }
-  }
-})(window.location.search);
 
 var iFramePath = "";
 if ((oGetVars.p != undefined) || (oGetVars.pattern != undefined)) {
