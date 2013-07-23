@@ -80,8 +80,14 @@
 
 var DataSaver = {
 	
+	// the name of the cookie to store the data in
 	cookieName: "patternlab",
 	
+	/**
+	* Add a given value to the cookie
+	* @param  {String}       the name of the key
+	* @param  {String}       the value
+	*/
 	addValue: function (name,val) {
 		var cookieVal = $.cookie(this.cookieName);
 		if ((cookieVal == null) || (cookieVal == "")) {
@@ -92,6 +98,11 @@ var DataSaver = {
 		$.cookie(this.cookieName,cookieVal);
 	},
 	
+	/**
+	* Update a value found in the cookie. If the key doesn't exist add the value
+	* @param  {String}       the name of the key
+	* @param  {String}       the value
+	*/
 	updateValue: function (name,val) {
 		if (this.findValue(name)) {
 			var updateCookieVals = "";
@@ -113,6 +124,10 @@ var DataSaver = {
 		}
 	},
 	
+	/**
+	* Remove the given key
+	* @param  {String}       the name of the key
+	*/
 	removeValue: function (name) {
 		var updateCookieVals = "";
 		var cookieVals = $.cookie(this.cookieName).split("|");
@@ -131,6 +146,12 @@ var DataSaver = {
 		$.cookie(this.cookieName,updateCookieVals);
 	},
 	
+	/**
+	* Find the value using the given key
+	* @param  {String}       the name of the key
+	*
+	* @return {String}       the value of the key or false if the value isn't found
+	*/
 	findValue: function (name) {
 		if ($.cookie(this.cookieName)) {
 			var cookieVals = $.cookie(this.cookieName).split("|");
