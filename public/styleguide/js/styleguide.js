@@ -124,8 +124,7 @@
 			killDisco();
 
 		} else {
-			discoMode = true;
-			discoID = setInterval(disco, 800);
+			startDisco();
 		}
 	});
 
@@ -139,6 +138,11 @@
 		clearInterval(discoID);
 		discoID = false;
 	}
+	
+	function startDisco() {
+		discoMode = true;
+		discoID = setInterval(disco, 800);
+	}
 
 	//Stephen Hay Mode - "Start with the small screen first, then expand until it looks like shit. Time for a breakpoint!"
 	$('#sg-size-hay').on("click", function(e){
@@ -148,13 +152,7 @@
 		if (hayMode) {
 			killHay();
 		} else {
-			hayMode = true;
-			$('#sg-gen-container').removeClass("vp-animate").width(minViewportWidth+viewportResizeHandleWidth);
-			$sgViewport.removeClass("vp-animate").width(minViewportWidth);		
-			var timeoutID = window.setTimeout(function(){
-				$('#sg-gen-container').addClass('hay-mode').width(maxViewportWidth+viewportResizeHandleWidth);
-				$sgViewport.addClass('hay-mode').width(maxViewportWidth);
-			}, 200);	
+			startHay();	
 		}
 	});
 
@@ -165,6 +163,17 @@
 		$sgViewport.removeClass('hay-mode');
 		$('#sg-gen-container').removeClass('hay-mode');
 		sizeiframe(Math.floor(currentWidth));
+	}
+	
+	// start Hay! mode
+	function startHay() {
+		hayMode = true;
+		$('#sg-gen-container').removeClass("vp-animate").width(minViewportWidth+viewportResizeHandleWidth);
+		$sgViewport.removeClass("vp-animate").width(minViewportWidth);		
+		var timeoutID = window.setTimeout(function(){
+			$('#sg-gen-container').addClass('hay-mode').width(maxViewportWidth+viewportResizeHandleWidth);
+			$sgViewport.addClass('hay-mode').width(maxViewportWidth);
+		}, 200);
 	}
 
 	//Pixel input
@@ -333,7 +342,11 @@
 	// pre-load the viewport width
 	var vpWidth = 0;
 	var trackViewportWidth = true; // can toggle this feature on & off
-	if ((oGetVars.w != undefined) || (oGetVars.width != undefined)) {
+	if ((oGetVars.h != undefined) || (oGetVars.hay != undefined)) {
+		startHay();
+	} else if ((oGetVars.d != undefined) || (oGetVars.disco != undefined)) {
+		startDisco();
+	} else if ((oGetVars.w != undefined) || (oGetVars.width != undefined)) {
 		vpWidth = (oGetVars.w != undefined) ? oGetVars.w : oGetVars.width;
 		vpWidth = (vpWidth.indexOf("em") != -1) ? Math.floor(Math.floor(vpWidth.replace("em",""))*$bodySize) : Math.floor(vpWidth.replace("px",""));
 		DataSaver.updateValue("vpWidth",vpWidth);
