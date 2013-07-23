@@ -327,6 +327,9 @@
 	$("#sg-gen-container").width(origViewportWidth);
 	$("#sg-viewport").width(origViewportWidth - 14);
 
+	// get the request vars
+	var oGetVars = urlHandler.getRequestVars();
+	
 	// pre-load the viewport width
 	var vpWidth = 0;
 	var trackViewportWidth = true; // can toggle this feature on & off
