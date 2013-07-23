@@ -439,6 +439,7 @@
 $('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
 	
 	// update the iframe
+	DataSaver.updateValue("patternName",this.href);
 	$("#sg-viewport").attr('src',this.href);
 	
 	// close up the menu
