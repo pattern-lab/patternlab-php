@@ -93,20 +93,24 @@ var DataSaver = {
 	},
 	
 	updateValue: function (name,val) {
-		var updateCookieVals = "";
-		var cookieVals = $.cookie(this.cookieName).split("|");
-		for (var i = 0; i < cookieVals.length; i++) {
-			var fieldVals = cookieVals[i].split("~");
- 			if (fieldVals[0] == name) {
-				fieldVals[1] = val;
+		if (this.findValue(name)) {
+			var updateCookieVals = "";
+			var cookieVals = $.cookie(this.cookieName).split("|");
+			for (var i = 0; i < cookieVals.length; i++) {
+				var fieldVals = cookieVals[i].split("~");
+	 			if (fieldVals[0] == name) {
+					fieldVals[1] = val;
+				}
+				if (i > 0) {
+						updateCookieVals += "|"+fieldVals[0]+"~"+fieldVals[1];
+				} else {
+						updateCookieVals += fieldVals[0]+"~"+fieldVals[1];
+				}	
 			}
-			if (i > 0) {
-					updateCookieVals += "|"+fieldVals[0]+"~"+fieldVals[1];
-			} else {
-					updateCookieVals += fieldVals[0]+"~"+fieldVals[1];
-			}	
+			$.cookie(this.cookieName,updateCookieVals);
+		} else {
+			this.addValue(name,val);
 		}
-		$.cookie(this.cookieName,updateCookieVals);
 	},
 	
 	removeValue: function (name) {
