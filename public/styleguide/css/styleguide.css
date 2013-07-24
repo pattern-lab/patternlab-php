@@ -59,6 +59,15 @@ html, body {
   overflow: hidden;
   background: #dddddd; }
 
+.is-vishidden {
+  position: absolute !important;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px); }
+
 /*------------------------------------*\
     $STYLE GUIDE HEADER 
 \*------------------------------------*/
@@ -164,6 +173,13 @@ html, body {
   background: rgba(255, 255, 255, 0.05); }
   .sg-acc-handle.active:after {
     content: ' -'; }
+.sg-acc-handle.sg-icon:after {
+  content: ""; }
+
+.sg-header .sg-icon {
+  width: auto;
+  font-size: 1rem;
+  padding: 0.5rem 1rem; }
 
 .sg-acc-panel {
   overflow: hidden;
@@ -177,6 +193,9 @@ html, body {
   transition: max-height 0.5s ease-out; }
   .sg-acc-panel.active {
     max-height: 50em; }
+  .sg-acc-panel.sg-right {
+    left: auto;
+    right: 0; }
 
 /* Controls (sizing, view mode) */
 .sg-controls {
@@ -511,7 +530,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-checkbox-unchecked, .icon-checkbox-checked {
+.icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .sg-header .sg-nav-toggle, .icon-checkbox-unchecked, .icon-checkbox-checked, .icon-eye {
   font-family: 'icons';
   speak: none;
   font-style: normal;
@@ -533,7 +552,7 @@ you can use the generic selector below, but it's slower:
 .icon-plus:before {
   content: "\e004"; }
 
-.icon-menu:before {
+.icon-menu:before, .sg-header .sg-nav-toggle:before {
   content: "\e005"; }
 
 .icon-checkbox-unchecked:before {
@@ -541,3 +560,6 @@ you can use the generic selector below, but it's slower:
 
 .icon-checkbox-checked:before {
   content: "\e007"; }
+
+.icon-eye:before {
+  content: "\e001"; }
