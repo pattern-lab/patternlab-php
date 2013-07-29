@@ -410,7 +410,7 @@ class Builder {
 					}
 				
 					// add a view all for the section
-					if (($bucket != 'pages') && ($bucket != 'templates') && isset($b["buckets"][$bi]["navItems"][$ni]["navSubItems"])) {
+					if (isset($b["buckets"][$bi]["navItems"][$ni]["navSubItems"])) {
 						$subItemsCount = count($b["buckets"][$bi]["navItems"][$ni]["navSubItems"]);
 						$b["buckets"][$bi]["navItems"][$ni]["navSubItems"][$subItemsCount] = array("patternPath" => $patternType."-".$dirClean."/index.html", "patternName" => "View All", "patternType" => $patternType, "patternSubType" => $dirClean);
 					}
@@ -492,7 +492,8 @@ class Builder {
 		// loop through pattern paths
 		foreach($this->patternPaths as $patternType => $patternTypeValues) {
 			
-			if (($patternType != "pages") && ($patternType != "templates")) {
+			// make sure that pages & templates (which don't have pattern sub-types) don't get "view all" pages
+			if (glob(__DIR__.$this->sp.$patternType."/*/*.mustache")) {
 				
 				foreach($patternTypeValues as $pattern => $path) {
 					
@@ -533,27 +534,22 @@ class Builder {
 		$p = array("partials" => array());
 		
 		$patternTypeClean = $this->getPatternName($patternType);
-		
-		// make sure that pages & templates don't get "view all" pages
-		if (($patternTypeClean != 'pages') && ($patternTypeClean != 'templates')) {
 			
-			// get matches based on pattern type and pattern sub-type
-			foreach(glob(__DIR__.$this->sp.$patternType."/".$patternSubType."/*.mustache") as $filename) {
+		// get matches based on pattern type and pattern sub-type
+		foreach(glob(__DIR__.$this->sp.$patternType."/".$patternSubType."/*.mustache") as $filename) {
+			
+			// get the directory match of the pattern
+			$path = $this->getPath($filename);
 				
-				// get the directory match of the pattern
-				$path = $this->getPath($filename);
-					
-				// because we're globbing we need to check again to see if the pattern should be ignored
-				$patternParts = explode("/",$path);
-				if ($patternParts[2][0] != "_") {
-					
-					// create the pattern name & link, render the partial, and stick it all into the pattern array
-					$patternName     = $this->getPatternName($patternParts[2]);
-					$patternLink     = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
-					$patternPartial  = $this->renderPattern($path.".mustache");
-					$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
-					
-				}
+			// because we're globbing we need to check again to see if the pattern should be ignored
+			$patternParts = explode("/",$path);
+			if ($patternParts[2][0] != "_") {
+				
+				// create the pattern name & link, render the partial, and stick it all into the pattern array
+				$patternName     = $this->getPatternName($patternParts[2]);
+				$patternLink     = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
+				$patternPartial  = $this->renderPattern($path.".mustache");
+				$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
 				
 			}
 			
