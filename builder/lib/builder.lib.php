@@ -456,7 +456,7 @@ class Builder {
 			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
 				preg_match('/\/([A-z0-9-_]{1,})\.mustache$/',$filename,$matches);
 				$pattern = $this->getPatternName($matches[1], false);
-				if ($pattern[0] != "_") {
+				if (($pattern[0] != "_") && (!isset($patternTypePaths[$pattern]))) {
 					$patternTypePaths[$pattern] = $this->getPath($filename);
 				}
 			}
@@ -465,7 +465,7 @@ class Builder {
 			foreach(glob(__DIR__.$this->sp.$patternType."/*.mustache") as $filename) {
 				preg_match('/\/([A-z0-9-_]{1,})\.mustache$/',$filename,$matches);
 				$pattern = $this->getPatternName($matches[1], false);
-				if ($pattern[0] != "_") {
+				if (($pattern[0] != "_") && (!isset($patternTypePaths[$pattern]))) {
 					$patternTypePaths[$pattern] = $this->getPath($filename);
 				}
 			}
