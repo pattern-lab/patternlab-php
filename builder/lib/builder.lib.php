@@ -492,10 +492,9 @@ class Builder {
 		// loop through pattern paths
 		foreach($this->patternPaths as $patternType => $patternTypeValues) {
 			
-			// make sure that pages & templates (which don't have pattern sub-types) don't get "view all" pages
-			if (glob(__DIR__.$this->sp.$patternType."/*/*.mustache")) {
+			foreach($patternTypeValues as $pattern => $path) {
 				
-				foreach($patternTypeValues as $pattern => $path) {
+				if (substr_count($path,"/") == 2) {
 					
 					// double-check the file exists
 					if (file_exists(__DIR__."/".$this->sp.$path.".mustache")) {
