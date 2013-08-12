@@ -91,6 +91,41 @@ var urlHandler = {
 		
 		return oGetVars;
 		
+	},
+	
+	/**
+	* push a pattern onto the current history based on a click
+	* @param  {String}       the shorthand partials syntax for a given pattern
+	*/
+	pushPattern: function (pattern) {
+		history.pushState({ "pattern": pattern }, null, "/?p="+pattern);
+	},
+	
+	/**
+	* based on a click forward or backward modify the url and iframe source
+	* @param  {Object}      event info like state and properties set in pushState()
+	*/
+	popPattern: function (e) {
+		
+		if (e.state == null) {
+			return;
+		}
+		
+		var iFramePath = "";
+		iFramePath = this.getFileName(e.state.pattern);
+		if (iFramePath == "") {
+			iFramePath = "styleguide/html/styleguide.html";
+		}
+		DataSaver.updateValue("patternName",iFramePath);
+		document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
+		
 	}
 
+}
+
+/**
+* handle the onpopstate event
+*/
+window.onpopstate = function (event) {
+	urlHandler.popPattern(event);
 }

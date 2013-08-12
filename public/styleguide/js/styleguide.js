@@ -366,7 +366,11 @@
 		iFramePath  = patternName;
 	}
 	DataSaver.updateValue("patternName",iFramePath);
-	$("#sg-viewport").attr("src",iFramePath);
+	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
+	
+	if (typeof(history.replaceState) !== "undefined") {
+		history.replaceState({ "pattern": patternName }, null, null);
+	}
 	
 	//IFrame functionality
 
@@ -453,8 +457,9 @@
 $('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
 	
 	// update the iframe
+	document.getElementById("sg-viewport").contentWindow.location.replace(this.href);
 	DataSaver.updateValue("patternName",this.href);
-	$("#sg-viewport").attr('src',this.href);
+	urlHandler.pushPattern(this.getAttribute("data-patternpartial"));
 	
 	// close up the menu
 	$(this).parents('.sg-acc-panel').toggleClass('active');
