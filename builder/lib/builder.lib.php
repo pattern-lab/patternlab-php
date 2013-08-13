@@ -26,6 +26,7 @@ class Builder {
 	protected $patternPaths;      // the paths to patterns for use with mustache partials
 	protected $patternTypesRegex; // the simple regex for the pattern types. used in getPath()
 	protected $navItems;          // the items for the nav. includes view all links
+	protected $viewAllPaths;      // the paths to the view all pages
 	
 	/**
 	* When initializing the Builder class or the sub-classes make sure the base properties are configured
@@ -120,6 +121,7 @@ class Builder {
 		$this->navItems['contentsyncport'] = $this->contentSyncPort;
 		$this->navItems['navsyncport']     = $this->navSyncPort;
 		$this->navItems['patternpaths']    = json_encode($this->patternPaths);
+		$this->navItems['viewallpaths']    = json_encode($this->viewAllPaths);
 		
 		// grab the partials into a data object for the style guide
 		$sd = $this->gatherPartials();
@@ -381,6 +383,8 @@ class Builder {
 				// iterate over pattern sub-types
 				foreach($patternSubTypes as $dir) {
 					
+					// NOTE: clean items still include directory numbers, final items DO NOT. made sense at the time i originally wrote it
+					
 					// get the bits for a directory and check to see if the first bit is a number
 					$dirClean = substr($dir,strlen(__DIR__.$this->sp.$patternType."/"));
 					$dirFinal = $this->getPatternName($dirClean); // ok, it's not a pattern name but same functionality
@@ -412,7 +416,14 @@ class Builder {
 					// add a view all for the section
 					if (isset($b["buckets"][$bi]["navItems"][$ni]["navSubItems"])) {
 						$subItemsCount = count($b["buckets"][$bi]["navItems"][$ni]["navSubItems"]);
-						$b["buckets"][$bi]["navItems"][$ni]["navSubItems"][$subItemsCount] = array("patternPath" => $patternType."-".$dirClean."/index.html", "patternName" => "View All", "patternType" => $patternType, "patternSubType" => $dirClean);
+						$vaBucket   = str_replace(" ","-",$bucket);
+						$vaDirFinal = str_replace(" ","-",$dirFinal);
+						$b["buckets"][$bi]["navItems"][$ni]["navSubItems"][$subItemsCount] = array("patternPath" => $patternType."-".$dirClean."/index.html", 
+																								   "patternName" => "View All",
+																								   "patternType" => $patternType,
+																								   "patternSubType" => $dirClean,
+																								   "patternPartial" => "viewall-".$vaBucket."-".$vaDirFinal);
+						$this->viewAllPaths[$vaBucket][$vaDirFinal] = $patternType."-".$dirClean;
 					}
 					
 					$ni++;

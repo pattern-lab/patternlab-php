@@ -19,32 +19,41 @@ var urlHandler = {
 	* @return {String}       the real file path
 	*/
 	getFileName: function (name) {
-	
+		
 		var baseDir     = "patterns";
 		var fileName    = "";
-	
-		var bits        = this.getPatternInfo(name);
+		
+		var paths = (name.indexOf("viewall-") != -1) ? viewAllPaths : patternPaths;
+		nameClean = name.replace("viewall-","");
+		
+		// look at this as a regular pattern
+		var bits        = this.getPatternInfo(nameClean, paths);
 		var patternType = bits[0];
 		var pattern     = bits[1];
-	
-		if ((patternPaths[patternType] != undefined) && (patternPaths[patternType][pattern] != undefined)) {
 		
-			fileName = patternPaths[patternType][pattern];
-		
-		} else if (patternPaths[patternType] != undefined) {
-		
-			for (patternMatchKey in patternPaths[patternType]) {
+		if ((paths[patternType] != undefined) && (paths[patternType][pattern] != undefined)) {
+			
+			fileName = paths[patternType][pattern];
+			
+		} else if (paths[patternType] != undefined) {
+			
+			for (patternMatchKey in paths[patternType]) {
 				if (patternMatchKey.indexOf(pattern) != -1) {
-					fileName = patternPaths[patternType][patternMatchKey];
+					fileName = paths[patternType][patternMatchKey];
 					break;
 				}
 			}
-		
+			
 		}
-	
+		
 		var regex = /\//g;
-		return (fileName == "") ? fileName : baseDir+"/"+fileName.replace(regex,"-")+"/"+fileName.replace(regex,"-")+".html";
-	
+		if ((name.indexOf("viewall-") != -1) && (fileName != "")) {
+			fileName = baseDir+"/"+fileName.replace(regex,"-")+"/index.html";
+		} else if (fileName != "") {
+			fileName = baseDir+"/"+fileName.replace(regex,"-")+"/"+fileName.replace(regex,"-")+".html";
+		}
+		
+		return fileName;
 	},
 	
 	/**
@@ -53,23 +62,23 @@ var urlHandler = {
 	*
 	* @return {Array}        the pattern type and pattern name
 	*/
-	getPatternInfo: function (name) {
-	
+	getPatternInfo: function (name, paths) {
+		
 		var patternBits = name.split("-");
-	
+		
 		var i = 1;
 		var c = patternBits.length;
-	
+		
 		var patternType = patternBits[0];
-		while ((patternPaths[patternType] == undefined) && (i < c)) {
+		while ((paths[patternType] == undefined) && (i < c)) {
 			patternType += "-"+patternBits[i];
 			i++;
 		}
-	
+		
 		pattern = name.slice(patternType.length+1,name.length);
-	
+		
 		return [patternType, pattern];
-	
+		
 	},
 	
 	/**
