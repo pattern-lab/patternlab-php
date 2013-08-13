@@ -1,27 +1,80 @@
 {
-	"atoms": {
-		"images": {
-			"landscape-4x3": {
-				"src": "../../images/fpo_4x3.png",
-				"alt": "4x3 Image"
-			},
-			"landscape-16x9": {
-				"src": "../../images/fpo_16x9.png",
-				"alt": "16x9 Image"
-			},
-			"logo": {
-				"href": "#",
-				"src": "../../images/logo.png",
-				"alt": "Logo for a Company"
-			},
-			"square": {
-				"src": "../../images/fpo_square.png",
-				"alt": "Square Thumbnail"
-			}
+	"title": "Trains, like time and tide, stop for no one.",
+	"img": {
+		"avatar": {
+			"src": "../../images/fpo_avatar.png",
+			"alt": "Avatar"
+		},
+		"square": {
+			"src": "../../images/fpo_square.png",
+			"alt": "Square"
+		},
+		"rectangle": {
+			"src": "http://placeimg.com/400/300/tech",
+			"alt": "Rectangle"
+		},
+		"logo": {
+			"src": "../../images/logo.png",
+			"alt": "Logo"
+		},
+		"landscape-4x3": {
+			"src": "../../images/fpo_4x3.png",
+			"alt": "Landscape 4x3"
+		},
+		"landscape-16x9": {
+			"src": "../../images/fpo_16x9.png",
+			"alt": "Landscape 16x9"
+		},
+		"loading-icon": {
+			"src": "../../images/ajax-loader.gif",
+			"alt": "Loading"
+		},
+		"favicon-16x16": {
+			"src": "../../images/favicon_16x16.jpg",
+			"alt": "Favicon 16x16"
+		},
+		"favicon-32x32": {
+			"src": "../../images/favicon_32x32.jpg",
+			"alt": "Favicon 32x32"
 		}
 	},
-	"landscape-4x3": {
-		"src": "/images/fpo_landscape.png",
-		"alt": "4x3 Image"
-	}
+	"description": "So, setting about it as methodically as men might smoke out a wasps' nest, the Martians spread this strange stifling vapour over the Londonward country. The horns of the crescent slowly moved apart, until at last they formed a line from Hanwell to Coombe and Malden. All night through their destructive tubes advanced.",
+	"url": "http://www.fillerati.com",
+	"name": {
+		"first": "Lacy",
+		"firsti": "L",
+		"middle": "Tommie",
+		"middlei": "T",
+		"last": "Way",
+		"lasti": "W"
+	},
+	"year": {
+		"long": "2013",
+		"short": "13"
+	},
+	"month": {
+		"long": "February",
+		"short": "Feb",
+		"digit": "02"
+	},
+	"dayofweek": {
+		"long": "Monday",
+		"short": "Mon"
+	},
+	"day": {
+		"long": "10",
+		"short": "10",
+		"ordinal": "th"
+	},
+	"hour": {
+		"long": "01",
+		"short": "1",
+		"military": "13",
+		"ampm": "pm"
+	},
+	"minute": {
+		"long": "20",
+		"short": "20"
+	},
+	"seconds": "31"
 }
