@@ -502,8 +502,13 @@ function receiveIframeMessage(event) {
 		return;
 	}
 	
-	if (event.data == 'body-click') {
+	if (event.data.bodyclick != undefined) {
 		closePanels();
+	} else if (event.data.patternpartial != undefined) {
+		var iFramePath = urlHandler.getFileName(event.data.patternpartial);
+		document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
+		DataSaver.updateValue("patternName",iFramePath);
+		urlHandler.pushPattern(event.data.patternpartial);
 	} else if (wsnConnected) {
 		wsn.send(event.data);
 	}

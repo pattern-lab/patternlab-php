@@ -515,7 +515,7 @@ class Builder {
 						$patternName     = $this->getPatternName($patternParts[2]);
 						$patternLink     = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
 						$patternPartial  = $this->renderPattern($path.".mustache");
-						$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
+						$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartialPath" => $patternType."-".$pattern, "patternPartial" => $patternPartial);
 						
 					}
 					
@@ -559,7 +559,7 @@ class Builder {
 				$patternName     = $this->getPatternName($patternParts[2]);
 				$patternLink     = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
 				$patternPartial  = $this->renderPattern($path.".mustache");
-				$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartial" => $patternPartial);
+				$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartialPath" => str_replace(" ","-",$patternTypeClean)."-".str_replace(" ","-",$patternName), "patternPartial" => $patternPartial);
 				
 			}
 			
