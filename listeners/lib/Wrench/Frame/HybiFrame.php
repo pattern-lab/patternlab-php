@@ -201,7 +201,7 @@ class HybiFrame extends Frame
     {
         if (!isset($this->masked)) {
             if (!isset($this->buffer[1])) {
-                throw new FrameException('Cannot tell if frame is masked: not enough frame data recieved');
+                throw new FrameException('Cannot tell if frame is masked: not enough frame data received');
             }
             $this->masked = (boolean)(ord($this->buffer[1]) & self::BITFIELD_MASKED);
         }

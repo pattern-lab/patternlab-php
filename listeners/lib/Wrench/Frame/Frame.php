@@ -165,7 +165,7 @@ abstract class Frame
     /**
      * Gets the contents of the frame buffer
      *
-     * This is the encoded value, receieved into the frame with recieveData().
+     * This is the encoded value, receieved into the frame with receiveData().
      *
      * @throws FrameException
      * @return string binary

@@ -58,7 +58,7 @@ class ClientSocket extends UriSocket
         );
 
         if (!$this->socket) {
-            throw new ConnectionException(sprintf(
+            throw new \Wrench\Exception\ConnectionException(sprintf(
                 'Could not connect to socket: %s (%d)',
                 $errstr,
                 $errno
