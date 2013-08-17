@@ -48,10 +48,18 @@ function connectNavSync() {
 		
 		// when receiving a message from WebSocket update the iframe source
 		wsn.onmessage = function (event) {
+			var data = JSON.parse(event.data);
 			var vpLocation  = document.getElementById('sg-viewport').contentWindow.location.href;
-			var mLocation   = "http://"+host+event.data;
+			var mLocation   = "http://"+host+data.url;
 			if (vpLocation != mLocation) {
-				$("#sg-viewport").attr('src',mLocation);
+				if (!backSkip) {
+					document.getElementById('sg-viewport').contentWindow.location.replace(mLocation);
+					DataSaver.updateValue("patternName",mLocation);
+					urlHandler.pushPattern(data.patternpartial);
+				} else {
+					backSkip = false;
+				}
+				
 			}
 		}
 		
@@ -101,7 +109,7 @@ function connectContentSync() {
 		// when receiving a message from WebSocket reload the current frame adding the received timestamp
 		// as a request var to, hopefully, bust caches... cachi(?)
 		wsc.onmessage = function (event) {
-			$("#sg-viewport").attr('src',$("#sg-viewport").attr('src')+'?'+event.data);
+			document.getElementById('sg-viewport').contentWindow.location.reload();
 		}
 		
 		// when there's an error update the pattern lab nav bar

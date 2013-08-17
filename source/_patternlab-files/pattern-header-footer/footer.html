@@ -13,15 +13,15 @@
 		if (host != '') {
 			
 			// alert the iframe parent that the pattern has loaded. for page follow.
-			parent.postMessage({"host":host},"http://"+host);
-			
-			// if there are clicks on the iframe make sure the nav in the iframe parent closes
-			var body = document.getElementsByTagName('body');
-			body[0].onclick = function() {
-				parent.postMessage({"bodyclick": "bodyclick"},"http://"+host)
-			};
+			parent.postMessage( { "url": host, "patternpartial": "{{ patternPartial }}"},"http://"+host);
 			
 		}
+		
+		// if there are clicks on the iframe make sure the nav in the iframe parent closes
+		var body = document.getElementsByTagName('body');
+		body[0].onclick = function() {
+			parent.postMessage({"bodyclick": "bodyclick"},"http://"+host)
+		};
 		
 	</script>
 	<!-- /DO NOT MODIFY -->

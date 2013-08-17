@@ -177,10 +177,11 @@ class Builder {
 	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
 	*/
 	private function generatePatternFile($f) {
-		$h  = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
+		$hr = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
 		$rf = $this->renderPattern($f);
-		$f  = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
-		return $h."\n".$rf."\n".$f;
+		$fr = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
+		$fr = str_replace("{{ patternPartial }}",$this->getPatternPartial($f),$fr);
+		return $hr."\n".$rf."\n".$fr;
 	}
 	
 	/**
@@ -594,6 +595,26 @@ class Builder {
 		$patternBits  = explode("-",$pattern,2);
 		$patternName = (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? $patternBits[1] : $pattern;
 		return ($clean) ? (str_replace("-"," ",$patternName)) : $patternName;
+	}
+	
+	protected function getPatternPartial($fileName) {
+		
+		$fileName = str_replace(".mustache","",$fileName);
+		
+		foreach($this->patternPaths as $patternTypeKey => $patternTypeVals) {
+			
+			foreach($patternTypeVals as $pattern => $path) {
+				
+				if ($path == $fileName) {
+					return $patternTypeKey."-".$pattern;
+				}
+				
+			}
+			
+		}
+		
+		return false;
+		
 	}
 	
 	/**

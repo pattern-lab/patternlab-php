@@ -365,7 +365,7 @@
 		iFramePath  = patternName;
 	}
 	DataSaver.updateValue("patternName",iFramePath);
-	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
+	document.getElementById("sg-viewport").contentWindow.location.assign(window.location.protocol+"//"+window.location.host+"/"+iFramePath);
 	
 	if (typeof(history.replaceState) !== "undefined") {
 		history.replaceState({ "pattern": patternName }, null, null);
@@ -457,8 +457,6 @@ $('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
 	
 	// update the iframe
 	document.getElementById("sg-viewport").contentWindow.location.replace(this.href);
-	DataSaver.updateValue("patternName",this.href);
-	urlHandler.pushPattern(this.getAttribute("data-patternpartial"));
 	
 	// close up the menu
 	$(this).parents('.sg-acc-panel').toggleClass('active');
@@ -495,7 +493,7 @@ $('#sg-vp-wrap').click(function(e) {
 // watch the iframe source so that it can be sent back to everyone else.
 // based on the great MDN docs at https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
 function receiveIframeMessage(event) {
-		
+	
 	// does the origin sending the message match the current host? if not dev/null the request
 	if (event.origin !== "http://"+window.location.host) {
 		return;
@@ -504,12 +502,22 @@ function receiveIframeMessage(event) {
 	if (event.data.bodyclick != undefined) {
 		closePanels();
 	} else if (event.data.patternpartial != undefined) {
+		
 		var iFramePath = urlHandler.getFileName(event.data.patternpartial);
-		document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
-		DataSaver.updateValue("patternName",iFramePath);
-		urlHandler.pushPattern(event.data.patternpartial);
-	} else if (wsnConnected) {
-		wsn.send(event.data);
+		if (!backSkip) {
+			if (document.getElementById("sg-viewport").contentWindow.location.toString() != "http://"+window.location.host+"/"+iFramePath) {
+				document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
+			}
+			DataSaver.updateValue("patternName",iFramePath);
+			urlHandler.pushPattern(event.data.patternpartial);
+		} else {
+			backSkip = false;
+		}
+		
+		if (wsnConnected) {
+			wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
+		}
+	
 	}
 	
 }

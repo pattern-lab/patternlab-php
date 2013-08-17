@@ -19,7 +19,7 @@ use Wrench\Application\NamedApplication;
 class navSyncBroadcasterApplication extends Application {
 	
 	protected $clients = array();
-	protected $currentAddress = null;
+	protected $data = null;
 	
 	/**
 	* When a client connects add it to the list of connected clients. Also send the client the current page to load in their iframe
@@ -27,8 +27,8 @@ class navSyncBroadcasterApplication extends Application {
 	public function onConnect($client) {
 		$id = $client->getId();
 		$this->clients[$id] = $client;
-		if ($this->currentAddress != null) {
-			$client->send($this->currentAddress);
+		if ($this->data != null) {
+			$client->send(json_encode($this->data));
 		}
 	}
 	
@@ -46,15 +46,18 @@ class navSyncBroadcasterApplication extends Application {
 	*/
 	public function onData($data, $client) {
 		
-		preg_match("/http:\/\/[A-z0-9\-\.]{1,}\/(.*)/i",$data,$matches);
-		$data = "/".$matches[1];
+		$dataDecoded = json_decode($data);
+		
+		$dataDecoded->url = "/".$dataDecoded->url;
+		$dataEncoded = json_encode($dataDecoded);
 		$testId = $client->getId();
 		foreach ($this->clients as $sendto) {
 			if ($testId != $sendto->getId()) {
-				$sendto->send($data);
+				$sendto->send($dataEncoded);
 			}
 		}
-		$this->currentAddress = $data;
+		
+		$this->data = $dataDecoded;
 		
 	}
 

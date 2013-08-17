@@ -10,6 +10,8 @@
  *
  */
 
+var backSkip = false;
+
 var urlHandler = {
 	
 	/**
@@ -59,6 +61,7 @@ var urlHandler = {
 	/**
 	* break up a pattern into its parts, pattern type and pattern name
 	* @param  {String}       the shorthand partials syntax for a given pattern
+	* @param  {Object}       the paths to be compared
 	*
 	* @return {Array}        the pattern type and pattern name
 	*/
@@ -117,6 +120,7 @@ var urlHandler = {
 	popPattern: function (e) {
 		
 		if (e.state == null) {
+			backSkip = false;
 			return;
 		}
 		
@@ -128,6 +132,10 @@ var urlHandler = {
 		DataSaver.updateValue("patternName",iFramePath);
 		document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
 		
+		if (wsnConnected) {
+			wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+e.state.pattern+'" }' );
+		}
+		
 	}
 
 }
@@ -136,5 +144,6 @@ var urlHandler = {
 * handle the onpopstate event
 */
 window.onpopstate = function (event) {
+	backSkip = true;
 	urlHandler.popPattern(event);
 }
