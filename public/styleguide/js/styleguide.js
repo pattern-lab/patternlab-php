@@ -272,7 +272,6 @@
 		
 		if (target == 'updatePxInput') {
 			$sizePx.val(pxSize);
-			console.log('pxSize='+pxSize)
 		} else if (target == 'updateEmInput') {
 			$sizeEms.val(emSize.toFixed(2));
 		} else {
