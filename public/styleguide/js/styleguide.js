@@ -504,14 +504,14 @@ function receiveIframeMessage(event) {
 	} else if (event.data.patternpartial != undefined) {
 		
 		var iFramePath = urlHandler.getFileName(event.data.patternpartial);
-		if (!backSkip) {
+		if (!urlHandler.backSkip) {
 			if (document.getElementById("sg-viewport").contentWindow.location.toString() != "http://"+window.location.host+"/"+iFramePath) {
 				document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
 			}
 			DataSaver.updateValue("patternName",iFramePath);
 			urlHandler.pushPattern(event.data.patternpartial);
 		} else {
-			backSkip = false;
+			urlHandler.backSkip = false;
 		}
 		
 		if (wsnConnected) {

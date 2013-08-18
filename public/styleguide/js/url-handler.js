@@ -10,9 +10,10 @@
  *
  */
 
-var backSkip = false;
-
 var urlHandler = {
+	
+	// if true it'll make sure iFrames and history aren't updated on back button click
+	backSkip: false,
 	
 	/**
 	* get the real file name for a given pattern name
@@ -120,7 +121,7 @@ var urlHandler = {
 	popPattern: function (e) {
 		
 		if (e.state == null) {
-			backSkip = false;
+			this.backSkip = false;
 			return;
 		}
 		
@@ -144,6 +145,6 @@ var urlHandler = {
 * handle the onpopstate event
 */
 window.onpopstate = function (event) {
-	backSkip = true;
+	urlHandler.backSkip = true;
 	urlHandler.popPattern(event);
 }

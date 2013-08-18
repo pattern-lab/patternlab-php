@@ -52,12 +52,12 @@ function connectNavSync() {
 			var vpLocation  = document.getElementById('sg-viewport').contentWindow.location.href;
 			var mLocation   = "http://"+host+data.url;
 			if (vpLocation != mLocation) {
-				if (!backSkip) {
+				if (!urlHandler.backSkip) {
 					document.getElementById('sg-viewport').contentWindow.location.replace(mLocation);
 					DataSaver.updateValue("patternName",mLocation);
 					urlHandler.pushPattern(data.patternpartial);
 				} else {
-					backSkip = false;
+					urlHandler.backSkip = false;
 				}
 				
 			}
