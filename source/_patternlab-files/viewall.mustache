@@ -24,16 +24,14 @@
 	
 </div><!--end .sg-main-->
 <script>
-	if (window.location.host != '') {
-		var body = document.getElementsByTagName('body');
-		body[0].onclick = function() {
-			parent.postMessage({"bodyclick":"bodyclick"},"http://"+window.location.host)
-		};
-	}
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage({"bodyclick":"bodyclick"},window.location.protocol+"//"+window.location.host)
+	};
 	var els = document.getElementsByClassName("patternLink");
 	for (i in els) {
 		els[i].onclick = function() {
-			parent.postMessage({"patternpartial":this.getAttribute("data-patternpartial")},"http://"+window.location.host);
+			parent.postMessage({"patternpartial":this.getAttribute("data-patternpartial")},window.location.protocol+"//"+window.location.host);
 			return false;
 		}
 	}

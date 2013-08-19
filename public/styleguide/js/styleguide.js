@@ -356,7 +356,7 @@
 	
 	// load the iframe source
 	var patternName = "";
-	var iFramePath  = "styleguide/html/styleguide.html";
+	var iFramePath  = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"styleguide/html/styleguide.html";
 	var trackiFrame = true; // can toggle this feature on & off
 	if ((oGetVars.p != undefined) || (oGetVars.pattern != undefined)) {
 		patternName = (oGetVars.p != undefined) ? oGetVars.p : oGetVars.pattern;
@@ -365,7 +365,7 @@
 		iFramePath  = patternName;
 	}
 	DataSaver.updateValue("patternName",iFramePath);
-	document.getElementById("sg-viewport").contentWindow.location.assign(window.location.protocol+"//"+window.location.host+"/"+iFramePath);
+	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
 	
 	if (typeof(history.replaceState) !== "undefined") {
 		history.replaceState({ "pattern": patternName }, null, null);
@@ -495,7 +495,7 @@ $('#sg-vp-wrap').click(function(e) {
 function receiveIframeMessage(event) {
 	
 	// does the origin sending the message match the current host? if not dev/null the request
-	if (event.origin !== "http://"+window.location.host) {
+	if (event.origin !== window.location.protocol+"//"+window.location.host) {
 		return;
 	}
 	
@@ -505,7 +505,7 @@ function receiveIframeMessage(event) {
 		
 		var iFramePath = urlHandler.getFileName(event.data.patternpartial);
 		if (!urlHandler.backSkip) {
-			if (document.getElementById("sg-viewport").contentWindow.location.toString() != "http://"+window.location.host+"/"+iFramePath) {
+			if (document.getElementById("sg-viewport").contentWindow.location.toString() != window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+iFramePath) {
 				document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
 			}
 			DataSaver.updateValue("patternName",iFramePath);

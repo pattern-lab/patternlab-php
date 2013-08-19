@@ -7,20 +7,14 @@
 	
 	<!-- DO NOT MODIFY -->
 	<script>
-	
-		// run only if we're running under apache
-		var host = window.location.host;
-		if (host != '') {
-			
-			// alert the iframe parent that the pattern has loaded. for page follow.
-			parent.postMessage( { "url": host, "patternpartial": "{{ patternPartial }}"},"http://"+host);
-			
-		}
+		
+		// alert the iframe parent that the pattern has loaded. for page follow.
+		parent.postMessage( { "url": window.location.host, "patternpartial": "{{ patternPartial }}"},window.location.protocol+"//"+window.location.host);
 		
 		// if there are clicks on the iframe make sure the nav in the iframe parent closes
 		var body = document.getElementsByTagName('body');
 		body[0].onclick = function() {
-			parent.postMessage({"bodyclick": "bodyclick"},"http://"+host)
+			parent.postMessage({"bodyclick": "bodyclick"},window.location.protocol+"//"+window.location.host)
 		};
 		
 	</script>

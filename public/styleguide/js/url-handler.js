@@ -111,7 +111,7 @@ var urlHandler = {
 	* @param  {String}       the shorthand partials syntax for a given pattern
 	*/
 	pushPattern: function (pattern) {
-		history.pushState({ "pattern": pattern }, null, "/?p="+pattern);
+		history.pushState({ "pattern": pattern }, null, window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"?p="+pattern);
 	},
 	
 	/**
@@ -128,7 +128,7 @@ var urlHandler = {
 		var iFramePath = "";
 		iFramePath = this.getFileName(e.state.pattern);
 		if (iFramePath == "") {
-			iFramePath = "styleguide/html/styleguide.html";
+			iFramePath = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"styleguide/html/styleguide.html";
 		}
 		DataSaver.updateValue("patternName",iFramePath);
 		document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
