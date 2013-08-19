@@ -597,6 +597,12 @@ class Builder {
 		return ($clean) ? (str_replace("-"," ",$patternName)) : $patternName;
 	}
 	
+	/**
+	* Get the pattern partial for a given file
+	* @param  {String}       the file name for a pattern
+	*
+	* @return {String}       the pattern partial
+	*/
 	protected function getPatternPartial($fileName) {
 		
 		$fileName = str_replace(".mustache","",$fileName);
