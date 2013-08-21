@@ -13,7 +13,8 @@
 var urlHandler = {
 	
 	// if true it'll make sure iFrames and history aren't updated on back button click
-	backSkip: false,
+	doPop:    true,
+	skipBack: false,
 	
 	/**
 	* get the real file name for a given pattern name
@@ -111,40 +112,42 @@ var urlHandler = {
 	* @param  {String}       the shorthand partials syntax for a given pattern
 	*/
 	pushPattern: function (pattern) {
-		history.pushState({ "pattern": pattern }, null, window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"?p="+pattern);
+		History.pushState({ "pattern": pattern }, null, window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"?p="+pattern);
 	},
 	
 	/**
 	* based on a click forward or backward modify the url and iframe source
 	* @param  {Object}      event info like state and properties set in pushState()
 	*/
-	popPattern: function (e) {
+	popPattern: function (state) {
 		
-		if (e.state == null) {
-			this.backSkip = false;
+		if (state.data == null) {
 			return;
 		}
 		
+		// make sure that the iframe message stuff is skipped
+		this.skipBack = true;
+		
 		var iFramePath = "";
-		iFramePath = this.getFileName(e.state.pattern);
+		iFramePath = this.getFileName(state.data.pattern);
 		if (iFramePath == "") {
 			iFramePath = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"styleguide/html/styleguide.html";
 		}
-		DataSaver.updateValue("patternName",iFramePath);
+		
 		document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
 		
 		if (wsnConnected) {
-			wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+e.state.pattern+'" }' );
+			wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+state.data.pattern+'" }' );
 		}
 		
 	}
 
 }
 
-/**
-* handle the onpopstate event
-*/
-window.onpopstate = function (event) {
-	urlHandler.backSkip = true;
-	urlHandler.popPattern(event);
-}
+History.Adapter.bind(window,'statechange',function(){
+	if (urlHandler.doPop) {
+		var state = History.getState();
+		urlHandler.popPattern(state);
+	}
+	urlHandler.doPop = true;
+});
