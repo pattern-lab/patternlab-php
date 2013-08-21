@@ -365,11 +365,8 @@
 		iFramePath  = patternName;
 	}
 	DataSaver.updateValue("patternName",iFramePath);
-	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
 	
-	if (typeof(history.replaceState) !== "undefined") {
-		history.replaceState({ "pattern": patternName }, null, null);
-	}
+	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
 	
 	//IFrame functionality
 
@@ -500,24 +497,27 @@ function receiveIframeMessage(event) {
 	}
 	
 	if (event.data.bodyclick != undefined) {
+		
 		closePanels();
+		
 	} else if (event.data.patternpartial != undefined) {
 		
-		var iFramePath = urlHandler.getFileName(event.data.patternpartial);
-		if (!urlHandler.backSkip) {
-			if (document.getElementById("sg-viewport").contentWindow.location.toString() != window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+iFramePath) {
-				document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
-			}
 			DataSaver.updateValue("patternName",iFramePath);
+		// make sure the pop pattern doesn't fire
+		urlHandler.doPop = false;
+		
+		if (!urlHandler.skipBack) {
+			var iFramePath = urlHandler.getFileName(event.data.patternpartial);
 			urlHandler.pushPattern(event.data.patternpartial);
-		} else {
-			urlHandler.backSkip = false;
+			if (wsnConnected) {
+				wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
+			}
 		}
 		
-		if (wsnConnected) {
-			wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
-		}
-	
+		// reset the defaults
+		urlHandler.doPop    = true;
+		urlHandler.skipBack = false;
+		
 	}
 	
 }
