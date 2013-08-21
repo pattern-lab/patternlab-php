@@ -48,17 +48,23 @@ function connectNavSync() {
 		
 		// when receiving a message from WebSocket update the iframe source
 		wsn.onmessage = function (event) {
+			
 			var data = JSON.parse(event.data);
 			var vpLocation  = document.getElementById('sg-viewport').contentWindow.location.href;
 			var mLocation   = "http://"+host+data.url;
+			
 			if (vpLocation != mLocation) {
-				if (!urlHandler.backSkip) {
-					document.getElementById('sg-viewport').contentWindow.location.replace(mLocation);
 					DataSaver.updateValue("patternName",mLocation);
-					urlHandler.pushPattern(data.patternpartial);
-				} else {
-					urlHandler.backSkip = false;
-				}
+				
+				document.getElementById('sg-viewport').contentWindow.location.replace(mLocation);
+				
+				// make sure the pop doesn't fire and push the pattern
+				urlHandler.doPop = false;
+				urlHandler.pushPattern(data.patternpartial);
+				
+				// reset the defaults
+				urlHandler.doPop    = true;
+				urlHandler.skipBack = false;
 				
 			}
 		}
