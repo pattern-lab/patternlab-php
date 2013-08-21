@@ -357,14 +357,10 @@
 	// load the iframe source
 	var patternName = "";
 	var iFramePath  = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"styleguide/html/styleguide.html";
-	var trackiFrame = true; // can toggle this feature on & off
 	if ((oGetVars.p != undefined) || (oGetVars.pattern != undefined)) {
 		patternName = (oGetVars.p != undefined) ? oGetVars.p : oGetVars.pattern;
 		iFramePath  = urlHandler.getFileName(patternName);
-	} else if (trackiFrame && (patternName = DataSaver.findValue("patternName"))) {
-		iFramePath  = patternName;
 	}
-	DataSaver.updateValue("patternName",iFramePath);
 	
 	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
 	
@@ -502,7 +498,6 @@ function receiveIframeMessage(event) {
 		
 	} else if (event.data.patternpartial != undefined) {
 		
-			DataSaver.updateValue("patternName",iFramePath);
 		// make sure the pop pattern doesn't fire
 		urlHandler.doPop = false;
 		

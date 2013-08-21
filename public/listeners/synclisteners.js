@@ -54,7 +54,6 @@ function connectNavSync() {
 			var mLocation   = "http://"+host+data.url;
 			
 			if (vpLocation != mLocation) {
-					DataSaver.updateValue("patternName",mLocation);
 				
 				document.getElementById('sg-viewport').contentWindow.location.replace(mLocation);
 				
