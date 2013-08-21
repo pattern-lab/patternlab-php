@@ -27,6 +27,10 @@ var urlHandler = {
 		var baseDir     = "patterns";
 		var fileName    = "";
 		
+		if (name == undefined) {
+			return fileName;
+		}
+		
 		var paths = (name.indexOf("viewall-") != -1) ? viewAllPaths : patternPaths;
 		nameClean = name.replace("viewall-","");
 		
@@ -47,7 +51,11 @@ var urlHandler = {
 					break;
 				}
 			}
-			
+		
+		}
+		
+		if (fileName == "") {
+			return fileName;
 		}
 		
 		var regex = /\//g;
