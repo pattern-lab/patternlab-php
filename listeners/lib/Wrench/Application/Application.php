@@ -17,7 +17,7 @@ abstract class Application
      *
      * @param
      */
-	// abstract public function onDisconnect($connection);
+	 abstract public function onDisconnect($connection);
 
     /**
      * Optional: allow the application to perform any tasks which will result in a push to clients
