@@ -16,6 +16,23 @@
 
 		<hr />
 
+		{{# latest-block }}
+				<div class="cont">
+					{{> molecules-inset-block }}
+				</div>
+		{{/ latest-block}}
+
+		<ul>
+			{{#listItems.twelve}}
+				<li>
+					<h3>{{name.first}} {{name.middlei}} {{name.last}} </h3>
+					<p>{{title}}</p>
+					<p>{{description}}</p>
+					<p>{{url}}</p>
+				</li>
+			{{/listItems.twelve}}
+		</ul>
+
 		<div class="l-two-col">
 			<div class="l-main">
 				{{> organisms-latest-posts }}
@@ -23,8 +40,13 @@
 
 			<div class="l-sidebar">
 				{{> organisms-recent-tweets }}
-			</div>
-		</div>
+			</div
+
+			{{# inset-blocks }}
+				<div class="cont">
+					{{> molecules-inset-block }}
+				</div>
+			{{/ inset-blocks}}
 		
 	</div><!--End role=main-->
 	{{> organisms-footer }}

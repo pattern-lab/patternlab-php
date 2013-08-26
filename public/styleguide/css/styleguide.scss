@@ -284,6 +284,7 @@ html, body {
 	}
 
 	&.sg-right {
+		position: absolute;
 		left: auto;
 		right: 0;
 	}
@@ -443,6 +444,20 @@ html, body {
 		position: absolute;
 		top: $offset-top;
 		left: 0;
+	}
+}
+
+//Checklist dropdown lists
+.sg-checkbox {
+	@extend .icon-checkbox-unchecked;
+
+	&:before {
+		display: inline-block;
+		margin-right: 0.4em;
+	}
+
+	&.active {
+		@extend .icon-checkbox-checked;
 	}
 }
 
@@ -655,6 +670,7 @@ html, body {
 	text-align: center;
 }
 
+//Animate Demo to show 
 .animate-move {
 	position: relative;
 

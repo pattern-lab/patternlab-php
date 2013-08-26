@@ -194,6 +194,7 @@ html, body {
   .sg-acc-panel.active {
     max-height: 50em; }
   .sg-acc-panel.sg-right {
+    position: absolute;
     left: auto;
     right: 0; }
 
@@ -306,6 +307,10 @@ html, body {
     position: absolute;
     top: 2em;
     left: 0; }
+
+.sg-checkbox:before {
+  display: inline-block;
+  margin-right: 0.4em; }
 
 /*------------------------------------*\
     $STYLE GUIDE VIEWPORT
@@ -530,7 +535,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .sg-header .sg-nav-toggle, .icon-checkbox-unchecked, .icon-checkbox-checked, .icon-eye {
+.icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .sg-header .sg-nav-toggle, .icon-checkbox-unchecked, .sg-checkbox, .icon-checkbox-checked, .sg-checkbox.active, .icon-eye {
   font-family: 'icons';
   speak: none;
   font-style: normal;
@@ -555,10 +560,10 @@ you can use the generic selector below, but it's slower:
 .icon-menu:before, .sg-header .sg-nav-toggle:before {
   content: "\e005"; }
 
-.icon-checkbox-unchecked:before {
+.icon-checkbox-unchecked:before, .sg-checkbox:before {
   content: "\e006"; }
 
-.icon-checkbox-checked:before {
+.icon-checkbox-checked:before, .sg-checkbox.active:before {
   content: "\e007"; }
 
 .icon-eye:before {

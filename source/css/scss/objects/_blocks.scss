@@ -100,11 +100,28 @@
 
 		img {
 			display: block;
-			margin-bottom: $space-half;
 		}
 	}
+}
 
-	
+/* Hero Block */
+.block-inset {
+	margin-bottom: $space-half;
+	position: relative;
+
+	.headline {
+		font-size: 1.1em;
+	}
+
+	.b-text {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		background: $dim;
+		color: $white;
+		padding: $pad-half;
+	}
 }
 
 /* Block Thumb with Summary */

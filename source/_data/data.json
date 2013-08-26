@@ -1,27 +1,34 @@
 {
-	"atoms": {
-		"images": {
-			"landscape-4x3": {
-				"src": "../../images/fpo_4x3.png",
-				"alt": "4x3 Image"
-			},
-			"landscape-16x9": {
-				"src": "../../images/fpo_16x9.png",
-				"alt": "16x9 Image"
-			},
-			"logo": {
-				"href": "#",
-				"src": "../../images/logo.png",
-				"alt": "Logo for a Company"
-			},
-			"square": {
-				"src": "../../images/fpo_square.png",
-				"alt": "Square Thumbnail"
-			}
+	"img": {
+		"landscape-4x3": {
+			"src": "../../images/fpo_4x3.png",
+			"alt": "4x3 Image"
+		},
+		"landscape-16x9": {
+			"src": "../../images/fpo_16x9.png",
+			"alt": "16x9 Image"
+		},
+		"square": {
+			"src": "../../images/fpo_square.png",
+			"alt": "Square Thumbnail"
+		},
+		"avatar" : {
+			"src" : "../../images/fpo_square.png",
+			"alt" : "Person Name"
 		}
 	},
-	"landscape-4x3": {
-		"src": "/images/fpo_landscape.png",
-		"alt": "4x3 Image"
+	"headline" : {
+		"short" : "Lorem ipsum dolor sit (37 characters)",
+		"medium" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. (72 characters)"
+	},
+	"excerpt" : {
+		"short" : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
+		"medium" : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+		"long" : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+	},
+	"name" : {
+		"first" : "Stephanie",
+		"middle" : "Jarvawitz",
+		"last" : "McCormick"
 	}
 }

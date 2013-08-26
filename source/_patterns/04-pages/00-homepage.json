@@ -1,0 +1,13 @@
+{
+	"headline" : "EU countries pave way to arm Syrian rebels",
+	"inset-blocks" : [
+		{
+			"headline" : "This is the headline for the inset block"
+		}
+	],
+	"latest-block" : [
+		{
+			"headline" : "This is the headline for the latest block"
+		}
+	]
+}

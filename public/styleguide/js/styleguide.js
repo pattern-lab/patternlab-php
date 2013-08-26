@@ -6,7 +6,6 @@
 		viewportResizeHandleWidth = 14, //Width of the viewport drag-to-resize handle
 		$sgViewport = $('#sg-viewport'), //Viewport element
 		$viewToggle = $('#sg-t-toggle'), //Toggle 
-		$tAnnotations = $('#sg-t-annotations'),
 		$sizePx = $('.sg-size-px'), //Px size input element in toolbar
 		$sizeEms = $('.sg-size-em'), //Em size input element in toolbar
 		$bodySize = parseInt($('body').css('font-size')), //Body size of the document
@@ -379,7 +378,6 @@
 		//Clean View Trigger
 		$('#sg-t-clean').on("click", function(e){
 			e.preventDefault();
-			$(this).toggleClass('active');
 			$sgViewport.contents().hide();
 			$vp.find('body').toggleClass('sg-clean');
 			$vp.find('#intro, .sg-head, #about-sg').toggle();
@@ -387,10 +385,9 @@
 		});
 		
 		//Code View Trigger
-		$('#sg-t-code').on("click", function(e){
+		$('#sg-t-code').click(function(e){
 			var $code = $vp.find('.sg-code');
 			e.preventDefault();
-			$(this).toggleClass('active');
 			
 			if($vp.find('.sg-code').length==0) {
 				buildCodeView();
@@ -400,10 +397,9 @@
 		});
 
 		//Annotation View Trigger
-		$('#sg-t-annotations').on("click", function(e){
+		$('#sg-t-annotations').click(function(e){
 			var $annotations = $vp.find('.sg-annotations');
 			e.preventDefault();
-			$(this).toggleClass('active');
 			
 			if($vp.find('.sg-annotations').length==0) {
 				buildAnnotationView();
