@@ -319,7 +319,7 @@ input[type="search"]::-webkit-search-decoration {
   background: none;
   padding: 0.78em 1em;
   border: 0;
-  border-left: 1px solid #dddddd;
+  border-left: 1px solid gray;
   color: gray; }
 
 /*------------------------------------*\

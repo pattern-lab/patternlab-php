@@ -1,53 +1,37 @@
 <div class="page" id="page">
 	{{> organisms-header }}
 	<div role="main">
-		{{> molecules-block-hero }}
+		
+		{{# hero }}
+			{{> molecules-block-hero }}
+		{{/ hero}}
+
 		<div class="g g-3up">
-			<div class="gi">
-				{{> molecules-inset-block }}
-			</div>
-			<div class="gi">
-				{{> molecules-inset-block }}
-			</div>
-			<div class="gi">
-				{{> molecules-inset-block }}
-			</div>
+			{{# touts}}
+				<div class="gi">
+					{{> molecules-inset-block }}
+				</div>
+			{{/ touts}}
 		</div><!--end 3up-->
 
 		<hr />
 
-		{{# latest-block }}
-				<div class="cont">
-					{{> molecules-inset-block }}
-				</div>
-		{{/ latest-block}}
-
-		<ul>
-			{{#listItems.twelve}}
-				<li>
-					<h3>{{name.first}} {{name.middlei}} {{name.last}} </h3>
-					<p>{{title}}</p>
-					<p>{{description}}</p>
-					<p>{{url}}</p>
-				</li>
-			{{/listItems.twelve}}
-		</ul>
-
 		<div class="l-two-col">
 			<div class="l-main">
-				{{> organisms-latest-posts }}
+				<section class="section latest-posts">
+					<h2 class="section-title">Latest Posts</h2>
+					<ul class="post-list">
+						{{# latest-posts}}
+							<li>{{> molecules-media-block }}</li>
+						{{/ latest-posts}}
+					</ul>
+					<a href="#" class="text-btn">View more posts</a>
+				</section>
 			</div>
 
 			<div class="l-sidebar">
 				{{> organisms-recent-tweets }}
-			</div
-
-			{{# inset-blocks }}
-				<div class="cont">
-					{{> molecules-inset-block }}
-				</div>
-			{{/ inset-blocks}}
-		
+			</div><!--end l-sidebar-->
 	</div><!--End role=main-->
 	{{> organisms-footer }}
 </div>
