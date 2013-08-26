@@ -366,6 +366,8 @@
 	
 	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
 	
+	history.replaceState({ "pattern": patternName }, null, null);
+	
 	//IFrame functionality
 
 	//Scripts to run after the page has loaded into the iframe
@@ -500,19 +502,17 @@ function receiveIframeMessage(event) {
 		
 	} else if (event.data.patternpartial != undefined) {
 		
-		// make sure the pop pattern doesn't fire
-		urlHandler.doPop = false;
-		
 		if (!urlHandler.skipBack) {
+			
 			var iFramePath = urlHandler.getFileName(event.data.patternpartial);
 			urlHandler.pushPattern(event.data.patternpartial);
 			if (wsnConnected) {
 				wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
 			}
+			
 		}
 		
 		// reset the defaults
-		urlHandler.doPop    = true;
 		urlHandler.skipBack = false;
 		
 	}
