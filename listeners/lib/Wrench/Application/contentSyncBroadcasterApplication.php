@@ -67,6 +67,7 @@ class contentSyncBroadcasterApplication extends Application {
 		if (file_exists(__DIR__."/../../../../public/latest-change.txt")) {
 			$readTimestamp = file_get_contents(__DIR__."/../../../../public/latest-change.txt");
 			if ($readTimestamp != $this->savedTimestamp) {
+				print "pattern lab updated. alerting connected browsers...\n";
 				foreach ($this->clients as $sendto) {
 					$sendto->send($readTimestamp);
 				}
