@@ -72,6 +72,22 @@ class Connection extends Configurable
     protected $port;
 
     /**
+     * The array of headers included with the original request (like Cookie for example)
+     * The headers specific to the web sockets handshaking have been stripped out
+     *
+     * @var array
+     */
+    protected $headers = null;
+
+    /**
+     * The array of query parameters included in the original request
+     * The array is in the format 'key' => 'value'
+     *
+     * @var array
+     */
+    protected $queryParams = null;
+
+    /**
      * Connection ID
      *
      * @var string|null
@@ -170,8 +186,8 @@ class Connection extends Configurable
         $algo = $this->options['connection_id_algo'];
 
         if (extension_loaded('gmp')) {
-            $hash = hash($algo, $message, true);
-            $hash = gmp_strval(gmp_init($hash, 16), 62);
+            $hash = hash($algo, $message);
+            $hash = gmp_strval(gmp_init('0x' . $hash, 16), 62);
         } else {
             // @codeCoverageIgnoreStart
             $hash = hash($algo, $message);
@@ -207,11 +223,13 @@ class Connection extends Configurable
     public function handshake($data)
     {
         try {
-            list($path, $origin, $key, $extensions)
+            list($path, $origin, $key, $extensions, $protocol, $headers, $params)
                 = $this->protocol->validateRequestHandshake($data);
 
-            $this->application = $this->manager->getApplicationForPath($path);
+            $this->headers = $headers;
+            $this->queryParams = $params;
 
+            $this->application = $this->manager->getApplicationForPath($path);
             if (!$this->application) {
                 throw new BadRequestException('Invalid application');
             }
@@ -466,6 +484,26 @@ class Connection extends Configurable
     public function getPort()
     {
         return $this->port;
+    }
+
+    /**
+     * Gets the non-web-sockets headers included with the original request
+     *
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    /**
+     * Gets the query parameters included with the original request
+     *
+     * @return array
+     */
+    public function getQueryParams()
+    {
+        return $this->queryParams;
     }
 
     /**

@@ -12,6 +12,10 @@
 
 var urlHandler = {
 	
+	// if true it'll make sure iFrames and history aren't updated on back button click
+	doPop:    true,
+	skipBack: false,
+	
 	/**
 	* get the real file name for a given pattern name
 	* @param  {String}       the shorthand partials syntax for a given pattern
@@ -19,57 +23,75 @@ var urlHandler = {
 	* @return {String}       the real file path
 	*/
 	getFileName: function (name) {
-	
+		
 		var baseDir     = "patterns";
 		var fileName    = "";
-	
-		var bits        = this.getPatternInfo(name);
+		
+		if (name == undefined) {
+			return fileName;
+		}
+		
+		var paths = (name.indexOf("viewall-") != -1) ? viewAllPaths : patternPaths;
+		nameClean = name.replace("viewall-","");
+		
+		// look at this as a regular pattern
+		var bits        = this.getPatternInfo(nameClean, paths);
 		var patternType = bits[0];
 		var pattern     = bits[1];
-	
-		if ((patternPaths[patternType] != undefined) && (patternPaths[patternType][pattern] != undefined)) {
 		
-			fileName = patternPaths[patternType][pattern];
-		
-		} else if (patternPaths[patternType] != undefined) {
-		
-			for (patternMatchKey in patternPaths[patternType]) {
+		if ((paths[patternType] != undefined) && (paths[patternType][pattern] != undefined)) {
+			
+			fileName = paths[patternType][pattern];
+			
+		} else if (paths[patternType] != undefined) {
+			
+			for (patternMatchKey in paths[patternType]) {
 				if (patternMatchKey.indexOf(pattern) != -1) {
-					fileName = patternPaths[patternType][patternMatchKey];
+					fileName = paths[patternType][patternMatchKey];
 					break;
 				}
 			}
 		
 		}
-	
+		
+		if (fileName == "") {
+			return fileName;
+		}
+		
 		var regex = /\//g;
-		return (fileName == "") ? fileName : baseDir+"/"+fileName.replace(regex,"-")+"/"+fileName.replace(regex,"-")+".html";
-	
+		if ((name.indexOf("viewall-") != -1) && (fileName != "")) {
+			fileName = baseDir+"/"+fileName.replace(regex,"-")+"/index.html";
+		} else if (fileName != "") {
+			fileName = baseDir+"/"+fileName.replace(regex,"-")+"/"+fileName.replace(regex,"-")+".html";
+		}
+		
+		return fileName;
 	},
 	
 	/**
 	* break up a pattern into its parts, pattern type and pattern name
 	* @param  {String}       the shorthand partials syntax for a given pattern
+	* @param  {Object}       the paths to be compared
 	*
 	* @return {Array}        the pattern type and pattern name
 	*/
-	getPatternInfo: function (name) {
-	
+	getPatternInfo: function (name, paths) {
+		
 		var patternBits = name.split("-");
-	
+		
 		var i = 1;
 		var c = patternBits.length;
-	
+		
 		var patternType = patternBits[0];
-		while ((patternPaths[patternType] == undefined) && (i < c)) {
+		while ((paths[patternType] == undefined) && (i < c)) {
 			patternType += "-"+patternBits[i];
 			i++;
 		}
-	
+		
 		pattern = name.slice(patternType.length+1,name.length);
-	
+		
 		return [patternType, pattern];
-	
+		
 	},
 	
 	/**
@@ -91,6 +113,49 @@ var urlHandler = {
 		
 		return oGetVars;
 		
+	},
+	
+	/**
+	* push a pattern onto the current history based on a click
+	* @param  {String}       the shorthand partials syntax for a given pattern
+	*/
+	pushPattern: function (pattern) {
+		History.pushState({ "pattern": pattern }, null, window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"?p="+pattern);
+	},
+	
+	/**
+	* based on a click forward or backward modify the url and iframe source
+	* @param  {Object}      event info like state and properties set in pushState()
+	*/
+	popPattern: function (state) {
+		
+		if (state.data == null) {
+			return;
+		}
+		
+		// make sure that the iframe message stuff is skipped
+		this.skipBack = true;
+		
+		var iFramePath = "";
+		iFramePath = this.getFileName(state.data.pattern);
+		if (iFramePath == "") {
+			iFramePath = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"styleguide/html/styleguide.html";
+		}
+		
+		document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
+		
+		if (wsnConnected) {
+			wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+state.data.pattern+'" }' );
+		}
+		
 	}
 
 }
+
+History.Adapter.bind(window,'statechange',function(){
+	if (urlHandler.doPop) {
+		var state = History.getState();
+		urlHandler.popPattern(state);
+	}
+	urlHandler.doPop = true;
+});

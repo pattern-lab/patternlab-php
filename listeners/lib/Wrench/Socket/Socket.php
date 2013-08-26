@@ -268,7 +268,7 @@ abstract class Socket extends Configurable implements Resource
     }
 
     /**
-     * Recieve data from the socket
+     * Receive data from the socket
      *
      * @param int $length
      * @return string

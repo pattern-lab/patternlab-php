@@ -16,18 +16,24 @@
 <div id="patterns">
 	{{# partials }}
 		<div class="sg-pattern">
-			<h2 class="sg-head sg-sub" ><a href="../../patterns/{{ patternLink }}">{{ patternName }}</a></h2>
+			<h2 class="sg-head sg-sub" ><a href="../../patterns/{{ patternLink }}" class="patternLink" data-patternpartial="{{ patternPartialPath }}">{{ patternName }}</a></h2>
 			{{{ patternPartial }}}
 		</div>
 	{{/ partials }}
 </div> <!--end #patterns-->
 </div><!--End Style Guide Main Content-->
 <script>
-	if (window.location.host != '') {
-		var body = document.getElementsByTagName('body');
-		body[0].onclick = function() {
-			parent.postMessage('body-click',"http://"+window.location.host)
-		};
+	var body = document.getElementsByTagName('body');
+	body[0].onclick = function() {
+		parent.postMessage({"bodyclick":"bodyclick"},window.location.protocol+"//"+window.location.host)
+	};
+	
+	var els = document.getElementsByClassName("patternLink");
+	for (i in els) {
+		els[i].onclick = function() {
+			parent.postMessage({"patternpartial":this.getAttribute("data-patternpartial")},window.location.protocol+"//"+window.location.host);
+			return false;
+		}
 	}
 </script>
 </body>

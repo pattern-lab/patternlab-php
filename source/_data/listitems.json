@@ -3,15 +3,15 @@
 		"title": "Nullizzle shizznit velizzle, hizzle, suscipit own yo', gravida vizzle, arcu.",
 		"img": {
 			"avatar": {
-				"src": "http://placeimg.com/100/100/any",
+				"src": "http://placeimg.com/100/100/people",
 				"alt": "Avatar"
 			},
 			"square": {
-				"src": "http://placeimg.com/300/300/any",
+				"src": "http://placeimg.com/300/300/nature",
 				"alt": "Square"
 			},
 			"rectangle": {
-				"src": "http://placeimg.com/400/300/any",
+				"src": "http://placeimg.com/400/300/tech",
 				"alt": "Rectangle"
 			}
 		}, 
@@ -59,15 +59,15 @@
 		"title": "Veggies sunt bona vobis, proinde vos postulo",
 		"img": {
 			"avatar": {
-				"src": "http://placeimg.com/100/100/any",
+				"src": "http://placeimg.com/100/100/nature",
 				"alt": "Avatar"
 			},
 			"square": {
-				"src": "http://placeimg.com/300/300/any",
+				"src": "http://placeimg.com/300/300/tech",
 				"alt": "Square"
 			},
 			"rectangle": {
-				"src": "http://placeimg.com/400/300/any",
+				"src": "http://placeimg.com/400/300/people",
 				"alt": "Rectangle"
 			}
 		},
@@ -115,15 +115,15 @@
 		"title": "Bacon ipsum dolor sit amet turducken strip steak beef ribs shank",
 		"img": {
 			"avatar": {
-				"src": "http://placeimg.com/100/100/any",
+				"src": "http://placeimg.com/100/100/tech",
 				"alt": "Avatar"
 			},
 			"square": {
-				"src": "http://placeimg.com/300/300/any",
+				"src": "http://placeimg.com/300/300/people",
 				"alt": "Square"
 			},
 			"rectangle": {
-				"src": "http://placeimg.com/400/300/any",
+				"src": "http://placeimg.com/400/300/nature",
 				"alt": "Rectangle"
 			}
 		},
@@ -171,15 +171,15 @@
 		"title": "Whatever swag accusamus occupy, gentrify butcher tote bag",
 		"img": {
 			"avatar": {
-				"src": "http://placeimg.com/100/100/any",
+				"src": "http://placeimg.com/100/100/animals",
 				"alt": "Avatar"
 			},
 			"square": {
-				"src": "http://placeimg.com/300/300/any",
+				"src": "http://placeimg.com/300/300/arch",
 				"alt": "Square"
 			},
 			"rectangle": {
-				"src": "http://placeimg.com/400/300/any",
+				"src": "http://placeimg.com/400/300/people/grayscale",
 				"alt": "Rectangle"
 			}
 		}, 
@@ -227,15 +227,15 @@
 		"title": "Marshall McLuhan Colbert bump backpack journalist vast wasteland Romenesko CPM",
 		"img": {
 			"avatar": {
-				"src": "http://placeimg.com/100/100/any",
+				"src": "http://placeimg.com/100/100/people/grayscale",
 				"alt": "Avatar"
 			},
 			"square": {
-				"src": "http://placeimg.com/300/300/any",
+				"src": "http://placeimg.com/300/300/animals",
 				"alt": "Square"
 			},
 			"rectangle": {
-				"src": "http://placeimg.com/400/300/any",
+				"src": "http://placeimg.com/400/300/arch",
 				"alt": "Rectangle"
 			}
 		}, 
@@ -283,15 +283,15 @@
 		"title": "Thunder, thunder, thundercats, Ho!",
 		"img": {
 			"avatar": {
-				"src": "http://placeimg.com/100/100/any",
+				"src": "http://placeimg.com/100/100/arch",
 				"alt": "Avatar"
 			},
 			"square": {
-				"src": "http://placeimg.com/300/300/any",
+				"src": "http://placeimg.com/300/300/animals",
 				"alt": "Square"
 			},
 			"rectangle": {
-				"src": "http://placeimg.com/400/300/any",
+				"src": "http://placeimg.com/400/300/people/grayscale",
 				"alt": "Rectangle"
 			}
 		}, 
@@ -395,15 +395,15 @@
 		"title": "Webtwo ipsum dolor sit amet, eskobo chumby doostang bebo",
 		"img": {
 			"avatar": {
-				"src": "http://placeimg.com/100/100/any",
+				"src": "http://placeimg.com/100/100/any/grayscale",
 				"alt": "Avatar"
 			},
 			"square": {
-				"src": "http://placeimg.com/300/300/any",
+				"src": "http://placeimg.com/300/300/any/grayscale",
 				"alt": "Square"
 			},
 			"rectangle": {
-				"src": "http://placeimg.com/400/300/any",
+				"src": "http://placeimg.com/400/300/any/grayscale",
 				"alt": "Rectangle"
 			}
 		},
@@ -451,15 +451,15 @@
 		"title": "Rebel Mission to Ord Mantell",
 		"img": {
 			"avatar": {
-				"src": "http://placeimg.com/100/100/any",
+				"src": "http://placeimg.com/100/100/any/sepia",
 				"alt": "Avatar"
 			},
 			"square": {
-				"src": "http://placeimg.com/300/300/any",
+				"src": "http://placeimg.com/300/300/any/sepia",
 				"alt": "Square"
 			},
 			"rectangle": {
-				"src": "http://placeimg.com/400/300/any",
+				"src": "http://placeimg.com/400/300/any/sepia",
 				"alt": "Rectangle"
 			}
 		},
@@ -507,15 +507,15 @@
 		"title": "Help, help, I'm being repressed!",
 		"img": {
 			"avatar": {
-				"src": "http://placeimg.com/100/100/any",
+				"src": "http://placeimg.com/100/100/tech/grayscale",
 				"alt": "Avatar"
 			},
 			"square": {
-				"src": "http://placeimg.com/300/300/any",
+				"src": "http://placeimg.com/300/300/nature/grayscale",
 				"alt": "Square"
 			},
 			"rectangle": {
-				"src": "http://placeimg.com/400/300/any",
+				"src": "http://placeimg.com/400/300/arch/grayscale",
 				"alt": "Rectangle"
 			}
 		},
@@ -563,15 +563,15 @@
 		"title": "Danish danish candy canes bonbon cheesecake danish marzipan",
 		"img": {
 			"avatar": {
-				"src": "http://placeimg.com/100/100/any",
+				"src": "http://placeimg.com/100/100/tech/sepia",
 				"alt": "Avatar"
 			},
 			"square": {
-				"src": "http://placeimg.com/300/300/any",
+				"src": "http://placeimg.com/300/300/animals/sepia",
 				"alt": "Square"
 			},
 			"rectangle": {
-				"src": "http://placeimg.com/400/300/any",
+				"src": "http://placeimg.com/400/300/arch/sepia",
 				"alt": "Rectangle"
 			}
 		},
@@ -619,15 +619,15 @@
 		"title": "Cottage cheese brie lancashire. Boursin when the cheese comes out.",
 		"img": {
 			"avatar": {
-				"src": "http://placeimg.com/100/100/any",
+				"src": "http://placeimg.com/100/100/people/sepia",
 				"alt": "Avatar"
 			},
 			"square": {
-				"src": "http://placeimg.com/300/300/any",
+				"src": "http://placeimg.com/300/300/people/sepia",
 				"alt": "Square"
 			},
 			"rectangle": {
-				"src": "http://placeimg.com/400/300/any",
+				"src": "http://placeimg.com/400/300/people/sepia",
 				"alt": "Rectangle"
 			}
 		},

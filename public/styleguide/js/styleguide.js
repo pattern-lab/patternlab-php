@@ -271,7 +271,6 @@
 		
 		if (target == 'updatePxInput') {
 			$sizePx.val(pxSize);
-			console.log('pxSize='+pxSize)
 		} else if (target == 'updateEmInput') {
 			$sizeEms.val(emSize.toFixed(2));
 		} else {
@@ -356,16 +355,15 @@
 	
 	// load the iframe source
 	var patternName = "";
-	var iFramePath  = "styleguide/html/styleguide.html";
-	var trackiFrame = true; // can toggle this feature on & off
+	var patternPath = "";
+	var iFramePath  = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"styleguide/html/styleguide.html";
 	if ((oGetVars.p != undefined) || (oGetVars.pattern != undefined)) {
 		patternName = (oGetVars.p != undefined) ? oGetVars.p : oGetVars.pattern;
-		iFramePath  = urlHandler.getFileName(patternName);
-	} else if (trackiFrame && (patternName = DataSaver.findValue("patternName"))) {
-		iFramePath  = patternName;
+		patternPath = urlHandler.getFileName(patternName);
+		iFramePath  = (patternPath != "") ? window.location.protocol+"//"+window.location.host+window.location.pathname+patternPath : iFramePath;
 	}
-	DataSaver.updateValue("patternName",iFramePath);
-	$("#sg-viewport").attr("src",iFramePath);
+	
+	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
 	
 	//IFrame functionality
 
@@ -449,8 +447,7 @@
 $('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
 	
 	// update the iframe
-	DataSaver.updateValue("patternName",this.href);
-	$("#sg-viewport").attr('src',this.href);
+	document.getElementById("sg-viewport").contentWindow.location.replace(this.href);
 	
 	// close up the menu
 	$(this).parents('.sg-acc-panel').toggleClass('active');
@@ -487,16 +484,33 @@ $('#sg-vp-wrap').click(function(e) {
 // watch the iframe source so that it can be sent back to everyone else.
 // based on the great MDN docs at https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
 function receiveIframeMessage(event) {
-		
+	
 	// does the origin sending the message match the current host? if not dev/null the request
-	if (event.origin !== "http://"+window.location.host) {
+	if (event.origin !== window.location.protocol+"//"+window.location.host) {
 		return;
 	}
 	
-	if (event.data == 'body-click') {
+	if (event.data.bodyclick != undefined) {
+		
 		closePanels();
-	} else if (wsnConnected) {
-		wsn.send(event.data);
+		
+	} else if (event.data.patternpartial != undefined) {
+		
+		// make sure the pop pattern doesn't fire
+		urlHandler.doPop = false;
+		
+		if (!urlHandler.skipBack) {
+			var iFramePath = urlHandler.getFileName(event.data.patternpartial);
+			urlHandler.pushPattern(event.data.patternpartial);
+			if (wsnConnected) {
+				wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
+			}
+		}
+		
+		// reset the defaults
+		urlHandler.doPop    = true;
+		urlHandler.skipBack = false;
+		
 	}
 	
 }
