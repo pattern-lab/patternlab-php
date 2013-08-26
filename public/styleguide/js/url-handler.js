@@ -119,20 +119,20 @@ var urlHandler = {
 	* @param  {String}       the shorthand partials syntax for a given pattern
 	*/
 	pushPattern: function (pattern) {
+		console.log("pushed");
 		var data = { "pattern": pattern };
-		history.pushState(data, "", "/?p="+pattern);
+		history.pushState(data, "", window.location.protocol+"//"+window.location.host+window.location.pathname+"?p="+pattern);
 	},
 	
 	/**
 	* based on a click forward or backward modify the url and iframe source
 	* @param  {Object}      event info like state and properties set in pushState()
 	*/
-	popPattern: function () {
+	popPattern: function (e) {
 		
-		var state = history.state;
+		var state = e.state;
 		
 		if (state == null) {
-			alert("null state");
 			var rVars = this.getRequestVars();
 			if ((rVars.p != undefined) || (rVars.pattern != undefined)) {
 				var patternName = (rVars.p != undefined) ? rVars.p : rVars.pattern;
@@ -141,7 +141,6 @@ var urlHandler = {
 				return;
 			}
 		} else if (state != null) {
-			alert(state.pattern);
 			var patternName = state.pattern;
 		} 
 		
@@ -157,11 +156,6 @@ var urlHandler = {
 			wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+patternName+'" }' );
 		}
 		
-	},
-	
-	init: function () {
-		urlHandler.skipBack = true;
-		urlHandler.popPattern();
 	}
 	
 }
@@ -169,9 +163,7 @@ var urlHandler = {
 /**
 * handle the onpopstate event
 */
-window.addEventListener("popstate", urlHandler.init, false);
-
-/*window.onpopstate = function (event) {
+window.onpopstate = function (event) {
 	urlHandler.skipBack = true;
 	urlHandler.popPattern(event);
-}*/
+}
