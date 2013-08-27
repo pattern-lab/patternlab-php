@@ -13,7 +13,7 @@
 			"alt": "Square Thumbnail"
 		},
 		"avatar" : {
-			"src" : "../../images/fpo_square.png",
+			"src" : "../../images/fpo_avatar.png",
 			"alt" : "Person Name"
 		}
 	},
@@ -64,5 +64,9 @@
 		"long": "20",
 		"short": "20"
 	},
-	"seconds" : "31"
+	"seconds" : "31",
+	"author" : {
+		"first-name": "Author",
+		"last-name": "Name"
+	}
 }

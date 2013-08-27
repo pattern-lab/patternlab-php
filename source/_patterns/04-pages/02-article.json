@@ -1,17 +1,8 @@
 {
-	"hero" : [
-		{
-			"img": {
-				"landscape-16x9": {
-					"src": "../../images/sample/landscape-16x9-mountains.jpg",
-					"alt": "Mountains"	
-				}
-			},
-			"headline" : {
-				"medium" : "Come visit our glorious mountain ranges"
-			}
-		}
-	],
+	"author" : {
+		"first-name" : "Julianne",
+		"last-name" : "McCormick"
+	},
 	"img": {
 		"landscape-4x3": {
 			"src": "../../images/sample/landscape-16x9-mountains.jpg",

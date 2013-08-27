@@ -1,14 +1,15 @@
 <div class="page" id="page">
 	{{> organisms-header }}
 	<div role="main">
-		<h1>Latest Posts</h1>
+		<h1 class="section-title">Our Outdoor Blog</h1>
 		<div class="l-two-col">
 			<div class="l-main">
+				{{> organisms-latest-posts }}
 				{{> molecules-pagination }}
 			</div><!--end l-main-->
 
 			<div class="l-sidebar">
-				
+				{{> organisms-recent-tweets }}
 			</div><!--end l-sidebar-->
 		</div><!--end two-col-->
 	</div><!--End role=main-->
