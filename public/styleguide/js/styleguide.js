@@ -333,6 +333,7 @@
 	var origViewportWidth = $("#sg-viewport").width();
 	$("#sg-gen-container").width(origViewportWidth);
 	$("#sg-viewport").width(origViewportWidth - 14);
+	updateSizeReading($("#sg-viewport").width());
 
 	// get the request vars
 	var oGetVars = urlHandler.getRequestVars();
