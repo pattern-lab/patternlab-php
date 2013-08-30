@@ -214,6 +214,7 @@ class Builder {
 								
 								// get all the rendered partials that match
 								$sid = $this->gatherPartialsByMatch($patternType, $patternSubType);
+								$sid["patternPartial"] = $subItem["patternPartial"];
 								
 								// render the viewall template
 								$v = $this->mfs->render('viewall',$sid);

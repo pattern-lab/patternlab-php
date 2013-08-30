@@ -503,7 +503,6 @@ function receiveIframeMessage(event) {
 	} else if (event.data.patternpartial != undefined) {
 		
 		if (!urlHandler.skipBack) {
-			
 			var iFramePath = urlHandler.getFileName(event.data.patternpartial);
 			urlHandler.pushPattern(event.data.patternpartial);
 			if (wsnConnected) {

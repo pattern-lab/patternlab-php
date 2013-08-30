@@ -119,9 +119,14 @@ var urlHandler = {
 	* @param  {String}       the shorthand partials syntax for a given pattern
 	*/
 	pushPattern: function (pattern) {
-		console.log("pushed");
 		var data = { "pattern": pattern };
-		history.pushState(data, "", window.location.protocol+"//"+window.location.host+window.location.pathname+"?p="+pattern);
+		var path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+urlHandler.getFileName(pattern);
+		if (document.getElementById("sg-viewport").contentWindow.location.toString() != path) {
+			urlHandler.skipBack = true;
+			document.getElementById("sg-viewport").contentWindow.location.replace(path);
+		} else {
+			history.pushState(data, "", window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"?p="+pattern);
+		}
 	},
 	
 	/**
