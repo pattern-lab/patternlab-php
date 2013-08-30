@@ -307,7 +307,7 @@ class Builder {
 		
 		// add pattern specific data so it can override when a pattern (not partial!) is rendered
 		// makes 'patternSpecific' a reserved word
-		$this->d->patternSpecifc = new stdClass();
+		$this->d->patternSpecific = new stdClass();
 		foreach($this->patternTypes as $patternType) {
 			
 			// $this->d->patternSpecific["pattern-name-that-matches-render.mustache"] = array of data;
