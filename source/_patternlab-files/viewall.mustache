@@ -24,17 +24,23 @@
 	
 </div><!--end .sg-main-->
 <script>
+	
 	var body = document.getElementsByTagName('body');
 	body[0].onclick = function() {
-		parent.postMessage({"bodyclick":"bodyclick"},window.location.protocol+"//"+window.location.host)
+		parent.postMessage( { "bodyclick":"bodyclick" }, window.location.protocol+"//"+window.location.host)
 	};
+	
 	var els = document.getElementsByClassName("patternLink");
 	for (i in els) {
 		els[i].onclick = function() {
-			parent.postMessage({"patternpartial":this.getAttribute("data-patternpartial")},window.location.protocol+"//"+window.location.host);
+			parent.postMessage( { "patternpartial": this.getAttribute("data-patternpartial") }, window.location.protocol+"//"+window.location.host);
 			return false;
 		}
 	}
+	
+	// alert the iframe parent that the pattern has loaded. for page follow.
+	parent.postMessage( { "url": window.location.host, "patternpartial": "{{ patternPartial }}" },window.location.protocol+"//"+window.location.host);
+	
 </script>
 </body>
 </html>
