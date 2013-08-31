@@ -46,7 +46,7 @@ class Generator extends Builder {
 		foreach($objects as $name => $object) {
 			
 			// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-			$fileName = str_replace(__DIR__."/../../source/","",$name);
+			$fileName = str_replace(__DIR__."/../../source".DIRECTORY_SEPARATOR,"",$name);
 			if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
 				
 				// catch directories that have the ignored dir in their path
