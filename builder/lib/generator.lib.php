@@ -40,7 +40,7 @@ class Generator extends Builder {
 		// iterate over all of the other files in the source directory and move them if their modified time has changed
 		$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/"), RecursiveIteratorIterator::SELF_FIRST);
 		
-		// make sure dots are skipped and that all returned paths are unix-y
+		// make sure dots are skipped
 		$objects->setFlags(FilesystemIterator::SKIP_DOTS);
 		
 		foreach($objects as $name => $object) {
