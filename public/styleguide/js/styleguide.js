@@ -449,8 +449,8 @@
 // having it outside fixes an auto-close bug i ran into
 $('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
 	
-	// update the iframe
-	document.getElementById("sg-viewport").contentWindow.location.replace(this.href);
+	// update the iframe via the history api handler
+	urlHandler.pushPattern($(this).attr("data-patternpartial"));
 	
 	// close up the menu
 	$(this).parents('.sg-acc-panel').toggleClass('active');
