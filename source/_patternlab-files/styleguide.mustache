@@ -25,16 +25,36 @@
 <script>
 	var body = document.getElementsByTagName('body');
 	body[0].onclick = function() {
-		parent.postMessage({"bodyclick":"bodyclick"},window.location.protocol+"//"+window.location.host)
+		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		parent.postMessage( { "bodyclick": "bodyclick" }, targetOrigin)
 	};
 	
 	var els = document.getElementsByClassName("patternLink");
 	for (i in els) {
 		els[i].onclick = function() {
-			parent.postMessage({"patternpartial":this.getAttribute("data-patternpartial")},window.location.protocol+"//"+window.location.host);
+			var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+			parent.postMessage( { "patternpartial": this.getAttribute("data-patternpartial"), "path": "foo" }, targetOrigin);
 			return false;
 		}
 	}
+	
+	// watch the iframe source so that it can be sent back to everyone else.
+	function receiveIframeMessage(event) {
+		
+		// does the origin sending the message match the current host? if not dev/null the request
+		if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
+			return;
+		}
+		
+		if (event.data.path != undefined) {
+			var path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("styleguide\/html\/styleguide.html","")+event.data.path;
+			window.location.replace(path);
+		} else if (event.data.reload != undefined) {
+			window.location.reload();
+		}
+		
+	}
+	window.addEventListener("message", receiveIframeMessage, false);
 </script>
 </body>
 </html>
