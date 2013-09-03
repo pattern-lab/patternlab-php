@@ -361,7 +361,7 @@
 	if ((oGetVars.p != undefined) || (oGetVars.pattern != undefined)) {
 		patternName = (oGetVars.p != undefined) ? oGetVars.p : oGetVars.pattern;
 		patternPath = urlHandler.getFileName(patternName);
-		iFramePath  = (patternPath != "") ? window.location.protocol+"//"+window.location.host+window.location.pathname+patternPath : iFramePath;
+		iFramePath  = (patternPath != "") ? window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+patternPath : iFramePath;
 	}
 	
 	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
