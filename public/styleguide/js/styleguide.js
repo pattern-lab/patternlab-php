@@ -489,7 +489,7 @@ $('#sg-vp-wrap').click(function(e) {
 function receiveIframeMessage(event) {
 	
 	// does the origin sending the message match the current host? if not dev/null the request
-	if (event.origin !== window.location.protocol+"//"+window.location.host) {
+	if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 		return;
 	}
 	
