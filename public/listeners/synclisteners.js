@@ -114,7 +114,8 @@ function connectContentSync() {
 		// when receiving a message from WebSocket reload the current frame adding the received timestamp
 		// as a request var to, hopefully, bust caches... cachi(?)
 		wsc.onmessage = function (event) {
-			document.getElementById('sg-viewport').contentWindow.location.reload();
+			var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+			document.getElementById('sg-viewport').contentWindow.postMessage( { "reload": true }, targetOrigin);
 		}
 		
 		// when there's an error update the pattern lab nav bar
