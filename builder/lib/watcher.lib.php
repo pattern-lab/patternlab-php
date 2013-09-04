@@ -211,6 +211,7 @@ class Watcher extends Builder {
 	*/
 	private function updateSite($fileName,$message) {
 		$this->gatherData();
+		$this->gatherPatternPaths();
 		$this->gatherNavItems();
 		$this->generatePatterns();
 		$this->generateViewAllPages();
