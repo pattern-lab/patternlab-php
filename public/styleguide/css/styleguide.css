@@ -115,6 +115,9 @@ html, body {
     .sg-header a:hover, .sg-header a:focus, .sg-header a.active {
       color: white;
       background: rgba(255, 255, 255, 0.05); }
+  .sg-header ol li ol li ol li a {
+    padding-left: 2em;
+    text-transform: none; }
 
 /* Navigation */
 .sg-header .sg-nav-toggle {
@@ -291,7 +294,7 @@ html, body {
 .sg-input {
   margin: -2px 0 0 0;
   padding: 0;
-  border: 1px solid #222;
+  border: 1px solid #222222;
   background-color: #222;
   color: gray;
   width: 35px;
