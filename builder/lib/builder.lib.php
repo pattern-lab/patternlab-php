@@ -692,7 +692,7 @@ class Builder {
 	protected function ignoreDir($fileName) {
 		$y = false;
 		foreach($this->id as $dir) {
-			$pos = strpos($fileName,"/".$dir."/");
+			$pos = strpos($fileName,DIRECTORY_SEPARATOR.$dir.DIRECTORY_SEPARATOR);
 			if ($pos !== false) {
 				$y = true;
 				break;

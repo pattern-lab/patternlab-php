@@ -45,16 +45,20 @@ class Watcher extends Builder {
 			
 			// iterate over the patterns & related data and regenerate the entire site if they've changed
 			$patternObjects  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/_patterns/"), RecursiveIteratorIterator::SELF_FIRST);
+			
+			// make sure dots are skipped
+			$patternObjects->setFlags(FilesystemIterator::SKIP_DOTS);
+			
 			foreach($patternObjects as $name => $object) {
 					
 				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-				$fileName      = str_replace(__DIR__."/../../source/_patterns/","",$name);
-				$fileNameClean = str_replace("/_","/",$fileName);
+				$fileName      = str_replace(__DIR__."/../../source/_patterns".DIRECTORY_SEPARATOR,"",$name);
+				$fileNameClean = str_replace(DIRECTORY_SEPARATOR."_",DIRECTORY_SEPARATOR,$fileName);
 				
 				if ($object->isFile() && (($object->getExtension() == "mustache") || ($object->getExtension() == "json"))) {
 					
 					// make sure this isn't a hidden pattern
-					$patternParts = explode("/",$fileName);
+					$patternParts = explode(DIRECTORY_SEPARATOR,$fileName);
 					$pattern      = isset($patternParts[2]) ? $patternParts[2] : $patternParts[1];
 					if ($pattern[0] != "_") {
 						
@@ -92,7 +96,7 @@ class Watcher extends Builder {
 					} elseif (isset($o->patterns->$fileNameClean)) {
 						
 						// the file was hidden so remove references to the item
-						$patternParts = explode("/",$fileNameClean);
+						$patternParts = explode(DIRECTORY_SEPARATOR,$fileNameClean);
 						$pattern      = isset($patternParts[2]) ? $patternParts[2] : $patternParts[1];
 						
 						unset($o->patterns->$fileNameClean);
@@ -113,7 +117,7 @@ class Watcher extends Builder {
 				foreach($cp as $fileName => $mt) {
 					
 					unset($o->patterns->$fileName);
-					$patternParts = explode("/",$fileName);
+					$patternParts = explode(DIRECTORY_SEPARATOR,$fileName);
 					$pattern = isset($patternParts[2]) ? $patternParts[2] : $patternParts[1];
 					
 					unset($this->patternPaths[$patternParts[0]][$pattern]);
@@ -125,9 +129,13 @@ class Watcher extends Builder {
 			
 			// iterate over the data files and regenerate the entire site if they've changed
 			$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/_data/"), RecursiveIteratorIterator::SELF_FIRST);
+			
+			// make sure dots are skipped
+			$objects->setFlags(FilesystemIterator::SKIP_DOTS);
+			
 			foreach($objects as $name => $object) {
 				
-				$fileName = str_replace(__DIR__."/../../source/_data/","",$name);
+				$fileName = str_replace(__DIR__."/../../source/_data".DIRECTORY_SEPARATOR,"",$name);
 				$mt = $object->getMTime();
 				
 				if (!isset($o->$fileName)) {
@@ -141,10 +149,14 @@ class Watcher extends Builder {
 			
 			// iterate over all of the other files in the source directory and move them if their modified time has changed
 			$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/"), RecursiveIteratorIterator::SELF_FIRST);
+			
+			// make sure dots are skipped
+			$objects->setFlags(FilesystemIterator::SKIP_DOTS);
+			
 			foreach($objects as $name => $object) {
 				
 				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-				$fileName = str_replace(__DIR__."/../../source/","",$name);
+				$fileName = str_replace(__DIR__."/../../source".DIRECTORY_SEPARATOR,"",$name);
 				if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
 					
 					// catch directories that have the ignored dir in their path
@@ -199,6 +211,7 @@ class Watcher extends Builder {
 	*/
 	private function updateSite($fileName,$message) {
 		$this->gatherData();
+		$this->gatherPatternPaths();
 		$this->gatherNavItems();
 		$this->generatePatterns();
 		$this->generateViewAllPages();

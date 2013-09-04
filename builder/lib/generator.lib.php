@@ -39,10 +39,14 @@ class Generator extends Builder {
 		
 		// iterate over all of the other files in the source directory and move them if their modified time has changed
 		$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/"), RecursiveIteratorIterator::SELF_FIRST);
+		
+		// make sure dots are skipped
+		$objects->setFlags(FilesystemIterator::SKIP_DOTS);
+		
 		foreach($objects as $name => $object) {
 			
 			// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-			$fileName = str_replace(__DIR__."/../../source/","",$name);
+			$fileName = str_replace(__DIR__."/../../source".DIRECTORY_SEPARATOR,"",$name);
 			if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
 				
 				// catch directories that have the ignored dir in their path
