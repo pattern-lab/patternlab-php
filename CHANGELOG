@@ -1,0 +1,16 @@
+THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
+
+PL-v0.2.0
+ - ADD: better styling in the overall navigation (via @geibi)
+ - FIX: better windows support for the generator and watcher
+ - FIX: more comprehensive "apache-less" support
+ - FIX: debian linux path issue when loading mustache
+ - FIX: pattern fix which mis-used an ID
+ - FIX: widths in 'ish are now properly updated onload
+ - THX: thanks to @benedfit & @bmuenzenmeyer for the help w/ windows 
+ - THX: thanks to @geibi for the pull request with the improved nav style
+ - THX: thanks to @juanmi007 for alerting me to issues on debian
+ - THX: thanks to @lewisnyman for the pattern fix
+
+PL-v0.1.0
+ - ADD: re-launch of the PHP version of Pattern Lab
