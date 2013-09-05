@@ -445,9 +445,22 @@
 	
 })(this);
 
+// reload the iframes initial state when clicking on home
+$('.sg-nav-home').on('click', function(e){
+	
+	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
+
+	//todo push state to maintain history.  not familiar with this yet.
+	
+	e.stopPropagation();
+
+	return false;
+
+});
+
 // update the iframe with the source from clicked element in pull down menu. also close the menu
 // having it outside fixes an auto-close bug i ran into
-$('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
+$('.sg-nav a').not('.sg-acc-handle').not('.sg-nav-home').on("click", function(e){
 	
 	// update the iframe via the history api handler
 	urlHandler.pushPattern($(this).attr("data-patternpartial"));
