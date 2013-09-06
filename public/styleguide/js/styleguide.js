@@ -364,6 +364,9 @@
 		iFramePath  = (patternPath != "") ? window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+patternPath : iFramePath;
 	}
 	
+	if (patternName != "") {
+		document.getElementById("title").innerHTML = "Pattern Lab - "+patternName;
+	}
 	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
 	
 	history.replaceState({ "pattern": patternName }, null, null);
