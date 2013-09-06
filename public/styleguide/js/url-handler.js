@@ -31,6 +31,10 @@ var urlHandler = {
 			return fileName;
 		}
 		
+		if (name == "all") {
+			return "styleguide/html/styleguide.html";
+		}
+		
 		var paths = (name.indexOf("viewall-") != -1) ? viewAllPaths : patternPaths;
 		nameClean = name.replace("viewall-","");
 		
@@ -124,6 +128,8 @@ var urlHandler = {
 		var data         = { "pattern": pattern };
 		var fileName     = urlHandler.getFileName(pattern);
 		var expectedPath = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("public/index.html","public/")+fileName;
+		console.log("given: "+givenPath);
+		console.log("expected: "+expectedPath);
 		if (givenPath != expectedPath) {
 			document.getElementById("sg-viewport").contentWindow.postMessage( { "path": fileName }, urlHandler.targetOrigin);
 		} else {

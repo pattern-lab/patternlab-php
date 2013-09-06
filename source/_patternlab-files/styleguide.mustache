@@ -38,6 +38,9 @@
 		}
 	}
 	
+	var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+	parent.postMessage( { "patternpartial": "all", "path": window.location.toString() }, targetOrigin);
+	
 	// watch the iframe source so that it can be sent back to everyone else.
 	function receiveIframeMessage(event) {
 		
