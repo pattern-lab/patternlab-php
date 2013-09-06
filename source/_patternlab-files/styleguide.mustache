@@ -23,6 +23,12 @@
 </div> <!--end #patterns-->
 </div><!--End Style Guide Main Content-->
 <script>
+
+	if (self != top) {
+		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		parent.postMessage( { "patternpartial": "all", "path": window.location.toString() }, targetOrigin);
+	}
+	
 	var body = document.getElementsByTagName('body');
 	body[0].onclick = function() {
 		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
@@ -32,14 +38,13 @@
 	var els = document.getElementsByClassName("patternLink");
 	for (i in els) {
 		els[i].onclick = function() {
-			var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-			parent.postMessage( { "patternpartial": this.getAttribute("data-patternpartial"), "path": "foo" }, targetOrigin);
-			return false;
+			if (self != top) {
+				var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+				parent.postMessage( { "patternpartial": this.getAttribute("data-patternpartial"), "path": "foo" }, targetOrigin);
+				return false;
+			}
 		}
 	}
-	
-	var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-	parent.postMessage( { "patternpartial": "all", "path": window.location.toString() }, targetOrigin);
 	
 	// watch the iframe source so that it can be sent back to everyone else.
 	function receiveIframeMessage(event) {
