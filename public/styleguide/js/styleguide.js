@@ -508,9 +508,12 @@ function receiveIframeMessage(event) {
 		
 		if (!urlHandler.skipBack) {
 			
-			var iFramePath = urlHandler.getFileName(event.data.patternpartial);
-			urlHandler.pushPattern(event.data.patternpartial, event.data.path);
+			if ((history.state == null) || (history.state.pattern != event.data.patternpartial)) {
+				urlHandler.pushPattern(event.data.patternpartial, event.data.path);
+			}
+			
 			if (wsnConnected) {
+				var iFramePath = urlHandler.getFileName(event.data.patternpartial);
 				wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
 			}
 			
