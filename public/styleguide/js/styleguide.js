@@ -355,7 +355,7 @@
 	}
 	
 	// load the iframe source
-	var patternName = "";
+	var patternName = "all";
 	var patternPath = "";
 	var iFramePath  = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"styleguide/html/styleguide.html";
 	if ((oGetVars.p != undefined) || (oGetVars.pattern != undefined)) {
@@ -364,12 +364,13 @@
 		iFramePath  = (patternPath != "") ? window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+patternPath : iFramePath;
 	}
 	
-	if (patternName != "") {
+	if (patternName != "all") {
 		document.getElementById("title").innerHTML = "Pattern Lab - "+patternName;
+		history.replaceState({ "pattern": patternName }, null, null);
 	}
-	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
 	
-	history.replaceState({ "pattern": patternName }, null, null);
+	urlHandler.skipBack = true;
+	document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
 	
 	//IFrame functionality
 
