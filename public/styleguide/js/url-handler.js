@@ -129,8 +129,10 @@ var urlHandler = {
 		var fileName     = urlHandler.getFileName(pattern);
 		var expectedPath = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("public/index.html","public/")+fileName;
 		if (givenPath != expectedPath) {
+			// make sure to update the iframe because there was a click
 			document.getElementById("sg-viewport").contentWindow.postMessage( { "path": fileName }, urlHandler.targetOrigin);
 		} else {
+			// add to the history
 			var addressReplacement = (window.location.protocol == "file:") ? null : window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"?p="+pattern;
 			history.pushState(data, null, addressReplacement);
 			document.getElementById("title").innerHTML = "Pattern Lab - "+pattern;
