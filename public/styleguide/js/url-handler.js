@@ -146,13 +146,8 @@ var urlHandler = {
 		var state = e.state;
 		
 		if (state == null) {
-			var rVars = this.getRequestVars();
-			if ((rVars.p != undefined) || (rVars.pattern != undefined)) {
-				var patternName = (rVars.p != undefined) ? rVars.p : rVars.pattern;
-			} else {
-				this.skipBack = false;
-				return;
-			}
+			this.skipBack = false;
+			return;
 		} else if (state != null) {
 			var patternName = state.pattern;
 		} 
