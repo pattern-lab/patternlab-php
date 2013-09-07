@@ -55,6 +55,10 @@ html, body {
   background: #dddddd;
   -webkit-text-size-adjust: 100%; }
 
+html#pattern-frame {
+  background: #ffffff;
+}
+
 .sg-nav-wrapper {
   overflow: hidden;
   background: #dddddd; }
