@@ -452,7 +452,6 @@
 // having it outside fixes an auto-close bug i ran into
 $('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
 	
-	console.log($(this).attr("data-patternpartial"));
 	
 	// update the iframe via the history api handler
 	urlHandler.pushPattern($(this).attr("data-patternpartial"));
