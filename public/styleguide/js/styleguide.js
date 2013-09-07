@@ -1,4 +1,5 @@
 (function(w){
+	
 	var sw = document.body.clientWidth, //Viewport Width
 		sh = document.body.clientHeight, //Viewport Height
 		minViewportWidth = 240, //Minimum Size for Viewport
