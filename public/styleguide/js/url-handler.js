@@ -132,8 +132,8 @@ var urlHandler = {
 			document.getElementById("sg-viewport").contentWindow.postMessage( { "path": fileName }, urlHandler.targetOrigin);
 		} else {
 			var addressReplacement = (window.location.protocol == "file:") ? null : window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"?p="+pattern;
-			document.getElementById("title").innerHTML = "Pattern Lab - "+pattern;
 			history.pushState(data, null, addressReplacement);
+			document.getElementById("title").innerHTML = "Pattern Lab - "+pattern;
 		}
 	},
 	
@@ -163,8 +163,8 @@ var urlHandler = {
 			iFramePath = "styleguide/html/styleguide.html";
 		}
 		
-		document.getElementById("title").innerHTML = "Pattern Lab - "+patternName;
 		document.getElementById("sg-viewport").contentWindow.postMessage( { "path": iFramePath }, urlHandler.targetOrigin);
+		document.getElementById("title").innerHTML = "Pattern Lab - "+patternName;
 		
 		if (wsnConnected) {
 			wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+patternName+'" }' );
