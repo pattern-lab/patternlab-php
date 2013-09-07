@@ -376,6 +376,8 @@
 
 	//Scripts to run after the page has loaded into the iframe
 	$sgViewport.load(function (){
+		
+		/*
 		var $sgSrc = $sgViewport.attr('src'),
 			$vp = $sgViewport.contents(),
 			$sgPattern = $vp.find('.sg-pattern');
@@ -435,6 +437,7 @@
 			});
 			$vp.find('.sg-annotations').show();
 		}
+		*/
 		
 		// Pattern Click
 		// this doesn't work because patternlab-php assumes the iframe is being refreshed. not the overall app
