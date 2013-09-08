@@ -346,6 +346,7 @@ class Builder {
 		$b  = array("buckets" => array()); // the array that will contain the items
 		$bi = 0;                           // track the number for the bucket array
 		$ni = 0;                           // track the number for the nav items array
+		$incrementNavItem = true;          // track nav item regeneration so we avoid rebuilding view all pages
 		
 		// iterate through each pattern type and add them as buckets
 		foreach($this->patternTypes as $patternType) {
@@ -378,6 +379,12 @@ class Builder {
 																	 "patternPartial" => str_replace(" ","-",$bucket)."-".str_replace(" ","-",$patternFinal));
 					}
 					
+				}
+				
+				// if all of the patterns for a given pattern type (e.g. atoms) were commented out we need to unset it
+				if (!isset($b["buckets"][$bi]["patternItems"])) {
+					unset($b["buckets"][$bi]);
+					$bi--;
 				}
 				
 			} else {
@@ -413,6 +420,12 @@ class Builder {
 						
 						}
 						
+						// if all of the patterns for a given sub-type were commented out we need to unset it
+						if (!isset($b["buckets"][$bi]["navItems"][$ni]["navSubItems"])) {
+							unset($b["buckets"][$bi]["navItems"][$ni]);
+							$incrementNavItem = false;
+						}
+						
 					}
 				
 					// add a view all for the section
@@ -428,7 +441,13 @@ class Builder {
 						$this->viewAllPaths[$vaBucket][$vaDirFinal] = $patternType."-".$dirClean;
 					}
 					
-					$ni++;
+					// this feels like such a hacky way of doing it
+					if (!$incrementNavItem) {
+						$incrementNavItem = true;
+					} else {
+						$ni++;
+					}
+					
 				}
 			}
 			
