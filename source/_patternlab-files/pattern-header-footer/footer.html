@@ -9,8 +9,10 @@
 	<script>
 		
 		// alert the iframe parent that the pattern has loaded. for page follow.
-		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-		parent.postMessage( { "patternpartial": "{{ patternPartial }}", "path": window.location.toString() }, targetOrigin);
+		if (self != top) {
+			var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+			parent.postMessage( { "patternpartial": "{{ patternPartial }}", "path": window.location.toString() }, targetOrigin);
+		}
 		
 		// if there are clicks on the iframe make sure the nav in the iframe parent closes
 		var body = document.getElementsByTagName('body');

@@ -1,4 +1,5 @@
 (function(w){
+	
 	var sw = document.body.clientWidth, //Viewport Width
 		sh = document.body.clientHeight, //Viewport Height
 		minViewportWidth = 240, //Minimum Size for Viewport
@@ -355,7 +356,7 @@
 	}
 	
 	// load the iframe source
-	var patternName = "";
+	var patternName = "all";
 	var patternPath = "";
 	var iFramePath  = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"styleguide/html/styleguide.html";
 	if ((oGetVars.p != undefined) || (oGetVars.pattern != undefined)) {
@@ -364,14 +365,20 @@
 		iFramePath  = (patternPath != "") ? window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+patternPath : iFramePath;
 	}
 	
-	document.getElementById("sg-viewport").contentWindow.location.assign(iFramePath);
+	if (patternName != "all") {
+		document.getElementById("title").innerHTML = "Pattern Lab - "+patternName;
+		history.replaceState({ "pattern": patternName }, null, null);
+	}
 	
-	history.replaceState({ "pattern": patternName }, null, null);
+	urlHandler.skipBack = true;
+	document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
 	
 	//IFrame functionality
 
 	//Scripts to run after the page has loaded into the iframe
 	$sgViewport.load(function (){
+		
+		/*
 		var $sgSrc = $sgViewport.attr('src'),
 			$vp = $sgViewport.contents(),
 			$sgPattern = $vp.find('.sg-pattern');
@@ -431,6 +438,7 @@
 			});
 			$vp.find('.sg-annotations').show();
 		}
+		*/
 		
 		// Pattern Click
 		// this doesn't work because patternlab-php assumes the iframe is being refreshed. not the overall app
@@ -449,14 +457,14 @@
 // having it outside fixes an auto-close bug i ran into
 $('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
 	
+	e.preventDefault();
+	
 	// update the iframe via the history api handler
-	urlHandler.pushPattern($(this).attr("data-patternpartial"));
+	document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
 	
 	// close up the menu
 	$(this).parents('.sg-acc-panel').toggleClass('active');
 	$(this).parents('.sg-acc-panel').siblings('.sg-acc-handle').toggleClass('active');
-	
-	e.stopPropagation();
 	
 	return false;
 	
@@ -501,9 +509,12 @@ function receiveIframeMessage(event) {
 		
 		if (!urlHandler.skipBack) {
 			
-			var iFramePath = urlHandler.getFileName(event.data.patternpartial);
-			urlHandler.pushPattern(event.data.patternpartial, event.data.path);
+			if ((history.state == null) || (history.state.pattern != event.data.patternpartial)) {
+				urlHandler.pushPattern(event.data.patternpartial, event.data.path);
+			}
+			
 			if (wsnConnected) {
+				var iFramePath = urlHandler.getFileName(event.data.patternpartial);
 				wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
 			}
 			

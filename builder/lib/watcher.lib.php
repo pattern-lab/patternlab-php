@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Watcher Class - v0.1
+ * Pattern Lab Watcher Class - v0.3.0
  *
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
