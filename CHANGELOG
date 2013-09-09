@@ -1,5 +1,15 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.3.0
+ - ADD: added "all" link to the nav that takes the user back to the style guide
+ - ADD: title tag updates when switching patterns
+ - FIX: if a pattern type or pattern sub-type doesn't have any patterns it's removed from the nav
+ - FIX: added styleguide.css to the pattern header
+ - FIX: commented out the video & audio patterns to address an issue w/ Chrome 29, frames, & History API
+ - FIX: reduced the number of comments called in the comment-thread pattern
+ - FIX: patterns won't try to auto-reload if viewed directly
+ - THX: thanks to @bmuenzenmeyer for the "all link" suggestion
+
 PL-v0.2.0
  - ADD: better styling in the overall navigation (via @geibi)
  - FIX: better windows support for the generator and watcher
