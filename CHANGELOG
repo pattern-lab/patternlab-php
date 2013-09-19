@@ -1,5 +1,9 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.3.1
+ - FIX: made sure the command scripts work in directories that contain spaces
+ - THX: thanks to @mattsims for the heads up
+
 PL-v0.3.0
  - ADD: added "all" link to the nav that takes the user back to the style guide
  - ADD: title tag updates when switching patterns
