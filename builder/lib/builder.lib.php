@@ -709,15 +709,13 @@ class Builder {
 	* @return {Boolean}      whether the directory should be ignored
 	*/
 	protected function ignoreDir($fileName) {
-		$y = false;
 		foreach($this->id as $dir) {
 			$pos = strpos($fileName,DIRECTORY_SEPARATOR.$dir.DIRECTORY_SEPARATOR);
 			if ($pos !== false) {
-				$y = true;
-				break;
+				return true;
 			}
 		}
-		return $y;
+		return false;
 	}
 	
 	/**
