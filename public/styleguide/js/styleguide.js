@@ -379,6 +379,7 @@
 		$('#sg-t-code').click(function(e){
 			var $code = $vp.find('.sg-code');
 			e.preventDefault();
+			$(this).toggleClass('active');
 			
 			if($vp.find('.sg-code').length==0) {
 				buildCodeView();
@@ -391,6 +392,7 @@
 		$('#sg-t-annotations').click(function(e){
 			var $annotations = $vp.find('.sg-annotations');
 			e.preventDefault();
+			$(this).toggleClass('active');
 			
 			if($vp.find('.sg-annotations').length==0) {
 				buildAnnotationView();
@@ -421,16 +423,6 @@
 			});
 			$vp.find('.sg-annotations').show();
 		}
-		
-		// Pattern Click
-		// this doesn't work because patternlab-php assumes the iframe is being refreshed. not the overall app
-		/*
-		$vp.find('.sg-head a').on("click", function(e){
-			e.preventDefault();
-			var thisHref = $(this).attr('href');
-			window.location = thisHref;
-		});
-		*/
 	});
 	
 })(this);
