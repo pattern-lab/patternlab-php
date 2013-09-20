@@ -11,7 +11,7 @@ pp = "/../../public/patterns/";
 ie = "scss,DS_Store,less"
 
 // directories and files to ignore when building or watching the source dir, separate with a comma
-id = "scss,.svn"
+id = "scss,.svn,all-wcprops"
 
 // choose which ports the websocket services should run on
 contentSyncPort  = "8002"
