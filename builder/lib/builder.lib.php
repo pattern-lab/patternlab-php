@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Builder Class - v0.3.1
+ * Pattern Lab Builder Class - v0.3.2
  *
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -709,15 +709,13 @@ class Builder {
 	* @return {Boolean}      whether the directory should be ignored
 	*/
 	protected function ignoreDir($fileName) {
-		$y = false;
 		foreach($this->id as $dir) {
-			$pos = strpos($fileName,DIRECTORY_SEPARATOR.$dir.DIRECTORY_SEPARATOR);
+			$pos = strpos(DIRECTORY_SEPARATOR.$fileName,DIRECTORY_SEPARATOR.$dir.DIRECTORY_SEPARATOR);
 			if ($pos !== false) {
-				$y = true;
-				break;
+				return true;
 			}
 		}
-		return $y;
+		return false;
 	}
 	
 	/**
