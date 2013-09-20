@@ -432,7 +432,7 @@ html#pattern-frame {
 		max-height: none;
 		max-width: none;
 
-		li {
+		> li {
 			float: left;
 			border: 0;
 			border-left: 1px solid $sg-tint;

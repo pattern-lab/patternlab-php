@@ -6,7 +6,6 @@
 		maxViewportWidth = 2600, //Maxiumum Size for Viewport
 		viewportResizeHandleWidth = 14, //Width of the viewport drag-to-resize handle
 		$sgViewport = $('#sg-viewport'), //Viewport element
-		$viewToggle = $('#sg-t-toggle'), //Toggle 
 		$sizePx = $('.sg-size-px'), //Px size input element in toolbar
 		$sizeEms = $('.sg-size-em'), //Em size input element in toolbar
 		$bodySize = parseInt($('body').css('font-size')), //Body size of the document
@@ -38,8 +37,8 @@
 	
 	
 	
-	//View Trigger
-	$viewToggle.on("click", function(e){
+	//"View (containing clean, code, raw, etc options) Trigger
+	$('#sg-t-toggle').on("click", function(e){
 		e.preventDefault();
 		$(this).parents('ul').toggleClass('active');
 	});
@@ -48,13 +47,6 @@
 	$('#sg-size-toggle').on("click", function(e){
 		e.preventDefault();
 		$(this).parents('ul').toggleClass('active');
-	});
-
-	//Add Active States for size controls
-	$('#sg-controls a').on("click", function(e){
-		var $this = $(this);
-		$('#sg-controls a').removeClass('active');
-		$this.addClass('active');
 	});
 	
 	//Phase View Events
@@ -378,19 +370,10 @@
 	//Scripts to run after the page has loaded into the iframe
 	$sgViewport.load(function (){
 		
-		/*
+		
 		var $sgSrc = $sgViewport.attr('src'),
 			$vp = $sgViewport.contents(),
 			$sgPattern = $vp.find('.sg-pattern');
-
-		//Clean View Trigger
-		$('#sg-t-clean').on("click", function(e){
-			e.preventDefault();
-			$sgViewport.contents().hide();
-			$vp.find('body').toggleClass('sg-clean');
-			$vp.find('#intro, .sg-head, #about-sg').toggle();
-			$vp.find('[role=main]').toggleClass('clean');
-		});
 		
 		//Code View Trigger
 		$('#sg-t-code').click(function(e){
@@ -438,7 +421,6 @@
 			});
 			$vp.find('.sg-annotations').show();
 		}
-		*/
 		
 		// Pattern Click
 		// this doesn't work because patternlab-php assumes the iframe is being refreshed. not the overall app
