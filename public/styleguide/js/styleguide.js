@@ -288,7 +288,7 @@
 	function updateViewportWidth(size) {
 	
 		$("#sg-viewport").width(size);
-		$("#sg-gen-container").width(Math.floor(size) + 14);
+		$("#sg-gen-container").width(size*1 + 14);
 		
 		updateSizeReading(size);
 	}
