@@ -122,6 +122,7 @@ class Builder {
 		$this->navItems['navsyncport']     = $this->navSyncPort;
 		$this->navItems['patternpaths']    = json_encode($this->patternPaths);
 		$this->navItems['viewallpaths']    = json_encode($this->viewAllPaths);
+		$this->navItems['mqs']             = $this->gatherMQs();
 		
 		// grab the partials into a data object for the style guide
 		$sd = $this->gatherPartials();
@@ -335,6 +336,30 @@ class Builder {
 		}
 		
 	}	
+	
+	/**
+	* Finds Media Queries in CSS files in the source/css/ dir
+	*
+	* @return {Array}        an array of the appropriate MQs
+	*/
+	protected function gatherMQs() {
+		
+		$mqs = array();
+		
+		foreach(glob(__DIR__."/../../source/css/*.css") as $filename) {
+			$data    = file_get_contents($filename);
+			preg_match_all("/(min|max)-width:( |)(([0-9]{1,5})(\.[0-9]{1,20}|)(px|em))/",$data,$matches);
+			foreach ($matches[3] as $match) {
+				if (!in_array($match,$mqs)) {
+					$mqs[] = $match;
+				}
+			}	
+		}
+		
+		sort($mqs);
+		return $mqs;
+		
+	}
 	
 	/**
 	* Gathers the partials for the nav drop down in Pattern Lab
