@@ -35,8 +35,6 @@
 		$('.sg-nav-container').toggleClass('active');
 	});
 	
-	
-	
 	//"View (containing clean, code, raw, etc options) Trigger
 	$('#sg-t-toggle').on("click", function(e){
 		e.preventDefault();
