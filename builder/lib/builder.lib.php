@@ -301,7 +301,7 @@ class Builder {
 			foreach($patterns as $pattern => $path) {
 				$patternName = $patternTypeName."-".$pattern;
 				$path = str_replace("/","-",$path);
-				$this->d->link->$patternName = "/patterns/".$path."/".$path.".html";
+				$this->d->link->$patternName = "../../patterns/".$path."/".$path.".html";
 			}
 			
 		}
