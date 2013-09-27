@@ -31,14 +31,14 @@
 	}
 	
 	// if there are clicks on the iframe make sure the nav in the iframe parent closes
-	var body = document.getElementsByTagName('body');
+	var body = document.getElementsByTagName("body");
 	body[0].onclick = function() {
 		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 		parent.postMessage( { "bodyclick": "bodyclick" }, targetOrigin)
 	};
 	
 	// find all links and add an onclick handler for replacing the iframe address so the history works
-	var aTags = document.getElementsByTagName('a');
+	var aTags = document.getElementsByTagName("a");
 	for (a in aTags) {
 		aTags[a].onclick = function(e) {
 			e.preventDefault();
