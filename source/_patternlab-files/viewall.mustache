@@ -39,14 +39,14 @@
 	};
 	
 	// find all links and add an onclick handler for replacing the iframe address so the history works
-	var aTags = document.getElementsByTagName('a');
-	for (a in aTags) {
-		aTags[a].onclick = function(e) {
-			if (self != top) {
+	if (self != top) {
+		var aTags = document.getElementsByTagName('a');
+		for (a in aTags) {
+			aTags[a].onclick = function(e) {
 				e.preventDefault();
 				window.location.replace(this.getAttribute("href"));
-			}
-		};
+			};
+		}
 	}
 	
 	// watch the iframe source so that it can be sent back to everyone else.
