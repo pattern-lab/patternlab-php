@@ -1,5 +1,11 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.3.3
+ - FIX: links created with {{ link.pattern }} now have the correct path
+ - FIX: links within a pattern now properly update the history
+ - FIX: simplified the history updates from a pattern
+ - THX: thanks to @kevin-heil for the fix for {{ link.pattern }}
+
 PL-v0.3.2
  - ADD: added .svn to the ignore dirs listing when checking the source dir
  - FIX: top-level ignored dirs are now found properly
