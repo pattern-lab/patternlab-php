@@ -105,15 +105,11 @@ $animate-quick: 0.2s;
     $STYLE GUIDE INTERFACE 
 \*------------------------------------*/
 
-html, body {
+#patternlab-html, #patternlab-body {
 	margin: 0;
 	padding: 0;
 	background: $sg-tertiary;
 	-webkit-text-size-adjust: 100%;
-}
-
-html#pattern-frame {
-	background: #fff;
 }
 
 .sg-nav-wrapper {
@@ -191,7 +187,7 @@ html#pattern-frame {
           ol{
             li{
               //3rd level nav item
-							a{
+							a {
 								padding-left: 2em;
 								text-transform: none;
 							}
@@ -777,12 +773,7 @@ html#pattern-frame {
 	font-style: normal;
 }
 
-/* Use the following CSS code if you want to have a class per icon */
-/*
-Instead of a list of all class selectors,
-you can use the generic selector below, but it's slower:
-[class*="icon-"] {
-*/
+/* Pattern Lab icon fonts */
 .icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-checkbox-unchecked, .icon-checkbox-checked, .icon-eye {
 	font-family: 'icons';
 	speak: none;

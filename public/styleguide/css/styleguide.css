@@ -49,14 +49,11 @@
 /*------------------------------------*\
     $STYLE GUIDE INTERFACE 
 \*------------------------------------*/
-html, body {
+#patternlab-html, #patternlab-body {
   margin: 0;
   padding: 0;
   background: #dddddd;
   -webkit-text-size-adjust: 100%; }
-
-html#pattern-frame {
-  background: #fff; }
 
 .sg-nav-wrapper {
   overflow: hidden;
@@ -535,12 +532,7 @@ html#pattern-frame {
   font-weight: normal;
   font-style: normal; }
 
-/* Use the following CSS code if you want to have a class per icon */
-/*
-Instead of a list of all class selectors,
-you can use the generic selector below, but it's slower:
-[class*="icon-"] {
-*/
+/* Pattern Lab icon fonts */
 .icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .sg-header .sg-nav-toggle, .icon-checkbox-unchecked, .sg-checkbox, .icon-checkbox-checked, .sg-checkbox.active, .icon-eye {
   font-family: 'icons';
   speak: none;

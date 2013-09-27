@@ -374,6 +374,11 @@
 		var $sgSrc = $sgViewport.attr('src'),
 			$vp = $sgViewport.contents(),
 			$sgPattern = $vp.find('.sg-pattern');
+
+		//Inject styleguide CSS into iframe
+		//The styleguide CSS is being injected via Javascript as to keep the user-generated source code as clean as possible. 
+		//Final code won't include any trace of Pattern Lab
+		$vp.find("head").prepend($("<link/>", { rel: "stylesheet", href: "../../styleguide/css/styleguide.css", type: "text/css" })).prepend('<!--styleguide.css is inserted for annotation and demo purposes. Will not be included in final code. -->');
 		
 		//Code View Trigger
 		$('#sg-t-code').click(function(e){
