@@ -49,17 +49,6 @@
 		};
 	}
 	
-	var els = document.getElementsByClassName("patternLink");
-	for (i in els) {
-		els[i].onclick = function() {
-			if (self != top) {
-				var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-				parent.postMessage( { "patternpartial": this.getAttribute("data-patternpartial"), "path": "foo" }, targetOrigin);
-				return false;
-			}
-		}
-	}
-	
 	// watch the iframe source so that it can be sent back to everyone else.
 	function receiveIframeMessage(event) {
 		
