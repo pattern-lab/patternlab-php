@@ -42,8 +42,8 @@
 	var aTags = document.getElementsByTagName('a');
 	for (a in aTags) {
 		aTags[a].onclick = function(e) {
-			e.preventDefault();
-			if ((self != top) && (this.getAttribute("class") != "patternLink")) {
+			if (self != top) {
+				e.preventDefault();
 				window.location.replace(this.getAttribute("href"));
 			}
 		};
