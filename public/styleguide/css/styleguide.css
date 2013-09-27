@@ -563,3 +563,45 @@ you can use the generic selector below, but it's slower:
 
 .icon-eye:before {
   content: "\e001"; }
+
+/* Annotations */
+#comment-container {
+  font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+  background: #222222;
+  color: #fff;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  text-align: left;
+  padding: 1em; }
+  #comment-container a {
+    color: #dddddd; }
+
+#close-comments {
+  color: #fff;
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  text-transform: uppercase;
+  display: none; }
+
+#comment-container {
+  position: fixed;
+  top: auto;
+  padding: 1em 1em 4em;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  -webkit-transition: bottom 0.3s ease-out;
+  -moz-transition: bottom 0.3s ease-out;
+  -webkit-transition: bottom 0.3s ease-out;
+  -ms-transition: bottom 0.3s ease-out;
+  -o-transition: bottom 0.3s ease-out;
+  transition: bottom 0.3s ease-out; }
+
+#close-comments {
+  display: block; }
+
+.has-comment, .has-comment a {
+  cursor: help !important; }
