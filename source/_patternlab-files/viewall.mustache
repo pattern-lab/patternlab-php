@@ -31,6 +31,7 @@
 		parent.postMessage( { "patternpartial": "{{ patternPartial }}", "path": window.location.toString() }, targetOrigin);
 	}
 	
+	// if there are clicks on the iframe make sure the nav in the iframe parent closes
 	var body = document.getElementsByTagName('body');
 	body[0].onclick = function() {
 		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;

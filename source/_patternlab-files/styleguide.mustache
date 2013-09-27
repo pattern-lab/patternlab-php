@@ -23,12 +23,14 @@
 </div> <!--end #patterns-->
 </div><!--End Style Guide Main Content-->
 <script>
-
+	
+	// alert the iframe parent that the pattern has loaded. for page follow.
 	if (self != top) {
 		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 		parent.postMessage( { "patternpartial": "all", "path": window.location.toString() }, targetOrigin);
 	}
 	
+	// if there are clicks on the iframe make sure the nav in the iframe parent closes
 	var body = document.getElementsByTagName('body');
 	body[0].onclick = function() {
 		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
