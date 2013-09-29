@@ -24,6 +24,7 @@ class Builder {
 	protected $navSyncPort;       // for populating the websockets template partial
 	protected $patternTypes;      // a list of pattern types that match the directory structure
 	protected $patternPaths;      // the paths to patterns for use with mustache partials
+	protected $patternLineages;   // the list of patterns that make up a particular pattern
 	protected $patternTypesRegex; // the simple regex for the pattern types. used in getPath()
 	protected $navItems;          // the items for the nav. includes view all links
 	protected $viewAllPaths;      // the paths to the view all pages
@@ -177,11 +178,18 @@ class Builder {
 	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
 	*/
 	private function generatePatternFile($f) {
+		
 		$hr = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
 		$rf = $this->renderPattern($f);
 		$fr = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
-		$fr = str_replace("{{ patternPartial }}",$this->getPatternPartial($f),$fr);
+		
+		// the footer isn't rendered as mustache but we have some variables there any way. find & replace.
+		$pp = $this->getPatternPartial($f);
+		$fr = str_replace("{{ patternPartial }}",$pp,$fr);
+		$fr = str_replace("{{ lineage }}",json_encode($this->patternLineages[$pp]),$fr);
+		
 		return $hr."\n".$rf."\n".$fr;
+		
 	}
 	
 	/**
@@ -469,8 +477,9 @@ class Builder {
 	protected function gatherPatternPaths() {
 		
 		// set-up vars
-		$this->patternPaths = array();
-		$this->patternTypes = array();
+		$this->patternPaths    = array();
+		$this->patternTypes    = array();
+		$this->patternLineages = array();
 		
 		// get the pattern types
 		foreach(glob(__DIR__.$this->sp."/*",GLOB_ONLYDIR) as $patternType) {
@@ -482,7 +491,9 @@ class Builder {
 		
 		// find the patterns for the types
 		foreach($this->patternTypes as $patternType) {
+			
 			$patternTypePaths = array();
+			$patternTypeClean = $this->getPatternName($patternType, false);
 			
 			// find pattern paths for pattern subtypes
 			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
@@ -490,6 +501,7 @@ class Builder {
 				$pattern = $this->getPatternName($matches[1], false);
 				if (($pattern[0] != "_") && (!isset($patternTypePaths[$pattern]))) {
 					$patternTypePaths[$pattern] = $this->getPath($filename);
+					$this->patternLineages[$patternTypeClean."-".$pattern] = $this->getLineage($filename);
 				}
 			}
 			
@@ -499,10 +511,10 @@ class Builder {
 				$pattern = $this->getPatternName($matches[1], false);
 				if (($pattern[0] != "_") && (!isset($patternTypePaths[$pattern]))) {
 					$patternTypePaths[$pattern] = $this->getPath($filename);
+					$this->patternLineages[$patternTypeClean."-".$pattern] = $this->getLineage($filename);
 				}
 			}
 			
-			$patternTypeClean = $this->getPatternName($patternType, false);
 			$this->patternPaths[$patternTypeClean] = $patternTypePaths;
 			
 		}
@@ -588,6 +600,19 @@ class Builder {
 		
 		return $p;
 		
+	}
+	
+	/**
+	* Get the lineage for a given pattern by parsing it and matching mustache partials
+	* @param  {String}       the filename for the pattern to be parsed
+	*
+	* @return {Array}        a list of patterns
+	*/
+	protected function getLineage($filename) {
+		$data = file_get_contents($filename);
+		if (preg_match_all('/{{>([ ]+)?([A-Za-z0-9-]+)([ ]+)?}}/',$data,$matches)) {
+			return $matches[2];
+		}
 	}
 	
 	/**
