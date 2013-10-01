@@ -140,9 +140,15 @@ class Watcher extends Builder {
 				
 				if (!isset($o->$fileName)) {
 					$o->$fileName = $mt;
+					if (($fileName[0] != "_") && $object->isFile()) {
+						$this->moveStaticFile("_data/".$fileName,"","_data","data");
+					}
 				} else if ($o->$fileName != $mt) {
 					$o->$fileName = $mt;
 					$this->updateSite($fileName,"changed");
+					if (($fileName[0] != "_") && $object->isFile()) {
+						$this->moveStaticFile("_data/".$fileName,"","_data","data");
+					}
 				}
 				
 			}
