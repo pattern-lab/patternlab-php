@@ -3,6 +3,7 @@ public/index.html
 public/styleguide.html
 public/styleguide/html/styleguide.html
 public/css/*
+public/data/*.js
 public/fonts/*
 public/js/*
 public/images/*
