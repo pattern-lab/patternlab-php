@@ -33,6 +33,7 @@ function connectNavSync() {
 			wsnConnected = true;
 			$('#navSyncButton').attr("data-state","on");
 			$('#navSyncButton').addClass("connected");
+			$('#navSyncButton').addClass("active");
 			$('#navSyncButton').html(navSyncCopy+' On');
 		}
 		
@@ -42,6 +43,7 @@ function connectNavSync() {
 			$('#navSyncButton').attr("data-state","off");
 			if ($('#navSyncButton').hasClass("connected")) {
 				$('#navSyncButton').removeClass("connected");
+				$('#navSyncButton').removeClass("active");
 			}
 			$('#navSyncButton').html(navSyncCopy+' Disabled');
 		}
@@ -74,6 +76,7 @@ function connectNavSync() {
 			$('#navSyncButton').attr("data-state","off");
 			if ($('#navSyncButton').hasClass("connected")) {
 				$('#navSyncButton').removeClass("connected");
+				$('#navSyncButton').removeClass("active");
 			}
 			$('#navSyncButton').html(navSyncCopy+' Disabled');
 		}
@@ -98,6 +101,7 @@ function connectContentSync() {
 			wscConnected = true;
 			$('#contentSyncButton').attr("data-state","on");
 			$('#contentSyncButton').addClass("connected");
+			$('#contentSyncButton').addClass("active");
 			$('#contentSyncButton').html(contentSyncCopy+' On');
 		}
 		
@@ -107,6 +111,7 @@ function connectContentSync() {
 			$('#contentSyncButton').attr("data-state","off");
 			if ($('#contentSyncButton').hasClass("connected")) {
 				$('#contentSyncButton').removeClass("connected");
+				$('#contentSyncButton').removeClass("active");
 			}
 			$('#contentSyncButton').html(contentSyncCopy+' Disabled');
 		}
@@ -124,6 +129,7 @@ function connectContentSync() {
 			$('#contentSyncButton').attr("data-state","off");
 			if ($('#contentSyncButton').hasClass("connected")) {
 				$('#contentSyncButton').removeClass("connected");
+				$('#contentSyncButton').removeClass("active");
 			}
 			$('#contentSyncButton').html(contentSyncCopy+' Disabled');
 		}
@@ -139,11 +145,13 @@ $('#navSyncButton').click(function() {
 		wsn.close();
 		$(this).attr("data-state","off");
 		$(this).removeClass("connected");
+		$(this).removeClass("active");
 		$(this).html('Nav Sync Off');
 	} else {
 		connectNavSync();
 		$(this).attr("data-state","on");
 		$(this).addClass("connected");
+		$(this).addClass("active");
 		$(this).html('Nav Sync On');
 	}
 });
@@ -153,11 +161,13 @@ $('#contentSyncButton').click(function() {
 		wsc.close();
 		$(this).attr("data-state","off");
 		$(this).removeClass("connected");
+		$(this).removeClass("active");
 		$(this).html('Content Sync Off');
 	} else {
 		connectContentSync();
 		$(this).attr("data-state","on");
 		$(this).addClass("connected");
+		$(this).addClass("active");
 		$(this).html('Content Sync On');
 	}
 });
