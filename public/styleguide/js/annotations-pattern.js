@@ -18,20 +18,18 @@ var annotationsPattern = {
 		for (comment in comments.comments) {
 			var item = comments.comments[comment];
 			var els  = document.querySelectorAll(item.el);
-			if (els.length > 0) {
-				for (el in els) {
-					els[el].onclick = (function(item) {
-						return function(e) {
-							if (annotationsPattern.commentsActive) {
-								e.preventDefault();
-								e.stopPropagation();
-								var obj = { "el": item.el, "title": item.title, "comment": item.comment };
-								var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-								parent.postMessage(obj,targetOrigin);
-							}
-					    }
-					  })(item);
-				}
+			for (var i = 0; i < els.length; ++i) {
+				els[i].onclick = (function(item) {
+					return function(e) {
+						if (annotationsPattern.commentsActive) {
+							e.preventDefault();
+							e.stopPropagation();
+							var obj = { "el": item.el, "title": item.title, "comment": item.comment };
+							var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+							parent.postMessage(obj,targetOrigin);
+						}
+					}
+				})(item);
 			}
 		}
 		
@@ -54,15 +52,11 @@ var annotationsPattern = {
 			for (comment in comments.comments) {
 				var item = comments.comments[comment];
 				var els = document.querySelectorAll(item.el);
-				if (els.length > 0) {
-					for (el in els) {
-						if (els[el].classList.length > 0) {
-							if (event.data.commentToggle == "on") {
-								els[el].classList.add("has-comment");
-							} else {
-								els[el].classList.remove("has-comment");
-							}
-						}
+				for (var i = 0; i < els.length; ++i) {
+					if (event.data.commentToggle == "on") {
+						els[i].classList.add("has-comment");
+					} else {
+						els[i].classList.remove("has-comment");
 					}
 				}
 			}
