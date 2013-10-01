@@ -743,9 +743,11 @@ class Builder {
 	* Moves static files that aren't directly related to Pattern Lab
 	* @param  {String}       file name to be moved
 	* @param  {String}       copy for the message to be printed out
+	* @param  {String}       part of the file name to be found for replacement
+	* @param  {String}       the replacement
 	*/
-	protected function moveStaticFile($fileName,$copy = "") {
-		$this->moveFile($fileName,$fileName);
+	protected function moveStaticFile($fileName,$copy = "", $find = "", $replace = "") {
+		$this->moveFile($fileName,str_replace($find, $replace, $fileName));
 		$this->updateChangeTime();
 		if ($copy != "") {
 			print $fileName." ".$copy."...\n";
