@@ -255,7 +255,7 @@ class Builder {
 	}
 	
 	/**
-	* Gather data from source/_data/data.json, source/_data/listitems.json, and pattern-specific json files
+	* Gather data from source/_data/_data.json, source/_data/_listitems.json, and pattern-specific json files
 	*
 	* Reserved attributes: 
 	*    - $this->d->listItems : listItems from listitems.json, duplicated into separate arrays for $this->d->listItems->one, $this->d->listItems->two, $this->d->listItems->three... etc.
@@ -267,14 +267,14 @@ class Builder {
 	protected function gatherData() {
 		
 		// gather the data from the main source data.json
-		if (file_exists(__DIR__."/../../source/_data/data.json")) {
-			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/_data/data.json")));
+		if (file_exists(__DIR__."/../../source/_data/_data.json")) {
+			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/_data/_data.json")));
 		}
 		
 		// add list item data, makes 'listItems' a reserved word
-		if (file_exists(__DIR__."/../../source/_data/listitems.json")) {
+		if (file_exists(__DIR__."/../../source/_data/_listitems.json")) {
 			
-			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/_data/listitems.json"));
+			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/_data/_listitems.json"));
 			$numbers   = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
 			
 			$i = 0;
