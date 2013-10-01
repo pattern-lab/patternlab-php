@@ -35,8 +35,6 @@
 		$('.sg-nav-container').toggleClass('active');
 	});
 	
-	
-	
 	//"View (containing clean, code, raw, etc options) Trigger
 	$('#sg-t-toggle').on("click", function(e){
 		e.preventDefault();
@@ -212,6 +210,16 @@
 		updateSizeReading(val,'em','updatePxInput');
 	});
 	
+	// handle the MQ click
+	$('#sg-mq a').on("click", function(e){
+		e.preventDefault();
+		var val = $(this).html();
+		var type = (val.indexOf("px") != -1) ? "px" : "em";
+		val = val.replace(type,"");
+		var width = (type == "px") ? val*1 : val*$bodySize;
+		sizeiframe(width,true);
+	});
+	
 	//Resize the viewport
 	//'size' is the target size of the viewport
 	//'animate' is a boolean for switching the CSS animation on or off. 'animate' is true by default, but can be set to false for things like nudging and dragging
@@ -280,7 +288,7 @@
 	function updateViewportWidth(size) {
 	
 		$("#sg-viewport").width(size);
-		$("#sg-gen-container").width(Math.floor(size) + 14);
+		$("#sg-gen-container").width(size*1 + 14);
 		
 		updateSizeReading(size);
 	}
