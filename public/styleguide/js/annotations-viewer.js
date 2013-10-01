@@ -1,5 +1,5 @@
 /*!
- * Annotations Support for the Viewer - v0.1
+ * Annotations Support for the Viewer - v0.2
  *
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -26,17 +26,18 @@ var annotationsViewer = {
 	
 	toggleComments: function() {
 		
+		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		
 		if (!annotationsViewer.commentsActive) {
 			
 			annotationsViewer.commentsActive = true;
-			// post message to child window
-			document.getElementById('sg-viewport').contentWindow.postMessage("on",window.location.protocol+"//"+window.location.host);
+			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "on" },targetOrigin);
 			$('#sg-t-annotations').text('Annotations On');
 			
 		} else {
 			
 			annotationsViewer.commentsActive = false;
-			document.getElementById('sg-viewport').contentWindow.postMessage("off",window.location.protocol+"//"+window.location.host);
+			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },targetOrigin);
 			$('#sg-t-annotations').text('Annotations Off');
 			annotationsViewer.slideComment(999);
 			
@@ -83,10 +84,15 @@ var annotationsViewer = {
 			annotationsViewer.slideComment(0);
 	},
 	
+	/**
+	* toggle the comment pop-up based on a user clicking on the pattern
+	* based on the great MDN docs at https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
+	* @param  {Object}      event info
+	*/
 	receiveIframeMessage: function(event) {
 		
 		// does the origin sending the message match the current host? if not dev/null the request
-		if (event.origin !== window.location.protocol+"//"+window.location.host) {
+		if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 			return;
 		}
 		
