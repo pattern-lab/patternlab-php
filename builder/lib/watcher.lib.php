@@ -14,7 +14,7 @@
  *
  */
 
-class Watcher extends Builder {
+class Watchr extends Buildr {
 	
 	/**
 	* Use the Builder __construct to gather the config variables

@@ -11,7 +11,7 @@
  *
  */
 
-class Generator extends Builder {
+class Generatr extends Buildr {
 	
 	/**
 	* Use the Builder __construct to gather the config variables
