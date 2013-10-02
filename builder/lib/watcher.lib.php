@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Watcher Class - v0.3.3
+ * Pattern Lab Watcher Class - v0.3.4
  *
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -14,7 +14,7 @@
  *
  */
 
-class Watcher extends Builder {
+class Watchr extends Buildr {
 	
 	/**
 	* Use the Builder __construct to gather the config variables

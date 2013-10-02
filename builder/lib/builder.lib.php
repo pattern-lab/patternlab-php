@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Builder Class - v0.3.3
+ * Pattern Lab Builder Class - v0.3.4
  *
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -10,7 +10,7 @@
  *
  */
 
-class Builder {
+class Buildr {
 
 	// i was lazy when i started this project & kept (mainly) to two letter vars. sorry.
 	protected $mpl;               // mustache pattern loader instance
@@ -51,7 +51,7 @@ class Builder {
 			// if the variables are array-like make sure the properties are validated/trimmed/lowercased before saving
 			if (($key == "ie") || ($key == "id")) {
 				$values = explode(",",$value);
-				array_walk($values,'Builder::trim');
+				array_walk($values,'Buildr::trim');
 				$this->$key = $values;
 			} else {
 				$this->$key = $value;
@@ -127,7 +127,7 @@ class Builder {
 		$sd = $this->gatherPartials();
 		
 		// sort partials by patternLink
-		usort($sd['partials'], "Builder::sortPartials");
+		usort($sd['partials'], "Buildr::sortPartials");
 		
 		// render the "view all" pages
 		$this->generateViewAllPages();
