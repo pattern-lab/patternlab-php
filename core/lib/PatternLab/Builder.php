@@ -595,7 +595,7 @@ class Builder {
 				$pattern     = str_replace(".mustache","",$patternFull);              // 00-colors
 				
 				if ($patternSubtypeSet) {
-					$patternPath     = $patternType."/".$patternSubtype."/".$pattern; // 00-atoms/01-global/00-colors
+					$patternPath     = $patternType.$dirSep.$patternSubtype.$dirSep.$pattern; // 00-atoms/01-global/00-colors
 					$patternPathDash = str_replace($dirSep,"-",$patternPath);         // 00-atoms-01-global-00-colors (file path)
 				} else {
 					$patternPath     = $patternType.$dirSep.$pattern;                 // 00-atoms/00-colors

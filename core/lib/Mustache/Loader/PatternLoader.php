@@ -109,7 +109,7 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
         
         // get the real file path for the pattern
         $fileName = $this->getFileName($partialName);
-        
+        //print $fileName."\n";
         // throw error if path is not found
         if (!file_exists($fileName)) {
             throw new Mustache_Exception_UnknownTemplateException($name);
@@ -143,29 +143,29 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
     {
         
         $fileName = "";
-        
+        $dirSep   = DIRECTORY_SEPARATOR;
         // test to see what kind of path was supplied
         $posDash  = strpos($name,"-");
-        $posSlash = strpos($name,"/");
+        $posSlash = strpos($name,$dirSep);
         if (($posSlash === false) && ($posDash !== false)) {
            
            list($patternType,$pattern) = $this->getPatternInfo($name);
            
            // see if the pattern is an exact match for patternPaths. if not iterate over patternPaths to find a likely match
            if (isset($this->patternPaths[$patternType][$pattern])) {
-              $fileName = $this->baseDir."/".$this->patternPaths[$patternType][$pattern]["patternSrcPath"];
+              $fileName = $this->baseDir.$dirSep.$this->patternPaths[$patternType][$pattern]["patternSrcPath"];
            } else if (isset($this->patternPaths[$patternType])) {
               foreach($this->patternPaths[$patternType] as $patternMatchKey=>$patternMatchValue) {
                   $pos = strpos($patternMatchKey,$pattern);
                   if ($pos !== false) {
-                      $fileName = $this->baseDir."/".$patternMatchValue["patternSrcPath"];
+                      $fileName = $this->baseDir.$dirSep.$patternMatchValue["patternSrcPath"];
                       break;
                   }
               }
            }
            
         } else {
-           $fileName = $this->baseDir."/".$name;
+           $fileName = $this->baseDir.$dirSep.$name;
         }
         
         if (substr($fileName, 0 - strlen($this->extension)) !== $this->extension) {
