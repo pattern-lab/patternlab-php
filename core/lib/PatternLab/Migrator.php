@@ -118,7 +118,7 @@ class Migrator {
 				$fileName = str_replace($sourcePath,"",$object->getPathname());
 				
 				// check to see if it's a new directory
-				if ($object->isDir() && !is_dir($destinationPath.$fileName)) {
+				if ($object->isDir() && !is_dir($destinationPath.$fileName)) {	
 					mkdir($destinationPath.$fileName);
 				} else if ($object->isFile()) {
 					copy($sourcePath.$fileName,$destinationPath.$fileName);
