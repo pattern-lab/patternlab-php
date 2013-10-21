@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Builder Class - v0.3.3
+ * Pattern Lab Builder Class - v0.3.5
  *
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -10,7 +10,7 @@
  *
  */
 
-class Builder {
+class Buildr {
 
 	// i was lazy when i started this project & kept (mainly) to two letter vars. sorry.
 	protected $mpl;               // mustache pattern loader instance
@@ -24,6 +24,7 @@ class Builder {
 	protected $navSyncPort;       // for populating the websockets template partial
 	protected $patternTypes;      // a list of pattern types that match the directory structure
 	protected $patternPaths;      // the paths to patterns for use with mustache partials
+	protected $patternLineages;   // the list of patterns that make up a particular pattern
 	protected $patternTypesRegex; // the simple regex for the pattern types. used in getPath()
 	protected $navItems;          // the items for the nav. includes view all links
 	protected $viewAllPaths;      // the paths to the view all pages
@@ -51,7 +52,7 @@ class Builder {
 			// if the variables are array-like make sure the properties are validated/trimmed/lowercased before saving
 			if (($key == "ie") || ($key == "id")) {
 				$values = explode(",",$value);
-				array_walk($values,'Builder::trim');
+				array_walk($values,'Buildr::trim');
 				$this->$key = $values;
 			} else {
 				$this->$key = $value;
@@ -122,12 +123,13 @@ class Builder {
 		$this->navItems['navsyncport']     = $this->navSyncPort;
 		$this->navItems['patternpaths']    = json_encode($this->patternPaths);
 		$this->navItems['viewallpaths']    = json_encode($this->viewAllPaths);
+		$this->navItems['mqs']             = $this->gatherMQs();
 		
 		// grab the partials into a data object for the style guide
 		$sd = $this->gatherPartials();
 		
 		// sort partials by patternLink
-		usort($sd['partials'], "Builder::sortPartials");
+		usort($sd['partials'], "Buildr::sortPartials");
 		
 		// render the "view all" pages
 		$this->generateViewAllPages();
@@ -177,11 +179,18 @@ class Builder {
 	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
 	*/
 	private function generatePatternFile($f) {
+		
 		$hr = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
 		$rf = $this->renderPattern($f);
 		$fr = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
-		$fr = str_replace("{{ patternPartial }}",$this->getPatternPartial($f),$fr);
+		
+		// the footer isn't rendered as mustache but we have some variables there any way. find & replace.
+		$pp = $this->getPatternPartial($f);
+		$fr = str_replace("{{ patternPartial }}",$pp,$fr);
+		$fr = str_replace("{{ lineage }}",json_encode($this->patternLineages[$pp]),$fr);
+		
 		return $hr."\n".$rf."\n".$fr;
+		
 	}
 	
 	/**
@@ -246,7 +255,7 @@ class Builder {
 	}
 	
 	/**
-	* Gather data from source/_data/data.json, source/_data/listitems.json, and pattern-specific json files
+	* Gather data from source/_data/_data.json, source/_data/_listitems.json, and pattern-specific json files
 	*
 	* Reserved attributes: 
 	*    - $this->d->listItems : listItems from listitems.json, duplicated into separate arrays for $this->d->listItems->one, $this->d->listItems->two, $this->d->listItems->three... etc.
@@ -258,14 +267,14 @@ class Builder {
 	protected function gatherData() {
 		
 		// gather the data from the main source data.json
-		if (file_exists(__DIR__."/../../source/_data/data.json")) {
-			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/_data/data.json")));
+		if (file_exists(__DIR__."/../../source/_data/_data.json")) {
+			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/_data/_data.json")));
 		}
 		
 		// add list item data, makes 'listItems' a reserved word
-		if (file_exists(__DIR__."/../../source/_data/listitems.json")) {
+		if (file_exists(__DIR__."/../../source/_data/_listitems.json")) {
 			
-			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/_data/listitems.json"));
+			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/_data/_listitems.json"));
 			$numbers   = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
 			
 			$i = 0;
@@ -335,6 +344,30 @@ class Builder {
 		}
 		
 	}	
+	
+	/**
+	* Finds Media Queries in CSS files in the source/css/ dir
+	*
+	* @return {Array}        an array of the appropriate MQs
+	*/
+	protected function gatherMQs() {
+		
+		$mqs = array();
+		
+		foreach(glob(__DIR__."/../../source/css/*.css") as $filename) {
+			$data    = file_get_contents($filename);
+			preg_match_all("/(min|max)-width:( |)(([0-9]{1,5})(\.[0-9]{1,20}|)(px|em))/",$data,$matches);
+			foreach ($matches[3] as $match) {
+				if (!in_array($match,$mqs)) {
+					$mqs[] = $match;
+				}
+			}	
+		}
+		
+		sort($mqs);
+		return $mqs;
+		
+	}
 	
 	/**
 	* Gathers the partials for the nav drop down in Pattern Lab
@@ -469,8 +502,9 @@ class Builder {
 	protected function gatherPatternPaths() {
 		
 		// set-up vars
-		$this->patternPaths = array();
-		$this->patternTypes = array();
+		$this->patternPaths    = array();
+		$this->patternTypes    = array();
+		$this->patternLineages = array();
 		
 		// get the pattern types
 		foreach(glob(__DIR__.$this->sp."/*",GLOB_ONLYDIR) as $patternType) {
@@ -482,7 +516,9 @@ class Builder {
 		
 		// find the patterns for the types
 		foreach($this->patternTypes as $patternType) {
+			
 			$patternTypePaths = array();
+			$patternTypeClean = $this->getPatternName($patternType, false);
 			
 			// find pattern paths for pattern subtypes
 			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
@@ -490,6 +526,7 @@ class Builder {
 				$pattern = $this->getPatternName($matches[1], false);
 				if (($pattern[0] != "_") && (!isset($patternTypePaths[$pattern]))) {
 					$patternTypePaths[$pattern] = $this->getPath($filename);
+					$this->patternLineages[$patternTypeClean."-".$pattern] = $this->getLineage($filename);
 				}
 			}
 			
@@ -499,10 +536,10 @@ class Builder {
 				$pattern = $this->getPatternName($matches[1], false);
 				if (($pattern[0] != "_") && (!isset($patternTypePaths[$pattern]))) {
 					$patternTypePaths[$pattern] = $this->getPath($filename);
+					$this->patternLineages[$patternTypeClean."-".$pattern] = $this->getLineage($filename);
 				}
 			}
 			
-			$patternTypeClean = $this->getPatternName($patternType, false);
 			$this->patternPaths[$patternTypeClean] = $patternTypePaths;
 			
 		}
@@ -588,6 +625,19 @@ class Builder {
 		
 		return $p;
 		
+	}
+	
+	/**
+	* Get the lineage for a given pattern by parsing it and matching mustache partials
+	* @param  {String}       the filename for the pattern to be parsed
+	*
+	* @return {Array}        a list of patterns
+	*/
+	protected function getLineage($filename) {
+		$data = file_get_contents($filename);
+		if (preg_match_all('/{{>([ ]+)?([A-Za-z0-9-]+)([ ]+)?}}/',$data,$matches)) {
+			return $matches[2];
+		}
 	}
 	
 	/**
@@ -693,9 +743,11 @@ class Builder {
 	* Moves static files that aren't directly related to Pattern Lab
 	* @param  {String}       file name to be moved
 	* @param  {String}       copy for the message to be printed out
+	* @param  {String}       part of the file name to be found for replacement
+	* @param  {String}       the replacement
 	*/
-	protected function moveStaticFile($fileName,$copy = "") {
-		$this->moveFile($fileName,$fileName);
+	protected function moveStaticFile($fileName,$copy = "", $find = "", $replace = "") {
+		$this->moveFile($fileName,str_replace($find, $replace, $fileName));
 		$this->updateChangeTime();
 		if ($copy != "") {
 			print $fileName." ".$copy."...\n";

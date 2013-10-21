@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Generator Class - v0.3.3
+ * Pattern Lab Generator Class - v0.3.5
  *
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -11,7 +11,7 @@
  *
  */
 
-class Generator extends Builder {
+class Generatr extends Buildr {
 	
 	/**
 	* Use the Builder __construct to gather the config variables
@@ -36,6 +36,21 @@ class Generator extends Builder {
 		
 		// render out the index and style guide
 		$this->generateMainPages();
+		
+		// iterate over the data files and regenerate the entire site if they've changed
+		$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/_data/"), RecursiveIteratorIterator::SELF_FIRST);
+		
+		// make sure dots are skipped
+		$objects->setFlags(FilesystemIterator::SKIP_DOTS);
+		
+		foreach($objects as $name => $object) {
+			
+			$fileName = str_replace(__DIR__."/../../source/_data".DIRECTORY_SEPARATOR,"",$name);
+			if (($fileName[0] != "_") && $object->isFile()) {
+				$this->moveStaticFile("_data/".$fileName,"","_data","data");
+			}
+			
+		}
 		
 		// iterate over all of the other files in the source directory and move them if their modified time has changed
 		$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/"), RecursiveIteratorIterator::SELF_FIRST);

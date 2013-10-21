@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Builder CLI - v0.3.3
+ * Pattern Lab Builder CLI - v0.3.5
  *
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -36,7 +36,7 @@ if (php_sapi_name() == 'cli') {
 		// initiate the g (generate) switch
 		
 		// iterate over the source directory and generate the site
-		$g = new Generator();
+		$g = new Generatr();
 		$g->generate();
 		print "your site has been generated...\n";
 		
@@ -45,12 +45,12 @@ if (php_sapi_name() == 'cli') {
 		// initiate the w (watch) switch
 		
 		// iterate over the source directory and generate the site
-		$g = new Generator();
+		$g = new Generatr();
 		$g->generate();
 		print "your site has been generated...\n";
 		
 		// watch the source directory and regenerate any changed files
-		$w = new Watcher();
+		$w = new Watchr();
 		print "watching your site for changes...\n";
 		$w->watch();
 		

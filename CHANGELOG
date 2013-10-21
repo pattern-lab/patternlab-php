@@ -1,5 +1,14 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.3.5
+ - ADD: an explicit MIT license
+ - FIX: updated .gitignore so that it's more flexible
+ - THX: thanks to @alienlebarge for the .gitignore fix
+
+PL-v0.3.4
+ - FIX: Generator class renamed because it's a reserved name in PHP 5.5
+ - THX: thanks to @faustgertz for the heads up
+
 PL-v0.3.3
  - FIX: links created with {{ link.pattern }} now have the correct path
  - FIX: links within a pattern now properly update the history
