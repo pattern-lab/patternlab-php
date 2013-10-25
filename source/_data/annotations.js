@@ -48,7 +48,7 @@ var comments = {
 	{
 		"el": ".qty-field",
 	 	"title" : "Quantity Field",
-	 	"comment": "We're using the HTML5 number input type, which <a href=\"http://diveintohtml5.info/forms.html\">brings up the appropriate virtual keyboard</a> for many mobile browsers. To increase usability, the input labels are using the "for" attribute, which focuses the cursor in the form field when clicked. However, iOS doesn't honor "for" default functionality, so we're adding "cursor: pointer" to the labels to get Mobile Safari to behave properly."
+	 	"comment": "We're using the HTML5 number input type, which <a href=\"http://diveintohtml5.info/forms.html\">brings up the appropriate virtual keyboard</a> for many mobile browsers. To increase usability, the input labels are using the \"for\" attribute, which focuses the cursor in the form field when clicked. However, iOS doesn't honor \"for\" default functionality, so we're adding \"cursor: pointer\" to the labels to get Mobile Safari to behave properly."
 	},
 	{
 		"el": ".size-field",
