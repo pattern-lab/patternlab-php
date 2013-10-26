@@ -28,6 +28,9 @@ class Generatr extends Buildr {
 	*/
 	public function generate() {
 		
+		// clean the public directory to remove old files
+		$this->cleanPublic();
+		
 		// gather data
 		$this->gatherData();
 		
@@ -52,7 +55,7 @@ class Generatr extends Buildr {
 			
 		}
 		
-		// iterate over all of the other files in the source directory and move them if their modified time has changed
+		// iterate over all of the other files in the source directory
 		$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/"), RecursiveIteratorIterator::SELF_FIRST);
 		
 		// make sure dots are skipped
@@ -73,7 +76,7 @@ class Generatr extends Buildr {
 				}
 				
 				// check to see if it's a new file or a file that has changed
-				if (!$ignoreDir && $object->isFile() && (!file_exists(__DIR__."/../../public/".$fileName) || ($object->getMTime() > filemtime(__DIR__."/../../public/".$fileName)))) {
+				if (!$ignoreDir && $object->isFile() && (!file_exists(__DIR__."/../../public/".$fileName))) {
 					$this->moveStaticFile($fileName);
 				}
 				

@@ -728,6 +728,78 @@ class Buildr {
 	}
 	
 	/**
+	* Delete patterns and user-created directories and files in public/
+	*/
+	protected function cleanPublic() {
+		
+		// find all of the patterns in public/. sort by the children first
+		$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../public/patterns/"), RecursiveIteratorIterator::CHILD_FIRST);
+		
+		// make sure dots are skipped
+		$objects->setFlags(FilesystemIterator::SKIP_DOTS);
+		
+		// for each file figure out what to do with it
+		foreach($objects as $name => $object) {
+			
+			if ($object->isDir()) {
+				// if this is a directory remove it
+				rmdir($name);
+			} else if ($object->isFile() && ($object->getFilename() != "README")) {
+				// if this is a file remove it
+				unlink($name);
+			}
+			
+		}
+		
+		// scan source/ & public/ to figure out what directories might need to be cleaned up
+		$sourceDirs = glob(__DIR__."/../../source/*",GLOB_ONLYDIR);
+		$publicDirs = glob(__DIR__."/../../public/*",GLOB_ONLYDIR);
+		
+		// make sure some directories aren't deleted
+		$ignoreDirs = array("listeners","styleguide");
+		foreach ($ignoreDirs as $ignoreDir) {
+			$key = array_search(__DIR__."/../../public/".$ignoreDir,$publicDirs);
+			if ($key !== false){
+				unset($publicDirs[$key]);
+			}
+		}
+		
+		// compare source dirs against public. remove those dirs w/ an underscore in source/ from the public/ list
+		foreach ($sourceDirs as $sourceDir) {
+			$cleanDir = str_replace(__DIR__."/../../source/","",$sourceDir);
+			if ($cleanDir[0] == "_") {
+				$key = array_search(__DIR__."/../../public/".str_replace("_","",$cleanDir),$publicDirs);
+				if ($key !== false){
+					unset($publicDirs[$key]);
+				}
+			}
+		}
+		
+		// for the remaining dirs in public delete them and their files
+		foreach ($publicDirs as $dir) {
+			
+			$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir), RecursiveIteratorIterator::CHILD_FIRST);
+			
+			// make sure dots are skipped
+			$objects->setFlags(FilesystemIterator::SKIP_DOTS);
+			
+			foreach($objects as $name => $object) {
+				
+				if ($object->isDir()) {
+					rmdir($name);
+				} else if ($object->isFile()) {
+					unlink($name);
+				}
+				
+			}
+			
+			rmdir($dir);
+			
+		}
+		
+	}
+	
+	/**
 	* Copies a file from the given source path to the given public path.
 	* THIS IS NOT FOR PATTERNS 
 	* @param  {String}       the source file

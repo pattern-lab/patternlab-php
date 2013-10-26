@@ -10,6 +10,7 @@
  *
  * 	php builder.php -g
  * 		Iterates over the 'source' directories & files and generates the entire site a single time.
+ * 		It also cleans the 'public' directory.
  * 	
  * 	php builder.php -w
  * 		Generates the site like the -g flag and then watches for changes in the 'source' directories &
@@ -40,7 +41,7 @@ if (php_sapi_name() == 'cli') {
 		$g->generate();
 		print "your site has been generated...\n";
 		
-	} elseif (isset($args["w"])) {
+	} else if (isset($args["w"])) {
 		
 		// initiate the w (watch) switch
 		
@@ -60,7 +61,8 @@ if (php_sapi_name() == 'cli') {
 		print "\n";
 		print "Usage:\n\n";
 		print "  php ".$_SERVER["PHP_SELF"]." -g\n";
-		print "    Iterates over the 'source' directories & files and generates the entire site a single time.\n\n";
+		print "    Iterates over the 'source' directories & files and generates the entire site a single time.\n";
+		print "    It also cleans the 'public' directory.\n\n";
 		print "  php ".$_SERVER["PHP_SELF"]." -w\n";
 		print "    Generates the site like the -g flag and then watches for changes in the 'source' directories &\n";
 		print "    files. Will re-generate files if they've changed.\n\n";
