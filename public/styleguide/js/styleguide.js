@@ -383,7 +383,7 @@
 		
 		var $sgSrc = $sgViewport.attr('src'),
 			$vp = $sgViewport.contents(),
-			$sgPattern = $vp.find('.sg-pattern');
+			$sgPattern = $vp.find('.sg-pattern-body');
 		
 		//Code View Trigger
 		$('#sg-t-code').click(function(e){
@@ -402,12 +402,16 @@
 		function buildCodeView() {
 			$sgPattern.each(function(index) {
 				$this = $(this),
-				$thisHTML = $this.html().replace(/[<>]/g, function(m) { return {'<':'&lt;','>':'&gt;'}[m]}), 
-				$thisCode = $( '<code></code>' ).html($thisHTML);
+				$thisHTML = $this.html().replace(/[<>]/g, function(m) { return {'<':'&lt;','>':'&gt;'}[m]}),
+				$codeWrapper = $('<div class="sg-code"><div class="sg-code-contains">This pattern contains: <code>atoms-logo</code> <code>molecule-primary-nav</code> <code>molecule-search-form</code></div><h3 class="sg-code-head">HTML</h3><pre class="sg-code-html"></pre><h3 class="sg-code-head">CSS</h3><pre class="sg-code-css"></pre></div>'), //Wrapper content for each pattern
+				$htmlCode = $( '<code></code>' ).html($thisHTML), //The pattern's HTML code
+				$cssCode = $( '<code></code>' ).html('CSS goes here'); //The pattern's CSS code
 				
-				$('<pre class="sg-code" />').html($thisCode).appendTo($this); //Create new node, fill it with the code text, then append it to the pattern
+				$codeWrapper.find('.sg-code-html').html($htmlCode); //Add pattern's HTML code to the HTML code container
+				$codeWrapper.find('.sg-code-css').html($cssCode); //Add pattern's CSS code to the CSS code container
+				$codeWrapper.appendTo($this); //Add code wrapper to the end of the pattern
 			});
-			$vp.find('.sg-code').show();
+			$vp.find('.sg-code').show(); //Show all code views in the viewport
 		}
 		
 	});

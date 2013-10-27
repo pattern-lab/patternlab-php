@@ -401,35 +401,27 @@
 /*------------------------------------*\
     $STYLE GUIDE CONTENT 
 \*------------------------------------*/
-/* Section Head */
-.sg-head {
-  margin: 2em 0;
-  font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
-  font-size: 70%;
-  font-weight: normal;
-  padding: 1em 0; }
-  .sg-head a {
-    display: block;
-    border-bottom: 1px solid #222222;
-    color: #222;
-    text-decoration: none; }
-    .sg-head a:hover {
-      color: gray;
-      border-bottom-color: gray; }
-
 /* Section Pattern */
 .sg-pattern {
   margin-bottom: 2em;
   padding: 0 1em;
   overflow: hidden; }
 
-/* Section Sub-head */
-.sg-sub a:link {
-  color: gray;
-  border-bottom-color: gray; }
-  .sg-sub a:link:hover {
-    color: #222222;
-    border-bottom-color: #222222; }
+/* Section Head */
+.sg-pattern-head {
+  margin: 2em 0;
+  font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+  font-size: 70%;
+  font-weight: normal;
+  padding: 1em 0;
+  border-bottom: 1px solid gray; }
+  .sg-pattern-head a {
+    display: block;
+    color: gray;
+    text-decoration: none;
+    cursor: pointer; }
+    .sg-pattern-head a:hover {
+      color: #222222; }
 
 /* Clean View */
 .sg-clean .sg-main {
@@ -439,15 +431,32 @@
   clear: both;
   background: #dddddd;
   color: #222222;
-  padding: 1em;
+  padding: 1em 0.5em;
   margin: 1em 0; }
 
-.sg-code {
-  white-space: -moz-pre-wrap;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
+.sg-code pre {
+  white-space: -moz-pre-line;
+  white-space: -pre-line;
+  white-space: -o-pre-line;
   word-wrap: break-word;
-  white-space: pre-wrap; }
+  white-space: pre-line;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.5em; }
+
+.sg-code-contains {
+  margin-bottom: 1rem;
+  font-size: 85%;
+  color: gray; }
+  .sg-code-contains code {
+    padding: 0.2em;
+    background: rgba(0, 0, 0, 0.3);
+    color: #f7f7f7;
+    position: relative;
+    top: -2px; }
+
+.sg-code-head {
+  color: gray;
+  font-size: 1em; }
 
 .demo {
   overflow: hidden;
