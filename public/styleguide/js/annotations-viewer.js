@@ -17,7 +17,15 @@ var annotationsViewer = {
 		$('body').addClass('comments-ready');
 		$('#sg-t-annotations').click(function(e) {
 			
-			e.preventDefault();		
+			e.preventDefault();
+			
+			// make sure the code view overlay is off
+			$('#sg-t-code').removeClass('active');
+			codeViewer.codeActive = false;
+			var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+			document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "off" },targetOrigin);
+			codeViewer.slideCode(999);
+				
 			annotationsViewer.toggleComments();
 			annotationsViewer.commentContainerInit();
 			
@@ -100,7 +108,9 @@ var annotationsViewer = {
 		
 		if (event.data.commentOverlay != undefined) {
 			if (event.data.commentOverlay == "on") {
+				
 				annotationsViewer.updateComment(event.data.el,event.data.title,event.data.comment);
+				
 			} else {
 				annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			}
