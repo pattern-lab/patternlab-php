@@ -17,8 +17,7 @@ var annotationsViewer = {
 		$('body').addClass('comments-ready');
 		$('#sg-t-annotations').click(function(e) {
 			
-			e.preventDefault();
-			
+			e.preventDefault();		
 			annotationsViewer.toggleComments();
 			annotationsViewer.commentContainerInit();
 			
@@ -48,18 +47,18 @@ var annotationsViewer = {
 	
 	commentContainerInit: function() {
 		
-		if (document.getElementById("comment-container") == undefined) {
-			$('<div id="comment-container" style="display: none;"></div>').html('<a href="#" id="close-comments">Close</a><h2 id="comment-title">Annotation Title</h2><div id="comment-text">Here is some comment text</div>').appendTo('body').css('bottom',-$(document).outerHeight());
+		if (document.getElementById("sg-annotation-container") == undefined) {
+			$('<div id="sg-annotation-container" style="display: none;"></div>').html('<a href="#" id="sg-annotation-close-btn">Close</a><h2 id="sg-annotation-title">Annotation Title</h2><div id="sg-annotation-text">Here is some comment text</div>').appendTo('body').css('bottom',-$(document).outerHeight());
 		}
 		
 		if (annotationsViewer.sw < annotationsViewer.breakpoint) {
-			$('#comment-container').hide();
+			$('#sg-annotation-container').hide();
 		} else {
-			$('#comment-container').show();
+			$('#sg-annotation-container').show();
 		}
 		
-		$('body').delegate('#close-comments','click',function(e) {
-			annotationsViewer.slideComment($('#comment-container').outerHeight());
+		$('body').delegate('#sg-annotation-close-btn','click',function(e) {
+			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			return false;
 		});
 		
@@ -67,21 +66,21 @@ var annotationsViewer = {
 	
 	slideComment: function(pos) {
 		
-		$('#comment-container').show();
+		$('#sg-annotation-container').show();
 		
 		if (annotationsViewer.sw > annotationsViewer.breakpoint) {
-			$('#comment-container').css('bottom',-pos);
+			$('#sg-annotation-container').css('bottom',-pos);
 		} else {
-			var offset = $('#comment-container').offset().top;
+			var offset = $('#sg-annotation-container').offset().top;
 			$('html,body').animate({scrollTop: offset}, 500);
 		}
 		
 	},
 	
 	updateComment: function(el,title,msg) {
-			var $container = $('#comment-container'),
-				$title = $('#comment-title'),
-				$text = $('#comment-text');
+			var $container = $('#sg-annotation-container'),
+				$title = $('#sg-annotation-title'),
+				$text = $('#sg-annotation-text');
 			$title.text(title);
 			$text.html(msg);
 			annotationsViewer.slideComment(0);
@@ -103,7 +102,7 @@ var annotationsViewer = {
 			if (event.data.commentOverlay == "on") {
 				annotationsViewer.updateComment(event.data.el,event.data.title,event.data.comment);
 			} else {
-				annotationsViewer.slideComment($('#comment-container').outerHeight());
+				annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			}
 		}
 		

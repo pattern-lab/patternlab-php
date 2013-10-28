@@ -433,6 +433,8 @@
   color: #222222;
   padding: 1em 0.5em;
   margin: 1em 0; }
+  .sg-code a, .sg-annotations a {
+    text-decoration: underline; }
 
 .sg-code pre {
   white-space: -moz-pre-line;
@@ -525,14 +527,50 @@
 .sg-label {
   line-height: 1; }
 
-#comment-container {
+#sg-annotation-container {
   position: fixed;
   bottom: 0;
   left: 0;
   z-index: 99;
   width: 100%;
-  padding: 1em;
-  background: red; }
+  padding: 1em; }
+
+/* Annotations */
+#sg-annotation-container {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+  font-size: 90%;
+  background: #222222;
+  color: gray;
+  position: fixed;
+  top: auto;
+  padding: 1rem 1rem 4rem;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  -webkit-transition: bottom 0.3s ease-out;
+  -moz-transition: bottom 0.3s ease-out;
+  -webkit-transition: bottom 0.3s ease-out;
+  -ms-transition: bottom 0.3s ease-out;
+  -o-transition: bottom 0.3s ease-out;
+  transition: bottom 0.3s ease-out; }
+  #sg-annotation-container a {
+    color: #dddddd; }
+
+#sg-annotation-close-btn {
+  color: #fff;
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: right; }
+
+.has-comment, .has-comment a {
+  cursor: help !important; }
 
 @font-face {
   font-family: 'icons';
@@ -575,45 +613,3 @@
 
 .icon-eye:before {
   content: "\e001"; }
-
-/* Annotations */
-#comment-container {
-  font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
-  background: #222222;
-  color: #fff;
-  position: relative;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  text-align: left;
-  padding: 1em; }
-  #comment-container a {
-    color: #dddddd; }
-
-#close-comments {
-  color: #fff;
-  position: absolute;
-  top: 1em;
-  right: 1em;
-  text-transform: uppercase;
-  display: none; }
-
-#comment-container {
-  position: fixed;
-  top: auto;
-  padding: 1em 1em 4em;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  -webkit-transition: bottom 0.3s ease-out;
-  -moz-transition: bottom 0.3s ease-out;
-  -webkit-transition: bottom 0.3s ease-out;
-  -ms-transition: bottom 0.3s ease-out;
-  -o-transition: bottom 0.3s ease-out;
-  transition: bottom 0.3s ease-out; }
-
-#close-comments {
-  display: block; }
-
-.has-comment, .has-comment a {
-  cursor: help !important; }

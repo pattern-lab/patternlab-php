@@ -634,6 +634,10 @@ $animate-quick: 0.2s;
 	color: $sg-primary;
 	padding: $sg-pad $sg-pad-half;
 	margin: $sg-space 0;
+
+	a {
+		text-decoration: underline;
+	}
 }
 
 .sg-code {
@@ -763,15 +767,58 @@ $animate-quick: 0.2s;
 }
 
 //Annotation
-#comment-container {
+#sg-annotation-container {
 	position: fixed;
 	bottom: 0;
 	left: 0;
 	z-index: 99;
 	width: 100%;
 	padding: $sg-pad;
-	background: red;
 }
+
+
+/* Annotations */
+#sg-annotation-container {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	font-family: $sg-font;
+	font-size: 90%;
+	background: $sg-primary;
+	color: $sg-secondary;
+	position: fixed;
+	top: auto;
+	padding: 1rem 1rem 4rem;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	z-index: 2;
+	-webkit-transition: bottom 0.3s ease-out;
+	-moz-transition: bottom 0.3s ease-out;
+  	-webkit-transition: bottom 0.3s ease-out;
+  	-ms-transition: bottom 0.3s ease-out; 
+  	-o-transition: bottom 0.3s ease-out; 
+  	transition:  bottom 0.3s ease-out;
+
+  	a {
+    	color: $sg-tertiary;
+    }
+}
+
+#sg-annotation-close-btn {
+	color: #fff;
+	position: absolute;
+	top: 1em;
+	right: 1em;
+	text-transform: uppercase;
+	text-decoration: none;
+	text-align: right;
+}
+
+.has-comment, .has-comment a {
+	cursor: help !important;
+}
+
 
 // Icon Font
 
@@ -820,53 +867,4 @@ $animate-quick: 0.2s;
 }
 .icon-eye:before {
 	content: "\e001";
-}
-
-
-/* Annotations */
-#comment-container {
-	font-family: $sg-font;
-	background: $sg-primary;
-	color: #fff;
-	position: relative;
-	top: 0;
-	left: 0;
-	z-index: 2;	
-	text-align: left;
-	padding: 1em;
-
-    a {
-    	color: $sg-tertiary;
-    }
-}
-
-#close-comments {
-	color: #fff;
-	position: absolute;
-	top: 1em;
-	right: 1em;
-	text-transform: uppercase;
-	display: none;
-}
-
-#comment-container {
-	position: fixed;
-	top: auto;
-	padding: 1em 1em 4em;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	-webkit-transition: bottom 0.3s ease-out;
-	-moz-transition: bottom 0.3s ease-out;
-  	-webkit-transition: bottom 0.3s ease-out;
-  	-ms-transition: bottom 0.3s ease-out; 
-  	-o-transition: bottom 0.3s ease-out; 
-  	transition:  bottom 0.3s ease-out;
-}
-#close-comments {
-	display: block;	
-}
-
-.has-comment, .has-comment a {
-	cursor: help !important;
 }
