@@ -27,10 +27,13 @@ require __DIR__."/lib/watcher.lib.php";
 require __DIR__."/lib/Mustache/Autoloader.php";
 Mustache_Autoloader::register();
 
+// load css rule saver
+require __DIR__."/lib/css-rule-saver/css-rule-saver.php";
+
 // make sure this script is being accessed from the command line
 if (php_sapi_name() == 'cli') {
 	
-	$args = getopt("gw");
+	$args = getopt("gwc");
 	
 	if (isset($args["g"])) {
 		
@@ -38,7 +41,10 @@ if (php_sapi_name() == 'cli') {
 		
 		// iterate over the source directory and generate the site
 		$g = new Generatr();
-		$g->generate();
+		
+		// check to see if CSS for patterns should be parsed & outputted
+		(isset($args["c"])) ? $g->generate(true) : $g->generate();
+		
 		print "your site has been generated...\n";
 		
 	} else if (isset($args["w"])) {

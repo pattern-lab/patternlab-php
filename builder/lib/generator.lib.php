@@ -25,8 +25,23 @@ class Generatr extends Buildr {
 	
 	/**
 	* Pulls together a bunch of functions from builder.lib.php in an order that makes sense
+	* @param  {Boolean}       decide if CSS should be parsed and saved. performance hog.
 	*/
-	public function generate() {
+	public function generate($enableCSS = false) {
+		
+		if ($enableCSS) {
+			
+			// enable CSS globally throughout PL
+			$this->enableCSS = true;
+			
+			// initialize CSS rule saver
+			$this->initializeCSSRuleSaver();
+			
+			print "CSS generation enabled. This could take a few seconds...\n";
+			
+		}
+		
+		
 		
 		// clean the public directory to remove old files
 		$this->cleanPublic();
