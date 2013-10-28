@@ -379,45 +379,6 @@
 	document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
 	
 	//IFrame functionality
-
-	//Scripts to run after the page has loaded into the iframe
-	$sgViewport.load(function (){
-		
-		
-		var $sgSrc = $sgViewport.attr('src'),
-			$vp = $sgViewport.contents(),
-			$sgPattern = $vp.find('.sg-pattern-body');
-		
-		//Code View Trigger
-		$('#sg-t-code').click(function(e){
-			var $code = $vp.find('.sg-code');
-			e.preventDefault();
-			$(this).toggleClass('active');
-			
-			if($vp.find('.sg-code').length==0) {
-				buildCodeView();
-			} else {
-				$code.toggle();
-			}
-		});
-		
-		//Add code blocks after each pattern
-		function buildCodeView() {
-			$sgPattern.each(function(index) {
-				$this = $(this),
-				$thisHTML = $this.html().replace(/[<>]/g, function(m) { return {'<':'&lt;','>':'&gt;'}[m]}),
-				$codeWrapper = $('<div class="sg-code"><div class="sg-code-contains">This pattern contains: <code>atoms-logo</code> <code>molecule-primary-nav</code> <code>molecule-search-form</code></div><h3 class="sg-code-head">HTML</h3><pre class="sg-code-html"></pre><h3 class="sg-code-head">CSS</h3><pre class="sg-code-css"></pre></div>'), //Wrapper content for each pattern
-				$htmlCode = $( '<code></code>' ).html($thisHTML), //The pattern's HTML code
-				$cssCode = $( '<code></code>' ).html('CSS goes here'); //The pattern's CSS code
-				
-				$codeWrapper.find('.sg-code-html').html($htmlCode); //Add pattern's HTML code to the HTML code container
-				$codeWrapper.find('.sg-code-css').html($cssCode); //Add pattern's CSS code to the CSS code container
-				$codeWrapper.appendTo($this); //Add code wrapper to the end of the pattern
-			});
-			$vp.find('.sg-code').show(); //Show all code views in the viewport
-		}
-		
-	});
 	
 })(this);
 

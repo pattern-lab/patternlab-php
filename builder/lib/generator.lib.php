@@ -25,8 +25,32 @@ class Generatr extends Buildr {
 	
 	/**
 	* Pulls together a bunch of functions from builder.lib.php in an order that makes sense
+	* @param  {Boolean}       decide if CSS should be parsed and saved. performance hog.
 	*/
-	public function generate() {
+	public function generate($enableCSS = false) {
+		
+		$timePL = true; // track how long it takes to generate a PL site
+		
+		if ($timePL) {
+			$mtime = microtime(); 
+			$mtime = explode(" ",$mtime); 
+			$mtime = $mtime[1] + $mtime[0]; 
+			$starttime = $mtime;
+		}
+		
+		if ($enableCSS) {
+			
+			// enable CSS globally throughout PL
+			$this->enableCSS = true;
+			
+			// initialize CSS rule saver
+			$this->initializeCSSRuleSaver();
+			
+			print "CSS generation enabled. This could take a few seconds...\n";
+			
+		}
+		
+		
 		
 		// clean the public directory to remove old files
 		$this->cleanPublic();
@@ -86,6 +110,15 @@ class Generatr extends Buildr {
 		
 		// update the change time so the auto-reload will fire (doesn't work for the index and style guide)
 		$this->updateChangeTime();
+		
+		if ($timePL) {
+			$mtime = microtime(); 
+			$mtime = explode(" ",$mtime); 
+			$mtime = $mtime[1] + $mtime[0]; 
+			$endtime = $mtime; 
+			$totaltime = ($endtime - $starttime); 
+			print "PL Site Generation took ".$totaltime." seconds\n";
+		}
 		
 	}
 	
