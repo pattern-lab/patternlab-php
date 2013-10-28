@@ -50,7 +50,7 @@ var annotationsPattern = {
 									
 									// if an element was clicked on while the overlay was already on swap it
 									obj = { "commentOverlay": "on", "swapOverlay": true, "el": item.el, "title": item.title, "comment": item.comment };
-								
+									
 								}
 								
 							}
@@ -178,8 +178,8 @@ var annotationsPattern = {
 				for (comment in comments.comments) {
 					var item = comments.comments[comment];
 					var els  = document.querySelectorAll(item.el);
-					for (var i = 0; i < els.length; ++i) {
-						annotationsPattern.embedComments(els[i],item.title,item.comment);
+					if (els.length > 0) {
+						annotationsPattern.embedComments(els[0],item.title,item.comment);
 					}
 					annotationsPattern.commentsEmbedded = true;
 				}
