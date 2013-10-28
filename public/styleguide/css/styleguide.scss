@@ -250,16 +250,6 @@ $animate-quick: 0.2s;
 	}
 }
 
-.sg-nav-Pages {
-	ol {
-		width: 24em;
-	}
-	li {
-		float: left; 
-		width: 50%;
-	}
-} 
-
 /* Accordion */
 .sg-acc-handle {
 	&:after {
@@ -596,7 +586,6 @@ $animate-quick: 0.2s;
 /* Section Pattern */
 .sg-pattern {
 	margin-bottom: $sg-doublespace;
-	padding: 0 $sg-pad;
 	overflow: hidden;
 }
 

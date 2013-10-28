@@ -157,12 +157,6 @@
         top: 2em;
         left: 0; } }
 
-.sg-nav-Pages ol {
-  width: 24em; }
-.sg-nav-Pages li {
-  float: left;
-  width: 50%; }
-
 /* Accordion */
 .sg-acc-handle:after {
   content: ' +';
@@ -404,7 +398,6 @@
 /* Section Pattern */
 .sg-pattern {
   margin-bottom: 2em;
-  padding: 0 1em;
   overflow: hidden; }
 
 /* Section Head */
