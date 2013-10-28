@@ -29,6 +29,15 @@ class Generatr extends Buildr {
 	*/
 	public function generate($enableCSS = false) {
 		
+		$timePL = true; // track how long it takes to generate a PL site
+		
+		if ($timePL) {
+			$mtime = microtime(); 
+			$mtime = explode(" ",$mtime); 
+			$mtime = $mtime[1] + $mtime[0]; 
+			$starttime = $mtime;
+		}
+		
 		if ($enableCSS) {
 			
 			// enable CSS globally throughout PL
@@ -101,6 +110,15 @@ class Generatr extends Buildr {
 		
 		// update the change time so the auto-reload will fire (doesn't work for the index and style guide)
 		$this->updateChangeTime();
+		
+		if ($timePL) {
+			$mtime = microtime(); 
+			$mtime = explode(" ",$mtime); 
+			$mtime = $mtime[1] + $mtime[0]; 
+			$endtime = $mtime; 
+			$totaltime = ($endtime - $starttime); 
+			print "PL Site Generation took ".$totaltime." seconds\n";
+		}
 		
 	}
 	
