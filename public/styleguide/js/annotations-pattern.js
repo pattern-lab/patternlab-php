@@ -21,7 +21,7 @@ var annotationsPattern = {
 		
 		// make sure this only added when we're on a pattern specific view
 		var body = document.getElementsByTagName("body");
-		if (!body[0].classList.contains("pattern-list")) {
+		if (!body[0].classList.contains("sg-pattern-list")) {
 			for (comment in comments.comments) {
 				var item = comments.comments[comment];
 				var els  = document.querySelectorAll(item.el);
@@ -139,7 +139,7 @@ var annotationsPattern = {
 			
 			// see which flag to toggle based on if this is a styleguide or view-all page
 			var body = document.getElementsByTagName("body");
-			if ((event.data.commentToggle == "on") && (body[0].classList.contains("pattern-list"))) {
+			if ((event.data.commentToggle == "on") && (body[0].classList.contains("sg-pattern-list"))) {
 				annotationsPattern.commentsEmbeddedActive = true;
 			} else if (event.data.commentToggle == "on") {
 				annotationsPattern.commentsOverlayActive  = true;
