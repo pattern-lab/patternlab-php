@@ -58,7 +58,7 @@ var annotationsViewer = {
 		}
 		
 		$('body').delegate('#sg-annotation-close-btn','click',function(e) {
-			annotationsViewer.slideComment($('#sg-annotation-containers').outerHeight());
+			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			return false;
 		});
 		
