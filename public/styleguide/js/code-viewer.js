@@ -8,7 +8,7 @@
 
 var codeViewer = {
 	
-	codeActive: false,
+	codeActive:     false,
 	sw:             document.documentElement.clientWidth,
 	breakpoint:     650,
 	
@@ -88,13 +88,13 @@ var codeViewer = {
 	updateCode: function(lineage,html,css) {
 			
 			// draw lineage
-			if (lineage != null) {
+			if (lineage.length != 0) {
 				$("#sg-code-lineage").css("display","block");
 				var i = 0;
 				var lineageList = "";
 				for (pattern in lineage) {
 					lineageList += (i == 0) ? "" : ", ";
-					lineageList += "<a href='#'>"+lineage[pattern]+"</a>";
+					lineageList += "<a href='"+lineage[pattern]["lineagePath"]+"'>"+lineage[pattern]["lineagePattern"]+"</a>";
 					i++;
 				}
 				$("#sg-code-lineage-fill").html(lineageList);
