@@ -65,6 +65,9 @@ class Buildr {
 		// generate patternTypes as well as patternPaths
 		$this->gatherPatternPaths();
 		
+		// generate patternLineages
+		$this->gatherLineages();
+		
 		// get nav items
 		$this->gatherNavItems();
 		
@@ -359,7 +362,38 @@ class Buildr {
 			
 		}
 		
-	}	
+	}
+	
+	/**
+	* Finds the Lineages for the patterns
+	*
+	* @return {Array}        an array of patterns with their lineages
+	*/
+	protected function gatherLineages() {
+		$this->patternLineages = array();
+		
+		foreach($this->patternPaths as $patternType => $patterns) {
+			
+			foreach ($patterns as $pattern => $filename) {
+				
+				$patternLineage = array();
+				$foundLineages  = $this->getLineage($filename);
+				
+				if (count($foundLineages) > 0) {
+					foreach ($foundLineages as $lineage) {
+						$patternBits  = explode("-",$lineage,2); // BUG: this is making an assumption
+						$path = str_replace("/","-",$this->patternPaths[$patternBits[0]][$patternBits[1]]);
+						$patternLineage[] = array("lineagePattern" => $lineage, "lineagePath" => "../../patterns/".$path."/".$path.".html");
+					}
+				}
+				
+				$this->patternLineages[$patternType."-".$pattern] = $patternLineage;
+				
+			}
+			
+		}
+		
+	}
 	
 	/**
 	* Finds Media Queries in CSS files in the source/css/ dir
@@ -514,13 +548,13 @@ class Buildr {
 	*
 	* @return {Array}        populates $this->patternPaths
 	* @return {Array}        populates $this->patternTypes
+	* @return {Array}        populates $this->patternLineages
 	*/
 	protected function gatherPatternPaths() {
 		
 		// set-up vars
 		$this->patternPaths    = array();
 		$this->patternTypes    = array();
-		$this->patternLineages = array();
 		
 		// get the pattern types
 		foreach(glob(__DIR__.$this->sp."/*",GLOB_ONLYDIR) as $patternType) {
@@ -542,7 +576,6 @@ class Buildr {
 				$pattern = $this->getPatternName($matches[1], false);
 				if (($pattern[0] != "_") && (!isset($patternTypePaths[$pattern]))) {
 					$patternTypePaths[$pattern] = $this->getPath($filename);
-					$this->patternLineages[$patternTypeClean."-".$pattern] = $this->getLineage($filename);
 				}
 			}
 			
@@ -552,7 +585,6 @@ class Buildr {
 				$pattern = $this->getPatternName($matches[1], false);
 				if (($pattern[0] != "_") && (!isset($patternTypePaths[$pattern]))) {
 					$patternTypePaths[$pattern] = $this->getPath($filename);
-					$this->patternLineages[$patternTypeClean."-".$pattern] = $this->getLineage($filename);
 				}
 			}
 			
@@ -601,7 +633,7 @@ class Buildr {
 						                         "patternPartial" => $patternCode,
 						                         "patternCSS" => $patternCSS,
 						                         "patternLineageExists" => $patternLineageExists,
-						                         "patternLineages" => $this->patternLineages[$patternPartial],
+						                         "patternLineages" => $patternLineages,
 						                         "patternCSSExists" => $patternCSSExists,
 						                         "patternCSS" => $patternCSS
 						                        );
@@ -648,10 +680,12 @@ class Buildr {
 				$patternLink          = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
 				$patternCode          = $this->renderPattern($path.".mustache");
 				$patternPartial       = $this->getPatternPartial($path);
-				$patternLineageExists = (count($this->patternLineages[$patternPartial]) > 0) ? true : false;
 				$patternLineages      = $this->patternLineages[$patternPartial];
+				$patternLineageExists = (count($patternLineages) > 0) ? true : false;
 				$patternCSSExists     = $this->enableCSS;
 				$patternCSS           = ($this->enableCSS) ? $this->patternCSS[$patternPartial] : "";
+				
+				print $patternName.": ".count($patternLineages)."\n";
 				
 				$p["partials"][] = array("patternName" => ucwords($patternName), 
 				                         "patternLink" => $patternLink, 
@@ -659,7 +693,7 @@ class Buildr {
 				                         "patternPartial" => $patternCode,
 				                         "patternCSS" => $patternCSS,
 				                         "patternLineageExists" => $patternLineageExists,
-				                         "patternLineages" => $this->patternLineages[$patternPartial],
+				                         "patternLineages" => $patternLineages,
 				                         "patternCSSExists" => $patternCSSExists,
 				                         "patternCSS" => $patternCSS
 				                        );
@@ -679,10 +713,11 @@ class Buildr {
 	* @return {Array}        a list of patterns
 	*/
 	protected function getLineage($filename) {
-		$data = file_get_contents($filename);
+		$data = file_get_contents(__DIR__.$this->sp.$filename.".mustache");
 		if (preg_match_all('/{{>([ ]+)?([A-Za-z0-9-]+)([ ]+)?}}/',$data,$matches)) {
 			return $matches[2];
 		}
+		return array();
 	}
 	
 	/**
