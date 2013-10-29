@@ -94,10 +94,16 @@ var codeViewer = {
 				var lineageList = "";
 				for (pattern in lineage) {
 					lineageList += (i == 0) ? "" : ", ";
-					lineageList += "<a href='"+lineage[pattern]["lineagePath"]+"'>"+lineage[pattern]["lineagePattern"]+"</a>";
+					lineageList += "<a href='"+lineage[pattern]["lineagePath"]+"' data-patternPartial='"+lineage[pattern]["lineagePattern"]+"'>"+lineage[pattern]["lineagePattern"]+"</a>";
 					i++;
 				}
+				
 				$("#sg-code-lineage-fill").html(lineageList);
+				
+				$('#sg-code-lineage-fill a').on("click", function(e){
+					e.preventDefault;
+					document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+				});
 			}
 			
 			// draw html
