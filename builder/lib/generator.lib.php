@@ -117,7 +117,7 @@ class Generatr extends Buildr {
 			$mtime = $mtime[1] + $mtime[0]; 
 			$endtime = $mtime; 
 			$totaltime = ($endtime - $starttime); 
-			print "PL Site Generation took ".$totaltime." seconds\n";
+			print "PL site generation took ".$totaltime." seconds...\n";
 		}
 		
 	}
