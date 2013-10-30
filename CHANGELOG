@@ -14,6 +14,9 @@ PL-v0.6.0 (in progress)
  - FIX: the checkboxes for the websocket-based features, page follow & auto-reload, now work
  - FIX: postmessage calls now centralized and refactored
  - FIX: units appear in the toolbar when using Hay! mode
+ - FIX: patterns shouldn't be cached
+ - THX: thanks to @benedfit for the MQ idea which he originally named "phases"
+ - THX: thanks to @alienlebarge for the "clean public/" idea
 
 PL-v0.3.5
  - ADD: an explicit MIT license
