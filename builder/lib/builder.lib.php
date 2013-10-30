@@ -685,8 +685,6 @@ class Buildr {
 				$patternCSSExists     = $this->enableCSS;
 				$patternCSS           = ($this->enableCSS) ? $this->patternCSS[$patternPartial] : "";
 				
-				print $patternName.": ".count($patternLineages)."\n";
-				
 				$p["partials"][] = array("patternName" => ucwords($patternName), 
 				                         "patternLink" => $patternLink, 
 				                         "patternPartialPath" => str_replace(" ","-",$patternTypeClean)."-".str_replace(" ","-",$patternName), 
