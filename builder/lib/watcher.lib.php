@@ -198,6 +198,9 @@ class Watchr extends Buildr {
 			unset($this->msf);
 			if (gc_enabled()) gc_collect_cycles();
 			
+			// pause for .05 seconds to give the CPU a rest
+			usleep(50000);
+			
 		}
 		
 	}
