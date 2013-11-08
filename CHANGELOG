@@ -1,5 +1,9 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.3.6
+ - FIX: added a delay to the watcher so the CPU doesn't get maxed
+ - THX: thanks to martin berglund for the heads up
+
 PL-v0.3.5
  - ADD: an explicit MIT license
  - FIX: updated .gitignore so that it's more flexible
