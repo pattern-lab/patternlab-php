@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Watcher Class - v0.3.5
+ * Pattern Lab Watcher Class - v0.3.6
  *
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -209,6 +209,9 @@ class Watchr extends Buildr {
 			unset($this->mpl);
 			unset($this->msf);
 			if (gc_enabled()) gc_collect_cycles();
+			
+			// pause for .05 seconds to give the CPU a rest
+			usleep(50000);
 			
 		}
 		

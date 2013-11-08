@@ -18,6 +18,10 @@ PL-v0.6.0 (in progress)
  - THX: thanks to @benedfit for the MQ idea which he originally named "phases"
  - THX: thanks to @alienlebarge for the "clean public/" idea
 
+PL-v0.3.6
+ - FIX: added a delay to the watcher so the CPU doesn't get maxed
+ - THX: thanks to martin berglund for the heads up
+
 PL-v0.3.5
  - ADD: an explicit MIT license
  - FIX: updated .gitignore so that it's more flexible
