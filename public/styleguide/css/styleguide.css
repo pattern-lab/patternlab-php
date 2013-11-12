@@ -529,7 +529,7 @@
   padding: 1em; }
 
 /* Annotations */
-#sg-annotation-container {
+#sg-annotation-container, #sg-code-container {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -550,10 +550,10 @@
   -ms-transition: bottom 0.3s ease-out;
   -o-transition: bottom 0.3s ease-out;
   transition: bottom 0.3s ease-out; }
-  #sg-annotation-container a {
+  #sg-annotation-container a, #sg-code-container a {
     color: #dddddd; }
 
-#sg-annotation-close-btn {
+#sg-annotation-close-btn, #sg-code-close-btn {
   color: #fff;
   position: absolute;
   top: 1em;

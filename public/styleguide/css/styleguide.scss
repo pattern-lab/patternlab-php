@@ -767,7 +767,7 @@ $animate-quick: 0.2s;
 
 
 /* Annotations */
-#sg-annotation-container {
+#sg-annotation-container, #sg-code-container {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
@@ -794,7 +794,7 @@ $animate-quick: 0.2s;
     }
 }
 
-#sg-annotation-close-btn {
+#sg-annotation-close-btn, #sg-code-close-btn {
 	color: #fff;
 	position: absolute;
 	top: 1em;
@@ -807,7 +807,6 @@ $animate-quick: 0.2s;
 .has-comment, .has-comment a {
 	cursor: help !important;
 }
-
 
 // Icon Font
 
