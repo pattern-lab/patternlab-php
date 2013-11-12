@@ -49,15 +49,11 @@
 /*------------------------------------*\
     $STYLE GUIDE INTERFACE 
 \*------------------------------------*/
-html, body {
+#patternlab-html, #patternlab-body {
   margin: 0;
   padding: 0;
   background: #dddddd;
   -webkit-text-size-adjust: 100%; }
-
-html#pattern-frame {
-  background: #ffffff;
-}
 
 .sg-nav-wrapper {
   overflow: hidden;
@@ -160,12 +156,6 @@ html#pattern-frame {
         position: absolute;
         top: 2em;
         left: 0; } }
-
-.sg-nav-Pages ol {
-  width: 24em; }
-.sg-nav-Pages li {
-  float: left;
-  width: 50%; }
 
 /* Accordion */
 .sg-acc-handle:after {
@@ -285,7 +275,7 @@ html#pattern-frame {
       position: static;
       max-height: none;
       max-width: none; }
-      .sg-size-options li {
+      .sg-size-options > li {
         float: left;
         border: 0;
         border-left: 1px solid rgba(255, 255, 255, 0.05); } }
@@ -298,7 +288,7 @@ html#pattern-frame {
 .sg-input {
   margin: -2px 0 0 0;
   padding: 0;
-  border: 1px solid #222222;
+  border: 1px solid #222;
   background-color: #222;
   color: gray;
   width: 35px;
@@ -405,35 +395,26 @@ html#pattern-frame {
 /*------------------------------------*\
     $STYLE GUIDE CONTENT 
 \*------------------------------------*/
+/* Section Pattern */
+.sg-pattern {
+  margin-bottom: 2em;
+  overflow: hidden; }
+
 /* Section Head */
-.sg-head {
+.sg-pattern-head {
   margin: 2em 0;
   font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
   font-size: 70%;
   font-weight: normal;
-  padding: 1em 0; }
-  .sg-head a {
+  padding: 1em 0;
+  border-bottom: 1px solid gray; }
+  .sg-pattern-head a {
     display: block;
-    border-bottom: 1px solid #222222;
-    color: #222;
-    text-decoration: none; }
-    .sg-head a:hover {
-      color: gray;
-      border-bottom-color: gray; }
-
-/* Section Pattern */
-.sg-pattern {
-  margin-bottom: 2em;
-  padding: 0 1em;
-  overflow: hidden; }
-
-/* Section Sub-head */
-.sg-sub a:link {
-  color: gray;
-  border-bottom-color: gray; }
-  .sg-sub a:link:hover {
-    color: #222222;
-    border-bottom-color: #222222; }
+    color: gray;
+    text-decoration: none;
+    cursor: pointer; }
+    .sg-pattern-head a:hover {
+      color: #222222; }
 
 /* Clean View */
 .sg-clean .sg-main {
@@ -443,15 +424,34 @@ html#pattern-frame {
   clear: both;
   background: #dddddd;
   color: #222222;
-  padding: 1em;
+  padding: 1em 0.5em;
   margin: 1em 0; }
+  .sg-code a, .sg-annotations a {
+    text-decoration: underline; }
 
-.sg-code {
-  white-space: -moz-pre-wrap;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
+.sg-code pre {
+  white-space: -moz-pre-line;
+  white-space: -pre-line;
+  white-space: -o-pre-line;
   word-wrap: break-word;
-  white-space: pre-wrap; }
+  white-space: pre-line;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.5em; }
+
+.sg-code-contains {
+  margin-bottom: 1rem;
+  font-size: 85%;
+  color: gray; }
+  .sg-code-contains code {
+    padding: 0.2em;
+    background: rgba(0, 0, 0, 0.3);
+    color: #f7f7f7;
+    position: relative;
+    top: -2px; }
+
+.sg-code-head {
+  color: gray;
+  font-size: 1em; }
 
 .demo {
   overflow: hidden;
@@ -520,14 +520,50 @@ html#pattern-frame {
 .sg-label {
   line-height: 1; }
 
-#comment-container {
+#sg-annotation-container {
   position: fixed;
   bottom: 0;
   left: 0;
   z-index: 99;
   width: 100%;
-  padding: 1em;
-  background: red; }
+  padding: 1em; }
+
+/* Annotations */
+#sg-annotation-container, #sg-code-container {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+  font-size: 90%;
+  background: #222222;
+  color: gray;
+  position: fixed;
+  top: auto;
+  padding: 1rem 1rem 4rem;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  -webkit-transition: bottom 0.3s ease-out;
+  -moz-transition: bottom 0.3s ease-out;
+  -webkit-transition: bottom 0.3s ease-out;
+  -ms-transition: bottom 0.3s ease-out;
+  -o-transition: bottom 0.3s ease-out;
+  transition: bottom 0.3s ease-out; }
+  #sg-annotation-container a, #sg-code-container a {
+    color: #dddddd; }
+
+#sg-annotation-close-btn, #sg-code-close-btn {
+  color: #fff;
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: right; }
+
+.has-comment, .has-comment a {
+  cursor: help !important; }
 
 @font-face {
   font-family: 'icons';
@@ -536,12 +572,7 @@ html#pattern-frame {
   font-weight: normal;
   font-style: normal; }
 
-/* Use the following CSS code if you want to have a class per icon */
-/*
-Instead of a list of all class selectors,
-you can use the generic selector below, but it's slower:
-[class*="icon-"] {
-*/
+/* Pattern Lab icon fonts */
 .icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .sg-header .sg-nav-toggle, .icon-checkbox-unchecked, .sg-checkbox, .icon-checkbox-checked, .sg-checkbox.active, .icon-eye {
   font-family: 'icons';
   speak: none;

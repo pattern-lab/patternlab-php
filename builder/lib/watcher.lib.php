@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Watcher Class - v0.3.6
+ * Pattern Lab Watcher Class - v0.6.0
  *
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -140,9 +140,15 @@ class Watchr extends Buildr {
 				
 				if (!isset($o->$fileName)) {
 					$o->$fileName = $mt;
+					if (($fileName[0] != "_") && $object->isFile()) {
+						$this->moveStaticFile("_data/".$fileName,"","_data","data");
+					}
 				} else if ($o->$fileName != $mt) {
 					$o->$fileName = $mt;
 					$this->updateSite($fileName,"changed");
+					if (($fileName[0] != "_") && $object->isFile()) {
+						$this->moveStaticFile("_data/".$fileName,"","_data","data");
+					}
 				}
 				
 			}
@@ -176,9 +182,15 @@ class Watchr extends Buildr {
 						if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists(__DIR__."/../../public/".$fileName)) {
 							$o->$fileName = $mt;
 							$this->moveStaticFile($fileName,"added");
+							if ($object->getExtension() == "css") {
+								$this->updateSite($fileName,"changed",0); // make sure the site is updated for MQ reasons
+							}
 						} else if (!$ignoreDir && $object->isFile() && isset($o->$fileName) && ($o->$fileName != $mt)) {
 							$o->$fileName = $mt;
 							$this->moveStaticFile($fileName,"changed");
+							if ($object->getExtension() == "css") {
+								$this->updateSite($fileName,"changed",0); // make sure the site is updated for MQ reasons
+							}
 						} else if (!isset($o->fileName)) {
 							$o->$fileName = $mt;
 						}
@@ -212,7 +224,7 @@ class Watchr extends Buildr {
 	*
 	* @return {String}       the final message
 	*/
-	private function updateSite($fileName,$message) {
+	private function updateSite($fileName,$message,$verbose = true) {
 		$this->gatherData();
 		$this->gatherPatternPaths();
 		$this->gatherNavItems();
@@ -220,14 +232,16 @@ class Watchr extends Buildr {
 		$this->generateViewAllPages();
 		$this->updateChangeTime();
 		$this->generateMainPages();
-		if ($message == "added") {
-			print $fileName." was added to Pattern Lab. Reload the website to see this change in the navigation...\n";
-		} elseif ($message == "removed") {
-			print $fileName." was removed from Pattern Lab. Reload the website to see this change reflected in the navigation...\n";
-		} elseif ($message == "hidden") {
-			print $fileName." was hidden from Pattern Lab. Reload the website to see this change reflected in the navigation...\n";
-		} else {
-			print $fileName." changed...\n";
+		if ($verbose) {
+			if ($message == "added") {
+				print $fileName." was added to Pattern Lab. Reload the website to see this change in the navigation...\n";
+			} elseif ($message == "removed") {
+				print $fileName." was removed from Pattern Lab. Reload the website to see this change reflected in the navigation...\n";
+			} elseif ($message == "hidden") {
+				print $fileName." was hidden from Pattern Lab. Reload the website to see this change reflected in the navigation...\n";
+			} else {
+				print $fileName." changed...\n";
+			}
 		}
 	}
 	

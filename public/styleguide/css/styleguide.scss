@@ -67,7 +67,7 @@ $sg-font-size-large : 120%;
 $sg-space : 1em;
 $sg-doublespace : $sg-space*2;
 $sg-pad : 1em;
-$sg-halfpad : $sg-pad/2;
+$sg-pad-half : $sg-pad/2;
 
 /* Dimensions */
 $offset-top: 2em;
@@ -105,15 +105,11 @@ $animate-quick: 0.2s;
     $STYLE GUIDE INTERFACE 
 \*------------------------------------*/
 
-html, body {
+#patternlab-html, #patternlab-body {
 	margin: 0;
 	padding: 0;
 	background: $sg-tertiary;
 	-webkit-text-size-adjust: 100%;
-}
-
-html#pattern-frame {
-	background: #fff;
 }
 
 .sg-nav-wrapper {
@@ -154,7 +150,7 @@ html#pattern-frame {
 	box-shadow: inset 0 1px 0 #5f6164,inset 0 -1px 0 #2e2f2f,0 1px 3px rgba(0,0,0,0.3);
 
 	* {
-		-moz-box-sizing: border-box;
+	  -moz-box-sizing: border-box;
 	  -webkit-box-sizing: border-box;
 	  box-sizing: border-box;
 	}
@@ -191,7 +187,7 @@ html#pattern-frame {
           ol{
             li{
               //3rd level nav item
-							a{
+							a {
 								padding-left: 2em;
 								text-transform: none;
 							}
@@ -253,16 +249,6 @@ html#pattern-frame {
 		}
 	}
 }
-
-.sg-nav-Pages {
-	ol {
-		width: 24em;
-	}
-	li {
-		float: left; 
-		width: 50%;
-	}
-} 
 
 /* Accordion */
 .sg-acc-handle {
@@ -432,7 +418,7 @@ html#pattern-frame {
 		max-height: none;
 		max-width: none;
 
-		li {
+		> li {
 			float: left;
 			border: 0;
 			border-left: 1px solid $sg-tint;
@@ -597,41 +583,30 @@ html#pattern-frame {
     $STYLE GUIDE CONTENT 
 \*------------------------------------*/
 
+/* Section Pattern */
+.sg-pattern {
+	margin-bottom: $sg-doublespace;
+	overflow: hidden;
+}
+
 /* Section Head */
-.sg-head {
+.sg-pattern-head {
 	margin: $sg-doublespace 0;
 	font-family: $sg-font;
 	font-size: $sg-font-size-sm;
 	font-weight: normal;
 	padding: $sg-pad 0;
+	border-bottom: 1px solid $sg-secondary;
 
 	a {
 		display: block;
-		border-bottom: 1px solid $sg-primary;
-		color: #222;
+		color: $sg-secondary;
 		text-decoration: none;
+		cursor: pointer;
 		
 		&:hover {
-			color: $sg-secondary;
-			border-bottom-color: $sg-secondary;
+			color: $sg-primary;
 		}
-	}
-}
-
-/* Section Pattern */
-.sg-pattern {
-	margin-bottom: $sg-doublespace;
-	padding: 0 $sg-pad;
-	overflow: hidden;
-}
-
-/* Section Sub-head */
-.sg-sub a:link {
-	color: $sg-secondary;
-	border-bottom-color: $sg-secondary;
-	&:hover {
-		color: $sg-primary;
-		border-bottom-color: $sg-primary;
 	}
 }
 
@@ -646,16 +621,43 @@ html#pattern-frame {
 	clear: both;
 	background: $sg-tertiary;
 	color: $sg-primary;
-	padding: $sg-pad;
+	padding: $sg-pad $sg-pad-half;
 	margin: $sg-space 0;
+
+	a {
+		text-decoration: underline;
+	}
 }
 
 .sg-code {
-	white-space: -moz-pre-wrap;
-	white-space: -pre-wrap;
-	white-space: -o-pre-wrap;
-	word-wrap: break-word; 
-	white-space: pre-wrap;
+	pre {
+		white-space: -moz-pre-line;
+		white-space: -pre-line;
+		white-space: -o-pre-line;
+		word-wrap: break-word; 
+		white-space: pre-line;
+		border: 1px solid $sg-tone;
+		padding: $sg-pad-half;
+	}
+}
+
+.sg-code-contains {
+	margin-bottom: 1rem;
+	font-size: 85%;
+	color: $sg-secondary;
+
+	code {
+		padding: 0.2em;
+		background: $sg-tone-2;
+		color: $sg-quinary;
+		position: relative;
+		top: -2px;
+	}
+}
+
+.sg-code-head {
+	color: $sg-secondary;
+	font-size: 1em;
 }
 
 // Demo to show grid system - in this stylesheet because it shouldn't be included in the production styles
@@ -667,7 +669,7 @@ html#pattern-frame {
 	background: $sg-tertiary;
 	color: $sg-secondary;
 	text-align: center;
-	margin-bottom: $sg-halfpad;
+	margin-bottom: $sg-pad-half;
 	padding: 1em !important;
 	
 	&:nth-of-type(2n) {
@@ -754,14 +756,56 @@ html#pattern-frame {
 }
 
 //Annotation
-#comment-container {
+#sg-annotation-container {
 	position: fixed;
 	bottom: 0;
 	left: 0;
 	z-index: 99;
 	width: 100%;
 	padding: $sg-pad;
-	background: red;
+}
+
+
+/* Annotations */
+#sg-annotation-container, #sg-code-container {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	font-family: $sg-font;
+	font-size: 90%;
+	background: $sg-primary;
+	color: $sg-secondary;
+	position: fixed;
+	top: auto;
+	padding: 1rem 1rem 4rem;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	z-index: 2;
+	-webkit-transition: bottom 0.3s ease-out;
+	-moz-transition: bottom 0.3s ease-out;
+  	-webkit-transition: bottom 0.3s ease-out;
+  	-ms-transition: bottom 0.3s ease-out; 
+  	-o-transition: bottom 0.3s ease-out; 
+  	transition:  bottom 0.3s ease-out;
+
+  	a {
+    	color: $sg-tertiary;
+    }
+}
+
+#sg-annotation-close-btn, #sg-code-close-btn {
+	color: #fff;
+	position: absolute;
+	top: 1em;
+	right: 1em;
+	text-transform: uppercase;
+	text-decoration: none;
+	text-align: right;
+}
+
+.has-comment, .has-comment a {
+	cursor: help !important;
 }
 
 // Icon Font
@@ -777,12 +821,7 @@ html#pattern-frame {
 	font-style: normal;
 }
 
-/* Use the following CSS code if you want to have a class per icon */
-/*
-Instead of a list of all class selectors,
-you can use the generic selector below, but it's slower:
-[class*="icon-"] {
-*/
+/* Pattern Lab icon fonts */
 .icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-checkbox-unchecked, .icon-checkbox-checked, .icon-eye {
 	font-family: 'icons';
 	speak: none;

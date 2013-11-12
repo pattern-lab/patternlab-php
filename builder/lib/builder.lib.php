@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Builder Class - v0.3.6
+ * Pattern Lab Builder Class - v0.6.0
  *
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -24,9 +24,13 @@ class Buildr {
 	protected $navSyncPort;       // for populating the websockets template partial
 	protected $patternTypes;      // a list of pattern types that match the directory structure
 	protected $patternPaths;      // the paths to patterns for use with mustache partials
+	protected $patternLineages;   // the list of patterns that make up a particular pattern
 	protected $patternTypesRegex; // the simple regex for the pattern types. used in getPath()
 	protected $navItems;          // the items for the nav. includes view all links
 	protected $viewAllPaths;      // the paths to the view all pages
+	protected $enableCSS;         // decide if we'll enable CSS parsing
+	protected $patternCSS;        // an array to hold the CSS generated for patterns
+	protected $cssRuleSaver;      // where css rule saver will be initialized
 	
 	/**
 	* When initializing the Builder class or the sub-classes make sure the base properties are configured
@@ -61,8 +65,15 @@ class Buildr {
 		// generate patternTypes as well as patternPaths
 		$this->gatherPatternPaths();
 		
+		// generate patternLineages
+		$this->gatherLineages();
+		
 		// get nav items
 		$this->gatherNavItems();
+		
+		// provide the default for enable CSS. performance hog so it should be run infrequently
+		$this->enableCSS  = false;
+		$this->patternCSS = array();
 		
 	}
 	
@@ -122,6 +133,7 @@ class Buildr {
 		$this->navItems['navsyncport']     = $this->navSyncPort;
 		$this->navItems['patternpaths']    = json_encode($this->patternPaths);
 		$this->navItems['viewallpaths']    = json_encode($this->viewAllPaths);
+		$this->navItems['mqs']             = $this->gatherMQs();
 		
 		// grab the partials into a data object for the style guide
 		$sd = $this->gatherPartials();
@@ -177,11 +189,27 @@ class Buildr {
 	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
 	*/
 	private function generatePatternFile($f) {
+		
 		$hr = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
 		$rf = $this->renderPattern($f);
 		$fr = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
-		$fr = str_replace("{{ patternPartial }}",$this->getPatternPartial($f),$fr);
+		
+		// the footer isn't rendered as mustache but we have some variables there any way. find & replace.
+		$pp = $this->getPatternPartial($f);
+		$fr = str_replace("{{ patternPartial }}",$pp,$fr);
+		$fr = str_replace("{{ lineage }}",json_encode($this->patternLineages[$pp]),$fr);
+		$fr = str_replace("{{ patternHTML }}",$rf,$fr);
+		
+		// set-up the mark-up for CSS Rule Saver so it can figure out which rules to save
+		if ($this->enableCSS) {
+			$this->cssRuleSaver->loadHTML($rf,false);
+			$patternCSS = $this->cssRuleSaver->saveRules();
+			$this->patternCSS[$pp] = $patternCSS;
+			$fr = str_replace("{{ patternCSS }}",$patternCSS,$fr);
+		}
+		
 		return $hr."\n".$rf."\n".$fr;
+		
 	}
 	
 	/**
@@ -246,7 +274,7 @@ class Buildr {
 	}
 	
 	/**
-	* Gather data from source/_data/data.json, source/_data/listitems.json, and pattern-specific json files
+	* Gather data from source/_data/_data.json, source/_data/_listitems.json, and pattern-specific json files
 	*
 	* Reserved attributes: 
 	*    - $this->d->listItems : listItems from listitems.json, duplicated into separate arrays for $this->d->listItems->one, $this->d->listItems->two, $this->d->listItems->three... etc.
@@ -258,14 +286,14 @@ class Buildr {
 	protected function gatherData() {
 		
 		// gather the data from the main source data.json
-		if (file_exists(__DIR__."/../../source/_data/data.json")) {
-			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/_data/data.json")));
+		if (file_exists(__DIR__."/../../source/_data/_data.json")) {
+			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/_data/_data.json")));
 		}
 		
 		// add list item data, makes 'listItems' a reserved word
-		if (file_exists(__DIR__."/../../source/_data/listitems.json")) {
+		if (file_exists(__DIR__."/../../source/_data/_listitems.json")) {
 			
-			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/_data/listitems.json"));
+			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/_data/_listitems.json"));
 			$numbers   = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
 			
 			$i = 0;
@@ -334,7 +362,62 @@ class Buildr {
 			
 		}
 		
-	}	
+	}
+	
+	/**
+	* Finds the Lineages for the patterns
+	*
+	* @return {Array}        an array of patterns with their lineages
+	*/
+	protected function gatherLineages() {
+		$this->patternLineages = array();
+		
+		foreach($this->patternPaths as $patternType => $patterns) {
+			
+			foreach ($patterns as $pattern => $filename) {
+				
+				$patternLineage = array();
+				$foundLineages  = $this->getLineage($filename);
+				
+				if (count($foundLineages) > 0) {
+					foreach ($foundLineages as $lineage) {
+						$patternBits  = explode("-",$lineage,2); // BUG: this is making an assumption
+						$path = str_replace("/","-",$this->patternPaths[$patternBits[0]][$patternBits[1]]);
+						$patternLineage[] = array("lineagePattern" => $lineage, "lineagePath" => "../../patterns/".$path."/".$path.".html");
+					}
+				}
+				
+				$this->patternLineages[$patternType."-".$pattern] = $patternLineage;
+				
+			}
+			
+		}
+		
+	}
+	
+	/**
+	* Finds Media Queries in CSS files in the source/css/ dir
+	*
+	* @return {Array}        an array of the appropriate MQs
+	*/
+	protected function gatherMQs() {
+		
+		$mqs = array();
+		
+		foreach(glob(__DIR__."/../../source/css/*.css") as $filename) {
+			$data    = file_get_contents($filename);
+			preg_match_all("/(min|max)-width:([ ]+)?(([0-9]{1,5})(\.[0-9]{1,20}|)(px|em))/",$data,$matches);
+			foreach ($matches[3] as $match) {
+				if (!in_array($match,$mqs)) {
+					$mqs[] = $match;
+				}
+			}	
+		}
+		
+		sort($mqs);
+		return $mqs;
+		
+	}
 	
 	/**
 	* Gathers the partials for the nav drop down in Pattern Lab
@@ -465,12 +548,13 @@ class Buildr {
 	*
 	* @return {Array}        populates $this->patternPaths
 	* @return {Array}        populates $this->patternTypes
+	* @return {Array}        populates $this->patternLineages
 	*/
 	protected function gatherPatternPaths() {
 		
 		// set-up vars
-		$this->patternPaths = array();
-		$this->patternTypes = array();
+		$this->patternPaths    = array();
+		$this->patternTypes    = array();
 		
 		// get the pattern types
 		foreach(glob(__DIR__.$this->sp."/*",GLOB_ONLYDIR) as $patternType) {
@@ -482,7 +566,9 @@ class Buildr {
 		
 		// find the patterns for the types
 		foreach($this->patternTypes as $patternType) {
+			
 			$patternTypePaths = array();
+			$patternTypeClean = $this->getPatternName($patternType, false);
 			
 			// find pattern paths for pattern subtypes
 			foreach(glob(__DIR__.$this->sp.$patternType."/*/*.mustache") as $filename) {
@@ -502,7 +588,6 @@ class Buildr {
 				}
 			}
 			
-			$patternTypeClean = $this->getPatternName($patternType, false);
 			$this->patternPaths[$patternTypeClean] = $patternTypePaths;
 			
 		}
@@ -532,12 +617,26 @@ class Buildr {
 					if (file_exists(__DIR__."/".$this->sp.$path.".mustache")) {
 						
 						// create the pattern name & link, render the partial, and stick it all into the pattern array
-						$patternParts    = explode("/",$path);
-						$patternName     = $this->getPatternName($patternParts[2]);
-						$patternLink     = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
-						$patternPartial  = $this->renderPattern($path.".mustache");
-						$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartialPath" => $patternType."-".$pattern, "patternPartial" => $patternPartial);
+						$patternParts         = explode("/",$path);
+						$patternName          = $this->getPatternName($patternParts[2]);
+						$patternLink          = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
+						$patternCode          = $this->renderPattern($path.".mustache");
+						$patternPartial       = $this->getPatternPartial($path);
+						$patternLineageExists = (count($this->patternLineages[$patternPartial]) > 0) ? true : false;
+						$patternLineages      = $this->patternLineages[$patternPartial];
+						$patternCSSExists     = $this->enableCSS;
+						$patternCSS           = ($this->enableCSS) ? $this->patternCSS[$patternPartial] : "";
 						
+						$p["partials"][] = array("patternName" => ucwords($patternName), 
+						                         "patternLink" => $patternLink, 
+						                         "patternPartialPath" => $patternType."-".$pattern, 
+						                         "patternPartial" => $patternCode,
+						                         "patternCSS" => $patternCSS,
+						                         "patternLineageExists" => $patternLineageExists,
+						                         "patternLineages" => $patternLineages,
+						                         "patternCSSExists" => $patternCSSExists,
+						                         "patternCSS" => $patternCSS
+						                        );
 					}
 					
 				}
@@ -577,10 +676,25 @@ class Buildr {
 			if ($patternParts[2][0] != "_") {
 				
 				// create the pattern name & link, render the partial, and stick it all into the pattern array
-				$patternName     = $this->getPatternName($patternParts[2]);
-				$patternLink     = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
-				$patternPartial  = $this->renderPattern($path.".mustache");
-				$p["partials"][] = array("patternName" => ucwords($patternName), "patternLink" => $patternLink, "patternPartialPath" => str_replace(" ","-",$patternTypeClean)."-".str_replace(" ","-",$patternName), "patternPartial" => $patternPartial);
+				$patternName          = $this->getPatternName($patternParts[2]);
+				$patternLink          = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
+				$patternCode          = $this->renderPattern($path.".mustache");
+				$patternPartial       = $this->getPatternPartial($path);
+				$patternLineages      = $this->patternLineages[$patternPartial];
+				$patternLineageExists = (count($patternLineages) > 0) ? true : false;
+				$patternCSSExists     = $this->enableCSS;
+				$patternCSS           = ($this->enableCSS) ? $this->patternCSS[$patternPartial] : "";
+				
+				$p["partials"][] = array("patternName" => ucwords($patternName), 
+				                         "patternLink" => $patternLink, 
+				                         "patternPartialPath" => str_replace(" ","-",$patternTypeClean)."-".str_replace(" ","-",$patternName), 
+				                         "patternPartial" => $patternCode,
+				                         "patternCSS" => $patternCSS,
+				                         "patternLineageExists" => $patternLineageExists,
+				                         "patternLineages" => $patternLineages,
+				                         "patternCSSExists" => $patternCSSExists,
+				                         "patternCSS" => $patternCSS
+				                        );
 				
 			}
 			
@@ -588,6 +702,20 @@ class Buildr {
 		
 		return $p;
 		
+	}
+	
+	/**
+	* Get the lineage for a given pattern by parsing it and matching mustache partials
+	* @param  {String}       the filename for the pattern to be parsed
+	*
+	* @return {Array}        a list of patterns
+	*/
+	protected function getLineage($filename) {
+		$data = file_get_contents(__DIR__.$this->sp.$filename.".mustache");
+		if (preg_match_all('/{{>([ ]+)?([A-Za-z0-9-]+)([ ]+)?}}/',$data,$matches)) {
+			return $matches[2];
+		}
+		return array();
 	}
 	
 	/**
@@ -678,6 +806,78 @@ class Buildr {
 	}
 	
 	/**
+	* Delete patterns and user-created directories and files in public/
+	*/
+	protected function cleanPublic() {
+		
+		// find all of the patterns in public/. sort by the children first
+		$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../public/patterns/"), RecursiveIteratorIterator::CHILD_FIRST);
+		
+		// make sure dots are skipped
+		$objects->setFlags(FilesystemIterator::SKIP_DOTS);
+		
+		// for each file figure out what to do with it
+		foreach($objects as $name => $object) {
+			
+			if ($object->isDir()) {
+				// if this is a directory remove it
+				rmdir($name);
+			} else if ($object->isFile() && ($object->getFilename() != "README")) {
+				// if this is a file remove it
+				unlink($name);
+			}
+			
+		}
+		
+		// scan source/ & public/ to figure out what directories might need to be cleaned up
+		$sourceDirs = glob(__DIR__."/../../source/*",GLOB_ONLYDIR);
+		$publicDirs = glob(__DIR__."/../../public/*",GLOB_ONLYDIR);
+		
+		// make sure some directories aren't deleted
+		$ignoreDirs = array("listeners","styleguide");
+		foreach ($ignoreDirs as $ignoreDir) {
+			$key = array_search(__DIR__."/../../public/".$ignoreDir,$publicDirs);
+			if ($key !== false){
+				unset($publicDirs[$key]);
+			}
+		}
+		
+		// compare source dirs against public. remove those dirs w/ an underscore in source/ from the public/ list
+		foreach ($sourceDirs as $sourceDir) {
+			$cleanDir = str_replace(__DIR__."/../../source/","",$sourceDir);
+			if ($cleanDir[0] == "_") {
+				$key = array_search(__DIR__."/../../public/".str_replace("_","",$cleanDir),$publicDirs);
+				if ($key !== false){
+					unset($publicDirs[$key]);
+				}
+			}
+		}
+		
+		// for the remaining dirs in public delete them and their files
+		foreach ($publicDirs as $dir) {
+			
+			$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir), RecursiveIteratorIterator::CHILD_FIRST);
+			
+			// make sure dots are skipped
+			$objects->setFlags(FilesystemIterator::SKIP_DOTS);
+			
+			foreach($objects as $name => $object) {
+				
+				if ($object->isDir()) {
+					rmdir($name);
+				} else if ($object->isFile()) {
+					unlink($name);
+				}
+				
+			}
+			
+			rmdir($dir);
+			
+		}
+		
+	}
+	
+	/**
 	* Copies a file from the given source path to the given public path.
 	* THIS IS NOT FOR PATTERNS 
 	* @param  {String}       the source file
@@ -693,9 +893,11 @@ class Buildr {
 	* Moves static files that aren't directly related to Pattern Lab
 	* @param  {String}       file name to be moved
 	* @param  {String}       copy for the message to be printed out
+	* @param  {String}       part of the file name to be found for replacement
+	* @param  {String}       the replacement
 	*/
-	protected function moveStaticFile($fileName,$copy = "") {
-		$this->moveFile($fileName,$fileName);
+	protected function moveStaticFile($fileName,$copy = "", $find = "", $replace = "") {
+		$this->moveFile($fileName,str_replace($find, $replace, $fileName));
 		$this->updateChangeTime();
 		if ($copy != "") {
 			print $fileName." ".$copy."...\n";
@@ -716,6 +918,19 @@ class Buildr {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	* Loads the CSS from source/css/ into CSS Rule Saver to be used for code view
+	*/
+	protected function initializeCSSRuleSaver() {
+		
+		$this->cssRuleSaver = new cssRuleSaver;
+		
+		foreach(glob(__DIR__."/../../source/css/*.css") as $filename) {
+			$this->cssRuleSaver->loadCSS($filename);
+		}
+		
 	}
 	
 	/**
