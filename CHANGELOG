@@ -1,6 +1,6 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
-PL-v0.6.0 (in progress)
+PL-v0.6.0
  - ADD: a UI list of the current media query widths from the CSS
  - ADD: a pattern's "lineage" now displays in the UI under code view
  - ADD: annotations can be added to DOM elements of patterns
