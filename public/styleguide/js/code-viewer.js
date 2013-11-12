@@ -100,7 +100,7 @@ var codeViewer = {
 				$("#sg-code-lineage-fill").html(lineageList);
 				
 				$('#sg-code-lineage-fill a').on("click", function(e){
-					e.preventDefault;
+					e.preventDefault();
 					document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
 				});
 			}
