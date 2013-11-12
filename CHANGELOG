@@ -1,5 +1,27 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.6.0 (in progress)
+ - ADD: a UI list of the current media query widths from the CSS
+ - ADD: a pattern's "lineage" now displays in the UI under code view
+ - ADD: annotations can be added to DOM elements of patterns
+ - ADD: separate annotation views on the list view and pattern details views
+ - ADD: generate() now "cleans" public/ before generating the site by deleting most everything
+ - ADD: added support for the css rule saver library
+ - ADD: can use a flag to generate the specific CSS that is used in a pattern. shows on code view when available.
+ - ADD: mark-up for a pattern is now included in the UI under code view
+ - FIX: can open the "raw" version of a pattern in a new window
+ - FIX: frame resizing bar properly supports decimals
+ - FIX: the checkboxes for the websocket-based features, page follow & auto-reload, now work
+ - FIX: postmessage calls now centralized and refactored
+ - FIX: units appear in the toolbar when using Hay! mode
+ - FIX: patterns shouldn't be cached
+ - THX: thanks to @benedfit for the MQ idea which he originally named "phases"
+ - THX: thanks to @alienlebarge for the "clean public/" idea
+
+PL-v0.3.6
+ - FIX: added a delay to the watcher so the CPU doesn't get maxed
+ - THX: thanks to martin berglund for the heads up
+
 PL-v0.3.5
  - ADD: an explicit MIT license
  - FIX: updated .gitignore so that it's more flexible
