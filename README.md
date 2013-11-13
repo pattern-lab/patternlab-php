@@ -15,6 +15,7 @@ The PHP version of Pattern Lab should be relatively easy for anyone to get up an
 * [Generating the Pattern Lab Website for the First Time](http://pattern-lab.info/docs/first-run.html)
 * [Editing the Pattern Lab Website Source Files](http://pattern-lab.info/docs/editing-source-files.html)
 * [Using the Command-line Options](http://pattern-lab.info/docs/command-line.html)
+* [Command Prompt on Windows](http://pattern-lab.info/docs/command-prompt-windows.html)
 
 ## Working with Patterns
 
@@ -28,13 +29,14 @@ Patterns are the core element of Pattern Lab. Understanding how they work is the
 * [Including One Pattern Within Another via Partials](http://pattern-lab.info/docs/pattern-including.html)
 * [Linking Directly to a Pattern](http://pattern-lab.info/docs/pattern-linking.html)
 * [Managing Assets for a Pattern: JavaScript, images, CSS, etc.](http://pattern-lab.info/docs/pattern-managing-assets.html)
+* [Adding Annotations](http://pattern-lab.info/docs/pattern-adding-annotations.html)
 
 ## Creating & Working With Dynamic Data for a Pattern
 
 The PHP version of Pattern Lab utilizes Mustache as the template language for patterns. In addition to allowing for the [inclusion of one pattern within another](https://github.com/pattern-lab/patternlab-php/wiki/Including-One-Pattern-Within-Another) it also gives pattern developers the ability to include variables. This means that attributes like image sources can be centralized in one file for easy modification across one or more patterns. The PHP version of Pattern Lab uses a JSON file, `source/_data/data.json`, to centralize many of these attributes.
 
 * [Introduction to JSON & Mustache Variables](http://pattern-lab.info/docs/data-json-mustache.html)
-* [Overriding the Central `data.json` Values with Pattern-specific Values](https://github.com/pattern-lab/patternlab-php/wiki/Overriding-the-Central-%60data.json%60-Values-with-Pattern-specific-Values)
+* [Overriding the Central `data.json` Values with Pattern-specific Values](http://pattern-lab.info/docs/data-pattern-specific.html)
 * [Linking to Patterns with Pattern Lab's Default `link` Variable](http://pattern-lab.info/docs/data-link-variable.html)
 * [Creating Lists with Pattern Lab's Default `listItems` Variable](http://pattern-lab.info/docs/data-listitems.html)
 
