@@ -10,39 +10,38 @@ You can play with a demo of the front-end of the PHP version of Pattern Lab at [
 
 The PHP version of Pattern Lab should be relatively easy for anyone to get up and running. 
 
-* [Requirements](https://github.com/pattern-lab/patternlab-php/wiki/Requirements)
-* [Installing the PHP Version of Pattern Lab](https://github.com/pattern-lab/patternlab-php/wiki/Installing-the-PHP-Version-of-Pattern-Lab)
-* [Generating the Pattern Lab Website for the First Time](https://github.com/pattern-lab/patternlab-php/wiki/Generating-the-Pattern-Lab-Website-for-the-First-Time)
-* [Editing the Pattern Lab Website Source Files](https://github.com/pattern-lab/patternlab-php/wiki/Editing-the-Pattern-Lab-Website-Source-Files)
-* [Using the Command-line Options](https://github.com/pattern-lab/patternlab-php/wiki/Using-the-Command-line-Options)
+* [Requirements](http://pattern-lab.info/docs/requirements.html)
+* [Installing the PHP Version of Pattern Lab](http://pattern-lab.info/docs/installation.html)
+* [Generating the Pattern Lab Website for the First Time](http://pattern-lab.info/docs/first-run.html)
+* [Editing the Pattern Lab Website Source Files](http://pattern-lab.info/docs/editing-source-files.html)
+* [Using the Command-line Options](http://pattern-lab.info/docs/command-line.html)
 
 ## Working with Patterns
 
 Patterns are the core element of Pattern Lab. Understanding how they work is the key to getting the most out of the system. Patterns use [Mustache](http://mustache.github.io/) so please read [Mustache's docs](http://mustache.github.io/mustache.5.html) as well.
 
-* [How Patterns Are Organized](https://github.com/pattern-lab/patternlab-php/wiki/How-Patterns-Are-Organized)
-* [Adding New Patterns](https://github.com/pattern-lab/patternlab-php/wiki/Adding-New-Patterns)
-* [Reorganizing Patterns](https://github.com/pattern-lab/patternlab-php/wiki/Reorganizing-Patterns)
+* [How Patterns Are Organized](http://pattern-lab.info/docs/pattern-organization.html)
+* [Adding New Patterns](http://pattern-lab.info/docs/pattern-add-new.html)
+* [Reorganizing Patterns](http://pattern-lab.info/docs/pattern-reorganizing.html)
 * [Converting Old Patterns](https://github.com/pattern-lab/patternlab-php/wiki/Converting-Old-Patterns)
-* ["Hiding" Patterns in the Navigation](https://github.com/pattern-lab/patternlab-php/wiki/Hiding-Patterns-in-the-Navigation)
-* [Including One Pattern Within Another via Partials](https://github.com/pattern-lab/patternlab-php/wiki/Including-One-Pattern-Within-Another)
-* [Linking Directly to a Pattern](https://github.com/pattern-lab/patternlab-php/wiki/Linking-Directly-to-a-Pattern)
-* [Managing Assets for a Pattern: JavaScript, images, CSS, etc.](https://github.com/pattern-lab/patternlab-php/wiki/Managing-Assets-for-a-Pattern)
-* [Modifying the Standard Header & Footer for Patterns](https://github.com/pattern-lab/patternlab-php/wiki/Modifying-the-Standard-Header-&-Footer-for-Patterns)
+* ["Hiding" Patterns in the Navigation](http://pattern-lab.info/docs/pattern-hiding.html)
+* [Including One Pattern Within Another via Partials](http://pattern-lab.info/docs/pattern-including.html)
+* [Linking Directly to a Pattern](http://pattern-lab.info/docs/pattern-linking.html)
+* [Managing Assets for a Pattern: JavaScript, images, CSS, etc.](http://pattern-lab.info/docs/pattern-managing-assets.html)
 
 ## Creating & Working With Dynamic Data for a Pattern
 
 The PHP version of Pattern Lab utilizes Mustache as the template language for patterns. In addition to allowing for the [inclusion of one pattern within another](https://github.com/pattern-lab/patternlab-php/wiki/Including-One-Pattern-Within-Another) it also gives pattern developers the ability to include variables. This means that attributes like image sources can be centralized in one file for easy modification across one or more patterns. The PHP version of Pattern Lab uses a JSON file, `source/_data/data.json`, to centralize many of these attributes.
 
-* [Introduction to JSON & Mustache Variables](http://github.com/pattern-lab/patternlab-php/wiki/Introduction-to-JSON-&-Mustache-Variables)
+* [Introduction to JSON & Mustache Variables](http://pattern-lab.info/docs/data-json-mustache.html)
 * [Overriding the Central `data.json` Values with Pattern-specific Values](https://github.com/pattern-lab/patternlab-php/wiki/Overriding-the-Central-%60data.json%60-Values-with-Pattern-specific-Values)
-* [Linking to Patterns with Pattern Lab's Default `link` Variable](https://github.com/pattern-lab/patternlab-php/wiki/Linking-to-Patterns-with-Pattern-Lab's-Default-%60link%60-Variable)
-* [Creating Lists with Pattern Lab's Default `listItems` Variable](https://github.com/pattern-lab/patternlab-php/wiki/Creating-Lists-with-Pattern-Lab's-Default-%60listItems%60-Variable)
+* [Linking to Patterns with Pattern Lab's Default `link` Variable](http://pattern-lab.info/docs/data-link-variable.html)
+* [Creating Lists with Pattern Lab's Default `listItems` Variable](http://pattern-lab.info/docs/data-listitems.html)
 
 ## Using Pattern Lab's Advanced Features
 
 By default, the Pattern Lab assets can be manually generated and the Pattern Lab site manually refreshed but who wants to waste time doing that? Here are some ways that the PHP version of Pattern Lab can make your development workflow a little smoother:
 
-* [Watching for Changes and Auto-Regenerating Patterns](https://github.com/pattern-lab/patternlab-php/wiki/Watching-for-Changes-and-Auto-Regenerating-Patterns)
-* [Auto-Reloading the Browser Window When Changes Are Made](https://github.com/pattern-lab/patternlab-php/wiki/Auto-Reloading-the-Browser-Window-When-Changes-Are-Made)
-* [Multi-browser & Multi-device Testing with Page Follow](https://github.com/pattern-lab/patternlab-php/wiki/Multi-browser-&-Multi-device-Testing-with-Page-Follow)
+* [Watching for Changes and Auto-Regenerating Patterns](http://pattern-lab.info/docs/advanced-auto-regenerate.html)
+* [Auto-Reloading the Browser Window When Changes Are Made](http://pattern-lab.info/docs/advanced-reload-browser.html)
+* [Multi-browser & Multi-device Testing with Page Follow](http://pattern-lab.info/docs/advanced-page-follow.html)
