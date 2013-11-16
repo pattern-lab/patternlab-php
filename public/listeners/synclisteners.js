@@ -17,8 +17,7 @@ var wsn;
 var wsnConnected = false;
 var wsc;
 var wscConnected = false;
-var dataPrevious = 0;
-var host = (window.location.host != "") ? window.location.host : "127.0.0.1";
+var host = (window.location.host !== "") ? window.location.host : "127.0.0.1";
 
 // handle page updates from one browser to another
 function connectNavSync() {
@@ -29,16 +28,16 @@ function connectNavSync() {
 		wsn = new WebSocket("ws://"+host+":"+navSyncPort+"/navsync");
 		
 		// when trying to open a connection to WebSocket update the pattern lab nav bar
-		wsn.onopen = function (event) {
+		wsn.onopen = function () {
 			wsnConnected = true;
 			$('#navSyncButton').attr("data-state","on");
 			$('#navSyncButton').addClass("connected");
 			$('#navSyncButton').addClass("active");
 			$('#navSyncButton').html(navSyncCopy+' On');
-		}
+		};
 		
 		// when closing a connection (or failing to make a connection) to WebSocket update the pattern lab nav bar
-		wsn.onclose = function (event) {
+		wsn.onclose = function () {
 			wsnConnected = false;
 			$('#navSyncButton').attr("data-state","off");
 			if ($('#navSyncButton').hasClass("connected")) {
@@ -46,7 +45,7 @@ function connectNavSync() {
 				$('#navSyncButton').removeClass("active");
 			}
 			$('#navSyncButton').html(navSyncCopy+' Disabled');
-		}
+		};
 		
 		// when receiving a message from WebSocket update the iframe source
 		wsn.onmessage = function (event) {
@@ -68,10 +67,10 @@ function connectNavSync() {
 				urlHandler.skipBack = false;
 				
 			}
-		}
+		};
 		
 		// when there's an error update the pattern lab nav bar
-		wsn.onerror = function (event) {
+		wsn.onerror = function () {
 			wsnConnected = false;
 			$('#navSyncButton').attr("data-state","off");
 			if ($('#navSyncButton').hasClass("connected")) {
@@ -79,7 +78,7 @@ function connectNavSync() {
 				$('#navSyncButton').removeClass("active");
 			}
 			$('#navSyncButton').html(navSyncCopy+' Disabled');
-		}
+		};
 		
 	}
 	
@@ -91,22 +90,21 @@ function connectContentSync() {
 	
 	if ('WebSocket' in window && window.WebSocket.CLOSING === 2) {
 		
-		var dc = true;
 		var contentSyncCopy = "Auto-reload";
 		
 		wsc = new WebSocket("ws://"+host+":"+contentSyncPort+"/contentsync");
 		
 		// when trying to open a connection to WebSocket update the pattern lab nav bar
-		wsc.onopen = function (event) {
+		wsc.onopen = function () {
 			wscConnected = true;
 			$('#contentSyncButton').attr("data-state","on");
 			$('#contentSyncButton').addClass("connected");
 			$('#contentSyncButton').addClass("active");
 			$('#contentSyncButton').html(contentSyncCopy+' On');
-		}
+		};
 		
 		// when closing a connection (or failing to make a connection) to WebSocket update the pattern lab nav bar
-		wsc.onclose = function (event) {
+		wsc.onclose = function () {
 			wscConnected = false;
 			$('#contentSyncButton').attr("data-state","off");
 			if ($('#contentSyncButton').hasClass("connected")) {
@@ -114,17 +112,17 @@ function connectContentSync() {
 				$('#contentSyncButton').removeClass("active");
 			}
 			$('#contentSyncButton').html(contentSyncCopy+' Disabled');
-		}
+		};
 		
 		// when receiving a message from WebSocket reload the current frame adding the received timestamp
 		// as a request var to, hopefully, bust caches... cachi(?)
-		wsc.onmessage = function (event) {
+		wsc.onmessage = function () {
 			var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 			document.getElementById('sg-viewport').contentWindow.postMessage( { "reload": true }, targetOrigin);
-		}
+		};
 		
 		// when there's an error update the pattern lab nav bar
-		wsc.onerror = function (event) {
+		wsc.onerror = function () {
 			wscConnected = false;
 			$('#contentSyncButton').attr("data-state","off");
 			if ($('#contentSyncButton').hasClass("connected")) {
@@ -132,7 +130,7 @@ function connectContentSync() {
 				$('#contentSyncButton').removeClass("active");
 			}
 			$('#contentSyncButton').html(contentSyncCopy+' Disabled');
-		}
+		};
 		
 	}
 	

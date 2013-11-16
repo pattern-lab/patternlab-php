@@ -55,7 +55,7 @@ var annotationsViewer = {
 	
 	commentContainerInit: function() {
 		
-		if (document.getElementById("sg-annotation-container") == undefined) {
+		if (document.getElementById("sg-annotation-container") === undefined) {
 			$('<div id="sg-annotation-container" style="display: none;"></div>').html('<a href="#" id="sg-annotation-close-btn">Close</a><h2 id="sg-annotation-title">Annotation Title</h2><div id="sg-annotation-text">Here is some comment text</div>').appendTo('body').css('bottom',-$(document).outerHeight());
 		}
 		
@@ -65,7 +65,7 @@ var annotationsViewer = {
 			$('#sg-annotation-container').show();
 		}
 		
-		$('body').delegate('#sg-annotation-close-btn','click',function(e) {
+		$('body').delegate('#sg-annotation-close-btn','click',function() {
 			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			return false;
 		});
@@ -86,9 +86,8 @@ var annotationsViewer = {
 	},
 	
 	updateComment: function(el,title,msg) {
-			var $container = $('#sg-annotation-container'),
-				$title = $('#sg-annotation-title'),
-				$text = $('#sg-annotation-text');
+			var $title = $('#sg-annotation-title'),
+			$text = $('#sg-annotation-text');
 			$title.text(title);
 			$text.html(msg);
 			annotationsViewer.slideComment(0);
@@ -106,7 +105,7 @@ var annotationsViewer = {
 			return;
 		}
 		
-		if (event.data.commentOverlay != undefined) {
+		if (event.data.commentOverlay !== undefined) {
 			if (event.data.commentOverlay == "on") {
 				
 				annotationsViewer.updateComment(event.data.el,event.data.title,event.data.comment);
@@ -118,7 +117,7 @@ var annotationsViewer = {
 		
 	}
 	
-}
+};
 
 $(document).ready(function() { annotationsViewer.onReady(); });
 window.addEventListener("message", annotationsViewer.receiveIframeMessage, false);

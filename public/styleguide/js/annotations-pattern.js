@@ -6,6 +6,8 @@
  *
  */
 
+var comments = {};
+
 var annotationsPattern = {
 	
 	commentsOverlayActive:  false,
@@ -22,8 +24,8 @@ var annotationsPattern = {
 		// make sure this only added when we're on a pattern specific view
 		var body = document.getElementsByTagName("body");
 		if (!body[0].classList.contains("sg-pattern-list")) {
-			for (comment in comments.comments) {
-				var item = comments.comments[comment];
+			for(i = 0; i < comments.comments.length; i++) {
+				var item = comments.comments[i];
 				var els  = document.querySelectorAll(item.el);
 				for (var i = 0; i < els.length; ++i) {
 					els[i].onclick = (function(item) {
@@ -59,7 +61,7 @@ var annotationsPattern = {
 							var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 							parent.postMessage(obj,targetOrigin);
 							
-						}
+						};
 					})(item);
 				}
 			}
@@ -109,10 +111,12 @@ var annotationsPattern = {
 	*/
 	findParent: function(el) {
 		
+    var parentEl;
+    
 		if (el.parentNode.classList.contains("sg-pattern")) {
 			return el.parentNode;
 		} else {
-			var parentEl = annotationsPattern.findParent(el.parentNode);
+			parentEl = annotationsPattern.findParent(el.parentNode);
 		}
 		
 		return parentEl;
@@ -131,7 +135,9 @@ var annotationsPattern = {
 			return;
 		}
 		
-		if (event.data.commentToggle != undefined) {
+		if (event.data.commentToggle !== undefined) {
+			
+			var i, els, item;
 			
 			// if this is an overlay make sure it's active for the onclick event
 			annotationsPattern.commentsOverlayActive  = false;
@@ -147,16 +153,16 @@ var annotationsPattern = {
 			
 			// if comments overlay is turned off make sure to remove the has-comment class and pointer
 			if (!annotationsPattern.commentsOverlayActive) {
-				var els = document.querySelectorAll(".has-comment");
-				for (var i = 0; i < els.length; i++) {
+				els = document.querySelectorAll(".has-comment");
+				for (i = 0; i < els.length; i++) {
 					els[i].classList.remove("has-comment");
 				}
 			}
 			
 			// if comments embedding is turned off make sure to hide the annotations div
 			if (!annotationsPattern.commentsEmbeddedActive) {
-				var els = document.getElementsByClassName("sg-annotations");
-				for (var i = 0; i < els.length; i++) {
+				els = document.getElementsByClassName("sg-annotations");
+				for (i = 0; i < els.length; i++) {
 					els[i].style.display = "none";
 				}
 			}
@@ -164,10 +170,10 @@ var annotationsPattern = {
 			// if comments overlay is turned on add the has-comment class and pointer
 			if (annotationsPattern.commentsOverlayActive) {
 				
-				for (comment in comments.comments) {
-					var item = comments.comments[comment];
-					var els  = document.querySelectorAll(item.el);
-					for (var i = 0; i < els.length; i++) {
+				for (i = 0; i < comments.comments.length; i++) {
+					item = comments.comments[i];
+					els  = document.querySelectorAll(item.el);
+					for (i = 0; i < els.length; i++) {
 						els[i].classList.add("has-comment");
 					}
 				}
@@ -175,9 +181,9 @@ var annotationsPattern = {
 			} else if (annotationsPattern.commentsEmbeddedActive && !annotationsPattern.commentsEmbedded) {
 				
 				// if comment embedding is turned on and comments haven't been embedded yet do it
-				for (comment in comments.comments) {
-					var item = comments.comments[comment];
-					var els  = document.querySelectorAll(item.el);
+				for (i = 0; i < comments.comments.length; i++)  {
+					item = comments.comments[i];
+					els  = document.querySelectorAll(item.el);
 					if (els.length > 0) {
 						annotationsPattern.embedComments(els[0],item.title,item.comment);
 					}
@@ -187,8 +193,8 @@ var annotationsPattern = {
 			} else if (annotationsPattern.commentsEmbeddedActive && annotationsPattern.commentsEmbedded) {
 				
 				// if comment embedding is turned on and comments have been embedded simply display them
-				var els = document.getElementsByClassName("sg-annotations");
-				for (var i = 0; i < els.length; ++i) {
+				els = document.getElementsByClassName("sg-annotations");
+				for (i = 0; i < els.length; ++i) {
 					els[i].style.display = "block";
 				}
 				

@@ -54,7 +54,7 @@ var codeViewer = {
 	
 	codeContainerInit: function() {
 		
-		if (document.getElementById("sg-code-container") == undefined) {
+		if (document.getElementById("sg-code-container") === undefined) {
 			$('<div id="sg-code-container" style="display: none;"></div>').html('<a href="#" id="sg-code-close-btn">Close</a><div id="sg-code-lineage" style="display: none;"><h2>Lineage</h2><p>This pattern contains the following patterns: <span id="sg-code-lineage-fill"></span></p></div><div id="sg-code-html"><h2>HTML</h2><pre><code id="sg-code-html-fill" class="language-markup"></code></pre></div><div id="sg-code-css" class="with-css" style="display: none;"><h2>CSS</h2><pre><code id="sg-code-css-fill" class="language-css"></code></pre></div>').appendTo('body').css('bottom',-$(document).outerHeight());
 		}
 		
@@ -64,7 +64,7 @@ var codeViewer = {
 			$('#sg-code-container').show();
 		}
 		
-		$('body').delegate('#sg-code-close-btn','click',function(e) {
+		$('body').delegate('#sg-code-close-btn','click',function() {
 			codeViewer.slideCode($('#sg-code-container').outerHeight());
 			return false;
 		});
@@ -87,13 +87,12 @@ var codeViewer = {
 	updateCode: function(lineage,html,css) {
 			
 			// draw lineage
-			if (lineage.length != 0) {
+			if (lineage.length !== 0) {
 				$("#sg-code-lineage").css("display","block");
-				var i = 0;
 				var lineageList = "";
-				for (pattern in lineage) {
-					lineageList += (i == 0) ? "" : ", ";
-					lineageList += "<a href='"+lineage[pattern]["lineagePath"]+"' data-patternPartial='"+lineage[pattern]["lineagePattern"]+"'>"+lineage[pattern]["lineagePattern"]+"</a>";
+				for (var i = 0; i < lineage.length; i++) {
+					lineageList += (i === 0) ? "" : ", ";
+					lineageList += "<a href='"+lineage[i].lineagePath+"' data-patternPartial='"+lineage[i].lineagePattern+"'>"+lineage[i].lineagePattern+"</a>";
 					i++;
 				}
 				
@@ -133,7 +132,7 @@ var codeViewer = {
 			return;
 		}
 		
-		if (event.data.codeOverlay != undefined) {
+		if (event.data.codeOverlay !== undefined) {
 			if (event.data.codeOverlay == "on") {
 				
 				codeViewer.updateCode(event.data.lineage,event.data.html,event.data.css);
@@ -147,7 +146,7 @@ var codeViewer = {
 		
 	}
 	
-}
+};
 
 $(document).ready(function() { codeViewer.onReady(); });
 window.addEventListener("message", codeViewer.receiveIframeMessage, false);
