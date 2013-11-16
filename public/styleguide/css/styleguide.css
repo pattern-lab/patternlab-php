@@ -553,6 +553,10 @@
   #sg-annotation-container a, #sg-code-container a {
     color: #dddddd; }
 
+#sg-code-container pre {
+  max-height: 300px;
+  padding: 0 1em; }
+
 #sg-annotation-close-btn, #sg-code-close-btn {
   color: #fff;
   position: absolute;
