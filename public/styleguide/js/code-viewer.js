@@ -54,7 +54,7 @@ var codeViewer = {
 	
 	codeContainerInit: function() {
 		
-		if (document.getElementById("sg-code-container") === undefined) {
+		if (document.getElementById("sg-code-container") === null) {
 			$('<div id="sg-code-container" style="display: none;"></div>').html('<a href="#" id="sg-code-close-btn">Close</a><div id="sg-code-lineage" style="display: none;"><h2>Lineage</h2><p>This pattern contains the following patterns: <span id="sg-code-lineage-fill"></span></p></div><div id="sg-code-html"><h2>HTML</h2><pre><code id="sg-code-html-fill" class="language-markup"></code></pre></div><div id="sg-code-css" class="with-css" style="display: none;"><h2>CSS</h2><pre><code id="sg-code-css-fill" class="language-css"></code></pre></div>').appendTo('body').css('bottom',-$(document).outerHeight());
 		}
 		

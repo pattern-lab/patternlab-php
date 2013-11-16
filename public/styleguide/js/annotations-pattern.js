@@ -6,8 +6,6 @@
  *
  */
 
-var comments = {};
-
 var annotationsPattern = {
 	
 	commentsOverlayActive:  false,
@@ -27,8 +25,8 @@ var annotationsPattern = {
 			for(i = 0; i < comments.comments.length; i++) {
 				var item = comments.comments[i];
 				var els  = document.querySelectorAll(item.el);
-				for (var i = 0; i < els.length; ++i) {
-					els[i].onclick = (function(item) {
+				for (var k = 0; k < els.length; k++) {
+					els[k].onclick = (function(item) {
 						return function(e) {
 							e.preventDefault();
 							e.stopPropagation();
@@ -173,8 +171,8 @@ var annotationsPattern = {
 				for (i = 0; i < comments.comments.length; i++) {
 					item = comments.comments[i];
 					els  = document.querySelectorAll(item.el);
-					for (i = 0; i < els.length; i++) {
-						els[i].classList.add("has-comment");
+					for (k = 0; k < els.length; k++) {
+						els[k].classList.add("has-comment");
 					}
 				}
 				

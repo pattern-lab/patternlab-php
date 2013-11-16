@@ -55,7 +55,7 @@ var annotationsViewer = {
 	
 	commentContainerInit: function() {
 		
-		if (document.getElementById("sg-annotation-container") === undefined) {
+		if (document.getElementById("sg-annotation-container") === null) {
 			$('<div id="sg-annotation-container" style="display: none;"></div>').html('<a href="#" id="sg-annotation-close-btn">Close</a><h2 id="sg-annotation-title">Annotation Title</h2><div id="sg-annotation-text">Here is some comment text</div>').appendTo('body').css('bottom',-$(document).outerHeight());
 		}
 		
