@@ -23,7 +23,9 @@ var codePattern = {
 			return;
 		}
 		
-		if (event.data.codeToggle != undefined) {
+		if (event.data.codeToggle !== undefined) {
+			
+			var els, i;
 			
 			// if this is an overlay make sure it's active for the onclick event
 			codePattern.codeOverlayActive  = false;
@@ -39,8 +41,8 @@ var codePattern = {
 			
 			// if comments embedding is turned off make sure to hide the annotations div
 			if (!codePattern.codeEmbeddedActive && (body[0].classList.contains("sg-pattern-list"))) {
-				var els = document.getElementsByClassName("sg-code");
-				for (var i = 0; i < els.length; i++) {
+				els = document.getElementsByClassName("sg-code");
+				for (i = 0; i < els.length; i++) {
 					els[i].style.display = "none";
 				}
 			}
@@ -49,14 +51,14 @@ var codePattern = {
 			if (codePattern.codeOverlayActive) {
 				
 				var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-				obj = { "codeOverlay": "on", "lineage": lineage, "html": document.getElementById("sg-pattern-html").textContent, "css": document.getElementById("sg-pattern-css").textContent };
+				var obj = { "codeOverlay": "on", "lineage": lineage, "html": document.getElementById("sg-pattern-html").textContent, "css": document.getElementById("sg-pattern-css").textContent };
 				parent.postMessage(obj,targetOrigin);
 				
 			} else if (codePattern.codeEmbeddedActive) {
 				
 				// if code embedding is turned on simply display them
-				var els = document.getElementsByClassName("sg-code");
-				for (var i = 0; i < els.length; ++i) {
+				els = document.getElementsByClassName("sg-code");
+				for (i = 0; i < els.length; ++i) {
 					els[i].style.display = "block";
 				}
 				
