@@ -225,6 +225,7 @@ class Watchr extends Buildr {
 	* @return {String}       the final message
 	*/
 	private function updateSite($fileName,$message,$verbose = true) {
+		$this->setCacheBuster();
 		$this->gatherData();
 		$this->gatherPatternPaths();
 		$this->gatherNavItems();

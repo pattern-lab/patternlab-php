@@ -31,6 +31,7 @@ class Buildr {
 	protected $enableCSS;         // decide if we'll enable CSS parsing
 	protected $patternCSS;        // an array to hold the CSS generated for patterns
 	protected $cssRuleSaver;      // where css rule saver will be initialized
+	protected $cacheBuster;       // a timestamp used to bust the cache for static assets like CSS and JS
 	
 	/**
 	* When initializing the Builder class or the sub-classes make sure the base properties are configured
@@ -74,6 +75,9 @@ class Buildr {
 		// provide the default for enable CSS. performance hog so it should be run infrequently
 		$this->enableCSS  = false;
 		$this->patternCSS = array();
+		
+		// set cache buster var
+		$this->setCacheBuster();
 		
 	}
 	
@@ -144,6 +148,10 @@ class Buildr {
 		// render the "view all" pages
 		$this->generateViewAllPages();
 		
+		// add cacheBuster info
+		$this->navItems['cacheBuster']     = $this->cacheBuster;
+		$sd['cacheBuster']                 = $this->cacheBuster;
+		
 		// render the index page and the style guide
 		$r = $this->mfs->render('index',$this->navItems);
 		file_put_contents(__DIR__."/../../public/index.html",$r);
@@ -194,6 +202,10 @@ class Buildr {
 		$rf = $this->renderPattern($f);
 		$fr = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
 		
+		// find & replace the cacheBuster var in header and footer
+		$hr = str_replace("{{ cacheBuster }}",$this->cacheBuster,$hr);
+		$fr = str_replace("{{ cacheBuster }}",$this->cacheBuster,$fr);
+		
 		// the footer isn't rendered as mustache but we have some variables there any way. find & replace.
 		$pp = $this->getPatternPartial($f);
 		$fr = str_replace("{{ patternPartial }}",$pp,$fr);
@@ -241,8 +253,9 @@ class Buildr {
 								$patternSubType = $subItem["patternSubType"];
 								
 								// get all the rendered partials that match
-								$sid = $this->gatherPartialsByMatch($patternType, $patternSubType);
+								$sid                   = $this->gatherPartialsByMatch($patternType, $patternSubType);
 								$sid["patternPartial"] = $subItem["patternPartial"];
+								$sid["cacheBuster"]    = $this->cacheBuster;
 								
 								// render the viewall template
 								$v = $this->mfs->render('viewall',$sid);
@@ -788,6 +801,13 @@ class Buildr {
 		
 		$this->patternTypesRegex = $regex;
 		
+	}
+	
+	/**
+	* Set the cache buster var so it can be used on the query string for file requests
+	*/
+	protected function setCacheBuster() {
+		$this->cacheBuster = time();
 	}
 	
 	/**
