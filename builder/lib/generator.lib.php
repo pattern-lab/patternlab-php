@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Generator Class - v0.6.0
+ * Pattern Lab Generator Class - v0.6.1
  *
  * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
