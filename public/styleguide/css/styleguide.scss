@@ -794,6 +794,15 @@ $animate-quick: 0.2s;
     }
 }
 
+#sg-code-container pre {
+	max-height: 300px;
+	padding: 0 1em;
+}
+
+#sg-code-container .with-css pre {
+	max-height: 200px;
+}
+
 #sg-annotation-close-btn, #sg-code-close-btn {
 	color: #fff;
 	position: absolute;
