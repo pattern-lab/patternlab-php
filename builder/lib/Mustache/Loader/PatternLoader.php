@@ -102,13 +102,26 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
      */
     protected function loadFile($name)
     {
-        $fileName = $this->getFileName($name);
+        //get pattern data 
+        $pattern_data = $this->getPatternIncludeData($name);
+        
+        //get file path
+        $fileName     = $this->getFileName($pattern_data['file']);
 
+        //throw error if path is not found
         if (!file_exists($fileName)) {
             throw new Mustache_Exception_UnknownTemplateException($name);
         }
 
-        return file_get_contents($fileName);
+        //get file as string
+        $file_str     = file_get_contents($fileName);
+        
+        //if pattern include was called with param, render param
+        if (isset($pattern_data['param'])) {
+            $file_str = $this->renderPattern($file_str, $pattern_data['param']);
+        }
+        
+        return $file_str;
     }
 
     /**
@@ -152,6 +165,115 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
         
         return $fileName;
     }
+    
+    /**
+     * Inspects pattern include call for param
+     * ex:
+     * {{ > patternType-pattern(param1: value, param2 ...) }}
+     * 
+     * and returns pattern data array with the following elements
+     * 
+     * string $file - the file name
+     * 
+     * array|null $param - an associative array of param ex: param_name => $param_value... or null if none found
+     * 
+     * @param string $pattern_include_call_str 
+     * @return array returns pattern data array
+     * 
+     */
+    
+    protected function getPatternIncludeData($pattern_include_call_str)
+    {
+        //create an array to store pattern include data
+        
+        $pattern_data = array();
+        
+        // $pattern_include_call_str contains pattern name
+        // followed by param, example:
+        // patterntype-pattern (param1: value, param2: value2)
+        
+        $p_inc_str    = $pattern_include_call_str;
+        
+        //get param using regex
+        //first remove all line breaks from string 
+        
+        $p_inc_str    = preg_replace("/[\r\n]*/","",$p_inc_str);
+        
+        //now use regex to get everything between parentheses ( )
+        //note: this regex call ignores escaped parenteses \( and \)
+        
+        $matches      = preg_match('/\([^\(\\\\]*(?:\\\\.[^\)\\\\]*)*\)/s', $p_inc_str, $p_inc_param);
+        
+        //if no matches are found return file name only, and set
+        //param to null
+        
+        if(!$matches){
+            
+            $pattern_data['file']  = $p_inc_str;
+            $pattern_data['param'] = null;
+            return $pattern_data;
+        }
+        
+        //otherwise strip param from string and set file
+        
+        else {
+
+            //strip param and add [file] as the include file name 
+            $pattern_data['file']  = trim(preg_replace('/\([^\(\\\\]*(?:\\\\.[^\)\\\\]*)*\)/s', '', $p_inc_str));
+        }
+        
+        //remove spaces & parentheses from either end of param string
+        
+        $p_inc_param  = trim($p_inc_param[0], '()');
+        
+        //split param by commas , but ignore escaped commas
+        
+        $p_inc_param = preg_split('/(?<!\\\),/', $p_inc_param);
+        
+        //unescape param values, remove back slashes from parenthesis and commas 
+        
+        $p_inc_param = str_replace(array("\(", "\)", "\,"), array("(", ")", ","), $p_inc_param);
+        
+        //loop through param and set $pattern_data[param] with values
+        
+        foreach($p_inc_param as $arg)
+        {
+            //separate args by the first colon :
+            //ex param_name: param_value
+            
+            $r = explode(":", trim($arg), 2);
+            
+            //set pattern_data['param']['param_name'] with 
+            //the un escaped values (remove slashes from commas and )
+            $pattern_data['param'][$r[0]] = $r[1];
+        }
+        
+        return $pattern_data;
+    }
+    
+    /**
+     * will replace each instance of {{ param_name }} with actual value 
+     * 
+     * @param string $pattern_string string to be parsed
+     * @param array $param an array of parameters
+     * @return string parsed $pattern_string 
+     */
+    
+    function renderPattern($pattern_string, $param)
+    {
+        //loop through given param
+        
+        foreach($param as $k => $v) 
+        { 
+            //replace each instance of {{ param_name }} with actual value 
+            
+            $pattern_string = preg_replace('/{{([\s]*'.$k .'[\s]*)}}/', $v, $pattern_string);
+        } 
+        
+        //return new pattern string
+        
+        return $pattern_string;
+    }    
 
     private function getPatternInfo($name) {
 	
