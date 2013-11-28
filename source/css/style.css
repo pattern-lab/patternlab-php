@@ -158,8 +158,8 @@ header, footer, nav, section, article, hgroup, figure {
 .warning {
   color: #fff664; }
 
-.info {
-  color: #a2dfdd; }
+.information {
+  color: #000db5; }
 
 .font-secondary {
   font-family: Georgia, Times, "Times New Roman", serif; }
@@ -642,8 +642,6 @@ td {
   background: #131313;
   color: white;
   line-height: 1.2; }
-  .footer .lc, .footer .header, .footer [role=main] {
-    padding: 1em 1em 0; }
   .footer a {
     color: #f9f9f9; }
 
@@ -673,6 +671,9 @@ td {
 .pullquote {
   font-family: Georgia, Times, "Times New Roman", serif;
   font-size: 1.4375em; }
+
+.caption {
+  font-style: italic; }
 
 .text a {
   text-decoration: underline; }
@@ -817,10 +818,11 @@ td {
   border: 0;
   text-align: center; }
   .btn:hover, .btn:focus {
+    background: gray;
     color: white; }
   .btn.disabled {
     background: #eeeeee;
-    color: #dddddd; }
+    color: gray; }
 
 .btn-small {
   padding: 0.5em; }
@@ -1078,7 +1080,8 @@ td {
 
 .comment-container {
   overflow: hidden;
-  margin-bottom: 1em; }
+  margin-bottom: 1em;
+  list-style: none; }
 
 .comment-meta {
   float: left;

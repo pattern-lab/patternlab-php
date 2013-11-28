@@ -8,16 +8,9 @@
 	color: $white;
 	line-height: 1.2;
 
-	.lc {
-		padding: $pad $pad 0;
-	}
-
-
 	a {
 		color: $gray-light;
 	}
-
-	
 }
 
 //Footer Nav
@@ -41,6 +34,6 @@
 
 .copyright {
 	@media all and (min-width: $bp-med) {
-			float: right;
-		}
+		float: right;
+	}
 }

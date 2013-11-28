@@ -1,9 +1,9 @@
 /*------------------------------------*\
-    $STYLE GUIDE CONTAINER STYLES
+    $PATTERN LAB STYLES
 \*------------------------------------*/
 /**
- * NOTE: These styles are specific to the style guide container and should not be modified. 
- * Use style.scss for all content styles that don't pertain to the style guide container.
+ * NOTE: These styles are specific to Pattern Lab and should not be modified. 
+ * Edit all project styles in /source/css/
  * 
  * Second note: Any important declarations are to prevent brand styles from overriding style guide 
  */
@@ -18,14 +18,13 @@
  * -----Defaults
  * -----Breakpoints
  * MIXINS---------------------------------Sass mixins 
- * RESET----------------------------------Set reset defaults
  * GLOBAL ELEMENTS------------------------Establish global styles
  * -----Main
  * -----Headings
  * -----Text-related elements (p, blockquote, lists)
  * -----Defaults
  * -----Breakpoints
- * STYLE GUIDE INTERFACE------------------CSS for the Style Guide Container. Should not influence the containing styles at all.
+ * STYLE GUIDE INTERFACE------------------CSS for the Pattern Lab Container.
  * -----Header
  * -----Navigation
  * -----Controls
@@ -33,9 +32,10 @@
  * -----Viewport
  * -----Section Headers
  * -----Code View
+ * -----Icon Fonts
  */
 /*------------------------------------*\
-    $STYLE GUIDE VARIABLES 
+    $PATTERN LAB VARIABLES 
 \*------------------------------------*/
 /*Fonts*/
 /* Style Guide Interface Colors */
@@ -44,10 +44,10 @@
 /* Dimensions */
 /* Breakpoints */
 /*------------------------------------*\
-    $STYLE GUIDE MIXINS 
+    $PATTERN LAB MIXINS 
 \*------------------------------------*/
 /*------------------------------------*\
-    $STYLE GUIDE INTERFACE 
+    $PATTERN LAB INTERFACE 
 \*------------------------------------*/
 #patternlab-html, #patternlab-body {
   margin: 0;
@@ -68,8 +68,16 @@
   border: 0;
   clip: rect(1px, 1px, 1px, 1px); }
 
+.sg-cf, .sg-pattern {
+  *zoom: 1; }
+  .sg-cf:before, .sg-pattern:before, .sg-cf:after, .sg-pattern:after {
+    content: " ";
+    display: table; }
+  .sg-cf:after, .sg-pattern:after {
+    clear: both; }
+
 /*------------------------------------*\
-    $STYLE GUIDE HEADER 
+    $PATTERN LAB HEADER 
 \*------------------------------------*/
 /* Header */
 .sg-header {
@@ -208,25 +216,26 @@
     min-width: 0; }
     .sg-controls .sg-nav-phases .sg-acc-panel.active {
       max-height: none; }
+  @media all and (min-width: 69.5em) {
+    .sg-controls {
+      width: 41.5em; } }
 
 .sg-control-trigger {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
   @media all and (min-width: 44em) {
     .sg-control-trigger {
       border: 0; } }
-  @media all and (min-width: 65em) {
+  @media all and (min-width: 69.5em) {
     .sg-control-trigger {
       float: left;
       width: 6em; } }
 
-@media all and (min-width: 44em) {
-  .sg-control > li {
-    float: left;
-    border-bottom: 0;
-    border-left: 1px solid rgba(255, 255, 255, 0.05); } }
-
 .sg-control > li {
   float: left; }
+  @media all and (min-width: 44em) {
+    .sg-control > li {
+      border-bottom: 0;
+      border-left: 1px solid rgba(255, 255, 255, 0.05); } }
 .sg-control .sg-input {
   padding: 0.1em;
   -webkit-transition: all 0.2s ease-out;
@@ -239,24 +248,6 @@
     background: #f7f7f7;
     color: #000; }
 
-@media all and (max-width: 65em) {
-  .sg-quarter {
-    float: left;
-    width: 25%;
-    border-left: 1px solid rgba(255, 255, 255, 0.05);
-    text-align: center; }
-    .sg-quarter:first-child {
-      border-left: 0; } }
-
-@media all and (max-width: 65em) {
-  .sg-half {
-    float: left;
-    width: 50%;
-    border-left: 1px solid rgba(255, 255, 255, 0.05);
-    text-align: center; }
-    .sg-half:nth-child(odd) {
-      border-left: 0; } }
-
 .sg-current-size {
   font-size: 70%;
   color: gray;
@@ -264,21 +255,20 @@
   .sg-current-size:hover .sg-input {
     background: #f7f7f7;
     color: #000; }
-  @media all and (min-width: 65em) {
+  @media all and (min-width: 69.5em) {
     .sg-current-size {
       float: left; } }
 
-.sg-size-options {
-  max-width: 10em; }
-  @media all and (min-width: 65em) {
-    .sg-size-options {
-      position: static;
-      max-height: none;
-      max-width: none; }
-      .sg-size-options > li {
-        float: left;
-        border: 0;
-        border-left: 1px solid rgba(255, 255, 255, 0.05); } }
+@media all and (min-width: 69.5em) {
+  .sg-size-options {
+    float: left;
+    position: static;
+    max-height: none;
+    max-width: none; }
+    .sg-size-options > li {
+      display: inline-block;
+      border: 0;
+      border-left: 1px solid rgba(255, 255, 255, 0.05); } }
 
 #sg-form {
   margin: 0;
@@ -310,7 +300,7 @@
   margin-right: 0.4em; }
 
 /*------------------------------------*\
-    $STYLE GUIDE VIEWPORT
+    $PATTERN LAB VIEWPORT
 \*------------------------------------*/
 /* Viewport */
 #sg-vp-wrap {
@@ -393,12 +383,11 @@
   transition: width 0.8s ease-out; }
 
 /*------------------------------------*\
-    $STYLE GUIDE CONTENT 
+    $PATTERN LAB CONTENT 
 \*------------------------------------*/
 /* Section Pattern */
 .sg-pattern {
-  margin-bottom: 2em;
-  overflow: hidden; }
+  margin-bottom: 2em; }
 
 /* Section Head */
 .sg-pattern-head {
@@ -419,39 +408,6 @@
 /* Clean View */
 .sg-clean .sg-main {
   padding: 0; }
-
-.sg-code, .sg-annotations {
-  clear: both;
-  background: #dddddd;
-  color: #222222;
-  padding: 1em 0.5em;
-  margin: 1em 0; }
-  .sg-code a, .sg-annotations a {
-    text-decoration: underline; }
-
-.sg-code pre {
-  white-space: -moz-pre-line;
-  white-space: -pre-line;
-  white-space: -o-pre-line;
-  word-wrap: break-word;
-  white-space: pre-line;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 0.5em; }
-
-.sg-code-contains {
-  margin-bottom: 1rem;
-  font-size: 85%;
-  color: gray; }
-  .sg-code-contains code {
-    padding: 0.2em;
-    background: rgba(0, 0, 0, 0.3);
-    color: #f7f7f7;
-    position: relative;
-    top: -2px; }
-
-.sg-code-head {
-  color: gray;
-  font-size: 1em; }
 
 .demo {
   overflow: hidden;
@@ -528,7 +484,6 @@
   width: 100%;
   padding: 1em; }
 
-/* Annotations */
 #sg-annotation-container, #sg-code-container {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -572,6 +527,40 @@
 .has-comment, .has-comment a {
   cursor: help !important; }
 
+.sg-code, .sg-annotations {
+  clear: both;
+  background: #dddddd;
+  color: #222222;
+  padding: 1em 0.5em;
+  margin: 1em 0; }
+  .sg-code a, .sg-annotations a {
+    text-decoration: underline; }
+
+.sg-code pre {
+  white-space: -moz-pre-line;
+  white-space: -pre-line;
+  white-space: -o-pre-line;
+  word-wrap: break-word;
+  white-space: pre-line;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.5em; }
+
+.sg-code-contains {
+  margin-bottom: 1rem;
+  font-size: 85%;
+  color: gray; }
+  .sg-code-contains code {
+    padding: 0.2em;
+    background: rgba(0, 0, 0, 0.3);
+    color: #f7f7f7;
+    position: relative;
+    top: -2px; }
+
+.sg-code-head {
+  color: gray;
+  font-size: 1em; }
+
+/* Pattern Lab icon fonts */
 @font-face {
   font-family: 'icons';
   src: url("../assets/icons.eot");
@@ -579,7 +568,6 @@
   font-weight: normal;
   font-style: normal; }
 
-/* Pattern Lab icon fonts */
 .icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .sg-header .sg-nav-toggle, .icon-checkbox-unchecked, .sg-checkbox, .icon-checkbox-checked, .sg-checkbox.active, .icon-eye {
   font-family: 'icons';
   speak: none;

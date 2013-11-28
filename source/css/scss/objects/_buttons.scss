@@ -12,12 +12,13 @@
 	text-align: center;
 	
 	&:hover, &:focus {
+		background: $gray;
 		color: $white;
 	}
 
 	&.disabled {
 		background: $gray-light-2;
-		color: $gray-light-3;
+		color: $gray;
 	}
 }
 
