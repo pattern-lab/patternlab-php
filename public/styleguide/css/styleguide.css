@@ -128,13 +128,15 @@
     text-transform: none; }
 
 /* Navigation */
-.sg-header .sg-nav-toggle {
+.sg-nav-toggle {
   padding: 1em;
+  display: inline-block !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0);
   position: relative;
+  text-transform: uppercase !important;
   z-index: 2; }
   @media all and (min-width: 44em) {
-    .sg-header .sg-nav-toggle {
+    .sg-nav-toggle {
       display: none; } }
 
 @media all and (max-width: 44em) {
@@ -568,7 +570,7 @@
   font-weight: normal;
   font-style: normal; }
 
-.icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .sg-header .sg-nav-toggle, .icon-checkbox-unchecked, .sg-checkbox, .icon-checkbox-checked, .sg-checkbox.active, .icon-eye {
+.icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-checkbox-unchecked, .sg-checkbox, .icon-checkbox-checked, .sg-checkbox.active, .icon-eye {
   font-family: 'icons';
   speak: none;
   font-style: normal;
@@ -590,7 +592,7 @@
 .icon-plus:before {
   content: "\e004"; }
 
-.icon-menu:before, .sg-header .sg-nav-toggle:before {
+.icon-menu:before {
   content: "\e005"; }
 
 .icon-checkbox-unchecked:before, .sg-checkbox:before {

@@ -178,6 +178,7 @@ $animate-quick: 0.2s;
 		list-style: none;
 		border-bottom: 1px solid $sg-tint;
 	}
+
 	a {
 		font-size: $sg-font-size-sm;
 		color: $sg-secondary;
@@ -217,11 +218,12 @@ $animate-quick: 0.2s;
 
 
 /* Navigation */
-.sg-header .sg-nav-toggle {
-	@extend .icon-menu;
+.sg-nav-toggle {
 	padding: $sg-pad;
+	display: inline-block !important;
 	border-bottom: 1px solid rgba(0,0,0,0);
 	position: relative;
+	text-transform: uppercase !important;
 	z-index: 2;
 	@media all and (min-width: $sg-bp-med) {
 		display: none;
