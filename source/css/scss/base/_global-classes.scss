@@ -80,7 +80,7 @@
     }
 }
 
-//
+//States
 .valid {
 	color: $valid;
 }
@@ -89,8 +89,16 @@
 	color: $error;
 }
 
-.info {
+.warning {
+    color: $warning;
+}
 
+.info {
+    color: $info;
+}
+
+.font-secondary {
+    font-family: $font-secondary;
 }
 
 

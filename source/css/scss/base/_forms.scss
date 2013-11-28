@@ -1,11 +1,6 @@
 /*------------------------------------*\
     $FORMS
 \*------------------------------------*/
-
-form > div {
-	margin-bottom: $space;
-}
-
 form ol, form ul {
 	list-style: none;
 	margin-left: 0;
@@ -19,7 +14,7 @@ fieldset {
 
 label {
 	display: block;
-	padding-bottom: $space-quarter;
+	padding-bottom: $space-half;
 }
 
 button, input, select, textarea {
@@ -73,7 +68,7 @@ input[type="search"]::-webkit-search-decoration {
 	}
 	
 	input[type=submit], button, .btn {
-		font-size: $font-size-slightly-smaller;
+		font-size: $font-size-small-2;
 		padding: 0.65rem 1.3rem;
 		background: $gray-dark;
 		position: absolute;

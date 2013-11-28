@@ -7,48 +7,39 @@ $gray : #808080;
 $gray-light : #f9f9f9;
 $gray-light-2 : #eee;
 $gray-light-3 : #ddd;
-$gray-light-4 : #bbb;
 $gray-med : #666;
 $gray-dark : #333;
 $gray-dark-2 : #131313;
 $white : #fff;
 $black : #000;
-
 $dim : rgba(0,0,0,0.5);
-$dimmer : rgba(0,0,0,0.8);
-
 $error : #f00;
 $valid : #089e00;
+$warning : #fff664;
+$info : #a2dfdd;
 
-$brand-facebook: #03539e;
-$brand-twitter: #35ccff;
-$brand-linkedin: #217bc1;
 
 //Typography
 $font : "HelveticaNeue", "Helvetica", "Arial", sans-serif;
 $font-secondary : Georgia, Times, "Times New Roman", serif;
 
-$font-size-norm : 1em;
-$font-size-slightly-larger : 1.0625em;
-$font-size-slightly-smaller : 0.875em;
-$font-size-sm : 0.75em;
+$font-size-small : 0.75em;
+$font-size-small-2 : 0.875em;
+$font-size-med : 1em;
+$font-size-med-2: 1.0625em;
 $font-size-large : 1.4375em;
 
-//Layout
-$max-width: 72rem;
-$offset-left-1: 4.5rem;
 
-$l-sidebar-width: 19.75rem;
+//Layout
+$max-width: 72em;
 
 //Defaults
-$space : 1rem;
+$space : 1em;
 $space-and-half : $space*1.5;
 $space-double : $space*2;
-$space-triple : $space*3;
 $space-quad : $space*4;
 $space-half : $space/2;
-$space-quarter : $space/4;
-$pad : 1rem;
+$pad : 1em;
 $pad-and-half : $pad*1.5;
 $pad-double : $pad*2;
 $pad-half : $pad/2;
