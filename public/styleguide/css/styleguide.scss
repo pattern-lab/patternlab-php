@@ -218,13 +218,19 @@ $animate-quick: 0.2s;
 
 
 /* Navigation */
-.sg-nav-toggle {
+.sg-header .sg-nav-toggle {
+	display: inline-block;
 	padding: $sg-pad;
-	display: inline-block !important;
 	border-bottom: 1px solid rgba(0,0,0,0);
 	position: relative;
-	text-transform: uppercase !important;
+	text-transform: uppercase;
 	z-index: 2;
+	
+	span {
+		display: inline-block;
+		padding-right: 0.2em;
+	}
+
 	@media all and (min-width: $sg-bp-med) {
 		display: none;
 	}
