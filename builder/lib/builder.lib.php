@@ -216,6 +216,10 @@ class Buildr {
 		$rf = $this->renderPattern($f);
 		$fr = $this->footHTML;
 		
+		// replace the user-defined header and footer info
+		$hr = str_replace("{{ headPattern }}",$this->headPattern,$hr);
+		$fr = str_replace("{{ footPattern }}",$this->footPattern,$fr);
+		
 		// find & replace the cacheBuster var in header and footer
 		$hr = str_replace("{{ cacheBuster }}",$this->cacheBuster,$hr);
 		$fr = str_replace("{{ cacheBuster }}",$this->cacheBuster,$fr);
@@ -225,10 +229,6 @@ class Buildr {
 		$fr = str_replace("{{ patternPartial }}",$pp,$fr);
 		$fr = str_replace("{{ lineage }}",json_encode($this->patternLineages[$pp]),$fr);
 		$fr = str_replace("{{ patternHTML }}",$rf,$fr);
-		
-		// replace the user-defined header and footer info
-		$hr = str_replace("{{ headPattern }}",$this->headPattern,$hr);
-		$fr = str_replace("{{ footPattern }}",$this->footPattern,$fr);
 		
 		// set-up the mark-up for CSS Rule Saver so it can figure out which rules to save
 		if ($this->enableCSS) {
