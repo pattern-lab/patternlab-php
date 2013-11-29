@@ -319,12 +319,15 @@ class Buildr {
 		// gather the data from the main source data.json
 		if (file_exists(__DIR__."/../../source/_data/_data.json")) {
 			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/_data/_data.json")));
+			$this->jsonLastErrorMsg("_data/_data.json");
 		}
 		
 		// add list item data, makes 'listItems' a reserved word
 		if (file_exists(__DIR__."/../../source/_data/_listitems.json")) {
 			
 			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/_data/_listitems.json"));
+			$this->jsonLastErrorMsg("_data/_listitems.json");
+			
 			$numbers   = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
 			
 			$i = 0;
@@ -379,6 +382,7 @@ class Buildr {
 				if (in_array($path,$this->patternPaths[$patternTypeClean])) {
 					$patternName = $path.".mustache";
 					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/_patterns/".$path.".json"));
+					$this->jsonLastErrorMsg($path.".json");
 				}
 			}
 			
@@ -388,6 +392,7 @@ class Buildr {
 				if (in_array($path,$this->patternPaths[$patternTypeClean])) {
 					$patternName = $path.".mustache";
 					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/_patterns/".$path.".json"));
+					$this->jsonLastErrorMsg($path.".json");
 				}
 			}
 			
@@ -969,6 +974,26 @@ class Buildr {
 			$this->cssRuleSaver->loadCSS($filename);
 		}
 		
+	}
+	
+	/**
+	* Returns the last error message when building a JSON file. Mimics json_last_error_msg() from PHP 5.5
+	* @param  {String}       the file that generated the error
+	*/
+	protected function jsonLastErrorMsg($file) {
+		$errors = array(
+			JSON_ERROR_NONE             => null,
+			JSON_ERROR_DEPTH            => 'Maximum stack depth exceeded',
+			JSON_ERROR_STATE_MISMATCH   => 'Underflow or the modes mismatch',
+			JSON_ERROR_CTRL_CHAR        => 'Unexpected control character found',
+			JSON_ERROR_SYNTAX           => 'Syntax error, malformed JSON',
+			JSON_ERROR_UTF8             => 'Malformed UTF-8 characters, possibly incorrectly encoded'
+		);
+		$error        = json_last_error();
+		$errorMessage = array_key_exists($error, $errors) ? $errors[$error] : "Unknown error ({$error})";
+		if ($errorMessage != null) {
+			print "The JSON file, ".$file.", wasn't loaded. The error: ".$errorMessage."\n";
+		}
 	}
 	
 	/**
