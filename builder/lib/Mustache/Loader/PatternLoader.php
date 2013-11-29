@@ -318,6 +318,10 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
                 $buffer    = "";
                 $inValue   = false;
                 $inKey     = true;
+            } else if ($inValue && (($i + 1) == $strLength)) {
+                // if inValue and end of the string add to buffer, save to parameters array
+                $buffer   .= $char;
+                $parameters[trim($keyBuffer)] = trim($buffer);
             } else if ($inValue) {
                 // if inValue add to buffer
                 $buffer   .= $char;
@@ -325,7 +329,6 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
                 // if inValue is false, inKey false, and a comma set inKey true
                 $inKey = true;
             }
-            
         }
         
         return $parameters;
