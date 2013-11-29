@@ -218,9 +218,7 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
         if (strpos($partial, "(") !== false) {
             $partialBits      = explode("(",$partial,2);
             $partial          = trim($partialBits[0]);
-            $cleanParameters  = explode(")",$partialBits[1]);
-            array_pop($cleanParameters);
-            $parametersString = implode($cleanParameters);
+            $parametersString = substr($partialBits[1],0,(strlen($partialBits[1]) - strlen(strrchr($partialBits[1],")"))));
             $parameters       = $this->parseParameters($parametersString);
         }
         
