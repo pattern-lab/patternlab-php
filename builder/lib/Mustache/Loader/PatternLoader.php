@@ -1,12 +1,13 @@
 <?php
 
 /*
- * This file is part of Mustache.php.
+ * PatternLoader has been modified from the FilesystemLoader.
  *
- * (c) 2012 Justin Hileman
+ * FileSytemLoader is (c) 2012 Justin Hileman
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * PatternLoader credits:
+ *    Dave Olsen, dmolsen.com
+ *    @coding-stuff for the initial pattern parameter code
  */
 
 /**
