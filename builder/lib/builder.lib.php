@@ -32,6 +32,10 @@ class Buildr {
 	protected $patternCSS;        // an array to hold the CSS generated for patterns
 	protected $cssRuleSaver;      // where css rule saver will be initialized
 	protected $cacheBuster;       // a timestamp used to bust the cache for static assets like CSS and JS
+	protected $headHTML;          // the HTML for the header
+	protected $footHTML;          // the HTML for the footer
+	protected $headPattern;       // the pattern to be included in the <head>
+	protected $footPattern;       // the pattern to be included in the foot
 	
 	/**
 	* When initializing the Builder class or the sub-classes make sure the base properties are configured
@@ -168,6 +172,16 @@ class Buildr {
 		// make sure $this->mpl is refreshed
 		$this->loadMustachePatternLoaderInstance();
 		
+		// load the overall header and footers
+		$this->headHTML = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
+		$this->footHTML = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
+		
+		// gather the user-defined header and footer information
+		$headPatternPath = __DIR__.$this->sp."00-atoms/00-meta/_00-head.mustache";
+		$footPatternPath = __DIR__.$this->sp."00-atoms/00-meta/_01-foot.mustache";
+		$this->headPattern = (file_exists($headPatternPath)) ? file_get_contents($headPatternPath) : "";
+		$this->footPattern = (file_exists($footPatternPath)) ? file_get_contents($footPatternPath) : "";
+		
 		// loop over the pattern paths to generate patterns for each
 		foreach($this->patternPaths as $patternType) {
 			
@@ -198,9 +212,9 @@ class Buildr {
 	*/
 	private function generatePatternFile($f) {
 		
-		$hr = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
+		$hr = $this->headHTML;
 		$rf = $this->renderPattern($f);
-		$fr = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
+		$fr = $this->footHTML;
 		
 		// find & replace the cacheBuster var in header and footer
 		$hr = str_replace("{{ cacheBuster }}",$this->cacheBuster,$hr);
@@ -211,6 +225,10 @@ class Buildr {
 		$fr = str_replace("{{ patternPartial }}",$pp,$fr);
 		$fr = str_replace("{{ lineage }}",json_encode($this->patternLineages[$pp]),$fr);
 		$fr = str_replace("{{ patternHTML }}",$rf,$fr);
+		
+		// replace the user-defined header and footer info
+		$hr = str_replace("{{ headPattern }}",$this->headPattern,$hr);
+		$fr = str_replace("{{ footPattern }}",$this->footPattern,$fr);
 		
 		// set-up the mark-up for CSS Rule Saver so it can figure out which rules to save
 		if ($this->enableCSS) {
