@@ -22,7 +22,7 @@ var annotationsViewer = {
 			// make sure the code view overlay is off
 			$('#sg-t-code').removeClass('active');
 			codeViewer.codeActive = false;
-			var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+			var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 			document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "off" },targetOrigin);
 			codeViewer.slideCode(999);
 				
@@ -36,18 +36,19 @@ var annotationsViewer = {
 	toggleComments: function() {
 		
 		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-		$('#sg-t-annotations').toggleClass('active');
 		
 		if (!annotationsViewer.commentsActive) {
 			
 			annotationsViewer.commentsActive = true;
 			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "on" },targetOrigin);
+			$('#sg-t-annotations').addClass('active');
 			
 		} else {
 			
 			annotationsViewer.commentsActive = false;
 			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },targetOrigin);
-			annotationsViewer.slideComment(999);
+			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
+			$('#sg-t-annotations').removeClass('active');
 			
 		}
 		
@@ -66,7 +67,7 @@ var annotationsViewer = {
 		}
 		
 		$('body').delegate('#sg-annotation-close-btn','click',function() {
-			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
+			annotationsViewer.toggleComments();
 			return false;
 		});
 		

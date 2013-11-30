@@ -21,41 +21,40 @@ var codeViewer = {
 			// make sure the annotations overlay is off
 			$('#sg-t-annotations').removeClass('active');
 			annotationsViewer.commentsActive = false;
-			var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+			var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },targetOrigin);
 			annotationsViewer.slideComment(999);
 			
-			codeViewer.toggleCode();
+			if ($(this).hasClass('active')) {
+				codeViewer.closeCode();
+			} else {
+				codeViewer.openCode();
+			}
+
 			codeViewer.codeContainerInit();
 			
 		});
-		
 	},
-	
-	toggleCode: function() {
-		
+
+	openCode: function() {
 		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-		$('#sg-t-code').toggleClass('active');
-		
-		if (!codeViewer.codeActive) {
-			
-			codeViewer.codeActive = true;
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "on" },targetOrigin);
-			
-		} else {
-			
-			codeViewer.codeActive = false;
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "off" },targetOrigin);
-			codeViewer.slideCode(999);
-			
-		}
-		
+		codeViewer.codeActive = true;
+		document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "on" },targetOrigin);
+		$('#sg-t-code').addClass('active');
+	},
+
+	closeCode: function() {
+		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		codeViewer.codeActive = false;
+		document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "off" },targetOrigin);
+		codeViewer.slideCode($('#sg-code-container').outerHeight());
+		$('#sg-t-code').removeClass('active');
 	},
 	
 	codeContainerInit: function() {
 		
 		if (document.getElementById("sg-code-container") === null) {
-			$('<div id="sg-code-container" class="sg-view-container" style="display: none;"></div>').html('<a href="#" id="sg-code-close-btn" class="sg-view-close-btn">Close</a><div id="sg-code-lineage" style="display: none;"><h2>Lineage</h2><p>This pattern contains the following patterns: <span id="sg-code-lineage-fill"></span></p></div><div id="sg-code-html"><h2>HTML</h2><pre><code id="sg-code-html-fill" class="language-markup"></code></pre></div><div id="sg-code-css" class="with-css" style="display: none;"><h2>CSS</h2><pre><code id="sg-code-css-fill" class="language-css"></code></pre></div>').appendTo('body').css('bottom',-$(document).outerHeight());
+			$('<div id="sg-code-container" class="sg-view-container" style="display: none;"></div>').html('<a href="#" id="sg-code-close-btn" class="sg-view-close-btn">Close</a><div id="sg-code-lineage" style="display: none;"><p>This pattern contains the following patterns: <span id="sg-code-lineage-fill"></span></p></div><div id="sg-code-html"><h2>HTML</h2><pre><code id="sg-code-html-fill" class="language-markup"></code></pre></div><div id="sg-code-css" class="with-css" style="display: none;"><h2>CSS</h2><pre><code id="sg-code-css-fill" class="language-css"></code></pre></div>').appendTo('body').css('bottom',-$(document).outerHeight());
 		}
 		
 		if (codeViewer.sw < codeViewer.breakpoint) {
@@ -65,7 +64,7 @@ var codeViewer = {
 		}
 		
 		$('body').delegate('#sg-code-close-btn','click',function() {
-			codeViewer.slideCode($('#sg-code-container').outerHeight());
+			codeViewer.closeCode();
 			return false;
 		});
 		
