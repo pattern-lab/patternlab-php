@@ -15,7 +15,9 @@ if (self != top) {
 	//   - all get path
 	//   - pattern & view all get a pattern partial, styleguide gets all
 	//   - pattern shares lineage
-	var options = { "path": window.location.toString() };
+	var path = window.location.toString();
+	var parts = path.split("?");
+	var options = { "path": parts[0] };
 	options.patternpartial = (patternPartial !== "") ? patternPartial : "all";
 	if (lineage !== "") {
 		options.lineage = lineage;
@@ -29,7 +31,7 @@ if (self != top) {
 	for (var i = 0; i < aTags.length; i++) {
 		aTags[i].onclick = function(e) {
 			e.preventDefault();
-			window.location.replace(this.getAttribute("href"));
+			window.location.replace(this.getAttribute("href")+'?'+Date.now());
 		};
 	}
 	
@@ -59,13 +61,15 @@ function receiveIframeMessage(event) {
 			
 			// handle patterns and the view all page
 			var re = /patterns\/(.*)$/;
-			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace(re,'')+event.data.path;
+			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace(re,'')+event.data.path+'?'+Date.now();
+			console.log(path);
 			window.location.replace(path);
 			
 		} else {
 			
 			// handle the style guide
-			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("styleguide\/html\/styleguide.html","")+event.data.path;
+			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("styleguide\/html\/styleguide.html","")+event.data.path+'?'+Date.now();
+			console.log(path);
 			window.location.replace(path);
 			
 		}
