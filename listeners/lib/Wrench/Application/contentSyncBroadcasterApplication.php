@@ -19,6 +19,7 @@ use Wrench\Application\NamedApplication;
 
 class contentSyncBroadcasterApplication extends Application {
 	
+	protected $newlines         = false;
 	protected $clients          = array();
 	protected $savedTimestamp   = null;
 	protected $c                = false;
@@ -26,7 +27,9 @@ class contentSyncBroadcasterApplication extends Application {
 	/**
 	* Set the saved timestamp. If the latest-change file doesn't exist simply use the current time as the saved time
 	*/
-	public function __construct() {
+	public function __construct($newlines) {
+		
+		$this->newlines = $newlines;
 		
 		if (file_exists(__DIR__."/../../../../public/latest-change.txt")) {
 			$this->savedTimestamp = file_get_contents(__DIR__."/../../../../public/latest-change.txt");
@@ -72,6 +75,8 @@ class contentSyncBroadcasterApplication extends Application {
 					$sendto->send($readTimestamp);
 				}
 				$this->savedTimestamp = $readTimestamp;
+			} else {
+				if ($this->newlines) print "\n";
 			}
 		}
 		

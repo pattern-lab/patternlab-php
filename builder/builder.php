@@ -12,9 +12,15 @@
  * 		Iterates over the 'source' directories & files and generates the entire site a single time.
  * 		It also cleans the 'public' directory.
  * 	
+ * 	php builder/builder.php -gc
+ * 		In addition to the -g flag features it will also generate CSS for each pattern. Resource instensive.
+ * 	
  * 	php builder.php -w
  * 		Generates the site like the -g flag and then watches for changes in the 'source' directories &
  * 		files. Will re-generate files if they've changed.
+ * 	
+ * 	php builder.php -wr
+ * 		In addition to the -w flag features it will also automatically start the auto-reload server.
  *
  */
 
@@ -33,7 +39,7 @@ require __DIR__."/lib/css-rule-saver/css-rule-saver.php";
 // make sure this script is being accessed from the command line
 if (php_sapi_name() == 'cli') {
 	
-	$args = getopt("gwc");
+	$args = getopt("gwcr");
 	
 	if (isset($args["g"])) {
 		
@@ -59,7 +65,12 @@ if (php_sapi_name() == 'cli') {
 		// watch the source directory and regenerate any changed files
 		$w = new Watchr();
 		print "watching your site for changes...\n";
-		$w->watch();
+		if (isset($args["r"])) {
+			print "starting page auto-reload...\n";
+			$w->watch(true);
+		} else {
+			$w->watch();
+		}
 		
 	} else {
 		
@@ -69,9 +80,13 @@ if (php_sapi_name() == 'cli') {
 		print "  php ".$_SERVER["PHP_SELF"]." -g\n";
 		print "    Iterates over the 'source' directories & files and generates the entire site a single time.\n";
 		print "    It also cleans the 'public' directory.\n\n";
+		print "  php ".$_SERVER["PHP_SELF"]." -gc\n";
+		print "    In addition to the -g flag features it will also generate CSS for each pattern. Resource instensive.\n\n";
 		print "  php ".$_SERVER["PHP_SELF"]." -w\n";
 		print "    Generates the site like the -g flag and then watches for changes in the 'source' directories &\n";
 		print "    files. Will re-generate files if they've changed.\n\n";
+		print "  php ".$_SERVER["PHP_SELF"]." -wr\n";
+		print "    In addition to the -w flag features it will also automatically start the auto-reload server.\n\n";
 		
 	}
 

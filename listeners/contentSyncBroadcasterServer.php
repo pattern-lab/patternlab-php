@@ -32,12 +32,18 @@ $port = ($config) ? trim($config['contentSyncPort']) : '8002';
 // start the content sync server
 $server = new \Wrench\Server('ws://0.0.0.0:'.$port.'/', array());
 
-// register the application 
-$server->registerApplication('contentsync', new \Wrench\Application\contentSyncBroadcasterApplication());
+// register the application
+$args = getopt("s");
+$newlines = (isset($args["s"])) ? true : false;
 
-print "\n";
-print "Auto-reload Server Started...\n";
-print "Use CTRL+C to stop this service...\n";
+$server->registerApplication('contentsync', new \Wrench\Application\contentSyncBroadcasterApplication($newlines));
+
+$args = getopt("s");
+if (!isset($args["s"])) {
+	print "\n";
+	print "Auto-reload Server Started...\n";
+	print "Use CTRL+C to stop this service...\n";
+}
 
 // run it
 $server->run();

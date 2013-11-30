@@ -29,7 +29,13 @@ class Watchr extends Buildr {
 	/**
 	* Watch the source/ directory for any changes to existing files. Will run forever if given the chance.
 	*/
-	public function watch() {
+	public function watch($reload = false) {
+		
+		// automatically start the auto-refresh tool
+		if ($reload) {
+			$path = str_replace("builder/lib","listeners/contentSyncBroadcasterServer.php",__DIR__);
+			$fp = popen("php ".$path." -s", "r"); 
+		}
 		
 		$c  = false;          // track that one loop through the pattern file listing has completed
 		$o  = new stdClass(); // create an object to hold the properties
@@ -210,10 +216,18 @@ class Watchr extends Buildr {
 			unset($this->msf);
 			if (gc_enabled()) gc_collect_cycles();
 			
+			if ($reload) {
+				$output = fgets($fp, 100);
+				if ($output != "\n") print $output;
+			}
+			
 			// pause for .05 seconds to give the CPU a rest
 			usleep(50000);
 			
 		}
+		
+		// close the auto-reload process, this shouldn't do anything
+		fclose($fp);
 		
 	}
 	
