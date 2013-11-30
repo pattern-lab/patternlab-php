@@ -877,7 +877,7 @@ class Buildr {
 		$publicDirs = glob(__DIR__."/../../public/*",GLOB_ONLYDIR);
 		
 		// make sure some directories aren't deleted
-		$ignoreDirs = array("listeners","styleguide");
+		$ignoreDirs = array("styleguide");
 		foreach ($ignoreDirs as $ignoreDir) {
 			$key = array_search(__DIR__."/../../public/".$ignoreDir,$publicDirs);
 			if ($key !== false){
