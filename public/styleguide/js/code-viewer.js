@@ -34,7 +34,7 @@ var codeViewer = {
 	
 	toggleCode: function() {
 		
-		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 		$('#sg-t-code').toggleClass('active');
 		
 		if (!codeViewer.codeActive) {
@@ -55,7 +55,7 @@ var codeViewer = {
 	codeContainerInit: function() {
 		
 		if (document.getElementById("sg-code-container") === null) {
-			$('<div id="sg-code-container" style="display: none;"></div>').html('<a href="#" id="sg-code-close-btn">Close</a><div id="sg-code-lineage" style="display: none;"><h2>Lineage</h2><p>This pattern contains the following patterns: <span id="sg-code-lineage-fill"></span></p></div><div id="sg-code-html"><h2>HTML</h2><pre><code id="sg-code-html-fill" class="language-markup"></code></pre></div><div id="sg-code-css" class="with-css" style="display: none;"><h2>CSS</h2><pre><code id="sg-code-css-fill" class="language-css"></code></pre></div>').appendTo('body').css('bottom',-$(document).outerHeight());
+			$('<div id="sg-code-container" class="sg-view-container" style="display: none;"></div>').html('<a href="#" id="sg-code-close-btn" class="sg-view-close-btn">Close</a><div id="sg-code-lineage" style="display: none;"><h2>Lineage</h2><p>This pattern contains the following patterns: <span id="sg-code-lineage-fill"></span></p></div><div id="sg-code-html"><h2>HTML</h2><pre><code id="sg-code-html-fill" class="language-markup"></code></pre></div><div id="sg-code-css" class="with-css" style="display: none;"><h2>CSS</h2><pre><code id="sg-code-css-fill" class="language-css"></code></pre></div>').appendTo('body').css('bottom',-$(document).outerHeight());
 		}
 		
 		if (codeViewer.sw < codeViewer.breakpoint) {
@@ -109,7 +109,7 @@ var codeViewer = {
 			Prism.highlightElement(document.getElementById("sg-code-html-fill"));
 			
 			// draw CSS
-			if (css.indexOf("{{ patternCSS }}") == -1) {
+			if (css.indexOf("{{ patternCSS }}") === -1) {
 				$("#sg-code-html").addClass("with-css");
 				$("#sg-code-css").css("display","block");
 				$("#sg-code-css-fill").text(css);
@@ -128,12 +128,12 @@ var codeViewer = {
 	receiveIframeMessage: function(event) {
 		
 		// does the origin sending the message match the current host? if not dev/null the request
-		if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
+		if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 			return;
 		}
 		
 		if (event.data.codeOverlay !== undefined) {
-			if (event.data.codeOverlay == "on") {
+			if (event.data.codeOverlay === "on") {
 				
 				codeViewer.updateCode(event.data.lineage,event.data.html,event.data.css);
 				

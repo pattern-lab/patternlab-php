@@ -481,15 +481,7 @@
 .sg-label {
   line-height: 1; }
 
-#sg-annotation-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 99;
-  width: 100%;
-  padding: 1em; }
-
-#sg-annotation-container, #sg-code-container {
+.sg-view-container {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -502,25 +494,22 @@
   padding: 1rem 1rem 4rem;
   bottom: 0;
   left: 0;
-  width: 100%;
   z-index: 2;
+  width: 100%;
+  height: 50%;
+  overflow: scroll;
   -webkit-transition: bottom 0.3s ease-out;
   -moz-transition: bottom 0.3s ease-out;
   -webkit-transition: bottom 0.3s ease-out;
   -ms-transition: bottom 0.3s ease-out;
   -o-transition: bottom 0.3s ease-out;
   transition: bottom 0.3s ease-out; }
-  #sg-annotation-container a, #sg-code-container a {
+  .sg-view-container a {
     color: #dddddd; }
+  .sg-view-container pre {
+    padding: 0 1em; }
 
-#sg-code-container pre {
-  max-height: 300px;
-  padding: 0 1em; }
-
-#sg-code-container .with-css pre {
-  max-height: 200px; }
-
-#sg-annotation-close-btn, #sg-code-close-btn {
+.sg-view-close-btn {
   color: #fff;
   position: absolute;
   top: 1em;
@@ -530,7 +519,8 @@
   text-align: right; }
 
 .has-comment, .has-comment a {
-  cursor: help !important; }
+  cursor: help !important;
+  position: relative; }
 
 .sg-code, .sg-annotations {
   clear: both;

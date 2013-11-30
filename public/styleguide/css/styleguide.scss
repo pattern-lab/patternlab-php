@@ -702,18 +702,8 @@ $animate-quick: 0.2s;
 	line-height: 1;
 }
 
-//Annotations and code view
-#sg-annotation-container {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	z-index: 99;
-	width: 100%;
-	padding: $sg-pad;
-}
-
-
-#sg-annotation-container, #sg-code-container {
+//Annotations and code view container
+.sg-view-container {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
@@ -726,8 +716,10 @@ $animate-quick: 0.2s;
 	padding: 1rem 1rem 4rem;
 	bottom: 0;
 	left: 0;
-	width: 100%;
 	z-index: 2;
+	width: 100%;
+	height: 50%;
+	overflow: scroll;
 	-webkit-transition: bottom 0.3s ease-out;
 	-moz-transition: bottom 0.3s ease-out;
   	-webkit-transition: bottom 0.3s ease-out;
@@ -738,19 +730,14 @@ $animate-quick: 0.2s;
   	a {
     	color: $sg-tertiary;
     }
+
+     pre {
+		padding: 0 1em;
+	}
 }
 
-// Code
-#sg-code-container pre {
-	max-height: 300px;
-	padding: 0 1em;
-}
-
-#sg-code-container .with-css pre {
-	max-height: 200px;
-}
-
-#sg-annotation-close-btn, #sg-code-close-btn {
+//Annotation and code view close button
+.sg-view-close-btn {
 	color: #fff;
 	position: absolute;
 	top: 1em;
@@ -762,6 +749,7 @@ $animate-quick: 0.2s;
 
 .has-comment, .has-comment a {
 	cursor: help !important;
+	position: relative;
 }
 
 .sg-code, .sg-annotations {
