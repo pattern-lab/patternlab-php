@@ -46,8 +46,6 @@ class Generatr extends Buildr {
 			// initialize CSS rule saver
 			$this->initializeCSSRuleSaver();
 			
-			print "CSS generation enabled. This could take a few seconds...\n";
-			
 		}
 		
 		
