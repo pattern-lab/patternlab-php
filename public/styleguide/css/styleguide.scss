@@ -713,7 +713,7 @@ $animate-quick: 0.2s;
 	color: $sg-secondary;
 	position: fixed;
 	top: auto;
-	padding: 1rem 1rem 4rem;
+	padding: $sg-pad;
 	bottom: 0;
 	left: 0;
 	z-index: 2;

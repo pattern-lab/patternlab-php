@@ -49,7 +49,6 @@ var annotationsViewer = {
 			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },targetOrigin);
 			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			$('#sg-t-annotations').removeClass('active');
-			
 		}
 		
 	},
@@ -57,33 +56,18 @@ var annotationsViewer = {
 	commentContainerInit: function() {
 		
 		if (document.getElementById("sg-annotation-container") === null) {
-			$('<div id="sg-annotation-container" class="sg-view-container" style="display: none;"></div>').html('<a href="#" id="sg-annotation-close-btn" class="sg-view-close-btn">Close</a><h2 id="sg-annotation-title">Annotation Title</h2><div id="sg-annotation-text">Here is some comment text</div>').appendTo('body').css('bottom',-$(document).outerHeight());
-		}
-		
-		if (annotationsViewer.sw < annotationsViewer.breakpoint) {
-			$('#sg-annotation-container').hide();
-		} else {
-			$('#sg-annotation-container').show();
+			$('<div id="sg-annotation-container" class="sg-view-container"></div>').html('<a href="#" id="sg-annotation-close-btn" class="sg-view-close-btn">Close</a><h2 id="sg-annotation-title">Annotation Title</h2><div id="sg-annotation-text">Here is some comment text</div>').appendTo('body').css('bottom',-$(document).outerHeight());
 		}
 		
 		$('body').delegate('#sg-annotation-close-btn','click',function() {
-			annotationsViewer.toggleComments();
+			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			return false;
 		});
 		
 	},
 	
 	slideComment: function(pos) {
-		
-		$('#sg-annotation-container').show();
-		
-		if (annotationsViewer.sw > annotationsViewer.breakpoint) {
-			$('#sg-annotation-container').css('bottom',-pos);
-		} else {
-			var offset = $('#sg-annotation-container').offset().top;
-			$('html,body').animate({scrollTop: offset}, 500);
-		}
-		
+		$('#sg-annotation-container').css('bottom',-pos);
 	},
 	
 	updateComment: function(el,title,msg) {
