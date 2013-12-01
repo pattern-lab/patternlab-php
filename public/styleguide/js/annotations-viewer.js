@@ -9,8 +9,6 @@
 var annotationsViewer = {
 	
 	commentsActive: false,
-	sw:             document.documentElement.clientWidth,
-	breakpoint:     650,
 	
 	onReady: function() {
 		
@@ -35,7 +33,7 @@ var annotationsViewer = {
 	
 	toggleComments: function() {
 		
-		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 		
 		if (!annotationsViewer.commentsActive) {
 			
@@ -86,12 +84,12 @@ var annotationsViewer = {
 	receiveIframeMessage: function(event) {
 		
 		// does the origin sending the message match the current host? if not dev/null the request
-		if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
+		if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 			return;
 		}
 		
 		if (event.data.commentOverlay !== undefined) {
-			if (event.data.commentOverlay == "on") {
+			if (event.data.commentOverlay === "on") {
 				
 				annotationsViewer.updateComment(event.data.el,event.data.title,event.data.comment);
 				
@@ -110,7 +108,7 @@ window.addEventListener("message", annotationsViewer.receiveIframeMessage, false
 // make sure if a new pattern or view-all is loaded that comments are turned on as appropriate
 $('#sg-viewport').load(function() {
 	if (annotationsViewer.commentsActive) {
-		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 		document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "on" },targetOrigin);
 	}
 });
