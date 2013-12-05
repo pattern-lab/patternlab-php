@@ -1,5 +1,9 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.6.2
+ - FIX: a few small sass and styling tweaks
+ - THX: thanks to @griffinartworks for the sass and styling fixes
+
 PL-v0.6.1
  - FIX: fixed the height of the HTML pre element on the pattern detail view
  - ADD: added in support for viewing the generated CSS on the pattern detail view
