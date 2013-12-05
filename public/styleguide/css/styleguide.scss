@@ -542,6 +542,8 @@ html#pattern-frame {
 	height: 100%; 
 	text-align: center; 
 	margin: 0 auto;
+	-webkit-overflow-scrolling: touch;
+  	overflow: scroll;
 
 	&.hay-mode {
 		-webkit-transition: all 40s linear;
