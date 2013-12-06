@@ -143,9 +143,9 @@ var annotationsPattern = {
 			
 			// see which flag to toggle based on if this is a styleguide or view-all page
 			var body = document.getElementsByTagName("body");
-			if ((event.data.commentToggle == "on") && (body[0].classList.contains("sg-pattern-list"))) {
+			if ((event.data.commentToggle === "on") && (body[0].classList.contains("sg-pattern-list"))) {
 				annotationsPattern.commentsEmbeddedActive = true;
-			} else if (event.data.commentToggle == "on") {
+			} else if (event.data.commentToggle === "on") {
 				annotationsPattern.commentsOverlayActive  = true;
 			}
 			
@@ -154,6 +154,7 @@ var annotationsPattern = {
 				els = document.querySelectorAll(".has-comment");
 				for (i = 0; i < els.length; i++) {
 					els[i].classList.remove("has-comment");
+
 				}
 			}
 			
@@ -183,7 +184,7 @@ var annotationsPattern = {
 					item = comments.comments[i];
 					els  = document.querySelectorAll(item.el);
 					if (els.length > 0) {
-						annotationsPattern.embedComments(els[0],item.title,item.comment);
+						annotationsPattern.embedComments(els[0],item.title,item.comment); //Embed the comment
 					}
 					annotationsPattern.commentsEmbedded = true;
 				}
@@ -211,6 +212,6 @@ window.addEventListener("message", annotationsPattern.receiveIframeMessage, fals
 // before unloading the iframe make sure any active overlay is turned off/closed
 window.onbeforeunload = function() {
 	var obj = { "commentOverlay": "off" };
-	var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+	var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 	parent.postMessage(obj,targetOrigin);
 };

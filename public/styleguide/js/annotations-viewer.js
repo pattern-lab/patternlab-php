@@ -28,7 +28,6 @@ var annotationsViewer = {
 			annotationsViewer.commentContainerInit();
 			
 		});
-		
 	},
 	
 	toggleComments: function() {
@@ -55,13 +54,15 @@ var annotationsViewer = {
 		
 		if (document.getElementById("sg-annotation-container") === null) {
 			$('<div id="sg-annotation-container" class="sg-view-container"></div>').html('<a href="#" id="sg-annotation-close-btn" class="sg-view-close-btn">Close</a><h2 id="sg-annotation-title">Annotation Title</h2><div id="sg-annotation-text">Here is some comment text</div>').appendTo('body').css('bottom',-$(document).outerHeight());
+
+			setTimeout(function(){ $('#sg-annotation-container').addClass('anim-ready'); },50); //Add animation class once container is positioned out of frame
 		}
 		
+		//Close Annotation View Button
 		$('body').delegate('#sg-annotation-close-btn','click',function() {
 			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			return false;
 		});
-		
 	},
 	
 	slideComment: function(pos) {

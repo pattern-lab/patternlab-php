@@ -720,12 +720,6 @@ $animate-quick: 0.2s;
 	width: 100%;
 	height: 50%;
 	overflow: scroll;
-	-webkit-transition: bottom 0.3s ease-out;
-	-moz-transition: bottom 0.3s ease-out;
-  	-webkit-transition: bottom 0.3s ease-out;
-  	-ms-transition: bottom 0.3s ease-out; 
-  	-o-transition: bottom 0.3s ease-out; 
-  	transition:  bottom 0.3s ease-out;
 
   	a {
     	color: $sg-tertiary;
@@ -733,6 +727,15 @@ $animate-quick: 0.2s;
 
      pre {
 		padding: 0 1em;
+	}
+
+	&.anim-ready {
+		-webkit-transition: bottom 0.3s ease-out;
+		-moz-transition: bottom 0.3s ease-out;
+	  	-webkit-transition: bottom 0.3s ease-out;
+	  	-ms-transition: bottom 0.3s ease-out; 
+	  	-o-transition: bottom 0.3s ease-out; 
+	  	transition:  bottom 0.3s ease-out;
 	}
 }
 
@@ -747,9 +750,21 @@ $animate-quick: 0.2s;
 	text-align: right;
 }
 
-.has-comment, .has-comment a {
+.has-comment {
 	cursor: help !important;
-	position: relative;
+	box-shadow: inset 0 0 10px #4787dd;
+
+	a, input {
+		cursor: help !important;
+	}
+
+	&:hover {
+		opacity: 0.95;
+	}
+
+	&.active {
+		box-shadow: inset 0 0 20px #4787dd;
+	}
 }
 
 .sg-code, .sg-annotations {

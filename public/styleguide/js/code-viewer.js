@@ -55,7 +55,7 @@ var codeViewer = {
 			$('<div id="sg-code-container" class="sg-view-container"></div>').html('<a href="#" id="sg-code-close-btn" class="sg-view-close-btn">Close</a><div id="sg-code-lineage" style="display: none;"><p>This pattern contains the following patterns: <span id="sg-code-lineage-fill"></span></p></div><div id="sg-code-html"><h2>HTML</h2><pre><code id="sg-code-html-fill" class="language-markup"></code></pre></div><div id="sg-code-css" class="with-css" style="display: none;"><h2>CSS</h2><pre><code id="sg-code-css-fill" class="language-css"></code></pre></div>').appendTo('body').css('bottom',-$(document).outerHeight());
 		}
 		
-		
+		//Close Code View Button
 		$('body').delegate('#sg-code-close-btn','click',function() {
 			codeViewer.closeCode();
 			return false;
