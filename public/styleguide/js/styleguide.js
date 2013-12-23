@@ -25,6 +25,11 @@
 	$('.sg-acc-handle').on("click", function(e){
 		var $this = $(this),
 			$panel = $this.next('.sg-acc-panel');
+
+		// close all other panels first
+		$('.sg-acc-handle').not($this).removeClass('active');
+		$('.sg-acc-panel').not($panel).removeClass('active');
+
 		e.preventDefault();
 		$this.toggleClass('active');
 		$panel.toggleClass('active');
