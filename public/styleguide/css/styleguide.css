@@ -146,16 +146,18 @@
   margin: 0;
   padding: 0;
   list-style: none; }
-  @media all and (min-width: 44em) {
-    .sg-nav > li {
-      border-bottom: 0;
-      border-right: 1px solid rgba(255, 255, 255, 0.05);
-      float: left;
-      position: relative; }
-      .sg-nav > li > ol {
-        position: absolute;
-        top: 2em;
-        left: 0; } }
+  .sg-nav > li {
+    cursor: pointer; }
+    @media all and (min-width: 44em) {
+      .sg-nav > li {
+        border-bottom: 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+        float: left;
+        position: relative; }
+        .sg-nav > li > ol {
+          position: absolute;
+          top: 2em;
+          left: 0; } }
 
 /* Accordion */
 .sg-acc-handle:after {

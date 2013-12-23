@@ -233,6 +233,7 @@ $animate-quick: 0.2s;
 	list-style: none;
 	
 	> li {
+		cursor: pointer;
 		
 		@media all and (min-width: $sg-bp-med) {
 			border-bottom: 0;
