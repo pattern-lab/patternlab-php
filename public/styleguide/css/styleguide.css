@@ -184,12 +184,7 @@
   overflow: hidden;
   max-height: 0;
   min-width: 10em;
-  background: #222222;
-  -webkit-transition: max-height 0.5s ease-out;
-  -moz-transition: max-height 0.5s ease-out;
-  -ms-transition: max-height 0.5s ease-out;
-  -o-transition: max-height 0.5s ease-out;
-  transition: max-height 0.5s ease-out; }
+  background: #222222; }
   .sg-acc-panel.active {
     max-height: 50em; }
   .sg-acc-panel.sg-right {

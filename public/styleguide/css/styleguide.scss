@@ -287,7 +287,6 @@ $animate-quick: 0.2s;
 	max-height: 0;
 	min-width: 10em;
 	background: $sg-primary;
-	@include sg-transition(max-height,0.5s,ease-out);
 
 	&.active {
 		max-height: 50em;
