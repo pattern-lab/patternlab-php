@@ -62,7 +62,6 @@ input[type="search"]::-webkit-search-decoration {
 }
 
 .inline-form {
-	
 	fieldset, .inline-container {
 		position: relative;
 	}
@@ -81,27 +80,6 @@ input[type="search"]::-webkit-search-decoration {
 			background: $gray;
 			color: $white;
 		}
-	}
-}
-
-// PK to clean this up
-.inline-search-results-form {
-	width: 100%;
-	@media all and (min-width: $bp-med) {
-		width: 82%;
-
-	} 
-	
-	fieldset, .inline-container {
-		position: relative;
-	}
-	
-	input[type=submit], button {
-		position: absolute;
-		top: 0;
-		right: 0;
-		z-index: 1;
-		width: auto;
 	}
 }
 

@@ -318,20 +318,6 @@ input[type="search"]::-webkit-search-decoration {
     background: gray;
     color: white; }
 
-.inline-search-results-form {
-  width: 100%; }
-  @media all and (min-width: 46.8em) {
-    .inline-search-results-form {
-      width: 82%; } }
-  .inline-search-results-form fieldset, .inline-search-results-form .inline-container {
-    position: relative; }
-  .inline-search-results-form input[type=submit], .inline-search-results-form button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1;
-    width: auto; }
-
 /* Validation */
 .has-error {
   border-color: red; }
