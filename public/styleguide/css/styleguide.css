@@ -146,11 +146,11 @@
   .sg-nav-container {
     overflow: hidden;
     max-height: 0;
-    -webkit-transition: max-height 0.5s ease-out;
-    -moz-transition: max-height 0.5s ease-out;
-    -ms-transition: max-height 0.5s ease-out;
-    -o-transition: max-height 0.5s ease-out;
-    transition: max-height 0.5s ease-out; }
+    -webkit-transition: max-height 0.1s ease-out;
+    -moz-transition: max-height 0.1s ease-out;
+    -ms-transition: max-height 0.1s ease-out;
+    -o-transition: max-height 0.1s ease-out;
+    transition: max-height 0.1s ease-out; }
     .sg-nav-container.active {
       max-height: 50em; } }
 
@@ -159,16 +159,18 @@
   margin: 0;
   padding: 0;
   list-style: none; }
-  @media all and (min-width: 44em) {
-    .sg-nav > li {
-      border-bottom: 0;
-      border-right: 1px solid rgba(255, 255, 255, 0.05);
-      float: left;
-      position: relative; }
-      .sg-nav > li > ol {
-        position: absolute;
-        top: 2em;
-        left: 0; } }
+  .sg-nav > li {
+    cursor: pointer; }
+    @media all and (min-width: 44em) {
+      .sg-nav > li {
+        border-bottom: 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+        float: left;
+        position: relative; }
+        .sg-nav > li > ol {
+          position: absolute;
+          top: 2em;
+          left: 0; } }
 
 /* Accordion */
 .sg-acc-handle:after {
@@ -196,11 +198,11 @@
   max-height: 0;
   min-width: 10em;
   background: #222222;
-  -webkit-transition: max-height 0.5s ease-out;
-  -moz-transition: max-height 0.5s ease-out;
-  -ms-transition: max-height 0.5s ease-out;
-  -o-transition: max-height 0.5s ease-out;
-  transition: max-height 0.5s ease-out; }
+  -webkit-transition: max-height 0.1s ease-out;
+  -moz-transition: max-height 0.1s ease-out;
+  -ms-transition: max-height 0.1s ease-out;
+  -o-transition: max-height 0.1s ease-out;
+  transition: max-height 0.1s ease-out; }
   .sg-acc-panel.active {
     max-height: 50em; }
   .sg-acc-panel.sg-right {
@@ -349,7 +351,9 @@
 #sg-gen-container {
   height: 100%;
   text-align: center;
-  margin: 0 auto; }
+  margin: 0 auto;
+  -webkit-overflow-scrolling: touch;
+  overflow: scroll; }
   #sg-gen-container.hay-mode {
     -webkit-transition: all 40s linear;
     -moz-transition: all 40s linear;
