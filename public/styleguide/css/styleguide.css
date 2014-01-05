@@ -130,7 +130,7 @@
 /* Navigation */
 .sg-header .sg-nav-toggle {
   display: inline-block;
-  padding: 1em;
+  padding: 0.9em 1em;
   border-bottom: 1px solid rgba(0, 0, 0, 0);
   position: relative;
   text-transform: uppercase;
@@ -258,7 +258,7 @@
 .sg-current-size {
   font-size: 70%;
   color: gray;
-  padding: 0.8em 0.95em; }
+  padding: 0.9em 0.95em; }
   .sg-current-size:hover .sg-input {
     background: #f7f7f7;
     color: #000; }

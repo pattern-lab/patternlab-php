@@ -220,7 +220,7 @@ $animate-quick: 0.2s;
 /* Navigation */
 .sg-header .sg-nav-toggle {
 	display: inline-block;
-	padding: $sg-pad;
+	padding: 0.9em $sg-pad;
 	border-bottom: 1px solid rgba(0,0,0,0);
 	position: relative;
 	text-transform: uppercase;
@@ -389,7 +389,7 @@ $animate-quick: 0.2s;
 .sg-current-size {
 	font-size: 70%;
 	color: $sg-secondary;
-	padding: 0.8em 0.95em;
+	padding: 0.9em 0.95em;
 
 	&:hover {
 		.sg-input {

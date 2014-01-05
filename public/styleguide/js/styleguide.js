@@ -19,7 +19,7 @@
 		sh = document.body.clientHeight;
 	});
 
-	/* Pattern Lab accordion dropdown */
+	/* Accordion dropdown */
 	$('.sg-acc-handle').on("click", function(e){
 		e.preventDefault();
 
@@ -67,7 +67,7 @@
 			$bodySize = 1;
 		}
 		
-		val = val.replace(/[^\d.-]/g,'')		
+		val = val.replace(/[^\d.-]/g,'');
 		sizeiframe(Math.floor(val*$bodySize));
 	});
 	
@@ -150,7 +150,7 @@
 		if (hayMode) {
 			killHay();
 		} else {
-			startHay();	
+			startHay();
 		}
 	});
 
@@ -167,7 +167,7 @@
 	function startHay() {
 		hayMode = true;
 		$('#sg-gen-container').removeClass("vp-animate").width(minViewportWidth+viewportResizeHandleWidth);
-		$sgViewport.removeClass("vp-animate").width(minViewportWidth);		
+		$sgViewport.removeClass("vp-animate").width(minViewportWidth);
 		
 		var timeoutID = window.setTimeout(function(){
 			$('#sg-gen-container').addClass('hay-mode').width(maxViewportWidth+viewportResizeHandleWidth);
@@ -181,21 +181,20 @@
 	$sizePx.on('keydown', function(e){
 		var val = Math.floor($(this).val());
 
-		if(e.keyCode == 38) { //If the up arrow key is hit
+		if(e.keyCode === 38) { //If the up arrow key is hit
 			val++;
 			sizeiframe(val,false);
-		} else if(e.keyCode == 40) { //If the down arrow key is hit
+		} else if(e.keyCode === 40) { //If the down arrow key is hit
 			val--;
 			sizeiframe(val,false);
-		} else if(e.keyCode == 13) { //If the Enter key is hit
-	    	e.preventDefault();
+		} else if(e.keyCode === 13) { //If the Enter key is hit
+			e.preventDefault();
 			sizeiframe(val); //Size Iframe to value of text box
 			$(this).blur();
-	    }
-	    
+		}
 	});
 
-	$sizePx.on('keyup', function(e){
+	$sizePx.on('keyup', function(){
 		var val = Math.floor($(this).val());
 		updateSizeReading(val,'px','updateEmInput');
 	});
@@ -204,19 +203,19 @@
 	$sizeEms.on('keydown', function(e){
 		var val = parseFloat($(this).val());
 
-	    if(e.keyCode == 38) { //If the up arrow key is hit
+		if(e.keyCode === 38) { //If the up arrow key is hit
 			val++;
 			sizeiframe(Math.floor(val*$bodySize),false);
-		} else if(e.keyCode == 40) { //If the down arrow key is hit
+		} else if(e.keyCode === 40) { //If the down arrow key is hit
 			val--;
 			sizeiframe(Math.floor(val*$bodySize),false);
-		} else if(e.keyCode == 13) { //If the Enter key is hit
-	    	e.preventDefault();
+		} else if(e.keyCode === 13) { //If the Enter key is hit
+			e.preventDefault();
 			sizeiframe(Math.floor(val*$bodySize)); //Size Iframe to value of text box
-	    } 
+		}
 	});
 
-	$sizeEms.on('keyup', function(e){
+	$sizeEms.on('keyup', function(){
 		var val = parseFloat($(this).val());
 		updateSizeReading(val,'em','updatePxInput');
 	});
@@ -225,9 +224,9 @@
 	$('#sg-mq a').on("click", function(e){
 		e.preventDefault();
 		var val = $(this).html();
-		var type = (val.indexOf("px") != -1) ? "px" : "em";
+		var type = (val.indexOf("px") !== -1) ? "px" : "em";
 		val = val.replace(type,"");
-		var width = (type == "px") ? val*1 : val*$bodySize;
+		var width = (type === "px") ? val*1 : val*$bodySize;
 		sizeiframe(width,true);
 	});
 	
@@ -246,7 +245,7 @@
 		}
 
 		//Conditionally remove CSS animation class from viewport
-		if(animate==false) { 
+		if(animate===false) {
 			$('#sg-gen-container,#sg-viewport').removeClass("vp-animate"); //If aninate is set to false, remove animate class from viewport
 		} else {
 			$('#sg-gen-container,#sg-viewport').addClass("vp-animate");
@@ -273,7 +272,9 @@
 	//'unit' is the type of unit: either px or em. Default is px. Accepted values are 'px' and 'em'
 	//'target' is what inputs to update. Defaults to both
 	function updateSizeReading(size,unit,target) {
-		if(unit=='em') { //If size value is in em units
+		var emSize, pxSize;
+
+		if(unit==='em') { //If size value is in em units
 			emSize = size;
 			pxSize = Math.floor(size*$bodySize);
 		} else { //If value is px or absent
@@ -281,19 +282,19 @@
 			emSize = size/$bodySize;
 		}
 		
-		if (target == 'updatePxInput') {
+		if (target === 'updatePxInput') {
 			$sizePx.val(pxSize);
-		} else if (target == 'updateEmInput') {
+		} else if (target === 'updateEmInput') {
 			$sizeEms.val(emSize.toFixed(2));
 		} else {
 			$sizeEms.val(emSize.toFixed(2));
 			$sizePx.val(pxSize);
-		}	
+		}
 	}
 	
 	/* Returns a random number between min and max */
 	function getRandom (min, max) {
-	    return Math.random() * (max - min) + min;
+		return Math.random() * (max - min) + min;
 	}
 	
 	function updateViewportWidth(size) {
@@ -353,13 +354,13 @@
 	// pre-load the viewport width
 	var vpWidth = 0;
 	var trackViewportWidth = true; // can toggle this feature on & off
-	if ((oGetVars.h != undefined) || (oGetVars.hay != undefined)) {
+	if ((oGetVars.h !== undefined) || (oGetVars.hay !== undefined)) {
 		startHay();
-	} else if ((oGetVars.d != undefined) || (oGetVars.disco != undefined)) {
+	} else if ((oGetVars.d !== undefined) || (oGetVars.disco !== undefined)) {
 		startDisco();
-	} else if ((oGetVars.w != undefined) || (oGetVars.width != undefined)) {
-		vpWidth = (oGetVars.w != undefined) ? oGetVars.w : oGetVars.width;
-		vpWidth = (vpWidth.indexOf("em") != -1) ? Math.floor(Math.floor(vpWidth.replace("em",""))*$bodySize) : Math.floor(vpWidth.replace("px",""));
+	} else if ((oGetVars.w !== undefined) || (oGetVars.width !== undefined)) {
+		vpWidth = (oGetVars.w !== undefined) ? oGetVars.w : oGetVars.width;
+		vpWidth = (vpWidth.indexOf("em") !== -1) ? Math.floor(Math.floor(vpWidth.replace("em",""))*$bodySize) : Math.floor(vpWidth.replace("px",""));
 		DataSaver.updateValue("vpWidth",vpWidth);
 		updateViewportWidth(vpWidth);
 	} else if (trackViewportWidth && (vpWidth = DataSaver.findValue("vpWidth"))) {
@@ -370,13 +371,13 @@
 	var patternName = "all";
 	var patternPath = "";
 	var iFramePath  = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"styleguide/html/styleguide.html";
-	if ((oGetVars.p != undefined) || (oGetVars.pattern != undefined)) {
-		patternName = (oGetVars.p != undefined) ? oGetVars.p : oGetVars.pattern;
+	if ((oGetVars.p !== undefined) || (oGetVars.pattern !== undefined)) {
+		patternName = (oGetVars.p !== undefined) ? oGetVars.p : oGetVars.pattern;
 		patternPath = urlHandler.getFileName(patternName);
-		iFramePath  = (patternPath != "") ? window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+patternPath : iFramePath;
+		iFramePath  = (patternPath !== "") ? window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+patternPath : iFramePath;
 	}
 	
-	if (patternName != "all") {
+	if (patternName !== "all") {
 		document.getElementById("title").innerHTML = "Pattern Lab - "+patternName;
 		history.replaceState({ "pattern": patternName }, null, null);
 	}
@@ -393,36 +394,18 @@
 // update the iframe with the source from clicked element in pull down menu. also close the menu
 // having it outside fixes an auto-close bug i ran into
 $('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
-	
 	e.preventDefault();
-	
 	// update the iframe via the history api handler
 	document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
-	
-	// close up the menu
-	$(this).parents('.sg-acc-panel').toggleClass('active');
-	$(this).parents('.sg-acc-panel').siblings('.sg-acc-handle').toggleClass('active');
-	
-	return false;
-	
+	closePanels();
 });
 
-// handle when someone clicks on the grey area of the viewport so it auto-closes the nav
+//Close all dropdowns and navigation
 function closePanels() {
-	// close up the menu
-	$('.sg-acc-panel').each(function() {
-		if ($(this).hasClass('active')) {
-			$(this).toggleClass('active');
-		}
-	});
-	
-	$('.sg-acc-handle').each(function() {
-		if ($(this).hasClass('active')) {
-			$(this).toggleClass('active');
-		}
-	});
+	$('.sg-nav-container, .sg-nav-toggle, .sg-acc-handle, .sg-acc-panel').removeClass('active');
 }
 
+// handle when someone clicks on the grey area of the viewport so it auto-closes the nav
 $('#sg-vp-wrap').click(function(e) {
 	
 	closePanels();
@@ -434,19 +417,19 @@ $('#sg-vp-wrap').click(function(e) {
 function receiveIframeMessage(event) {
 	
 	// does the origin sending the message match the current host? if not dev/null the request
-	if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
+	if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 		return;
 	}
 	
-	if (event.data.bodyclick != undefined) {
+	if (event.data.bodyclick !== undefined) {
 		
 		closePanels();
 		
-	} else if (event.data.patternpartial != undefined) {
+	} else if (event.data.patternpartial !== undefined) {
 		
 		if (!urlHandler.skipBack) {
 			
-			if ((history.state == null) || (history.state.pattern != event.data.patternpartial)) {
+			if ((history.state === null) || (history.state.pattern !== event.data.patternpartial)) {
 				urlHandler.pushPattern(event.data.patternpartial, event.data.path);
 			}
 			
@@ -456,9 +439,6 @@ function receiveIframeMessage(event) {
 			}
 			
 		}
-		
-		// for testing purposes
-		console.log(event.data.lineage);
 		
 		// reset the defaults
 		urlHandler.skipBack = false;
