@@ -141,6 +141,7 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
      */
     protected function getFileName($name)
     {
+        
         $fileName = "";
         
         // test to see what kind of path was supplied

@@ -48,13 +48,8 @@ class Generatr extends Buildr {
 			
 		}
 		
-		
-		
 		// clean the public directory to remove old files
 		$this->cleanPublic();
-		
-		// gather data
-		$this->gatherData();
 		
 		// render out the patterns and move them to public/patterns
 		$this->generatePatterns();

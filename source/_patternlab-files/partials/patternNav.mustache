@@ -1,17 +1,17 @@
 <ol class="sg-nav">
-	{{# buckets }}
-		<li class="sg-nav-{{ bucketNameLC }}"><a class="sg-acc-handle">{{ bucketNameUC }}</a><ol class="sg-acc-panel">
-		{{# navItems }}
-			<li class="sg-nav-{{ sectionNameLC }}"><a class="sg-acc-handle">{{ sectionNameUC }}</a><ol class="sg-acc-panel">
-			{{# navSubItems }}
+	{{# patternTypes }}
+		<li class="sg-nav-{{ patternTypeLC }}"><a class="sg-acc-handle">{{ patternTypeUC }}</a><ol class="sg-acc-panel">
+		{{# patternTypeItems }}
+			<li class="sg-nav-{{ patternSubtypeLC }}"><a class="sg-acc-handle">{{ patternSubtypeUC }}</a><ol class="sg-acc-panel">
+			{{# patternSubtypeItems }}
 				<li><a href="patterns/{{ patternPath }}" class="sg-pop" data-patternpartial="{{ patternPartial }}">{{ patternName }}</a></li>
-			{{/ navSubItems }}
+			{{/ patternSubtypeItems }}
 			</ol></li>
-		{{/ navItems }}
+		{{/ patternTypeItems }}
 		{{# patternItems }}
 			<li><a href="patterns/{{ patternPath }}" class="sg-pop" data-patternpartial="{{ patternPartial }}">{{ patternName }}</a></li>
 		{{/ patternItems }}
 		</ol></li>
-	{{/ buckets }}
+	{{/ patternTypes }}
 	<li><a href="styleguide/html/styleguide.html" class="sg-pop" data-patternpartial="all">All</a></li>
 </ol>
