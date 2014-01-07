@@ -70,22 +70,26 @@ var codeViewer = {
 	updateCode: function(lineage,html,css) {
 			
 			// draw lineage
+			var lineageList = "";
+			$("#sg-code-lineage").css("display","none");
+			
 			if (lineage.length !== 0) {
 				$("#sg-code-lineage").css("display","block");
-				var lineageList = "";
+				
 				for (var i = 0; i < lineage.length; i++) {
 					lineageList += (i === 0) ? "" : ", ";
 					lineageList += "<a href='"+lineage[i].lineagePath+"' data-patternPartial='"+lineage[i].lineagePattern+"'>"+lineage[i].lineagePattern+"</a>";
 					i++;
 				}
 				
-				$("#sg-code-lineage-fill").html(lineageList);
-				
-				$('#sg-code-lineage-fill a').on("click", function(e){
-					e.preventDefault();
-					document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
-				});
 			}
+			
+			$("#sg-code-lineage-fill").html(lineageList);
+			
+			$('#sg-code-lineage-fill a').on("click", function(e){
+				e.preventDefault();
+				document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+			});
 			
 			// draw html
 			$("#sg-code-html-fill").text(html);
