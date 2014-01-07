@@ -153,12 +153,12 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
            
            // see if the pattern is an exact match for patternPaths. if not iterate over patternPaths to find a likely match
            if (isset($this->patternPaths[$patternType][$pattern])) {
-              $fileName = $this->baseDir."/".$this->patternPaths[$patternType][$pattern];
+              $fileName = $this->baseDir."/".$this->patternPaths[$patternType][$pattern]["patternSrcPath"];
            } else if (isset($this->patternPaths[$patternType])) {
               foreach($this->patternPaths[$patternType] as $patternMatchKey=>$patternMatchValue) {
                   $pos = strpos($patternMatchKey,$pattern);
                   if ($pos !== false) {
-                      $fileName = $this->baseDir."/".$patternMatchValue;
+                      $fileName = $this->baseDir."/".$patternMatchValue["patternSrcPath"];
                       break;
                   }
               }
