@@ -65,19 +65,12 @@ class Buildr {
 			} else {
 				$this->$key = $value;
 			}
+			
 		}
 		
 		// provide the default for enable CSS. performance hog so it should be run infrequently
 		$this->enableCSS  = false;
 		$this->patternCSS = array();
-		
-		// gather up all of the data to be used in patterns
-		$this->gatherData();
-		
-		// gather all of the various pattern info
-		$this->gatherPatternInfo();
-		//print_r($this->patternPaths);
-		//exit;
 		
 		// set cache buster var
 		$this->setCacheBuster();
@@ -111,16 +104,16 @@ class Buildr {
 	/**
 	* Renders a given pattern file using Mustache and incorporating the provided data
 	* @param  {String}       the filename of the file to be rendered
-	* @param  {Object}       the instance of mustache to be used in the rendering
+	* @param  {String}       the pattern partial
 	*
 	* @return {String}       the mark-up as rendered by Mustache
 	*/
-	protected function renderPattern($f) {
+	protected function renderPattern($f,$p) {
 		
 		// if there is pattern-specific data make sure to override the default in $this->d
 		$d = $this->d;
-		if (isset($d->patternSpecific) && array_key_exists($f,$d->patternSpecific)) {
-			$d = (object) array_merge((array) $d, (array) $d->patternSpecific->$f);
+		if (isset($d->patternSpecific) && array_key_exists($p,$d->patternSpecific)) {
+			$d = (object) array_merge((array) $d, (array) $d->patternSpecific->$p);
 		}
 		
 		return $this->mpl->render($f,$d);
@@ -135,10 +128,21 @@ class Buildr {
 		// make sure $this->mfs is refreshed
 		$this->loadMustacheFileSystemLoaderInstance();
 		
+		// get the source pattern paths
+		$patternPathDests = array();
+		foreach($this->patternPaths as $patternType => $patterns) {
+			$patternPathDests[$patternType] = array();
+			foreach ($patterns as $pattern => $patternInfo) {
+				if ($patternInfo["render"]) {
+					$patternPathDests[$patternType][$pattern] = $patternInfo["patternDestPath"];
+				}
+			}
+		}
+		
 		// render out the main pages and move them to public
 		$this->navItems['contentsyncport'] = $this->contentSyncPort;
 		$this->navItems['navsyncport']     = $this->navSyncPort;
-		$this->navItems['patternpaths']    = json_encode($this->patternPaths);
+		$this->navItems['patternpaths']    = json_encode($patternPathDests);
 		$this->navItems['viewallpaths']    = json_encode($this->viewAllPaths);
 		$this->navItems['mqs']             = $this->gatherMQs();
 		
@@ -157,8 +161,8 @@ class Buildr {
 		$this->generateViewAllPages();
 		
 		// add cacheBuster info
-		$this->navItems['cacheBuster']     = $this->cacheBuster;
-		$sd['cacheBuster']                 = $this->cacheBuster;
+		$this->navItems['cacheBuster'] = $this->cacheBuster;
+		$sd['cacheBuster']             = $this->cacheBuster;
 		
 		// render the index page and the style guide
 		$r = $this->mfs->render('index',$this->navItems);
@@ -189,17 +193,21 @@ class Buildr {
 		// loop over the pattern paths to generate patterns for each
 		foreach($this->patternPaths as $patternType) {
 			
-			foreach($patternType as $pattern => $path) {
+			foreach($patternType as $pattern => $pathInfo) {
 				
-				$r = $this->generatePatternFile($path.".mustache");
-				
-				// if the pattern directory doesn't exist create it
-				$path = str_replace("/","-",$path);
-				if (!is_dir(__DIR__.$this->pp.$path)) {
-					mkdir(__DIR__.$this->pp.$path);
-					file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$r);
-				} else {
-					file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$r);
+				// make sure this pattern should be rendered
+				if ($pathInfo["render"]) {
+					
+					$r = $this->generatePatternFile($pathInfo["patternSrcPath"].".mustache",$pathInfo["patternPartial"]);
+					
+					// if the pattern directory doesn't exist create it
+					$path = $pathInfo["patternDestPath"];
+					if (!is_dir(__DIR__.$this->pp.$path)) {
+						mkdir(__DIR__.$this->pp.$path);
+						file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$r);
+					} else {
+						file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$r);
+					}
 				}
 				
 			}
@@ -211,13 +219,14 @@ class Buildr {
 	/**
 	* Generates a pattern with a header & footer
 	* @param  {String}       the filename of the file to be rendered
+	* @param  {String}       the pattern partial
 	*
 	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
 	*/
-	private function generatePatternFile($f) {
+	private function generatePatternFile($f,$p) {
 		
 		$hr = $this->headHTML;
-		$rf = $this->renderPattern($f);
+		$rf = $this->renderPattern($f,$p);
 		$fr = $this->footHTML;
 		
 		// replace the user-defined header and footer info
@@ -229,16 +238,15 @@ class Buildr {
 		$fr = str_replace("{{ cacheBuster }}",$this->cacheBuster,$fr);
 		
 		// the footer isn't rendered as mustache but we have some variables there any way. find & replace.
-		$pp = $this->getPatternPartial($f);
-		$fr = str_replace("{{ patternPartial }}",$pp,$fr);
-		$fr = str_replace("{{ lineage }}",json_encode($this->patternLineages[$pp]),$fr);
+		$fr = str_replace("{{ patternPartial }}",$p,$fr);
+		$fr = str_replace("{{ lineage }}",json_encode($this->patternLineages[$p]),$fr);
 		$fr = str_replace("{{ patternHTML }}",$rf,$fr);
 		
 		// set-up the mark-up for CSS Rule Saver so it can figure out which rules to save
 		if ($this->enableCSS) {
 			$this->cssRuleSaver->loadHTML($rf,false);
 			$patternCSS = $this->cssRuleSaver->saveRules();
-			$this->patternCSS[$pp] = $patternCSS;
+			$this->patternCSS[$p] = $patternCSS;
 			$fr = str_replace("{{ patternCSS }}",$patternCSS,$fr);
 		}
 		
@@ -363,48 +371,6 @@ class Buildr {
 		$this->d->link = new stdClass();
 		$this->d->patternSpecific = new stdClass();
 		
-		// add the link names for easy reference, makes 'link' a reserved word
-		/*
-		foreach($this->patternPaths as $patternTypeName => $patterns) {
-			
-			foreach($patterns as $pattern => $path) {
-				$patternName = $patternTypeName."-".$pattern;
-				$path = str_replace("/","-",$path);
-				$this->d->link->$patternName = "../../patterns/".$path."/".$path.".html";
-			}
-			
-		}
-		
-		// add pattern specific data so it can override when a pattern (not partial!) is rendered
-		// makes 'patternSpecific' a reserved word
-		/*
-		foreach($this->patternTypes as $patternType) {
-			
-			// $this->d->patternSpecific["pattern-name-that-matches-render.mustache"] = array of data;
-			$patternTypeClean = $this->getPatternName($patternType,false);
-			
-			// find pattern data for pattern subtypes/*
-			foreach(glob(__DIR__.$this->sp.$patternType."/*.json") as $filename) {
-				$path = $this->getPath($filename,"j");
-				if (in_array($path,$this->patternPaths[$patternTypeClean])) {
-					$patternName = $path.".mustache";
-					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/_patterns/".$path.".json"));
-					$this->jsonLastErrorMsg($path.".json");
-				}
-			}
-			
-			// find pattern data for pattern types that are flat (e.g. pages & templates)
-			foreach(glob(__DIR__.$this->sp.$patternType."/*.json") as $filename) {
-				$path = $this->getPath($filename,"j");
-				if (in_array($path,$this->patternPaths[$patternTypeClean])) {
-					$patternName = $path.".mustache";
-					$this->d->patternSpecific->$patternName = (array) json_decode(file_get_contents(__DIR__."/../../source/_patterns/".$path.".json"));
-					$this->jsonLastErrorMsg($path.".json");
-				}
-			}
-			
-		}*/
-		
 	}
 	
 	/**
@@ -419,9 +385,10 @@ class Buildr {
 		
 		foreach($this->patternPaths as $patternType => $patterns) {
 			
-			foreach ($patterns as $pattern => $filename) {
+			foreach ($patterns as $pattern => $patternInfo) {
 				
 				$patternLineage = array();
+				$filename       = $patternInfo["patternSrcPath"];
 				
 				// if a file doesn't exist it assumes it's a pseudo-pattern and will use the last lineage found
 				if (file_exists(__DIR__.$this->sp.$filename.".mustache")) {
@@ -431,7 +398,7 @@ class Buildr {
 				if (count($foundLineages) > 0) {
 					foreach ($foundLineages as $lineage) {
 						$patternBits  = explode("-",$lineage,2); // BUG: this is making an assumption
-						$path = str_replace("/","-",$this->patternPaths[$patternBits[0]][$patternBits[1]]);
+						$path = $this->patternPaths[$patternBits[0]][$patternBits[1]]["patternDestPath"];
 						$patternLineage[] = array("lineagePattern" => $lineage, "lineagePath" => "../../patterns/".$path."/".$path.".html");
 					}
 				}
@@ -564,7 +531,7 @@ class Buildr {
 				 *************************************/
 				
 				$patternFull = $object->getFilename();                                // 00-colors.mustache
-				$pattern         = str_replace(".mustache","",$patternFull);          // 00-colors
+				$pattern     = str_replace(".mustache","",$patternFull);              // 00-colors
 				
 				if ($patternSubtypeSet) {
 					$patternPath     = $patternType."/".$patternSubtype."/".$pattern; // 00-atoms/01-global/00-colors
@@ -574,13 +541,16 @@ class Buildr {
 					$patternPathDash = str_replace("/","-",$patternPath);             // 00-atoms-00-colors (file path)
 				}
 				
+				// track to see if this pattern should get rendered
+				$render = false;
+				
 				// make sure the pattern isn't hidden
 				if ($patternFull[0] != "_") {
 					
 					// set-up the names                            
-					$patternDash     = $this->getPatternName($pattern,false);             // colors
-					$patternClean    = str_replace("-"," ",$patternDash);                 // colors (dashes replaced with spaces)
-					$patternPartial  = $patternTypeDash."-".$patternDash;                 // atoms-colors
+					$patternDash    = $this->getPatternName($pattern,false);             // colors
+					$patternClean   = str_replace("-"," ",$patternDash);                 // colors (dashes replaced with spaces)
+					$patternPartial = $patternTypeDash."-".$patternDash;                 // atoms-colors
 					
 					// set-up the info for the nav
 					$patternInfo = array("patternPath"    => $patternPathDash."/".$patternPathDash.".html",
@@ -598,15 +568,22 @@ class Buildr {
 					// add to the link var for inclusion in patterns
 					$this->d->link->$patternPartial = "../../patterns/".$patternPathDash."/".$patternPathDash.".html";
 					
+					// yup, this pattern should get rendered
+					$render = true;
+					
 				} else {
 					
 					// replace the underscore to generate a good file pattern name
-					$patternDash = $this->getPatternName(str_replace("_","",$pattern),false); // colors
+					$patternDash    = $this->getPatternName(str_replace("_","",$pattern),false); // colors
+					$patternPartial = $patternTypeDash."-".$patternDash;                         // atoms-colors
+					
 				}
 				
 				// add all patterns to patternPaths
-				$this->patternPaths[$patternTypeDash][$patternDash] = $patternPath;
-			
+				$patternSrcPath  = $patternPath;
+				$patternDestPath = $patternPathDash;
+				$this->patternPaths[$patternTypeDash][$patternDash] = array("patternSrcPath" => $patternSrcPath, "patternDestPath" => $patternDestPath, "patternPartial" => $patternPartial, "render" => $render);
+				
 			} else if ($object->isFile() && ($object->getExtension() == "json") && (strpos($object->getFilename(),"~") !== false)) {
 					
 				/*************************************
@@ -631,16 +608,18 @@ class Buildr {
 					$patternPartial  = $patternTypeDash."-".$patternDash;                            // pages-homepage-emergency
 					
 					// add to patternPaths
-					// add to patternPaths
 					if ($patternSubtypeSet) {
-						$patternPath     = $patternType."/".$patternSubtype."/".$patternBits[0];     // 00-atoms/01-global/00-colors
+						$patternPath     = $patternType."/".$patternSubtype."/".$pattern;            // 00-atoms/01-global/00-colors
 						$patternPathDash = str_replace("/","-",$patternPath);                        // 00-atoms-01-global-00-colors (file path)
 					} else {
-						$patternPath     = $patternType."/".$patternBits[0];                         // 00-atoms/00-colors
+						$patternPath     = $patternType."/".$pattern;                                // 00-atoms/00-colors
 						$patternPathDash = str_replace("/","-",$patternPath);                        // 00-atoms-00-colors (file path)
 					}
-					$this->patternPaths[$patternTypeDash][$patternDash] = $patternPath;
 					
+					// add all patterns to patternPaths
+					$patternSrcPath  = str_replace(__DIR__.$this->sp,"",preg_replace("/\~(.*)\.json/","",$object->getPathname()));
+					$patternDestPath = $patternPathDash;
+					$this->patternPaths[$patternTypeDash][$patternDash] = array("patternSrcPath" => $patternSrcPath, "patternDestPath" => $patternDestPath, "patternPartial" => $patternPartial, "render" => true);
 					
 					// set-up the info for the nav
 					$patternInfo = array("patternPath"    => $patternPathDash."/".$patternPathDash.".html",
@@ -679,13 +658,14 @@ class Buildr {
 				 * This section is for:
 				 *    JSON data
 				 *************************************/
+				$patternFull    = $object->getFilename();                            // 00-colors.mustache
+				$pattern        = str_replace(".json","",$patternFull);              // 00-colors
+				$patternDash    = $this->getPatternName($pattern,false);             // colors
+				$patternPartial = $patternTypeDash."-".$patternDash;                 // atoms-colors
 				
-				$json = $object->getFilename();
-				if ($json[0] != "_") {
-					$patternDash    = str_replace(".json","",$json);
-					$patternPartial = $patternTypeDash."-".$patternDash;
-					$patternData    = (array) json_decode(file_get_contents($object->getPathname()));
-					$this->jsonLastErrorMsg($json);
+				if ($patternFull[0] != "_") {
+					$patternData = (array) json_decode(file_get_contents($object->getPathname()));
+					$this->jsonLastErrorMsg($patternFull);
 					$this->d->patternSpecific->$patternPartial = $patternData;
 				}
 				
@@ -738,7 +718,7 @@ class Buildr {
 						// add patterns to $this->patternPartials
 						foreach ($patternSubtypeValues["patternSubtypeItems"] as $patternSubtypeItem) {
 							
-							$patternCode          = $this->renderPattern($patternSubtypeItem["patternSrcPath"]);
+							$patternCode          = $this->renderPattern($patternSubtypeItem["patternSrcPath"],$patternSubtypeItem["patternPartial"]);
 							$patternCSSExists     = $this->enableCSS;
 							$patternCSS           = ($this->enableCSS) ? $this->patternCSS[$patternSubtypeItem["patternPartial"]] : "";
 							$patternLineageExists = (count($this->patternLineages[$patternSubtypeItem["patternPartial"]]) > 0) ? true : false;
@@ -760,7 +740,7 @@ class Buildr {
 					
 				}
 				
-				// reset the items to take into account removed of items
+				// reset the items to take into account removed items affecting the index
 				if ($arrayReset) {
 					$this->navItems["patternTypes"][$patternTypeKey]["patternTypeItems"] = array_values($this->navItems["patternTypes"][$patternTypeKey]["patternTypeItems"]);
 					$arrayReset = false;
@@ -812,32 +792,6 @@ class Buildr {
 		$patternBits  = explode("-",$pattern,2);
 		$patternName = (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? $patternBits[1] : $pattern;
 		return ($clean) ? (str_replace("-"," ",$patternName)) : $patternName;
-	}
-	
-	/**
-	* Get the pattern partial for a given file
-	* @param  {String}       the file name for a pattern
-	*
-	* @return {String}       the pattern partial
-	*/
-	protected function getPatternPartial($fileName) {
-		
-		$fileName = str_replace(".mustache","",$fileName);
-		
-		foreach($this->patternPaths as $patternTypeKey => $patternTypeVals) {
-			
-			foreach($patternTypeVals as $pattern => $path) {
-				
-				if ($path == $fileName) {
-					return $patternTypeKey."-".$pattern;
-				}
-				
-			}
-			
-		}
-		
-		return false;
-		
 	}
 	
 	/**
