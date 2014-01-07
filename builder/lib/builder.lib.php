@@ -638,6 +638,7 @@ class Buildr {
 					$this->d->link->$patternPartial = "../../patterns/".$patternPathDash."/".$patternPathDash.".html";
 					
 					// get the base data
+					$patternDataBase = array();
 					if (file_exists($object->getPath()."/".$patternBaseJSON)) {
 						$patternDataBase = (array) json_decode(file_get_contents($object->getPath()."/".$patternBaseJSON));
 						$this->jsonLastErrorMsg($patternBaseJSON);
