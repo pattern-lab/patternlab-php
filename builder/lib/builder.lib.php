@@ -112,8 +112,28 @@ class Buildr {
 		
 		// if there is pattern-specific data make sure to override the default in $this->d
 		$d = $this->d;
-		if (isset($d->patternSpecific) && array_key_exists($p,$d->patternSpecific)) {
-			$d = (object) array_merge((array) $d, (array) $d->patternSpecific->$p);
+		
+		if (isset($d["patternSpecific"]) && array_key_exists($p,$d["patternSpecific"])) {
+			
+			if (!empty($d["patternSpecific"][$p]["data"])) {
+				$d = array_replace_recursive($d, $d["patternSpecific"][$p]["data"]);
+			}
+			
+			if (!empty($d["patternSpecific"][$p]["listItems"])) {
+				
+				$numbers = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
+				
+				$k = 0;
+				$c = count($d["patternSpecific"][$p]["listItems"]);
+				
+				while ($k < $c) {
+					$section = $numbers[$k];
+					$d["listItems"][$section] = array_replace_recursive( $d["listItems"][$section], $d["patternSpecific"][$p]["listItems"][$section]);
+					$k++;
+				}
+				
+			}
+			
 		}
 		
 		return $this->mpl->render($f,$d);
@@ -330,46 +350,16 @@ class Buildr {
 		
 		// gather the data from the main source data.json
 		if (file_exists(__DIR__."/../../source/_data/_data.json")) {
-			$this->d = (object) array_merge(array(), (array) json_decode(file_get_contents(__DIR__."/../../source/_data/_data.json")));
+			$this->d = array_merge(array(), json_decode(file_get_contents(__DIR__."/../../source/_data/_data.json"),true));
 			$this->jsonLastErrorMsg("_data/_data.json");
 		}
 		
-		// add list item data, makes 'listItems' a reserved word
-		if (file_exists(__DIR__."/../../source/_data/_listitems.json")) {
-			
-			$listItems = (array) json_decode(file_get_contents(__DIR__."/../../source/_data/_listitems.json"));
-			$this->jsonLastErrorMsg("_data/_listitems.json");
-			
-			$numbers   = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
-			
-			$i = 0;
-			$k = 1;
-			$c = count($listItems)+1;
-			
-			$this->d->listItems = new stdClass();
-			
-			while ($k < $c) {
-				
-				shuffle($listItems);
-				$itemsArray = array();
-				$this->d->listItems->$numbers[$k-1] = new stdClass();
-				
-				while ($i < $k) {
-					$itemsArray[] = $listItems[$i];
-					$i++;
-				}
-				
-				$this->d->listItems->$numbers[$k-1] = $itemsArray;
-				
-				$i = 0;
-				$k++;
-				
-			}
-			
-		}
+		$this->d["listItems"] = $this->getListItems(__DIR__."/../../source/_data/_listitems.json");
 		
-		$this->d->link = new stdClass();
-		$this->d->patternSpecific = new stdClass();
+		//print_r($this->d->listItems);
+		
+		$this->d["link"]            = array();
+		$this->d["patternSpecific"] = array();
 		
 	}
 	
@@ -566,7 +556,7 @@ class Buildr {
 					}
 					
 					// add to the link var for inclusion in patterns
-					$this->d->link->$patternPartial = "../../patterns/".$patternPathDash."/".$patternPathDash.".html";
+					$this->d["link"][$patternPartial] = "../../patterns/".$patternPathDash."/".$patternPathDash.".html";
 					
 					// yup, this pattern should get rendered
 					$render = true;
@@ -635,12 +625,12 @@ class Buildr {
 					}
 					
 					// add to the link var for inclusion in patterns
-					$this->d->link->$patternPartial = "../../patterns/".$patternPathDash."/".$patternPathDash.".html";
+					$this->d["link"][$patternPartial] = "../../patterns/".$patternPathDash."/".$patternPathDash.".html";
 					
 					// get the base data
 					$patternDataBase = array();
 					if (file_exists($object->getPath()."/".$patternBaseJSON)) {
-						$patternDataBase = (array) json_decode(file_get_contents($object->getPath()."/".$patternBaseJSON));
+						$patternDataBase = json_decode(file_get_contents($object->getPath()."/".$patternBaseJSON),true);
 						$this->jsonLastErrorMsg($patternBaseJSON);
 					}
 					
@@ -649,7 +639,13 @@ class Buildr {
 					$this->jsonLastErrorMsg($object->getFilename());
 					
 					// merge them for the file
-					$this->d->patternSpecific->$patternPartial = array_merge($patternDataBase, $patternData);
+					if (!isset($this->d["patternSpecific"][$patternPartial])) {
+						$this->d["patternSpecific"][$patternPartial]              = array();
+						$this->d["patternSpecific"][$patternPartial]["data"]      = array();
+						$this->d["patternSpecific"][$patternPartial]["listItems"] = array();
+					}
+					
+					$this->d["patternSpecific"][$patternPartial]["data"] = array_merge($patternDataBase, $patternData);
 					
 				}
 						
@@ -659,20 +655,35 @@ class Buildr {
 				 * This section is for:
 				 *    JSON data
 				 *************************************/
-				$patternFull    = $object->getFilename();                            // 00-colors.mustache
-				$pattern        = str_replace(".json","",$patternFull);              // 00-colors
-				$patternDash    = $this->getPatternName($pattern,false);             // colors
-				$patternPartial = $patternTypeDash."-".$patternDash;                 // atoms-colors
+				$patternFull    = $object->getFilename();                                            // 00-colors.mustache
+				$pattern        = str_replace(".listitems","",str_replace(".json","",$patternFull)); // 00-colors
+				$patternDash    = $this->getPatternName($pattern,false);                             // colors
+				$patternPartial = $patternTypeDash."-".$patternDash;                                 // atoms-colors
 				
 				if ($patternFull[0] != "_") {
-					$patternData = (array) json_decode(file_get_contents($object->getPathname()));
-					$this->jsonLastErrorMsg($patternFull);
-					$this->d->patternSpecific->$patternPartial = $patternData;
+					
+					if (!isset($this->d["patternSpecific"][$patternPartial])) {
+						$this->d["patternSpecific"][$patternPartial]              = array();
+						$this->d["patternSpecific"][$patternPartial]["data"]      = array();
+						$this->d["patternSpecific"][$patternPartial]["listItems"] = array();
+					}
+					
+					if (strpos($object->getFilename(),".listitems.json") !== false) {
+						$patternData = $this->getListItems($object->getPathname());
+						$this->d["patternSpecific"][$patternPartial]["listItems"] = $patternData;
+					} else {
+						$patternData = json_decode(file_get_contents($object->getPathname()),true);
+						$this->jsonLastErrorMsg($patternFull);
+						$this->d["patternSpecific"][$patternPartial]["data"] = $patternData;
+					}
+					
 				}
 				
 			}
 			
 		}
+		
+
 		
 		// get all of the lineages
 		$this->gatherLineages();
@@ -766,6 +777,52 @@ class Buildr {
 			return $matches[2];
 		}
 		return array();
+	}
+	
+	/**
+	* Get the lineage for a given pattern by parsing it and matching mustache partials
+	* @param  {String}       the filename for the pattern to be parsed
+	*
+	* @return {Array}        the final set of list items
+	*/
+	protected function getListItems($filepath) {
+		
+		$listItems = array();
+		
+		// add list item data, makes 'listItems' a reserved word
+		if (file_exists($filepath)) {
+			
+			$listItemsJSON = json_decode(file_get_contents($filepath), true);
+			$this->jsonLastErrorMsg(str_replace(__DIR__."/../../source/","",$filepath));
+			
+			$numbers = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
+			
+			$i = 0;
+			$k = 1;
+			$c = count($listItemsJSON)+1;
+			
+			while ($k < $c) {
+				
+				shuffle($listItemsJSON);
+				$itemsArray = array();
+				//$listItems[$numbers[$k-1]] = array();
+				
+				while ($i < $k) {
+					$itemsArray[] = $listItemsJSON[$i];
+					$i++;
+				}
+				
+				$listItems[$numbers[$k-1]] = $itemsArray;
+				
+				$i = 0;
+				$k++;
+				
+			}
+			
+		}
+		
+		return $listItems;
+		
 	}
 	
 	/**
