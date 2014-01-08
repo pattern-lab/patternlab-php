@@ -592,8 +592,9 @@ class Buildr {
 					$patternBase     = $patternBits[0].".mustache";                                  // 00-homepage.mustache
 					$patternBaseJSON = $patternBits[0].".json";                                      // 00-homepage.json
 					$stripJSON       = str_replace(".json","",$patternBits[1]);
-					$pattern         = $patternBits[0]."-".$this->getPatternName($stripJSON, false); // 00-homepage-emergency
-					$patternDash     = $this->getPatternName($pattern,false);                        // homepage-emergency
+					$pattern         = $patternBits[0]."-".$stripJSON;                               // 00-homepage-00-emergency
+					$patternInt      = $patternBits[0]."-".$this->getPatternName($stripJSON, false); // 00-homepage-emergency
+					$patternDash     = $this->getPatternName($patternInt,false);                     // homepage-emergency
 					$patternClean    = str_replace("-"," ",$patternDash);                            // homepage emergency
 					$patternPartial  = $patternTypeDash."-".$patternDash;                            // pages-homepage-emergency
 					
