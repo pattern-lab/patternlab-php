@@ -436,22 +436,19 @@ class Buildr {
 	*/
 	protected function gatherPatternInfo() {
 		
-		$b  = array("patternTypes" => array()); // the array that will contain the items
-		$p  = array("partials" => array()); // the array that will contain the items
-		$ni = 0;                                // track the number for the nav items array
-		$incrementNavItem = true;               // track nav item regeneration so we avoid rebuilding view all pages
-		
 		// set-up the defaults
 		$patternType       = "";
 		$patternSubtype    = "";
 		$patternSubtypeSet = false;
 		
 		// initialize various arrays
-		$this->patternPaths    = array();
-		$this->patternTypes    = array();
-		$this->patternLineages = array();
-		$this->patternPartials = array();
-		$this->viewAllPaths    = array();
+		$this->navItems                 = array();
+		$this->navItems["patternTypes"] = array();
+		$this->patternPaths             = array();
+		$this->patternTypes             = array();
+		$this->patternLineages          = array();
+		$this->patternPartials          = array();
+		$this->viewAllPaths             = array();
 		
 		// iterate over the patterns & related data and regenerate the entire site if they've changed
 		$patternObjects  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__.$this->sp), RecursiveIteratorIterator::SELF_FIRST);
@@ -480,7 +477,7 @@ class Buildr {
 				$patternTypeClean = str_replace("-"," ",$patternTypeDash); // atoms (dashes replaced with spaces)
 				
 				// add to pattern types & pattern paths
-				$this->patternTypes[]                  = $patternType;
+				$this->patternTypes[]                 = $patternType;
 				$this->patternPaths[$patternTypeDash] = array();
 				
 				// add a new patternType to the nav
