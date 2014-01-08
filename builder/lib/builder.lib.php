@@ -738,8 +738,8 @@ class Buildr {
 							
 							$this->patternPartials[$patternTypeDash."-".$patternSubtypeDash][] = array("patternName"          => $patternSubtypeItem["patternName"], 
 																									   "patternLink"          => $patternSubtypeItem["patternPath"], 
-																									   "patternPartialPath"   => $patternSubtypeItem["patternPartial"], 
-																									   "patternPartial"       => $patternCode,
+																									   "patternPartial"       => $patternSubtypeItem["patternPartial"], 
+																									   "patternPartialCode"   => $patternCode,
 																									   "patternCSSExists"     => $patternCSSExists,
 																									   "patternCSS"           => $patternCSS,
 																									   "patternLineageExists" => $patternLineageExists,
