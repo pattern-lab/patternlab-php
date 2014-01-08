@@ -24,10 +24,10 @@
 			<!-- Patterns -->
 			<div id="sg-patterns">
 				{{# partials }}
-					<div class="sg-pattern">
-						<h2 class="sg-pattern-head" ><a href="../../patterns/{{ patternLink }}" class="patternLink" data-patternpartial="{{ patternPartialPath }}">{{ patternName }}</a></h2>
+					<div id="{{ patternPartial }}" class="sg-pattern">
+						<h2 class="sg-pattern-head" ><a href="../../patterns/{{ patternLink }}" class="patternLink" data-patternpartial="{{ patternPartial }}">{{ patternName }}</a></h2>
 						<div class="sg-pattern-body">
-							{{{ patternPartial }}}
+							{{{ patternPartialCode }}}
 							<div class="sg-code" style="display: none">
 								{{# patternLineageExists }}
 									<div class="sg-code-contains">
@@ -40,7 +40,7 @@
 								<h3 class="sg-code-head">HTML</h3>
 								<pre class="sg-code-html">
 									<code>
-										{{ patternPartial }}
+										{{ patternPartialCode }}
 									</code>
 								</pre>
 								{{# patternCSSExists }}
