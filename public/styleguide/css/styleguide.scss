@@ -195,24 +195,10 @@ $animate-quick: 0.2s;
 		}
 	}
 
-	ol{
-    li{
-      ol{
-        li{
-          ol{
-            li{
-              //3rd level nav item
-				a {
-					padding-left: 2em;
-					text-transform: none;
-				}
-            }
-          }
-        }
-      }
+	ol ol ol a { //3rd level nav item
+		padding-left: 2em;
+		text-transform: none;
     }
-  }
-  
 }
 
 
@@ -389,7 +375,7 @@ $animate-quick: 0.2s;
 .sg-current-size {
 	font-size: 70%;
 	color: $sg-secondary;
-	padding: 0.9em 0.95em;
+	padding: 0.85em 0.7em;
 
 	&:hover {
 		.sg-input {
@@ -400,6 +386,14 @@ $animate-quick: 0.2s;
 
 	@media all and (min-width: $sg-bp-large) {
 		float: left;
+	}
+}
+
+.sg-size {
+	width: 135px;
+
+	@media all and (min-width: $sg-bp-med) {
+		width: auto;
 	}
 }
 
@@ -427,11 +421,15 @@ $animate-quick: 0.2s;
 .sg-input {
 	margin: -2px 0 0 0;
 	padding: 0;
-	border: 1px solid #222;
+	border: 0;
 	background-color: #222;
 	color: gray;
-	width: 35px;
+	width: 25px;
 	text-align: right;
+
+	@media all and (min-width: $sg-bp-med) {
+		width: 35px;
+	}
 }
 
 .sg-input-active {
@@ -473,15 +471,12 @@ $animate-quick: 0.2s;
 #sg-vp-wrap {
 	text-align: center;
 	width: 100%;
-
-	@media all and (min-width: $sg-bp-med) {
-	  position: fixed;
-	  top: $offset-top;
-	  bottom: 0;
-	  left: 0;
-	  right: 0;
-	  z-index: 0;
-	}
+	position: fixed;
+	top: $offset-top;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 0;
 
 	&.wrap-animate {
 		-webkit-transition: left 0.3s ease-out;
@@ -610,62 +605,6 @@ $animate-quick: 0.2s;
 	padding: 0;
 }
 
-// Demo to show grid system - in this stylesheet because it shouldn't be included in the production styles
-.demo {
-	overflow: hidden;
-	margin-bottom: 1rem;
-}
-.demo .gi, .demo .demo-block {
-	background: $sg-tertiary;
-	color: $sg-secondary;
-	text-align: center;
-	margin-bottom: $sg-pad-half;
-	padding: 1em !important;
-	
-	&:nth-of-type(2n) {
-		color: $sg-tertiary;
-		background: $sg-secondary;
-	}
-	
-	.gi {
-		background: $sg-tone;
-		color: $sg-tertiary;
-		
-		&:nth-of-type(2n) {
-			background: $sg-tone-2;
-		}
-	}
-}
-
-//Demo box for animation
-.demo-animate {
-	background: $sg-tertiary;
-	padding: $sg-pad;
-	margin-bottom: $sg-space;
-	text-align: center;
-}
-
-//Animate Demo to show 
-.animate-move {
-	position: relative;
-
-	.demo-shape {
-		position: absolute;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		width: 20px;
-		background: $sg-secondary;
-	}
-
-	&:hover {
-		> .demo-shape {
-			left: 100%;
-			margin-left: -20px;
-		}
-	}
-}
-
 // Style Guide color swatches
 .sg-colors {
 	overflow: hidden;
@@ -753,16 +692,17 @@ $animate-quick: 0.2s;
 	text-align: right;
 }
 
+//Visually emphasize e
 .has-comment {
 	cursor: help !important;
-	box-shadow: inset 0 0 10px #4787dd;
+	box-shadow: 0 0 10px #4787dd;
 
 	a, input {
 		cursor: help !important;
 	}
 
 	&:hover {
-		opacity: 0.95;
+		box-shadow: 0 0 10px #005ad3;
 	}
 
 	&.active {
@@ -860,4 +800,63 @@ $animate-quick: 0.2s;
 }
 .icon-eye:before {
 	content: "\e001";
+}
+
+/******************************************************************/
+/* End Pattern Lab Interface code */
+
+// Demo to show grid system - in this stylesheet because it shouldn't be included in the production styles
+.demo {
+	overflow: hidden;
+	margin-bottom: 1rem;
+}
+.demo .gi, .demo .demo-block {
+	background: $sg-tertiary;
+	color: $sg-secondary;
+	text-align: center;
+	margin-bottom: $sg-pad-half;
+	padding: 1em !important;
+	
+	&:nth-of-type(2n) {
+		color: $sg-tertiary;
+		background: $sg-secondary;
+	}
+	
+	.gi {
+		background: $sg-tone;
+		color: $sg-tertiary;
+		
+		&:nth-of-type(2n) {
+			background: $sg-tone-2;
+		}
+	}
+}
+
+//Demo box for animation
+.demo-animate {
+	background: $sg-tertiary;
+	padding: $sg-pad;
+	margin-bottom: $sg-space;
+	text-align: center;
+}
+
+//Animate Demo to show 
+.animate-move {
+	position: relative;
+
+	.demo-shape {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		width: 20px;
+		background: $sg-secondary;
+	}
+
+	&:hover {
+		> .demo-shape {
+			left: 100%;
+			margin-left: -20px;
+		}
+	}
 }

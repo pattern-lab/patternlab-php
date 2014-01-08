@@ -123,7 +123,7 @@
     .sg-header a:hover, .sg-header a:focus, .sg-header a.active {
       color: white;
       background: rgba(255, 255, 255, 0.05); }
-  .sg-header ol li ol li ol li a {
+  .sg-header ol ol ol a {
     padding-left: 2em;
     text-transform: none; }
 
@@ -258,13 +258,19 @@
 .sg-current-size {
   font-size: 70%;
   color: gray;
-  padding: 0.9em 0.95em; }
+  padding: 0.85em 0.7em; }
   .sg-current-size:hover .sg-input {
     background: #f7f7f7;
     color: #000; }
   @media all and (min-width: 69.5em) {
     .sg-current-size {
       float: left; } }
+
+.sg-size {
+  width: 135px; }
+  @media all and (min-width: 44em) {
+    .sg-size {
+      width: auto; } }
 
 @media all and (min-width: 69.5em) {
   .sg-size-options {
@@ -285,11 +291,14 @@
 .sg-input {
   margin: -2px 0 0 0;
   padding: 0;
-  border: 1px solid #222;
+  border: 0;
   background-color: #222;
   color: gray;
-  width: 35px;
+  width: 25px;
   text-align: right; }
+  @media all and (min-width: 44em) {
+    .sg-input {
+      width: 35px; } }
 
 .sg-input-active {
   background-color: #fff;
@@ -312,15 +321,13 @@
 /* Viewport */
 #sg-vp-wrap {
   text-align: center;
-  width: 100%; }
-  @media all and (min-width: 44em) {
-    #sg-vp-wrap {
-      position: fixed;
-      top: 2em;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 0; } }
+  width: 100%;
+  position: fixed;
+  top: 2em;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0; }
   #sg-vp-wrap.wrap-animate {
     -webkit-transition: left 0.3s ease-out;
     -moz-transition: left 0.3s ease-out;
@@ -418,44 +425,6 @@
 .sg-clean .sg-main {
   padding: 0; }
 
-.demo {
-  overflow: hidden;
-  margin-bottom: 1rem; }
-
-.demo .gi, .demo .demo-block {
-  background: #dddddd;
-  color: gray;
-  text-align: center;
-  margin-bottom: 0.5em;
-  padding: 1em !important; }
-  .demo .gi:nth-of-type(2n), .demo .demo-block:nth-of-type(2n) {
-    color: #dddddd;
-    background: gray; }
-  .demo .gi .gi, .demo .demo-block .gi {
-    background: rgba(0, 0, 0, 0.1);
-    color: #dddddd; }
-    .demo .gi .gi:nth-of-type(2n), .demo .demo-block .gi:nth-of-type(2n) {
-      background: rgba(0, 0, 0, 0.3); }
-
-.demo-animate {
-  background: #dddddd;
-  padding: 1em;
-  margin-bottom: 1em;
-  text-align: center; }
-
-.animate-move {
-  position: relative; }
-  .animate-move .demo-shape {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 20px;
-    background: gray; }
-  .animate-move:hover > .demo-shape {
-    left: 100%;
-    margin-left: -20px; }
-
 .sg-colors {
   overflow: hidden; }
   .sg-colors li {
@@ -525,11 +494,11 @@
 
 .has-comment {
   cursor: help !important;
-  box-shadow: inset 0 0 10px #4787dd; }
+  box-shadow: 0 0 10px #4787dd; }
   .has-comment a, .has-comment input {
     cursor: help !important; }
   .has-comment:hover {
-    opacity: 0.95; }
+    box-shadow: 0 0 10px #005ad3; }
   .has-comment.active {
     box-shadow: inset 0 0 20px #4787dd; }
 
@@ -607,3 +576,43 @@
 
 .icon-eye:before {
   content: "\e001"; }
+
+/******************************************************************/
+/* End Pattern Lab Interface code */
+.demo {
+  overflow: hidden;
+  margin-bottom: 1rem; }
+
+.demo .gi, .demo .demo-block {
+  background: #dddddd;
+  color: gray;
+  text-align: center;
+  margin-bottom: 0.5em;
+  padding: 1em !important; }
+  .demo .gi:nth-of-type(2n), .demo .demo-block:nth-of-type(2n) {
+    color: #dddddd;
+    background: gray; }
+  .demo .gi .gi, .demo .demo-block .gi {
+    background: rgba(0, 0, 0, 0.1);
+    color: #dddddd; }
+    .demo .gi .gi:nth-of-type(2n), .demo .demo-block .gi:nth-of-type(2n) {
+      background: rgba(0, 0, 0, 0.3); }
+
+.demo-animate {
+  background: #dddddd;
+  padding: 1em;
+  margin-bottom: 1em;
+  text-align: center; }
+
+.animate-move {
+  position: relative; }
+  .animate-move .demo-shape {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 20px;
+    background: gray; }
+  .animate-move:hover > .demo-shape {
+    left: 100%;
+    margin-left: -20px; }

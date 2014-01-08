@@ -1,4 +1,4 @@
-(function(w){
+(function (w) {
 	
 	var sw = document.body.clientWidth, //Viewport Width
 		sh = document.body.clientHeight, //Viewport Height
@@ -13,8 +13,8 @@
 		discoMode = false,
 		hayMode = false;
 	
-	
-	$(w).resize(function(){ //Update dimensions on resize
+	//Update dimensions on resize
+	$(w).resize(function() {
 		sw = document.body.clientWidth;
 		sh = document.body.clientHeight;
 	});
@@ -297,12 +297,19 @@
 		return Math.random() * (max - min) + min;
 	}
 	
+	//Update The viewport size
 	function updateViewportWidth(size) {
-	
 		$("#sg-viewport").width(size);
 		$("#sg-gen-container").width(size*1 + 14);
 		
 		updateSizeReading(size);
+	}
+
+	//Detect larger screen and no touch support
+	if('ontouchstart' in document.documentElement && window.matchMedia("(max-width: 700px)").matches) {
+		console.log('touch and less than 700px');
+	} else {
+		
 	}
 
 	// handles widening the "viewport"
@@ -320,7 +327,8 @@
 		
 		// add the mouse move event and capture data. also update the viewport width
 		$('#sg-cover').mousemove(function(event) {
-			
+			var viewportWidth;
+
 			viewportWidth = (origClientX > event.clientX) ? origViewportWidth - ((origClientX - event.clientX)*2) : origViewportWidth + ((event.clientX - origClientX)*2);
 			
 			if (viewportWidth > minViewportWidth) {
@@ -337,16 +345,19 @@
 	});
 
 	// on "mouseup" we unbind the "mousemove" event and hide the cover again
-	$('body').mouseup(function(event) {
+	$('body').mouseup(function() {
 		$('#sg-cover').unbind('mousemove');
 		$('#sg-cover').css("display","none");
 	});
 
-	// capture the viewport width that was loaded and modify it so it fits with the pull bar
-	var origViewportWidth = $("#sg-viewport").width();
-	$("#sg-gen-container").width(origViewportWidth);
-	$("#sg-viewport").width(origViewportWidth - 14);
-	updateSizeReading($("#sg-viewport").width());
+	function resizeHandlerInit() {
+		// capture the viewport width that was loaded and modify it so it fits with the pull bar
+		var origViewportWidth = $("#sg-viewport").width();
+		$("#sg-gen-container").width(origViewportWidth);
+		$("#sg-viewport").width(origViewportWidth - 14);
+		updateSizeReading($("#sg-viewport").width());
+	}
+	
 
 	// get the request vars
 	var oGetVars = urlHandler.getRequestVars();
@@ -354,6 +365,7 @@
 	// pre-load the viewport width
 	var vpWidth = 0;
 	var trackViewportWidth = true; // can toggle this feature on & off
+
 	if ((oGetVars.h !== undefined) || (oGetVars.hay !== undefined)) {
 		startHay();
 	} else if ((oGetVars.d !== undefined) || (oGetVars.disco !== undefined)) {
@@ -386,64 +398,62 @@
 	
 	urlHandler.skipBack = true;
 	document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
-	
-	//IFrame functionality
-	
-})(this);
 
-// update the iframe with the source from clicked element in pull down menu. also close the menu
-// having it outside fixes an auto-close bug i ran into
-$('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
-	e.preventDefault();
-	// update the iframe via the history api handler
-	document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
-	closePanels();
-});
-
-//Close all dropdowns and navigation
-function closePanels() {
-	$('.sg-nav-container, .sg-nav-toggle, .sg-acc-handle, .sg-acc-panel').removeClass('active');
-}
-
-// handle when someone clicks on the grey area of the viewport so it auto-closes the nav
-$('#sg-vp-wrap').click(function(e) {
 	
-	closePanels();
-	
-});
 
-// watch the iframe source so that it can be sent back to everyone else.
-// based on the great MDN docs at https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
-function receiveIframeMessage(event) {
-	
-	// does the origin sending the message match the current host? if not dev/null the request
-	if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
-		return;
+	//Close all dropdowns and navigation
+	function closePanels() {
+		$('.sg-nav-container, .sg-nav-toggle, .sg-acc-handle, .sg-acc-panel').removeClass('active');
 	}
-	
-	if (event.data.bodyclick !== undefined) {
-		
+
+	// update the iframe with the source from clicked element in pull down menu. also close the menu
+	// having it outside fixes an auto-close bug i ran into
+	$('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
+		e.preventDefault();
+		// update the iframe via the history api handler
+		document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
 		closePanels();
+	});
+
+	// handle when someone clicks on the grey area of the viewport so it auto-closes the nav
+	$('#sg-vp-wrap').click(function() {
+		closePanels();
+	});
+
+	// watch the iframe source so that it can be sent back to everyone else.
+	// based on the great MDN docs at https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
+	function receiveIframeMessage(event) {
 		
-	} else if (event.data.patternpartial !== undefined) {
-		
-		if (!urlHandler.skipBack) {
-			
-			if ((history.state === null) || (history.state.pattern !== event.data.patternpartial)) {
-				urlHandler.pushPattern(event.data.patternpartial, event.data.path);
-			}
-			
-			if (wsnConnected) {
-				var iFramePath = urlHandler.getFileName(event.data.patternpartial);
-				wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
-			}
-			
+		// does the origin sending the message match the current host? if not dev/null the request
+		if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
+			return;
 		}
 		
-		// reset the defaults
-		urlHandler.skipBack = false;
-		
+		if (event.data.bodyclick !== undefined) {
+			
+			closePanels();
+			
+		} else if (event.data.patternpartial !== undefined) {
+			
+			if (!urlHandler.skipBack) {
+				
+				if ((history.state === null) || (history.state.pattern !== event.data.patternpartial)) {
+					urlHandler.pushPattern(event.data.patternpartial, event.data.path);
+				}
+				
+				if (wsnConnected) {
+					var iFramePath = urlHandler.getFileName(event.data.patternpartial);
+					wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
+				}
+			}
+			
+			// reset the defaults
+			urlHandler.skipBack = false;
+			
+		}
 	}
-	
-}
-window.addEventListener("message", receiveIframeMessage, false);
+	window.addEventListener("message", receiveIframeMessage, false);
+
+
+})(this);
+
