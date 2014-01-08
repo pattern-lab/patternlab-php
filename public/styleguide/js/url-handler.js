@@ -146,7 +146,7 @@ var urlHandler = {
 	*/
 	popPattern: function (e) {
 		
-    var patternName;
+		var patternName;
 		var state = e.state;
 		
 		if (state === null) {

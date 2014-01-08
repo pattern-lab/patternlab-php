@@ -79,7 +79,9 @@ class Watchr extends Buildr {
 								$o->patterns->$fileName = $mt;
 								$this->updateSite($fileName,"added");
 								if ($object->getExtension() == "mustache") {
-									$this->patternPaths[$patternParts[0]][$pattern] = str_replace(".mustache","",$fileName);
+									$patternSrcPath  = str_replace(".mustache","",$fileName);
+									$patternDestPath = str_replace("/","-",$patternSrcPath);
+									$this->patternPaths[$patternParts[0]][$pattern] = array("patternSrcPath" => $patternSrcPath, "patternDestPath" => $patternDestPath, "render" => true);
 								}
 							} else if (!isset($o->patterns->$fileName)) {
 								$o->patterns->$fileName = $mt;
@@ -241,8 +243,7 @@ class Watchr extends Buildr {
 	private function updateSite($fileName,$message,$verbose = true) {
 		$this->setCacheBuster();
 		$this->gatherData();
-		$this->gatherPatternPaths();
-		$this->gatherNavItems();
+		$this->gatherPatternInfo();
 		$this->generatePatterns();
 		$this->generateViewAllPages();
 		$this->updateChangeTime();

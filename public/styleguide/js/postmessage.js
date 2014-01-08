@@ -62,14 +62,12 @@ function receiveIframeMessage(event) {
 			// handle patterns and the view all page
 			var re = /patterns\/(.*)$/;
 			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace(re,'')+event.data.path+'?'+Date.now();
-			console.log(path);
 			window.location.replace(path);
 			
 		} else {
 			
 			// handle the style guide
 			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("styleguide\/html\/styleguide.html","")+event.data.path+'?'+Date.now();
-			console.log(path);
 			window.location.replace(path);
 			
 		}
