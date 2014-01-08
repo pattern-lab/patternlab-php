@@ -388,8 +388,14 @@ class Buildr {
 				if (count($foundLineages) > 0) {
 					foreach ($foundLineages as $lineage) {
 						$patternBits  = explode("-",$lineage,2); // BUG: this is making an assumption
-						$path = $this->patternPaths[$patternBits[0]][$patternBits[1]]["patternDestPath"];
-						$patternLineage[] = array("lineagePattern" => $lineage, "lineagePath" => "../../patterns/".$path."/".$path.".html");
+						if (isset($this->patternPaths[$patternBits[0]][$patternBits[1]])) {
+							$path = $this->patternPaths[$patternBits[0]][$patternBits[1]]["patternDestPath"];
+							$patternLineage[] = array("lineagePattern" => $lineage, "lineagePath" => "../../patterns/".$path."/".$path.".html");
+						} else {
+							if (strpos($lineage, '/') === false) {
+								print "You may have a typo in ".$patternInfo["patternSrcPath"].". {{> ".$lineage." }} is not a valid pattern.\n";
+							}
+						}
 					}
 				}
 				
