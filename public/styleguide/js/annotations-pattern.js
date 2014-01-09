@@ -13,56 +13,42 @@ var annotationsPattern = {
 	commentsOverlayElement: "",
 	commentsEmbeddedActive: false,
 	commentsEmbedded:       false,
+	commentsGathered:       { "commentOverlay": "on", "count": 0, "comments": { } },
 	
 	/**
-	* add an onclick handler to each element in the pattern that has an annotation
+	* record which annotations are related to this pattern so they can be sent to the viewer when called
 	*/
-	showComments: function() {
+	gatherComments: function() {
 		
 		// make sure this only added when we're on a pattern specific view
 		var body = document.getElementsByTagName("body");
 		if (!body[0].classList.contains("sg-pattern-list")) {
+			
+			// count elements so it can be used when displaying the results in the viewer
+			var count = 0;
+			
+			// iterate over the comments in annotations.js
 			for(i = 0; i < comments.comments.length; i++) {
+				
 				var item = comments.comments[i];
 				var els  = document.querySelectorAll(item.el);
-				for (var k = 0; k < els.length; k++) {
-					els[k].onclick = (function(item) {
-						return function(e) {
-							e.preventDefault();
-							e.stopPropagation();
-							var obj = {};
-							
-							if (annotationsPattern.commentsOverlayActive && !annotationsPattern.commentsOverlay) {
-								
-								// if this is for an overlay and comments overlay is false set the payload to turn the overlay on
-								annotationsPattern.commentsOverlay = true;
-								obj = { "commentOverlay": "on", "swapOverlay": false, "el": item.el, "title": item.title, "comment": item.comment };
-								
-							} else if (annotationsPattern.commentsOverlayActive && annotationsPattern.commentsOverlay) {
-								
-								if (item.el == annotationsPattern.commentsOverlayElement) {
-									
-									// if the last element was clicked again turn off the overlay
-									annotationsPattern.commentsOverlay = false;
-									obj = { "commentOverlay": "off" };
-									
-								} else {
-									
-									// if an element was clicked on while the overlay was already on swap it
-									obj = { "commentOverlay": "on", "swapOverlay": true, "el": item.el, "title": item.title, "comment": item.comment };
-									
-								}
-								
-							}
-							
-							annotationsPattern.commentsOverlayElement = item.el;
-							var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-							parent.postMessage(obj,targetOrigin);
-							
-						};
-					})(item);
+				
+				// if an element is found in the given pattern add it to the overall object so it can be passed when the overlay is turned on
+				if (els.length > 0) {
+					annotationsPattern.commentsGathered.comments[count] = { "el": item.el, "title": item.title, "comment": item.comment };
+					count++;
 				}
+				
 			}
+			
+			annotationsPattern.commentsGathered.count = count;
+			
+		} else {
+			
+			var obj = { "commentOverlay": "off" };
+			var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+			parent.postMessage(obj,targetOrigin);
+			
 		}
 		
 	},
@@ -109,8 +95,8 @@ var annotationsPattern = {
 	*/
 	findParent: function(el) {
 		
-    var parentEl;
-    
+		var parentEl;
+		
 		if (el.parentNode.classList.contains("sg-pattern")) {
 			return el.parentNode;
 		} else {
@@ -154,7 +140,6 @@ var annotationsPattern = {
 				els = document.querySelectorAll(".has-comment");
 				for (i = 0; i < els.length; i++) {
 					els[i].classList.remove("has-comment");
-
 				}
 			}
 			
@@ -176,6 +161,10 @@ var annotationsPattern = {
 						els[k].classList.add("has-comment");
 					}
 				}
+				
+				// send the list of annotations for the page back to the parent
+				var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+				parent.postMessage(annotationsPattern.commentsGathered,targetOrigin);
 				
 			} else if (annotationsPattern.commentsEmbeddedActive && !annotationsPattern.commentsEmbedded) {
 				
@@ -206,7 +195,7 @@ var annotationsPattern = {
 };
 
 // add the onclick handlers to the elements that have an annotations
-annotationsPattern.showComments();
+annotationsPattern.gatherComments();
 window.addEventListener("message", annotationsPattern.receiveIframeMessage, false);
 
 // before unloading the iframe make sure any active overlay is turned off/closed
