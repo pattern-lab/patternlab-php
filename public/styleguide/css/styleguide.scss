@@ -52,7 +52,7 @@ $sg-primary : #222;
 $sg-secondary : #808080;
 $sg-tertiary : #ddd;
 $sg-quaternary : #fff;
-$sg-quinary : #f7f7f7;
+$sg-quinary : #999;
 $sg-tint : rgba(255,255,255,0.05);
 $sg-tint-2 : rgba(255,255,255,0.25);
 $sg-tone : rgba(0,0,0,0.1);
@@ -661,6 +661,7 @@ $animate-quick: 0.2s;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	font-family: $sg-font;
+	line-height: 1.4;
 	font-size: 90%;
 	background: $sg-primary;
 	color: $sg-secondary;
@@ -675,7 +676,7 @@ $animate-quick: 0.2s;
 	overflow: scroll;
 
   	a {
-    	color: $sg-tertiary;
+    	color: $sg-quinary;
     }
 
      pre {
@@ -703,7 +704,7 @@ $animate-quick: 0.2s;
 	text-align: right;
 }
 
-//Visually emphasize e
+//Visually emphasize annotated elements
 .has-comment {
 	cursor: help !important;
 	box-shadow: 0 0 10px #4787dd;
@@ -718,6 +719,25 @@ $animate-quick: 0.2s;
 
 	&.active {
 		box-shadow: inset 0 0 20px #4787dd;
+	}
+}
+
+#sg-comments-container {
+	max-width: 60em;
+	margin: 0 auto;
+}
+
+.sg-comment-container {
+	padding-bottom: 2em;
+	margin-bottom: $sg-space;
+	border-bottom: 1px solid $sg-tint-2;
+
+	p:last-child {
+		margin-bottom: 0;
+	}
+
+	h2 {
+		margin-bottom: 0.25em;
 	}
 }
 

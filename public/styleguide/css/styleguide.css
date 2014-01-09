@@ -252,7 +252,7 @@
   transition: all 0.2s ease-out; }
   .sg-control .sg-input:active, .sg-control .sg-input:focus {
     outline: 0;
-    background: #f7f7f7;
+    background: #999999;
     color: #000; }
 
 .sg-current-size {
@@ -260,7 +260,7 @@
   color: gray;
   padding: 0.85em 0.7em; }
   .sg-current-size:hover .sg-input {
-    background: #f7f7f7;
+    background: #999999;
     color: #000; }
   @media all and (min-width: 69.5em) {
     .sg-current-size {
@@ -464,6 +464,7 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+  line-height: 1.4;
   font-size: 90%;
   background: #222222;
   color: gray;
@@ -477,7 +478,7 @@
   height: 50%;
   overflow: scroll; }
   .sg-view-container a {
-    color: #dddddd; }
+    color: #999999; }
   .sg-view-container pre {
     padding: 0 1em; }
   .sg-view-container.anim-ready {
@@ -507,6 +508,19 @@
   .has-comment.active {
     box-shadow: inset 0 0 20px #4787dd; }
 
+#sg-comments-container {
+  max-width: 60em;
+  margin: 0 auto; }
+
+.sg-comment-container {
+  padding-bottom: 2em;
+  margin-bottom: 1em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25); }
+  .sg-comment-container p:last-child {
+    margin-bottom: 0; }
+  .sg-comment-container h2 {
+    margin-bottom: 0.25em; }
+
 .sg-code, .sg-annotations {
   clear: both;
   background: #dddddd;
@@ -532,7 +546,7 @@
   .sg-code-contains code {
     padding: 0.2em;
     background: rgba(0, 0, 0, 0.3);
-    color: #f7f7f7;
+    color: #999999;
     position: relative;
     top: -2px; }
 
