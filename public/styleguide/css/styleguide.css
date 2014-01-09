@@ -347,6 +347,11 @@
     -o-transition: all 40s linear;
     transition: all 40s linear; }
 
+.no-resize #sg-cover, .no-resize #sg-rightpull-container {
+  display: none; }
+.no-resize #sg-viewport {
+  overflow: hidden !important; }
+
 #sg-cover {
   width: 100%;
   height: 100%;
