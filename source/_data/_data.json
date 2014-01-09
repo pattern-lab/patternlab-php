@@ -15,6 +15,10 @@
 		"avatar" : {
 			"src" : "../../images/fpo_avatar.png",
 			"alt" : "Person Name"
+		},
+		"rectangle": {
+			"src": "http://placeimg.com/400/300/tech",
+			"alt": "Rectangle"
 		}
 	},
 	"headline" : {
