@@ -307,7 +307,10 @@
 
 	//Detect larger screen and no touch support
 	if('ontouchstart' in document.documentElement && window.matchMedia("(max-width: 700px)").matches) {
-		console.log('touch and less than 700px');
+		$('body').addClass('no-resize');
+		$('#sg-viewport ').width(sw);
+
+		alert('workit');
 	} else {
 		
 	}

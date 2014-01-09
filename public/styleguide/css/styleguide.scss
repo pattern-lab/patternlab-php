@@ -503,6 +503,17 @@ $animate-quick: 0.2s;
 	}
 }
 
+.no-resize {
+	#sg-cover, #sg-rightpull-container {
+		display: none;
+	}
+
+	#sg-viewport {
+		overflow: hidden !important;
+	}
+	
+}
+
 #sg-cover {
 	width: 100%; 
 	height: 100%; 
