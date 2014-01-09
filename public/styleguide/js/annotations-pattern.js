@@ -35,8 +35,21 @@ var annotationsPattern = {
 				
 				// if an element is found in the given pattern add it to the overall object so it can be passed when the overlay is turned on
 				if (els.length > 0) {
+					
 					annotationsPattern.commentsGathered.comments[count] = { "el": item.el, "title": item.title, "comment": item.comment };
 					count++;
+					
+					var numberDiv = document.createElement("div");
+					numberDiv.style.position   = "absolute";
+					numberDiv.style.zIndex     = 99;
+					numberDiv.style.marginLeft = -10;
+					numberDiv.style.marginTop  = -10;
+					numberDiv.innerHTML        = count;
+					
+					for (k = 0; k < els.length; k++) {
+						els[k].appendChild(numberDiv);
+					}
+					
 				}
 				
 			}
