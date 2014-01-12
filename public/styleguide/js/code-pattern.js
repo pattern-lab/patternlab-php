@@ -32,15 +32,14 @@ var codePattern = {
 			codePattern.codeEmbeddedActive = false;
 			
 			// see which flag to toggle based on if this is a styleguide or view-all page
-			var body = document.getElementsByTagName("body");
-			if ((event.data.codeToggle == "on") && (body[0].classList.contains("sg-pattern-list"))) {
+			if ((event.data.codeToggle == "on") && (document.getElementById("sg-patterns") !== null)) {
 				codePattern.codeEmbeddedActive = true;
 			} else if (event.data.codeToggle == "on") {
 				codePattern.codeOverlayActive  = true;
 			}
 			
 			// if comments embedding is turned off make sure to hide the annotations div
-			if (!codePattern.codeEmbeddedActive && (body[0].classList.contains("sg-pattern-list"))) {
+			if (!codePattern.codeEmbeddedActive && (document.getElementById("sg-patterns") !== null)) {
 				els = document.getElementsByClassName("sg-code");
 				for (i = 0; i < els.length; i++) {
 					els[i].style.display = "none";
