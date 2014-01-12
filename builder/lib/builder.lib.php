@@ -857,13 +857,6 @@ class Buildr {
 	}
 	
 	/**
-	* Set the cache buster var so it can be used on the query string for file requests
-	*/
-	protected function setCacheBuster() {
-		$this->cacheBuster = time();
-	}
-	
-	/**
 	* Write out the time tracking file so the content sync service will work. A holdover
 	* from how I put together the original AJAX polling set-up.
 	*/
