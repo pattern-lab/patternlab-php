@@ -386,6 +386,14 @@ class Buildr {
 			$this->jsonLastErrorMsg("_data/_data.json");
 		}
 		
+		$reservedKeys = array("listItems","cacheBuster","link","patternSpecific");
+		foreach ($reservedKeys as $reservedKey) {
+			if (array_key_exists($reservedKey,$this->d)) {
+				print "\"".$reservedKey."\" is a reserved key in Pattern Lab. The data using that key in _data.json will be overwritten. Please choose a new key.\n";
+			}
+		}
+		
+		
 		$this->d["listItems"]       = $this->getListItems(__DIR__."/../../source/_data/_listitems.json");
 		$this->d["cacheBuster"]     = $this->cacheBuster;
 		$this->d["link"]            = array();
