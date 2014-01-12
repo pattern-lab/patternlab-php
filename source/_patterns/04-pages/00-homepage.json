@@ -1,4 +1,6 @@
 {
+	"title" : "Home Page",
+	"bodyClass": "home",
 	"hero" : [
 		{
 			"img": {
@@ -8,7 +10,7 @@
 				}
 			},
 			"headline" : {
-				"medium" : "Top 10 mountin ranges for hiking"
+				"medium" : "Top 10 mountain ranges for hiking"
 			}
 		}
 	],
