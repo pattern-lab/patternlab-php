@@ -24,6 +24,11 @@ var comments = {
 		"el": ".article-header h1",
 		"title" : "Article Header",
 		"comment": "<p>The article header should be no more than 140 characters. </p>"
+	},
+	{
+		"el": ".block-hero",
+		"title" : "Hero",
+		"comment": "<p>The hero area highlights one major story using a large image and a captivating headline.</p>"
 	}
 ]
 };

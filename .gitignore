@@ -7,3 +7,5 @@ public/*
 config.ini
 latest-change.txt
 *-ck.js
+
+/public/data/annotations-ck.js
