@@ -688,7 +688,7 @@ $animate-quick: 0.2s;
 		-moz-transition: bottom 0.3s ease-out;
 	  	-webkit-transition: bottom 0.3s ease-out;
 	  	-ms-transition: bottom 0.3s ease-out; 
-	  	-o-transition: bottom 0.3s ease-out; 
+	  	-o-transition: bottom 0.3s ease-out;
 	  	transition:  bottom 0.3s ease-out;
 	}
 }
@@ -705,20 +705,47 @@ $animate-quick: 0.2s;
 }
 
 //Visually emphasize annotated elements
-.has-comment {
+.has-annotation {
 	cursor: help !important;
-	box-shadow: 0 0 10px #4787dd;
+	box-shadow: 0 0 10px $sg-secondary;
+	position: relative !important;
+	overflow: visible !important;
 
 	a, input {
 		cursor: help !important;
 	}
 
 	&:hover {
-		box-shadow: 0 0 10px #005ad3;
+		box-shadow: 0 0 10px $sg-primary;
 	}
 
 	&.active {
-		box-shadow: inset 0 0 20px #4787dd;
+		box-shadow: inset 0 0 20px $sg-secondary;
+	}
+
+	.annotation-tip { 
+		display: block !important;
+	}
+}
+
+.annotation-tip {
+	position: absolute !important;
+	top: -2px !important;
+	left: -6px !important;
+	background: $sg-secondary !important;
+	color: $sg-tertiary !important;
+	opacity: 0.8 !important;
+	display: none !important;
+	font-size: 11px !important;
+	width: 18px !important;
+	height: 18px !important;
+	padding: 0 !important;
+	text-align: center !important;
+	border-radius: 10px !important;
+
+	&:hover, &:focus {
+		opacity: 1 !important;
+		color: #fff !important;
 	}
 }
 

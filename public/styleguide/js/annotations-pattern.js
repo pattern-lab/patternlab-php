@@ -23,38 +23,6 @@ var annotationsPattern = {
 		// make sure this only added when we're on a pattern specific view
 		if (document.getElementById("sg-patterns") === null) {
 			
-			// count elements so it can be used when displaying the results in the viewer
-			var count = 0;
-			
-			// iterate over the comments in annotations.js
-			for(i = 0; i < comments.comments.length; i++) {
-				
-				var item = comments.comments[i];
-				var els  = document.querySelectorAll(item.el);
-				
-				// if an element is found in the given pattern add it to the overall object so it can be passed when the overlay is turned on
-				if (els.length > 0) {
-					
-					annotationsPattern.commentsGathered.comments[count] = { "el": item.el, "title": item.title, "comment": item.comment };
-					count++;
-					
-					var numberDiv = document.createElement("div");
-					numberDiv.style.position   = "absolute";
-					numberDiv.style.zIndex     = 99;
-					numberDiv.style.marginLeft = -10;
-					numberDiv.style.marginTop  = -10;
-					numberDiv.innerHTML        = count;
-					
-					for (k = 0; k < els.length; k++) {
-						els[k].appendChild(numberDiv);
-					}
-					
-				}
-				
-			}
-			
-			annotationsPattern.commentsGathered.count = count;
-			
 		} else {
 			
 			var obj = { "commentOverlay": "off" };
@@ -133,7 +101,7 @@ var annotationsPattern = {
 		
 		if (event.data.commentToggle !== undefined) {
 			
-			var i, els, item;
+			var i, els, item, displayNum;
 			
 			// if this is an overlay make sure it's active for the onclick event
 			annotationsPattern.commentsOverlayActive  = false;
@@ -146,11 +114,12 @@ var annotationsPattern = {
 				annotationsPattern.commentsOverlayActive  = true;
 			}
 			
-			// if comments overlay is turned off make sure to remove the has-comment class and pointer
+			// if comments overlay is turned off make sure to remove the has-annotation class and pointer
 			if (!annotationsPattern.commentsOverlayActive) {
-				els = document.querySelectorAll(".has-comment");
+				els = document.querySelectorAll(".has-annotation");
 				for (i = 0; i < els.length; i++) {
-					els[i].classList.remove("has-comment");
+					els[i].classList.remove("has-annotation");
+
 				}
 			}
 			
@@ -162,16 +131,46 @@ var annotationsPattern = {
 				}
 			}
 			
-			// if comments overlay is turned on add the has-comment class and pointer
+			// if comments overlay is turned on add the has-annotation class and pointer
 			if (annotationsPattern.commentsOverlayActive) {
 				
 				for (i = 0; i < comments.comments.length; i++) {
 					item = comments.comments[i];
-					els  = document.querySelectorAll(item.el);
+					els  = document.querySelectorAll(item.el),
+					displayNum = i+1;
+
+					//Loop through all items with annotations
 					for (k = 0; k < els.length; k++) {
-						els[k].classList.add("has-comment");
+						els[k].classList.add("has-annotation");
+
+						var numberDiv = document.createElement("a");
+						numberDiv.href = "#annotation-" + displayNum;
+						numberDiv.classList.add("annotation-tip");
+
+						els[k].appendChild(numberDiv);
+						numberDiv.innerHTML = displayNum;
 					}
 				}
+
+			// count elements so it can be used when displaying the results in the viewer
+			var count = 0;
+			
+			// iterate over the comments in annotations.js
+			for(i = 0; i < comments.comments.length; i++) {
+				
+				var item = comments.comments[i];
+				var els  = document.querySelectorAll(item.el);
+				
+				// if an element is found in the given pattern add it to the overall object so it can be passed when the overlay is turned on
+				if (els.length > 0) {
+					
+					annotationsPattern.commentsGathered.comments[count] = { "el": item.el, "title": item.title, "comment": item.comment };
+					count++;
+				}
+				
+			}
+			
+			annotationsPattern.commentsGathered.count = count;
 				
 				// send the list of annotations for the page back to the parent
 				var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;

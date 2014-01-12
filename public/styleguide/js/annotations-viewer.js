@@ -78,21 +78,20 @@ var annotationsViewer = {
 		
 		var commentsContainer = document.getElementById("sg-comments-container");
 		
-		if (commentsContainer.innerHTML != "") {
+		if (commentsContainer.innerHTML !== "") {
 			commentsContainer.innerHTML = "";
 		}
 		
 		if (count > 0) {
 			
 			for(i = 0; i < count; i++) {
-				
-				// for loop and add them to a doc frag and join it
-				var commentDiv = document.createElement("div");
+				var displayNum = i +1;
+				var commentDiv = document.createElement("div"); // for loop and add them to a doc frag and join it
+				var h2 = document.createElement("h2");
+				var div = document.createElement("div");
 				commentDiv.classList.add("sg-comment-container");
-				
-				var h2        = document.createElement("h2");
-				var div       = document.createElement("div");
-				h2.innerHTML  = comments[i].title;
+				commentDiv.id = "annotation-" + displayNum;
+				h2.innerHTML  = displayNum + ". " + comments[i].title;
 				div.innerHTML = comments[i].comment;
 				
 				commentDiv.appendChild(h2);
@@ -149,7 +148,10 @@ var annotationsViewer = {
 	
 };
 
-$(document).ready(function() { annotationsViewer.onReady(); });
+$(document).ready(function() {
+	annotationsViewer.onReady();
+});
+
 window.addEventListener("message", annotationsViewer.receiveIframeMessage, false);
 
 // make sure if a new pattern or view-all is loaded that comments are turned on as appropriate

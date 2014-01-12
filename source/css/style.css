@@ -569,6 +569,10 @@ td {
   @media all and (min-width: 46.8em) {
     .nav-toggle {
       display: none; } }
+  @media all and (max-width: 17em) {
+    .nav-toggle {
+      padding-left: 0.2rem;
+      padding-right: 0.2rem; } }
 
 .search-form {
   overflow: hidden;

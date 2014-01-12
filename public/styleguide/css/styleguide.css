@@ -498,15 +498,37 @@
   text-decoration: none;
   text-align: right; }
 
-.has-comment {
+.has-annotation {
   cursor: help !important;
-  box-shadow: 0 0 10px #4787dd; }
-  .has-comment a, .has-comment input {
+  box-shadow: 0 0 10px gray;
+  position: relative !important;
+  overflow: visible !important; }
+  .has-annotation a, .has-annotation input {
     cursor: help !important; }
-  .has-comment:hover {
-    box-shadow: 0 0 10px #005ad3; }
-  .has-comment.active {
-    box-shadow: inset 0 0 20px #4787dd; }
+  .has-annotation:hover {
+    box-shadow: 0 0 10px #222222; }
+  .has-annotation.active {
+    box-shadow: inset 0 0 20px gray; }
+  .has-annotation .annotation-tip {
+    display: block !important; }
+
+.annotation-tip {
+  position: absolute !important;
+  top: -2px !important;
+  left: -6px !important;
+  background: gray !important;
+  color: #dddddd !important;
+  opacity: 0.8 !important;
+  display: none !important;
+  font-size: 11px !important;
+  width: 18px !important;
+  height: 18px !important;
+  padding: 0 !important;
+  text-align: center !important;
+  border-radius: 10px !important; }
+  .annotation-tip:hover, .annotation-tip:focus {
+    opacity: 1 !important;
+    color: #fff !important; }
 
 #sg-comments-container {
   max-width: 60em;

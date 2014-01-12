@@ -26,6 +26,11 @@
 	@media all and (min-width: $bp-med) {
 		display: none;
 	}
+
+	@media all and (max-width: 17em) {
+		padding-left: 0.2rem;
+		padding-right: 0.2rem;
+	}
 }
 
 .search-form {
