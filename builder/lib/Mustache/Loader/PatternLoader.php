@@ -28,8 +28,8 @@
 class Mustache_Loader_PatternLoader implements Mustache_Loader
 {
     private $baseDir;
-    private $extension = '.mustache';
-    private $templates = array();
+    private $extension    = '.mustache';
+    private $templates    = array();
     private $patternPaths = array();
 
     /**
@@ -66,6 +66,7 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
         if (array_key_exists('patternPaths', $options)) {
             $this->patternPaths = $options['patternPaths'];
         }
+
     }
 
     /**
@@ -83,13 +84,12 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
         if (!isset($this->templates[$name])) {
             try {
                 $this->templates[$name] = $this->loadFile($name);
-                return $this->templates[$name];
             } catch (Exception $e) {
                 print "The partial, ".$name.", wasn't found so a pattern failed to build.\n";
             }
-        } else {
-           return $this->templates[$name];
         }
+        
+        return $this->templates[$name];
     }
 
     /**

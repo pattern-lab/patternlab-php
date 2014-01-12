@@ -96,7 +96,7 @@ var codeViewer = {
 			Prism.highlightElement(document.getElementById("sg-code-html-fill"));
 			
 			// draw CSS
-			if (css.indexOf("{{ patternCSS }}") === -1) {
+			if (css.indexOf("{% patternCSS %}") === -1) {
 				$("#sg-code-html").addClass("with-css");
 				$("#sg-code-css").css("display","block");
 				$("#sg-code-css-fill").text(css);

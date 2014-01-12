@@ -15,6 +15,7 @@ class Buildr {
 	// i was lazy when i started this project & kept (mainly) to two letter vars. sorry.
 	protected $mpl;               // mustache pattern loader instance
 	protected $mfs;               // mustache file system loader instance
+	protected $mv;                // mustache vanilla instance
 	protected $d;                 // data from data.json files
 	protected $sp;                // source patterns dir
 	protected $pp;                // public patterns dir
@@ -32,10 +33,11 @@ class Buildr {
 	protected $patternCSS;        // an array to hold the CSS generated for patterns
 	protected $cssRuleSaver;      // where css rule saver will be initialized
 	protected $cacheBuster;       // a timestamp used to bust the cache for static assets like CSS and JS
-	protected $headHTML;          // the HTML for the header
-	protected $footHTML;          // the HTML for the footer
-	protected $headPattern;       // the pattern to be included in the <head>
-	protected $footPattern;       // the pattern to be included in the foot
+	protected $patternHead;       // the header to be included on patterns
+	protected $patternFoot;       // the footer to be included on patterns
+	protected $mainPageHead;      // the header to be included on main pages
+	protected $mainPageFoot;      // the footer to be included on main pages
+	protected $addPatternHF;      // should the pattern header and footer be added
 	
 	/**
 	* When initializing the Builder class or the sub-classes make sure the base properties are configured
@@ -69,11 +71,25 @@ class Buildr {
 		}
 		
 		// provide the default for enable CSS. performance hog so it should be run infrequently
-		$this->enableCSS  = false;
-		$this->patternCSS = array();
+		$this->enableCSS    = false;
+		$this->patternCSS   = array();
 		
-		// set cache buster var
-		$this->setCacheBuster();
+		// load pattern-lab's resources
+		$htmlHead           = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
+		$htmlFoot           = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
+		$extraFoot          = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer-pattern.html");
+		
+		// gather the user-defined header and footer information
+		$patternHeadPath    = __DIR__.$this->sp."00-atoms/00-meta/_00-head.mustache";
+		$patternFootPath    = __DIR__.$this->sp."00-atoms/00-meta/_01-foot.mustache";
+		$patternHead        = (file_exists($patternHeadPath)) ? file_get_contents($patternHeadPath) : "";
+		$patternFoot        = (file_exists($patternFootPath)) ? file_get_contents($patternFootPath) : "";
+		
+		// add pattern lab's resource to the user-defined files
+		$this->patternHead  = str_replace("{% pattern-lab-head %}",$htmlHead,$patternHead);
+		$this->patternFoot  = str_replace("{% pattern-lab-foot %}",$extraFoot.$htmlFoot,$patternFoot);
+		$this->mainPageHead = $this->patternHead;
+		$this->mainPageFoot = str_replace("{% pattern-lab-foot %}",$htmlFoot,$patternFoot);
 		
 	}
 	
@@ -99,6 +115,15 @@ class Buildr {
 						"loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/_patternlab-files/"),
 						"partials_loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/_patternlab-files/partials/")
 		));
+	}
+	
+	/**
+	* Load a new Mustache instance that uses the File System Loader
+	*
+	* @return {Object}       an instance of the Mustache engine
+	*/
+	protected function loadMustacheVanillaInstance() {
+		$this->mv  = new Mustache_Engine;
 	}
 	
 	/**
@@ -136,7 +161,16 @@ class Buildr {
 			
 		}
 		
-		return $this->mpl->render($f,$d);
+		$pattern = $this->mpl->render($f,$d);
+		
+		if ($this->addPatternHF) {
+			$patternHead = $this->mv->render($this->patternHead,$d);
+			$patternFoot = $this->mv->render($this->patternFoot,$d);
+			$patternFoot = str_replace("{% patternHTML %}",$pattern,$patternFoot);
+			$pattern     = $patternHead.$pattern.$patternFoot;
+		}
+		
+		return $pattern;
 		
 	}
 	
@@ -145,8 +179,9 @@ class Buildr {
 	*/
 	protected function generateMainPages() {
 		
-		// make sure $this->mfs is refreshed
+		// make sure $this->mfs & $this->mv are refreshed
 		$this->loadMustacheFileSystemLoaderInstance();
+		$this->loadMustacheVanillaInstance();
 		
 		// get the source pattern paths
 		$patternPathDests = array();
@@ -184,11 +219,16 @@ class Buildr {
 		$this->navItems['cacheBuster'] = $this->cacheBuster;
 		$sd['cacheBuster']             = $this->cacheBuster;
 		
-		// render the index page and the style guide
+		// render the index page
 		$r = $this->mfs->render('index',$this->navItems);
 		file_put_contents(__DIR__."/../../public/index.html",$r);
-		$s = $this->mfs->render('styleguide',$sd);
-		file_put_contents(__DIR__."/../../public/styleguide/html/styleguide.html",$s);
+		
+		// render the style guide
+		$sd             = array_replace_recursive($this->d,$sd);
+		$styleGuideHead = $this->mv->render($this->mainPageHead,$sd);
+		$styleGuideFoot = $this->mv->render($this->mainPageFoot,$sd);
+		$styleGuidePage = $styleGuideHead.$this->mfs->render('viewall',$sd).$styleGuideFoot;
+		file_put_contents(__DIR__."/../../public/styleguide/html/styleguide.html",$styleGuidePage);
 		
 	}
 	
@@ -197,18 +237,12 @@ class Buildr {
 	*/
 	protected function generatePatterns() {
 		
-		// make sure $this->mpl is refreshed
+		// make sure the pattern header & footer aren't added
+		$this->addPatternHF = true;
+		
+		// make sure $this->mpl & $this->mv are refreshed
 		$this->loadMustachePatternLoaderInstance();
-		
-		// load the overall header and footers
-		$this->headHTML = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
-		$this->footHTML = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
-		
-		// gather the user-defined header and footer information
-		$headPatternPath = __DIR__.$this->sp."00-atoms/00-meta/_00-head.mustache";
-		$footPatternPath = __DIR__.$this->sp."00-atoms/00-meta/_01-foot.mustache";
-		$this->headPattern = (file_exists($headPatternPath)) ? file_get_contents($headPatternPath) : "";
-		$this->footPattern = (file_exists($footPatternPath)) ? file_get_contents($footPatternPath) : "";
+		$this->loadMustacheVanillaInstance();
 		
 		// loop over the pattern paths to generate patterns for each
 		foreach($this->patternPaths as $patternType) {
@@ -228,6 +262,7 @@ class Buildr {
 					} else {
 						file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$r);
 					}
+					
 				}
 				
 			}
@@ -245,32 +280,21 @@ class Buildr {
 	*/
 	private function generatePatternFile($f,$p) {
 		
-		$hr = $this->headHTML;
 		$rf = $this->renderPattern($f,$p);
-		$fr = $this->footHTML;
-		
-		// replace the user-defined header and footer info
-		$hr = str_replace("{{ headPattern }}",$this->headPattern,$hr);
-		$fr = str_replace("{{ footPattern }}",$this->footPattern,$fr);
-		
-		// find & replace the cacheBuster var in header and footer
-		$hr = str_replace("{{ cacheBuster }}",$this->cacheBuster,$hr);
-		$fr = str_replace("{{ cacheBuster }}",$this->cacheBuster,$fr);
 		
 		// the footer isn't rendered as mustache but we have some variables there any way. find & replace.
-		$fr = str_replace("{{ patternPartial }}",$p,$fr);
-		$fr = str_replace("{{ lineage }}",json_encode($this->patternLineages[$p]),$fr);
-		$fr = str_replace("{{ patternHTML }}",$rf,$fr);
+		$rf = str_replace("{% patternPartial %}",$p,$rf);
+		$rf = str_replace("{% lineage %}",json_encode($this->patternLineages[$p]),$rf);
 		
 		// set-up the mark-up for CSS Rule Saver so it can figure out which rules to save
 		if ($this->enableCSS) {
 			$this->cssRuleSaver->loadHTML($rf,false);
 			$patternCSS = $this->cssRuleSaver->saveRules();
 			$this->patternCSS[$p] = $patternCSS;
-			$fr = str_replace("{{ patternCSS }}",$patternCSS,$fr);
+			$rf = str_replace("{% patternCSS %}",$patternCSS,$rf);
 		}
 		
-		return $hr."\n".$rf."\n".$fr;
+		return $rf;
 		
 	}
 	
@@ -279,8 +303,9 @@ class Buildr {
 	*/
 	protected function generateViewAllPages() {
 		
-		// make sure $this->mfs is refreshed on each generation of view all. for some reason the mustache instance dies
+		// make sure $this->mfs & $this->mv are refreshed on each generation of view all
 		$this->loadMustacheFileSystemLoaderInstance();
+		$this->loadMustacheVanillaInstance();
 		
 		// add view all to each list
 		$i = 0; $k = 0;
@@ -306,17 +331,20 @@ class Buildr {
 								$sid                   = array("partials" => $this->patternPartials[$this->getPatternName($patternType,false)."-".$this->getPatternName($patternSubType,false)]);
 								$sid["patternPartial"] = $subItem["patternPartial"];
 								$sid["cacheBuster"]    = $this->cacheBuster;
+								$sid                   = array_replace_recursive($this->d,$sid);
 								
 								// render the viewall template
-								$v = $this->mfs->render('viewall',$sid);
+								$viewAllHead = $this->mv->render($this->mainPageHead,$sid);
+								$viewAllFoot = $this->mv->render($this->mainPageFoot,$sid);
+								$viewAllPage = $viewAllHead.$this->mfs->render('viewall',$sid).$viewAllFoot;
 								
 								// if the pattern directory doesn't exist create it
 								$patternPath = $patternType."-".$patternSubType;
 								if (!is_dir(__DIR__.$this->pp.$patternPath)) {
 									mkdir(__DIR__.$this->pp.$patternPath);
-									file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
+									file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$viewAllPage);
 								} else {
-									file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$v);
+									file_put_contents(__DIR__.$this->pp.$patternPath."/index.html",$viewAllPage);
 								}
 								
 							}
@@ -339,25 +367,35 @@ class Buildr {
 	/**
 	* Gather data from source/_data/_data.json, source/_data/_listitems.json, and pattern-specific json files
 	*
-	* Reserved attributes: 
-	*    - $this->d->listItems : listItems from listitems.json, duplicated into separate arrays for $this->d->listItems->one, $this->d->listItems->two, $this->d->listItems->three... etc.
-	*    - $this->d->link : the links to each pattern
-	*    - $this->d->patternSpecific : holds attributes from the pattern-specific data files
+	* Reserved attributes:
+	*    - $this->d["listItems"] : listItems from listitems.json, duplicated into separate arrays for $this->d->listItems->one, $this->d->listItems->two, $this->d->listItems->three... etc.
+	*    - $this->d["link"] : the links to each pattern
+	*    - $this->d["cacheBuster"] : the cache buster value to be appended to URLs
+	*    - $this->d["patternSpecific"] : holds attributes from the pattern-specific data files
 	*
 	* @return {Array}        populates $this->d
 	*/
 	protected function gatherData() {
 		
+		// set the cacheBuster
+		$this->cacheBuster = time();
+		
 		// gather the data from the main source data.json
 		if (file_exists(__DIR__."/../../source/_data/_data.json")) {
-			$this->d = array_merge(array(), json_decode(file_get_contents(__DIR__."/../../source/_data/_data.json"),true));
+			$this->d = json_decode(file_get_contents(__DIR__."/../../source/_data/_data.json"),true);
 			$this->jsonLastErrorMsg("_data/_data.json");
 		}
 		
-		$this->d["listItems"] = $this->getListItems(__DIR__."/../../source/_data/_listitems.json");
+		$reservedKeys = array("listItems","cacheBuster","link","patternSpecific");
+		foreach ($reservedKeys as $reservedKey) {
+			if (array_key_exists($reservedKey,$this->d)) {
+				print "\"".$reservedKey."\" is a reserved key in Pattern Lab. The data using that key in _data.json will be overwritten. Please choose a new key.\n";
+			}
+		}
 		
-		//print_r($this->d->listItems);
 		
+		$this->d["listItems"]       = $this->getListItems(__DIR__."/../../source/_data/_listitems.json");
+		$this->d["cacheBuster"]     = $this->cacheBuster;
 		$this->d["link"]            = array();
 		$this->d["patternSpecific"] = array();
 		
@@ -436,10 +474,13 @@ class Buildr {
 	*/
 	protected function gatherPatternInfo() {
 		
+		// make sure the pattern header & footer aren't added
+		$this->addPatternHF = false;
+		
 		// set-up the defaults
-		$patternType       = "";
-		$patternSubtype    = "";
-		$patternSubtypeSet = false;
+		$patternType        = "";
+		$patternSubtype     = "";
+		$patternSubtypeSet  = false;
 		
 		// initialize various arrays
 		$this->navItems                 = array();
@@ -687,8 +728,6 @@ class Buildr {
 			
 		}
 		
-
-		
 		// get all of the lineages
 		$this->gatherLineages();
 		
@@ -854,13 +893,6 @@ class Buildr {
 		$patternBits  = explode("-",$pattern,2);
 		$patternName = (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? $patternBits[1] : $pattern;
 		return ($clean) ? (str_replace("-"," ",$patternName)) : $patternName;
-	}
-	
-	/**
-	* Set the cache buster var so it can be used on the query string for file requests
-	*/
-	protected function setCacheBuster() {
-		$this->cacheBuster = time();
 	}
 	
 	/**

@@ -21,8 +21,7 @@ var annotationsPattern = {
 	gatherComments: function() {
 		
 		// make sure this only added when we're on a pattern specific view
-		var body = document.getElementsByTagName("body");
-		if (!body[0].classList.contains("sg-pattern-list")) {
+		if (document.getElementById("sg-patterns") === null) {
 			
 			// count elements so it can be used when displaying the results in the viewer
 			var count = 0;
@@ -141,8 +140,7 @@ var annotationsPattern = {
 			annotationsPattern.commentsEmbeddedActive = false;
 			
 			// see which flag to toggle based on if this is a styleguide or view-all page
-			var body = document.getElementsByTagName("body");
-			if ((event.data.commentToggle === "on") && (body[0].classList.contains("sg-pattern-list"))) {
+			if ((event.data.commentToggle === "on") && (document.getElementById("sg-patterns") !== null)) {
 				annotationsPattern.commentsEmbeddedActive = true;
 			} else if (event.data.commentToggle === "on") {
 				annotationsPattern.commentsOverlayActive  = true;
