@@ -353,13 +353,13 @@
 		$('#sg-cover').css("display","none");
 	});
 
-	function resizeHandlerInit() {
+	//function resizeHandlerInit() {
 		// capture the viewport width that was loaded and modify it so it fits with the pull bar
 		var origViewportWidth = $("#sg-viewport").width();
 		$("#sg-gen-container").width(origViewportWidth);
 		$("#sg-viewport").width(origViewportWidth - 14);
 		updateSizeReading($("#sg-viewport").width());
-	}
+	//}
 	
 
 	// get the request vars
