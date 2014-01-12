@@ -82,7 +82,27 @@ var annotationsViewer = {
 			commentsContainer.innerHTML = "";
 		}
 		
-		for(i = 0; i < count; i++) {
+		if (count > 0) {
+			
+			for(i = 0; i < count; i++) {
+				
+				// for loop and add them to a doc frag and join it
+				var commentDiv = document.createElement("div");
+				commentDiv.classList.add("sg-comment-container");
+				
+				var h2        = document.createElement("h2");
+				var div       = document.createElement("div");
+				h2.innerHTML  = comments[i].title;
+				div.innerHTML = comments[i].comment;
+				
+				commentDiv.appendChild(h2);
+				commentDiv.appendChild(div);
+				
+				commentsContainer.appendChild(commentDiv);
+				
+			}
+			
+		} else {
 			
 			// for loop and add them to a doc frag and join it
 			var commentDiv = document.createElement("div");
@@ -90,8 +110,8 @@ var annotationsViewer = {
 			
 			var h2        = document.createElement("h2");
 			var div       = document.createElement("div");
-			h2.innerHTML  = comments[i].title;
-			div.innerHTML = comments[i].comment;
+			h2.innerHTML  = "No Annotations";
+			div.innerHTML = "There are no annotations for this pattern.";
 			
 			commentDiv.appendChild(h2);
 			commentDiv.appendChild(div);
@@ -99,6 +119,7 @@ var annotationsViewer = {
 			commentsContainer.appendChild(commentDiv);
 			
 		}
+		
 		
 		annotationsViewer.slideComment(0);
 		
