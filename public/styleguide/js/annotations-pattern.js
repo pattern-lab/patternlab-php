@@ -21,9 +21,7 @@ var annotationsPattern = {
 	gatherComments: function() {
 		
 		// make sure this only added when we're on a pattern specific view
-		if (document.getElementById("sg-patterns") === null) {
-			
-		} else {
+		if (document.getElementById("sg-patterns") !== null) {
 			
 			var obj = { "commentOverlay": "off" };
 			var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
@@ -119,7 +117,6 @@ var annotationsPattern = {
 				els = document.querySelectorAll(".has-annotation");
 				for (i = 0; i < els.length; i++) {
 					els[i].classList.remove("has-annotation");
-
 				}
 			}
 			
@@ -138,39 +135,38 @@ var annotationsPattern = {
 					item = comments.comments[i];
 					els  = document.querySelectorAll(item.el),
 					displayNum = i+1;
-
+					
 					//Loop through all items with annotations
 					for (k = 0; k < els.length; k++) {
 						els[k].classList.add("has-annotation");
-
+						
 						var numberDiv = document.createElement("a");
 						numberDiv.href = "#annotation-" + displayNum;
 						numberDiv.classList.add("annotation-tip");
-
+						
 						els[k].appendChild(numberDiv);
 						numberDiv.innerHTML = displayNum;
 					}
 				}
-
-			// count elements so it can be used when displaying the results in the viewer
-			var count = 0;
-			
-			// iterate over the comments in annotations.js
-			for(i = 0; i < comments.comments.length; i++) {
 				
-				var item = comments.comments[i];
-				var els  = document.querySelectorAll(item.el);
+				// count elements so it can be used when displaying the results in the viewer
+				var count = 0;
 				
-				// if an element is found in the given pattern add it to the overall object so it can be passed when the overlay is turned on
-				if (els.length > 0) {
+				// iterate over the comments in annotations.js
+				for(i = 0; i < comments.comments.length; i++) {
 					
-					annotationsPattern.commentsGathered.comments[count] = { "el": item.el, "title": item.title, "comment": item.comment };
-					count++;
+					var item = comments.comments[i];
+					var els  = document.querySelectorAll(item.el);
+					
+					// if an element is found in the given pattern add it to the overall object so it can be passed when the overlay is turned on
+					if (els.length > 0) {
+						annotationsPattern.commentsGathered.comments[count] = { "el": item.el, "title": item.title, "comment": item.comment };
+						count++;
+					}
+				
 				}
 				
-			}
-			
-			annotationsPattern.commentsGathered.count = count;
+				annotationsPattern.commentsGathered.count = count;
 				
 				// send the list of annotations for the page back to the parent
 				var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
