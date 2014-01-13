@@ -46,7 +46,7 @@ class Generator extends Builder {
 			$this->enableCSS = true;
 			
 			// initialize CSS rule saver
-			require __DIR__."../lib/css-rule-saver/css-rule-saver.php";
+			require __DIR__."../lib/CSSRuleSaver/CSSRuleSaver.php";
 			$this->initializeCSSRuleSaver();
 			print "CSS generation enabled. This could take a few seconds...\n";
 			
