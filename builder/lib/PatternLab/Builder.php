@@ -10,7 +10,13 @@
  *
  */
 
-class Buildr {
+namespace PatternLab;
+
+use \Mustache_Engine as Engine;
+use \Mustache_Loader_PatternLoader as PatternLoader;
+use \Mustache_Loader_FilesystemLoader as FilesystemLoader;
+
+class Builder {
 
 	// i was lazy when i started this project & kept (mainly) to two letter vars. sorry.
 	protected $mpl;               // mustache pattern loader instance
@@ -19,6 +25,8 @@ class Buildr {
 	protected $d;                 // data from data.json files
 	protected $sp;                // source patterns dir
 	protected $pp;                // public patterns dir
+	protected $sd;                // source dir
+	protected $pd;                // public dir
 	protected $ie;                // extensions to ignore
 	protected $id;                // directories to ignore
 	protected $contentSyncPort;   // for populating the websockets template partial
@@ -46,13 +54,14 @@ class Buildr {
 	public function __construct() {
 		
 		// set-up the configuration options for patternlab
-		if (!($config = @parse_ini_file(__DIR__."/../../config/config.ini"))) {
+		$cd = __DIR__."/../../../config";
+		if (!($config = @parse_ini_file($cd."/config.ini"))) {
 			// config.ini didn't exist so attempt to create it using the default file
-			if (!@copy(__DIR__."/../../config/config.ini.default", __DIR__."/../../config/config.ini")) {
+			if (!@copy($cd."/config.ini.default", $cd."/config.ini")) {
 				print "Please make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically. Check permissions of config/.";
 				exit;
 			} else {
-				$config = parse_ini_file(__DIR__."/../../config/config.ini");
+				$config = parse_ini_file($cd."/config.ini");
 			}
 		}
 		
@@ -62,13 +71,17 @@ class Buildr {
 			// if the variables are array-like make sure the properties are validated/trimmed/lowercased before saving
 			if (($key == "ie") || ($key == "id")) {
 				$values = explode(",",$value);
-				array_walk($values,'Buildr::trim');
+				array_walk($values,'PatternLab\Builder::trim');
 				$this->$key = $values;
 			} else {
 				$this->$key = $value;
 			}
 			
 		}
+		
+		// set-up the source & public dirs
+		$this->sd = __DIR__."/../../../source";
+		$this->pd = __DIR__."/../../../public";
 		
 		// provide the default for enable CSS. performance hog so it should be run infrequently
 		$this->enableCSS    = false;
@@ -99,9 +112,9 @@ class Buildr {
 	* @return {Object}       an instance of the Mustache engine
 	*/
 	protected function loadMustachePatternLoaderInstance() {
-		$this->mpl = new Mustache_Engine(array(
-						"loader" => new Mustache_Loader_PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths)),
-						"partials_loader" => new Mustache_Loader_PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths))
+		$this->mpl = new Engine(array(
+						"loader" => new PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths)),
+						"partials_loader" => new PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths))
 		));
 	}
 	
@@ -111,9 +124,9 @@ class Buildr {
 	* @return {Object}       an instance of the Mustache engine
 	*/
 	protected function loadMustacheFileSystemLoaderInstance() {
-		$this->mfs = new Mustache_Engine(array(
-						"loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/_patternlab-files/"),
-						"partials_loader" => new Mustache_Loader_FilesystemLoader(__DIR__."/../../source/_patternlab-files/partials/")
+		$this->mfs = new Engine(array(
+						"loader" => new FilesystemLoader($this->sd."/_patternlab-files/"),
+						"partials_loader" => new FilesystemLoader($this->sd."/_patternlab-files/partials/")
 		));
 	}
 	
@@ -123,7 +136,7 @@ class Buildr {
 	* @return {Object}       an instance of the Mustache engine
 	*/
 	protected function loadMustacheVanillaInstance() {
-		$this->mv  = new Mustache_Engine;
+		$this->mv  = new Engine;
 	}
 	
 	/**
@@ -210,7 +223,7 @@ class Buildr {
 		}
 		
 		// sort partials by patternLink
-		usort($sd['partials'], "Buildr::sortPartials");
+		usort($sd['partials'], "PatternLab\Builder::sortPartials");
 		
 		// render the "view all" pages
 		$this->generateViewAllPages();
@@ -221,14 +234,14 @@ class Buildr {
 		
 		// render the index page
 		$r = $this->mfs->render('index',$this->navItems);
-		file_put_contents(__DIR__."/../../public/index.html",$r);
+		file_put_contents($this->pd."/index.html",$r);
 		
 		// render the style guide
 		$sd             = array_replace_recursive($this->d,$sd);
 		$styleGuideHead = $this->mv->render($this->mainPageHead,$sd);
 		$styleGuideFoot = $this->mv->render($this->mainPageFoot,$sd);
 		$styleGuidePage = $styleGuideHead.$this->mfs->render('viewall',$sd).$styleGuideFoot;
-		file_put_contents(__DIR__."/../../public/styleguide/html/styleguide.html",$styleGuidePage);
+		file_put_contents($this->pd."/styleguide/html/styleguide.html",$styleGuidePage);
 		
 	}
 	
@@ -381,8 +394,8 @@ class Buildr {
 		$this->cacheBuster = time();
 		
 		// gather the data from the main source data.json
-		if (file_exists(__DIR__."/../../source/_data/_data.json")) {
-			$this->d = json_decode(file_get_contents(__DIR__."/../../source/_data/_data.json"),true);
+		if (file_exists($this->sd."/_data/_data.json")) {
+			$this->d = json_decode(file_get_contents($this->sd."/_data/_data.json"),true);
 			$this->jsonLastErrorMsg("_data/_data.json");
 		}
 		
@@ -394,7 +407,7 @@ class Buildr {
 		}
 		
 		
-		$this->d["listItems"]       = $this->getListItems(__DIR__."/../../source/_data/_listitems.json");
+		$this->d["listItems"]       = $this->getListItems($this->sd."/_data/_listitems.json");
 		$this->d["cacheBuster"]     = $this->cacheBuster;
 		$this->d["link"]            = array();
 		$this->d["patternSpecific"] = array();
@@ -454,7 +467,7 @@ class Buildr {
 		
 		$mqs = array();
 		
-		foreach(glob(__DIR__."/../../source/css/*.css") as $filename) {
+		foreach(glob($this->sd."/css/*.css") as $filename) {
 			$data    = file_get_contents($filename);
 			preg_match_all("/(min|max)-width:([ ]+)?(([0-9]{1,5})(\.[0-9]{1,20}|)(px|em))/",$data,$matches);
 			foreach ($matches[3] as $match) {
@@ -492,8 +505,8 @@ class Buildr {
 		$this->viewAllPaths             = array();
 		
 		// iterate over the patterns & related data and regenerate the entire site if they've changed
-		$patternObjects  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__.$this->sp), RecursiveIteratorIterator::SELF_FIRST);
-		$patternObjects->setFlags(FilesystemIterator::SKIP_DOTS);
+		$patternObjects  = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(__DIR__.$this->sp), \RecursiveIteratorIterator::SELF_FIRST);
+		$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
 		
 		foreach($patternObjects as $name => $object) {
 			
@@ -836,7 +849,7 @@ class Buildr {
 		if (file_exists($filepath)) {
 			
 			$listItemsJSON = json_decode(file_get_contents($filepath), true);
-			$this->jsonLastErrorMsg(str_replace(__DIR__."/../../source/","",$filepath));
+			$this->jsonLastErrorMsg(str_replace($this->sd."/","",$filepath));
 			
 			$numbers = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
 			
@@ -901,8 +914,8 @@ class Buildr {
 	*/
 	protected function updateChangeTime() {
 		
-		if (is_dir(__DIR__."/../../public/")) {
-			file_put_contents(__DIR__."/../../public/latest-change.txt",time());
+		if (is_dir($this->pd."/")) {
+			file_put_contents($this->pd."/latest-change.txt",time());
 		} else {
 			print "Either the public directory for Pattern Lab doesn't exist or the builder is in the wrong location. Please fix.";
 			exit;
@@ -916,10 +929,10 @@ class Buildr {
 	protected function cleanPublic() {
 		
 		// find all of the patterns in public/. sort by the children first
-		$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../public/patterns/"), RecursiveIteratorIterator::CHILD_FIRST);
+		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->pd."/patterns/"), \RecursiveIteratorIterator::CHILD_FIRST);
 		
 		// make sure dots are skipped
-		$objects->setFlags(FilesystemIterator::SKIP_DOTS);
+		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 		
 		// for each file figure out what to do with it
 		foreach($objects as $name => $object) {
@@ -935,13 +948,13 @@ class Buildr {
 		}
 		
 		// scan source/ & public/ to figure out what directories might need to be cleaned up
-		$sourceDirs = glob(__DIR__."/../../source/*",GLOB_ONLYDIR);
-		$publicDirs = glob(__DIR__."/../../public/*",GLOB_ONLYDIR);
+		$sourceDirs = glob($this->sd."/*",GLOB_ONLYDIR);
+		$publicDirs = glob($this->pd."/*",GLOB_ONLYDIR);
 		
 		// make sure some directories aren't deleted
 		$ignoreDirs = array("styleguide");
 		foreach ($ignoreDirs as $ignoreDir) {
-			$key = array_search(__DIR__."/../../public/".$ignoreDir,$publicDirs);
+			$key = array_search($this->pd."/".$ignoreDir,$publicDirs);
 			if ($key !== false){
 				unset($publicDirs[$key]);
 			}
@@ -949,9 +962,9 @@ class Buildr {
 		
 		// compare source dirs against public. remove those dirs w/ an underscore in source/ from the public/ list
 		foreach ($sourceDirs as $sourceDir) {
-			$cleanDir = str_replace(__DIR__."/../../source/","",$sourceDir);
+			$cleanDir = str_replace($this->sd."/","",$sourceDir);
 			if ($cleanDir[0] == "_") {
-				$key = array_search(__DIR__."/../../public/".str_replace("_","",$cleanDir),$publicDirs);
+				$key = array_search($this->pd."/".str_replace("_","",$cleanDir),$publicDirs);
 				if ($key !== false){
 					unset($publicDirs[$key]);
 				}
@@ -961,10 +974,10 @@ class Buildr {
 		// for the remaining dirs in public delete them and their files
 		foreach ($publicDirs as $dir) {
 			
-			$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir), RecursiveIteratorIterator::CHILD_FIRST);
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir), \RecursiveIteratorIterator::CHILD_FIRST);
 			
 			// make sure dots are skipped
-			$objects->setFlags(FilesystemIterator::SKIP_DOTS);
+			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 			
 			foreach($objects as $name => $object) {
 				
@@ -989,8 +1002,8 @@ class Buildr {
 	* @param  {String}       the public file
 	*/
 	protected function moveFile($s,$p) {
-		if (file_exists(__DIR__."/../../source/".$s)) {
-			copy(__DIR__."/../../source/".$s,__DIR__."/../../public/".$p);
+		if (file_exists($this->sd."/".$s)) {
+			copy($this->sd."/".$s,$this->pd."/".$p);
 		}
 	}
 	
@@ -1032,7 +1045,7 @@ class Buildr {
 		
 		$this->cssRuleSaver = new cssRuleSaver;
 		
-		foreach(glob(__DIR__."/../../source/css/*.css") as $filename) {
+		foreach(glob($this->sd."/css/*.css") as $filename) {
 			$this->cssRuleSaver->loadCSS($filename);
 		}
 		

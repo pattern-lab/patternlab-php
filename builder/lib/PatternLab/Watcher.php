@@ -14,7 +14,9 @@
  *
  */
 
-class Watchr extends Buildr {
+namespace PatternLab;
+
+class Watcher extends Builder {
 	
 	/**
 	* Use the Builder __construct to gather the config variables
@@ -33,7 +35,7 @@ class Watchr extends Buildr {
 		
 		// automatically start the auto-refresh tool
 		if ($reload) {
-			$path = str_replace("builder/lib","listeners/contentSyncBroadcasterServer.php",__DIR__);
+			$path = str_replace("builder/lib/PatternLab","listeners/contentSyncBroadcasterServer.php",__DIR__);
 			$fp = popen("php ".$path." -s", "r"); 
 		}
 		
@@ -50,15 +52,15 @@ class Watchr extends Buildr {
 			$cp = clone $o->patterns;
 			
 			// iterate over the patterns & related data and regenerate the entire site if they've changed
-			$patternObjects  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/_patterns/"), RecursiveIteratorIterator::SELF_FIRST);
+			$patternObjects  = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/_patterns/"), \RecursiveIteratorIterator::SELF_FIRST);
 			
 			// make sure dots are skipped
-			$patternObjects->setFlags(FilesystemIterator::SKIP_DOTS);
+			$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
 			
 			foreach($patternObjects as $name => $object) {
 					
 				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-				$fileName      = str_replace(__DIR__."/../../source/_patterns".DIRECTORY_SEPARATOR,"",$name);
+				$fileName      = str_replace($this->sd."/_patterns".DIRECTORY_SEPARATOR,"",$name);
 				$fileNameClean = str_replace(DIRECTORY_SEPARATOR."_",DIRECTORY_SEPARATOR,$fileName);
 				
 				if ($object->isFile() && (($object->getExtension() == "mustache") || ($object->getExtension() == "json"))) {
@@ -136,14 +138,14 @@ class Watchr extends Buildr {
 			}
 			
 			// iterate over the data files and regenerate the entire site if they've changed
-			$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/_data/"), RecursiveIteratorIterator::SELF_FIRST);
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/_data/"), \RecursiveIteratorIterator::SELF_FIRST);
 			
 			// make sure dots are skipped
-			$objects->setFlags(FilesystemIterator::SKIP_DOTS);
+			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 			
 			foreach($objects as $name => $object) {
 				
-				$fileName = str_replace(__DIR__."/../../source/_data".DIRECTORY_SEPARATOR,"",$name);
+				$fileName = str_replace($this->sd."/_data".DIRECTORY_SEPARATOR,"",$name);
 				$mt = $object->getMTime();
 				
 				if (!isset($o->$fileName)) {
@@ -162,23 +164,23 @@ class Watchr extends Buildr {
 			}
 			
 			// iterate over all of the other files in the source directory and move them if their modified time has changed
-			$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__."/../../source/"), RecursiveIteratorIterator::SELF_FIRST);
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/"), \RecursiveIteratorIterator::SELF_FIRST);
 			
 			// make sure dots are skipped
-			$objects->setFlags(FilesystemIterator::SKIP_DOTS);
+			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 			
 			foreach($objects as $name => $object) {
 				
 				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-				$fileName = str_replace(__DIR__."/../../source".DIRECTORY_SEPARATOR,"",$name);
+				$fileName = str_replace($this->sd.DIRECTORY_SEPARATOR,"",$name);
 				if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
 					
 					// catch directories that have the ignored dir in their path
 					$ignoreDir = $this->ignoreDir($fileName);
 					
 					// check to see if it's a new directory
-					if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir(__DIR__."/../../public/".$fileName)) {
-						mkdir(__DIR__."/../../public/".$fileName);
+					if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir($this->pd."/".$fileName)) {
+						mkdir($this->pd."/".$fileName);
 						$o->$fileName = "dir created"; // placeholder
 						print $fileName."/ directory was created...\n";
 					}
@@ -187,7 +189,7 @@ class Watchr extends Buildr {
 					if (file_exists($name)) {
 						
 						$mt = $object->getMTime();
-						if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists(__DIR__."/../../public/".$fileName)) {
+						if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists($this->pd."/".$fileName)) {
 							$o->$fileName = $mt;
 							$this->moveStaticFile($fileName,"added");
 							if ($object->getExtension() == "css") {
