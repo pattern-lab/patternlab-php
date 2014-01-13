@@ -67,6 +67,22 @@ class Builder {
 			}
 		}
 		
+		// check the config version and update it if necessary
+		if (!isset($config["v"]) || ($config["v"] != VERSION)) {
+			$configOutput = "";
+			$oldConfig    = $config;
+			$config       = parse_ini_file($cd."/config.ini.default");
+			foreach ($oldConfig as $key => $value) {
+				if ($key != "v") {
+					$config[$key] = $value;
+				}
+			}
+			foreach ($config as $key => $value) {
+				$configOutput .= $key." = \"".$value."\"\n";
+			}
+			file_put_contents($cd."/config.ini",$configOutput);
+		}
+		
 		// populate some standard variables out of the config
 		foreach ($config as $key => $value) {
 			
