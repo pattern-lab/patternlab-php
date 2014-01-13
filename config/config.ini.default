@@ -3,6 +3,8 @@
  * If config.ini doesn't exist Pattern Lab will try to create a new version
  */
 
+v  = "0.6.2"
+
 // both the source and the public location of the patterns
 sp = "/../../../source/_patterns/";
 pp = "/../../../public/patterns/";
