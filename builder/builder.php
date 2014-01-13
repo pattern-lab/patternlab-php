@@ -22,6 +22,9 @@
  * 	php builder.php -wr
  * 		In addition to the -w flag features it will also automatically start the auto-reload server.
  *
+ * 	php builder.php -v
+ * 		Prints out the current version of Pattern Lab.
+ *
  */
 
 // auto-load classes
@@ -40,7 +43,12 @@ if (php_sapi_name() != 'cli') {
 	exit;
 }
 
-$args = getopt("gwcr");
+$args = getopt("gwcrv");
+
+if (isset($args["v"])) {
+	$b = new PatternLab\Builder();
+	$b->printVersion();
+}
 	
 if (isset($args["g"]) || isset($args["w"])) {
 		
@@ -76,7 +84,7 @@ if (isset($args["w"])) {
 	
 }
 	
-if (!isset($args["g"]) && !isset($args["w"])) {
+if (!isset($args["g"]) && !isset($args["w"]) && !isset($args["v"])) {
 	
 	// when in doubt write out the usage
 	print "\n";
@@ -91,5 +99,7 @@ if (!isset($args["g"]) && !isset($args["w"])) {
 	print "    files. Will re-generate files if they've changed.\n\n";
 	print "  php ".$_SERVER["PHP_SELF"]." -wr\n";
 	print "    In addition to the -w flag features it will also automatically start the auto-reload server.\n\n";
+	print "  php ".$_SERVER["PHP_SELF"]." -v\n";
+	print "    Prints out the current version of Pattern Lab.\n\n";
 	
 }
