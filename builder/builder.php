@@ -50,14 +50,12 @@ if (isset($args["g"]) || isset($args["w"])) {
 	
 	// check to see if CSS for patterns should be parsed & outputted
 	if (isset($args["c"]) && !isset($args["w"])) {
-		// load css rule saver
-
 		$c = true;
 	}
 	
-	print "your site has been generated...\n";
-	
 	$g->generate($c);
+	
+	print "your site has been generated...\n";
 	
 }
 
