@@ -3,7 +3,7 @@
 /*!
  * Pattern Lab Watcher Class - v0.6.2
  *
- * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
+ * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
  * Watches the source/ dir for any changes so those changes can be automagically
