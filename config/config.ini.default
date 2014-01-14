@@ -5,10 +5,6 @@
 
 v  = "0.6.2"
 
-// both the source and the public location of the patterns
-sp = "/../../../source/_patterns/";
-pp = "/../../../public/patterns/";
-
 // file extensions to ignore when building or watching the source dir, separate with a comma
 ie = "scss,DS_Store,less"
 

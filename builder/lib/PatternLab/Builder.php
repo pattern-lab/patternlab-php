@@ -98,6 +98,8 @@ class Builder {
 		}
 		
 		// set-up the source & public dirs
+		$this->sp = "/../../../source/_patterns/";
+		$this->pp = "/../../../public/patterns/";
 		$this->sd = __DIR__."/../../../source";
 		$this->pd = __DIR__."/../../../public";
 		
