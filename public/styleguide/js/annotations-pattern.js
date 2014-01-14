@@ -10,7 +10,6 @@ var annotationsPattern = {
 	
 	commentsOverlayActive:  false,
 	commentsOverlay:        false,
-	commentsOverlayElement: "",
 	commentsEmbeddedActive: false,
 	commentsEmbedded:       false,
 	commentsGathered:       { "commentOverlay": "on", "count": 0, "comments": { } },
@@ -21,7 +20,41 @@ var annotationsPattern = {
 	gatherComments: function() {
 		
 		// make sure this only added when we're on a pattern specific view
-		if (document.getElementById("sg-patterns") !== null) {
+		if (document.getElementById("sg-patterns") === null) {
+			
+			var count = 0;
+			
+			for (comment in comments.comments) {
+				var item = comments.comments[comment];
+				var els  = document.querySelectorAll(item.el);
+				if (els.length > 0) {
+					
+					count++;
+					item.displaynumber = count;
+					
+					for (var i = 0; i < els.length; ++i) {
+						els[i].onclick = (function(item) {
+							return function(e) {
+								e.preventDefault();
+								e.stopPropagation();
+								var obj = {};
+								
+								// if an element was clicked on while the overlay was already on swap it
+								obj = { "displaynumber": item.displaynumber, "el": item.el, "title": item.title, "comment": item.comment };
+								
+								var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+								parent.postMessage(obj,targetOrigin);
+								
+							}
+						})(item);
+
+					}
+				}
+				
+				
+			}
+						
+		} else {
 			
 			var obj = { "commentOverlay": "off" };
 			var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;

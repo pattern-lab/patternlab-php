@@ -142,6 +142,9 @@ var annotationsViewer = {
 			} else {
 				annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			}
+		} else if (event.data.displaynumber !== undefined) {
+			var top = document.getElementById("annotation-"+event.data.displaynumber).offsetTop;
+			$('#sg-annotation-container').animate({scrollTop: top - 10}, 600);
 		}
 		
 	}
