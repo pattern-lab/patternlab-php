@@ -294,7 +294,7 @@
 	
 	/* Returns a random number between min and max */
 	function getRandom (min, max) {
-		return Math.random() * (max - min) + min;
+		return Math.floor(Math.random() * (max - min) + min);
 	}
 	
 	//Update The viewport size
