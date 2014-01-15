@@ -105,6 +105,14 @@ $animate-quick: 0.2s;
     $PATTERN LAB INTERFACE 
 \*------------------------------------*/
 
+html, body {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	-webkit-backface-visibility: visible;
+}
+
 #patternlab-html, #patternlab-body {
 	margin: 0;
 	padding: 0;
@@ -490,7 +498,7 @@ $animate-quick: 0.2s;
 
 #sg-viewport {
   border: 0;
-  x-margin: 0 auto;
+  margin: 0 0 -5px 0;
   height: 100%;
   width: 100%; 
 
@@ -528,7 +536,7 @@ $animate-quick: 0.2s;
 	text-align: center; 
 	margin: 0 auto;
 	-webkit-overflow-scrolling: touch;
-  	overflow: scroll;
+	overflow-y: scroll;
 
 	&.hay-mode {
 		-webkit-transition: all 40s linear;

@@ -49,6 +49,15 @@
 /*------------------------------------*\
     $PATTERN LAB INTERFACE 
 \*------------------------------------*/
+
+html, body {
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     -webkit-backface-visibility: visible;
+}
+
 #patternlab-html, #patternlab-body {
   margin: 0;
   padding: 0;
@@ -327,7 +336,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 0; }
+  z-index: 0; 
+}
   #sg-vp-wrap.wrap-animate {
     -webkit-transition: left 0.3s ease-out;
     -moz-transition: left 0.3s ease-out;
@@ -337,9 +347,11 @@
 
 #sg-viewport {
   border: 0;
-  x-margin: 0 auto;
+  padding: 0;
+  margin: 0 0 -5px 0;
   height: 100%;
-  width: 100%; }
+  width: 100%;
+}
   #sg-viewport.hay-mode {
     -webkit-transition: all 40s linear;
     -moz-transition: all 40s linear;
@@ -365,7 +377,8 @@
   text-align: center;
   margin: 0 auto;
   -webkit-overflow-scrolling: touch;
-  overflow: scroll; }
+  overflow-y: scroll;
+}
   #sg-gen-container.hay-mode {
     -webkit-transition: all 40s linear;
     -moz-transition: all 40s linear;
