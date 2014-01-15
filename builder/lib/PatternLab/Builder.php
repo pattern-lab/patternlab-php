@@ -16,7 +16,7 @@ use \Mustache_Engine as Engine;
 use \Mustache_Loader_PatternLoader as PatternLoader;
 use \Mustache_Loader_FilesystemLoader as FilesystemLoader;
 
-define("VERSION", "0.6.2");
+define("VERSION", "0.7.0dev1");
 
 class Builder {
 
@@ -31,6 +31,7 @@ class Builder {
 	protected $pd;                // public dir
 	protected $ie;                // extensions to ignore
 	protected $id;                // directories to ignore
+	protected $xipHostname;       // the xip address for the pattern lab site if using one
 	protected $contentSyncPort;   // for populating the websockets template partial
 	protected $navSyncPort;       // for populating the websockets template partial
 	protected $patternTypes;      // a list of pattern types that match the directory structure
@@ -233,6 +234,8 @@ class Builder {
 		$this->navItems['patternpaths']    = json_encode($patternPathDests);
 		$this->navItems['viewallpaths']    = json_encode($this->viewAllPaths);
 		$this->navItems['mqs']             = $this->gatherMQs();
+		$this->navItems['ipaddress']       = getHostByName(getHostName());
+		$this->navItems['xiphostname']     = $this->xipHostname;
 		
 		// grab the partials into a data object for the style guide
 		$sd = array("partials" => array());

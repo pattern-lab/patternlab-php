@@ -456,7 +456,13 @@
 		}
 	}
 	window.addEventListener("message", receiveIframeMessage, false);
-
-
+	
+	$('.sg-tools').click(function() {
+		if (!qrCodeGenerator.generated) {
+			qrCodeGenerator.getQRCode();
+			qrCodeGenerator.generated = true;
+		}
+	});
+	
 })(this);
 

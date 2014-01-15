@@ -3,7 +3,7 @@
  * If config.ini doesn't exist Pattern Lab will try to create a new version
  */
 
-v  = "0.6.2"
+v  = "0.7.0dev1"
 
 // file extensions to ignore when building or watching the source dir, separate with a comma
 ie = "scss,DS_Store,less"
@@ -14,3 +14,6 @@ id = "scss,.svn"
 // choose which ports the websocket services should run on
 contentSyncPort  = "8002"
 navSyncPort      = "8003"
+
+// pattern lab's xip host if you have it configured
+xipHostname = "http://patternlab.*.xip.io"
