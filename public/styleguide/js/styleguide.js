@@ -306,6 +306,7 @@
 	}
 
 	//Detect larger screen and no touch support
+	/*
 	if('ontouchstart' in document.documentElement && window.matchMedia("(max-width: 700px)").matches) {
 		$('body').addClass('no-resize');
 		$('#sg-viewport ').width(sw);
@@ -314,6 +315,7 @@
 	} else {
 		
 	}
+	*/
 
 	// handles widening the "viewport"
 	//   1. on "mousedown" store the click location
