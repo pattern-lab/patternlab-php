@@ -335,8 +335,8 @@
 		// add the mouse move event and capture data. also update the viewport width
 		$('#sg-cover').mousemove(function(event) {
 			var viewportWidth;
-
-			viewportWidth = (origClientX > event.clientX) ? origViewportWidth - ((origClientX - event.clientX)*2) : origViewportWidth + ((event.clientX - origClientX)*2);
+			
+			viewportWidth = (origClientX > event.clientX) ? origViewportWidth - (origClientX - event.clientX) : origViewportWidth + (event.clientX - origClientX);
 			
 			if (viewportWidth > minViewportWidth) {
 				
