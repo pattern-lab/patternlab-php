@@ -41,7 +41,7 @@ class Watcher extends Builder {
 		
 		$c  = false;          // track that one loop through the pattern file listing has completed
 		$o  = new \stdClass(); // create an object to hold the properties
-		$cp = new \StdClass(); // create an object to hold a clone of $o
+		$cp = new \stdClass(); // create an object to hold a clone of $o
 		
 		$o->patterns = new \stdClass();
 		
