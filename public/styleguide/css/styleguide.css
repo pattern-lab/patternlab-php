@@ -669,9 +669,3 @@
     left: 100%;
     margin-left: -20px; }
 
-  @media all and (max-width: 600px) {
-    .pl .body {
-      background-color: red } }
-  @media all and (min-width: 600px) {
-    .pl .body {
-      background-color: green } }
