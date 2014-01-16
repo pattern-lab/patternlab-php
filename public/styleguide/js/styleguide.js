@@ -316,6 +316,8 @@
 		
 	}
 	*/
+	
+	$('#sg-gen-container').on('touchstart', function(event){});
 
 	// handles widening the "viewport"
 	//   1. on "mousedown" store the click location
