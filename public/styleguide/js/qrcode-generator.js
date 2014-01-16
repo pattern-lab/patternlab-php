@@ -26,7 +26,7 @@ var qrCodeGenerator = {
 		
 		$.ajax({
 			type: 'GET',
-			url: 'http://miniqr.com/api/create.php?api=http&content="+url+"&size=150&rtype=json',
+			url: 'http://miniqr.com/api/create.php?api=http&content='+url+'&size=150&rtype=json',
 			async: false,
 			jsonpCallback: 'plCallback',
 			contentType: "application/json",
