@@ -10,7 +10,8 @@
 
 var qrCodeGenerator = {
 	
-	generated: false,
+	lastGenerated: "",
+	liAdded: false,
 	
 	/**
 	* break up a pattern into its parts, pattern type and pattern name
@@ -32,25 +33,30 @@ var qrCodeGenerator = {
 			dataType: 'jsonp',
 			success: function(json) {
 				
-				var img            = document.createElement("img");
-				img.src            = json.imageurl;
-				img.alt            = "QR code for Pattern Lab";
-				img.width          = "150";
-				img.height         = "150";
+				var img               = document.createElement("img");
+				img.src               = json.imageurl;
+				img.alt               = "QR code for Pattern Lab";
+				img.width             = "150";
+				img.height            = "150";
 				
-				var br             = document.createElement("br");
-				var a              = document.createElement("a");
-				a.href             = qrCodeGenerator.createURL();
-				a.innerHTML        = qrCodeGenerator.createURL();
+				var br                = document.createElement("br");
+				var a                 = document.createElement("a");
+				a.href                = qrCodeGenerator.createURL();
+				a.innerHTML           = "[link]"
+				a.style.textTransform = "lowercase";
 				
-				var li             = document.createElement("li");
-				li.style.textAlign = "center";
+				var li                = document.createElement("li");
+				li.style.textAlign    = "center";
 				li.appendChild(img);
 				li.appendChild(br);
 				li.appendChild(a);
 				
 				var ul = document.querySelector(".sg-tools ul");
+				if (qrCodeGenerator.liAdded) {
+					ul.removeChild(ul.lastChild);
+				}
 				ul.appendChild(li);
+				qrCodeGenerator.liAdded = true;
 				
 			},
 			error: function(e) {

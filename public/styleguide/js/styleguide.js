@@ -462,9 +462,9 @@
 	window.addEventListener("message", receiveIframeMessage, false);
 	
 	$('.sg-tools').click(function() {
-		if (!qrCodeGenerator.generated) {
+		if ((qrCodeGenerator.lastGenerated == "") || (qrCodeGenerator.lastGenerated != window.location.search)) {
 			qrCodeGenerator.getQRCode();
-			qrCodeGenerator.generated = true;
+			qrCodeGenerator.lastGenerated = window.location.search;
 		}
 	});
 	
