@@ -349,6 +349,9 @@
 				sizeiframe(viewportWidth,false);
 			}
 		});
+		
+		return false;
+		
 	});
 
 	// on "mouseup" we unbind the "mousemove" event and hide the cover again
