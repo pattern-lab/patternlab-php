@@ -535,7 +535,8 @@ $animate-quick: 0.2s;
 	text-align: center; 
 	margin: 0 auto;
 	-webkit-overflow-scrolling: touch;
-	overflow-y: scroll;
+	overflow-y: auto;
+	overflow-x: hidden;
 
 	&.hay-mode {
 		-webkit-transition: all 40s linear;

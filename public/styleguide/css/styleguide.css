@@ -375,7 +375,8 @@
   text-align: center;
   margin: 0 auto;
   -webkit-overflow-scrolling: touch;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
   #sg-gen-container.hay-mode {
     -webkit-transition: all 40s linear;
@@ -389,7 +390,8 @@
   float: right;
   margin: 0;
   height: 100%;
-  cursor: col-resize; }
+  cursor: col-resize; 
+}
 
 #sg-rightpull {
   margin: 0;
@@ -668,4 +670,3 @@
   .animate-move:hover > .demo-shape {
     left: 100%;
     margin-left: -20px; }
-
