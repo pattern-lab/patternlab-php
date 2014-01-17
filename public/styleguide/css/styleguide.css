@@ -70,7 +70,7 @@
   clip: rect(1px, 1px, 1px, 1px); }
 
 .sg-cf, .sg-pattern {
-  *zoom: 1; }
+  /*zoom: 1;*/ }
   .sg-cf:before, .sg-pattern:before, .sg-cf:after, .sg-pattern:after {
     content: " ";
     display: table; }

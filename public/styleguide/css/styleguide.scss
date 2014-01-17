@@ -130,7 +130,7 @@ $animate-quick: 0.2s;
 
 //Clearfix
 .sg-cf {
-    *zoom: 1;
+    /**zoom: 1;*/
 
     &:before, &:after {
     	content: " ";
