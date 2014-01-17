@@ -14,11 +14,7 @@ var qrCodeGenerator = {
 	liAdded: false,
 	
 	/**
-	* break up a pattern into its parts, pattern type and pattern name
-	* @param  {String}       the shorthand partials syntax for a given pattern
-	* @param  {Object}       the paths to be compared
-	*
-	* @return {Array}        the pattern type and pattern name
+	* get the qr code json object and add the qr code to the dom
 	*/
 	getQRCode: function () {
 		
@@ -67,6 +63,9 @@ var qrCodeGenerator = {
 		
 	},
 	
+	/**
+	* create the url that will be linked to from the qr code
+	*/
 	createURL: function() {
 		var path = window.location.pathname;
 		var search = window.location.search;
