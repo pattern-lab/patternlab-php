@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Nav Sync Server, v0.1
+ * Page Follow Server, v0.2
  *
  * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -11,15 +11,12 @@
  *
  */
 
-// turn errors on or off for debugging purposes
-ini_set('display_errors', 0);
-error_reporting(E_ALL);
-
-require(__DIR__.'/lib/SplClassLoader.php');
+// auto-load classes
+require(__DIR__."/lib/SplClassLoader.php");
 
 // load wrench
-$classLoader = new SplClassLoader('Wrench',__DIR__.'/lib');
-$classLoader->register();
+$loader = new SplClassLoader('Wrench', __DIR__.'/lib');
+$loader->register();
 
 // parse the main config for the content sync port
 if (!($config = @parse_ini_file(__DIR__."/../config/config.ini"))) {
@@ -27,13 +24,14 @@ if (!($config = @parse_ini_file(__DIR__."/../config/config.ini"))) {
 	exit;	
 }
 
-$port = ($config) ? trim($config['navSyncPort']) : '8000';
+// give it a default port
+$port = ($config) ? trim($config['pageFollowPort']) : '8000';
 
 // start the content sync server
 $server = new \Wrench\Server('ws://0.0.0.0:'.$port.'/', array());
 
 // register the application & run it
-$server->registerApplication('navsync', new \Wrench\Application\navSyncBroadcasterApplication());
+$server->registerApplication('pagefollow', new \Wrench\Application\PageFollowApplication());
 
 print "\n";
 print "Page Follow Server Started...\n";
