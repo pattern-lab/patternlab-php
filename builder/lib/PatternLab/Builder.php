@@ -243,7 +243,7 @@ class Builder {
 	*/
 	protected function generatePatterns() {
 		
-		// make sure the pattern header & footer aren't added
+		// make sure the pattern header & footer are added
 		$this->addPatternHF = true;
 		
 		// make sure $this->mpl & $this->mv are refreshed
