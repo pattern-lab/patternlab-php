@@ -218,6 +218,7 @@ class Watcher extends Builder {
 			// taking out the garbage. basically killing mustache after each run.
 			unset($this->mpl);
 			unset($this->msf);
+			unset($this->mv);
 			if (gc_enabled()) gc_collect_cycles();
 			
 			// output anything the reload server might send our way
