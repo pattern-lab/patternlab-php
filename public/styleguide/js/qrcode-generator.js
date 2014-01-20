@@ -34,6 +34,7 @@ var qrCodeGenerator = {
 				img.alt               = "QR code for Pattern Lab";
 				img.width             = "150";
 				img.height            = "150";
+				img.style.paddingTop  = "10px";
 				
 				var br                = document.createElement("br");
 				var a                 = document.createElement("a");
