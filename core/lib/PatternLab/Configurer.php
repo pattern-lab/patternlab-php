@@ -24,7 +24,7 @@ class Configurer {
 		
 		// set-up the configuration options for patternlab
 		$this->userConfigPath = __DIR__."/../../../config/config.ini";
-		$this->plConfigPath   = __DIR__."/../../../config/config.ini.default";
+		$this->plConfigPath   = __DIR__."/../../config/config.ini.default";
 		
 		// double-check the default config file exists
 		if (!file_exists($this->plConfigPath)) {
