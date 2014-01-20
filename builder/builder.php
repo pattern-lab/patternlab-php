@@ -42,10 +42,11 @@ $loader->register();
 
 // make sure this script is being accessed from the command line
 if (php_sapi_name() != 'cli') {
-	print "The builder script can only be run from the command line.";
+	print "The builder script can only be run from the command line.\n";
 	exit;
 }
 
+// grab the arguments from the command line
 $args = getopt("gwcrv");
 
 // show the version of Pattern Lab
@@ -58,9 +59,9 @@ if (isset($args["v"])) {
 $co     = new PatternLab\Configurer;
 $config = $co->getConfig(VERSION);
 
+// generate the pattern lab site if appropriate
 if (isset($args["g"]) || isset($args["w"])) {
 		
-	// iterate over the source directory and generate the site
 	$g = new PatternLab\Generator($config);
 	$c = false;
 	
@@ -75,9 +76,9 @@ if (isset($args["g"]) || isset($args["w"])) {
 	
 }
 
+// watch the source directory and regenerate any changed files
 if (isset($args["w"])) {
 	
-	// watch the source directory and regenerate any changed files
 	$w = new PatternLab\Watcher($config);
 	$a = false;
 	
@@ -91,10 +92,10 @@ if (isset($args["w"])) {
 	$w->watch($a);
 	
 }
-	
+
+// when in doubt write out the usage
 if (!isset($args["g"]) && !isset($args["w"]) && !isset($args["v"])) {
 	
-	// when in doubt write out the usage
 	print "\n";
 	print "Usage:\n\n";
 	print "  php ".$_SERVER["PHP_SELF"]." -g\n";

@@ -39,7 +39,7 @@ class Watcher extends Builder {
 			$fp = popen("php ".$path." -s", "r"); 
 		}
 		
-		$c  = false;          // track that one loop through the pattern file listing has completed
+		$c  = false;           // track that one loop through the pattern file listing has completed
 		$o  = new \stdClass(); // create an object to hold the properties
 		$cp = new \stdClass(); // create an object to hold a clone of $o
 		
@@ -220,6 +220,7 @@ class Watcher extends Builder {
 			unset($this->msf);
 			if (gc_enabled()) gc_collect_cycles();
 			
+			// output anything the reload server might send our way
 			if ($reload) {
 				$output = fgets($fp, 100);
 				if ($output != "\n") print $output;
