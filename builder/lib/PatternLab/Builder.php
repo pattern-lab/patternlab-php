@@ -54,6 +54,12 @@ class Builder {
 	*/
 	public function __construct($config = array()) {
 		
+		// making sure the config isn't empty
+		if (empty($config)) {
+			print "A set of configuration options is required to use Pattern Lab.\n";
+			exit;
+		}
+		
 		// populate some standard variables out of the config
 		foreach ($config as $key => $value) {
 			
