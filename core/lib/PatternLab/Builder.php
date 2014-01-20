@@ -105,8 +105,8 @@ class Builder {
 	*/
 	protected function loadMustacheFileSystemLoaderInstance() {
 		$this->mfs = new Engine(array(
-						"loader" => new FilesystemLoader($this->sd."/_patternlab-files/"),
-						"partials_loader" => new FilesystemLoader($this->sd."/_patternlab-files/partials/")
+						"loader" => new FilesystemLoader(__DIR__."../../templates/"),
+						"partials_loader" => new FilesystemLoader(__DIR__."../../templates/partials/")
 		));
 	}
 	
@@ -801,9 +801,9 @@ class Builder {
 		}
 		
 		// load pattern-lab's resources
-		$htmlHead           = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/header.html");
-		$htmlFoot           = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer.html");
-		$extraFoot          = file_get_contents(__DIR__.$this->sp."../_patternlab-files/pattern-header-footer/footer-pattern.html");
+		$htmlHead           = file_get_contents(__DIR__."/../../templates/pattern-header-footer/header.html");
+		$htmlFoot           = file_get_contents(__DIR__."/../../templates/pattern-header-footer/footer.html");
+		$extraFoot          = file_get_contents(__DIR__."/../../templates/pattern-header-footer/footer-pattern.html");
 		
 		// gather the user-defined header and footer information
 		$patternHeadPath    = __DIR__.$this->sp."00-atoms/00-meta/_00-head.mustache";
