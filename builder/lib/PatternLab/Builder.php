@@ -52,35 +52,7 @@ class Builder {
 	* When initializing the Builder class or the sub-classes make sure the base properties are configured
 	* Also, create the config if it doesn't already exist
 	*/
-	public function __construct() {
-		
-		// set-up the configuration options for patternlab
-		$cd = __DIR__."/../../../config";
-		if (!($config = @parse_ini_file($cd."/config.ini"))) {
-			// config.ini didn't exist so attempt to create it using the default file
-			if (!@copy($cd."/config.ini.default", $cd."/config.ini")) {
-				print "Please make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically. Check permissions of config/.";
-				exit;
-			} else {
-				$config = parse_ini_file($cd."/config.ini");
-			}
-		}
-		
-		// check the config version and update it if necessary
-		if (!isset($config["v"]) || ($config["v"] != VERSION)) {
-			$configOutput = "";
-			$oldConfig    = $config;
-			$config       = parse_ini_file($cd."/config.ini.default");
-			foreach ($oldConfig as $key => $value) {
-				if ($key != "v") {
-					$config[$key] = $value;
-				}
-			}
-			foreach ($config as $key => $value) {
-				$configOutput .= $key." = \"".$value."\"\n";
-			}
-			file_put_contents($cd."/config.ini",$configOutput);
-		}
+	public function __construct($config = array()) {
 		
 		// populate some standard variables out of the config
 		foreach ($config as $key => $value) {

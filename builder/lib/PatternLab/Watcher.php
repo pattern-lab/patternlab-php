@@ -21,10 +21,10 @@ class Watcher extends Builder {
 	/**
 	* Use the Builder __construct to gather the config variables
 	*/
-	public function __construct() {
+	public function __construct($config = array()) {
 		
 		// construct the parent
-		parent::__construct();
+		parent::__construct($config);
 		
 	}
 	

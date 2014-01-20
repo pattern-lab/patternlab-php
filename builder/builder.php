@@ -53,11 +53,15 @@ if (isset($args["v"])) {
 	print "You're running v".VERSION." of the PHP version of Pattern Lab.\n";
 	exit;
 }
-	
+
+// load Pattern Lab's config, if first time set-up move files appropriately too
+$co     = new PatternLab\Configurer;
+$config = $co->getConfig(VERSION);
+
 if (isset($args["g"]) || isset($args["w"])) {
 		
 	// iterate over the source directory and generate the site
-	$g = new PatternLab\Generator();
+	$g = new PatternLab\Generator($config);
 	$c = false;
 	
 	// check to see if CSS for patterns should be parsed & outputted
@@ -74,7 +78,7 @@ if (isset($args["g"]) || isset($args["w"])) {
 if (isset($args["w"])) {
 	
 	// watch the source directory and regenerate any changed files
-	$w = new PatternLab\Watcher();
+	$w = new PatternLab\Watcher($config);
 	$a = false;
 	
 	if (isset($args["r"])) {
