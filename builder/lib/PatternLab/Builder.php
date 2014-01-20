@@ -16,8 +16,6 @@ use \Mustache_Engine as Engine;
 use \Mustache_Loader_PatternLoader as PatternLoader;
 use \Mustache_Loader_FilesystemLoader as FilesystemLoader;
 
-define("VERSION", "0.7.0dev1");
-
 class Builder {
 
 	// i was lazy when i started this project & kept (mainly) to two letter vars. sorry.
@@ -1101,15 +1099,6 @@ class Builder {
 	*/
 	public function printData() {
 		print_r($this->d);
-	}
-	
-	/**
-	* Print out the current version of Pattern Lab
-	*
-	* @return {String}       the current version of PL
-	*/
-	public function printVersion() {
-		print "You're running v".VERSION." of the PHP version of Pattern Lab.\n";
 	}
 	
 	/**
