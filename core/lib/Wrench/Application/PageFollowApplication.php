@@ -16,7 +16,7 @@ namespace Wrench\Application;
 use Wrench\Application\Application;
 use Wrench\Application\NamedApplication;
 
-class navSyncBroadcasterApplication extends Application {
+class PageFollowApplication extends Application {
 	
 	protected $clients = array();
 	protected $data = null;

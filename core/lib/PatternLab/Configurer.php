@@ -3,7 +3,7 @@
 /*!
  * Pattern Lab Configurer Class - v0.6.2
  *
- * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
+ * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
  * Configures Pattern Lab by checking config files and required files
@@ -24,13 +24,7 @@ class Configurer {
 		
 		// set-up the configuration options for patternlab
 		$this->userConfigPath = __DIR__."/../../../config/config.ini";
-		$this->plConfigPath   = __DIR__."/../../../config/config.ini.default";
-		
-		// double-check the default config file exists
-		if (!file_exists($this->plConfigPath)) {
-			print "Please make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically.\n";
-			exit;
-		}
+		$this->plConfigPath   = __DIR__."/../../config/config.ini.default";
 		
 	}
 	
@@ -48,22 +42,43 @@ class Configurer {
 			exit;
 		}
 		
+		// double-check the default config file exists
+		if (!file_exists($this->plConfigPath)) {
+			print "Please make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically.\n";
+			exit;
+		}
+		
+		// make sure migrate doesn't happen by default
+		$migrate     = false;
+		$diffVersion = false;
+		
 		// check the config
-		if (!($config = @parse_ini_file($this->userConfigPath))) {
+		print "configuring pattern lab...\n";
+		if (!($config = parse_ini_file($this->userConfigPath))) {
 			
 			// config.ini didn't exist so attempt to create it using the default file
 			if (!@copy($this->plConfigPath, $this->userConfigPath)) {
 				print "Please make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically. Check permissions of config/.\n";
 				exit;
-			} else {
-				$config = parse_ini_file($this->userConfigPath);
 			}
+			
+			$config  = parse_ini_file($this->userConfigPath);
+			$migrate = true;
 			
 		}
 		
 		// check the config version and update it if necessary
 		if (!isset($config["v"]) || ($config["v"] != $version)) {
+			print "upgrading your version of pattern lab...\n";
 			$config = $this->writeNewConfig($config);
+			$diffVersion = true;
+		}
+		
+		// if either migrate or diff version run the migrations
+		if ($migrate || $diffVersion) {
+			print "checking for migrations...\n";
+			$m = new Migrator;
+			$m->migrate($diffVersion);
 		}
 		
 		return $config;

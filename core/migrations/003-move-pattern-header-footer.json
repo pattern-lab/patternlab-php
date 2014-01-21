@@ -1,0 +1,5 @@
+{
+	"sourcePath": "core/source/_patterns/00-atoms/00-meta/",
+	"destinationPath": "source/_patterns/00-atoms/00-meta/",
+	"checkType": "dirExists"
+}

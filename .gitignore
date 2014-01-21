@@ -1,5 +1,6 @@
 .DS_Store
 public/*
+source/*
 !public/listeners/*
 !public/styleguide/*
 !public/patterns/**/*

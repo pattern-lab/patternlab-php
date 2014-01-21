@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Content Sync Server, v0.1
+ * Auto-Reload Server, v0.2
  *
  * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -11,15 +11,12 @@
  *
  */
 
-// turn errors on or off for debugging purposes
-ini_set('display_errors', 0);
-error_reporting(E_ALL);
-
-require(__DIR__.'/lib/SplClassLoader.php');
+// auto-load classes
+require(__DIR__."/lib/SplClassLoader.php");
 
 // load wrench
-$classLoader = new SplClassLoader('Wrench',__DIR__.'/lib');
-$classLoader->register();
+$loader = new SplClassLoader('Wrench', __DIR__.'/lib');
+$loader->register();
 
 // parse the main config for the content sync port
 if (!($config = @parse_ini_file(__DIR__."/../config/config.ini"))) {
@@ -27,18 +24,17 @@ if (!($config = @parse_ini_file(__DIR__."/../config/config.ini"))) {
 	exit;	
 }
 
-$port = ($config) ? trim($config['contentSyncPort']) : '8002';
-
-// start the content sync server
-$server = new \Wrench\Server('ws://0.0.0.0:'.$port.'/', array());
-
-// register the application
-$args = getopt("s");
+// give it a default port
+$port     = ($config) ? trim($config['autoReloadPort']) : '8001';
+$args     = getopt("s");
 $newlines = (isset($args["s"])) ? true : false;
 
-$server->registerApplication('contentsync', new \Wrench\Application\contentSyncBroadcasterApplication($newlines));
+// start the content sync server
+$server   = new \Wrench\Server('ws://0.0.0.0:'.$port.'/', array());
 
-$args = getopt("s");
+// register the application
+$server->registerApplication('autoreload', new \Wrench\Application\AutoReloadApplication($newlines));
+
 if (!isset($args["s"])) {
 	print "\n";
 	print "Auto-reload Server Started...\n";

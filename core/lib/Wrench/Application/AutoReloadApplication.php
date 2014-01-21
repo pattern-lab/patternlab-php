@@ -17,7 +17,7 @@ namespace Wrench\Application;
 use Wrench\Application\Application;
 use Wrench\Application\NamedApplication;
 
-class contentSyncBroadcasterApplication extends Application {
+class AutoReloadApplication extends Application {
 	
 	protected $newlines         = false;
 	protected $clients          = array();

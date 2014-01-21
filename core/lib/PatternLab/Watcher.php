@@ -35,7 +35,7 @@ class Watcher extends Builder {
 		
 		// automatically start the auto-refresh tool
 		if ($reload) {
-			$path = str_replace("builder/lib/PatternLab","listeners/contentSyncBroadcasterServer.php",__DIR__);
+			$path = str_replace("lib/PatternLab","autoReloadServer.php",__DIR__);
 			$fp = popen("php ".$path." -s", "r"); 
 		}
 		

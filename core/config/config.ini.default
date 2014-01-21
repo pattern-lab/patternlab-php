@@ -12,8 +12,8 @@ ie = "scss,DS_Store,less"
 id = "scss,.svn"
 
 // choose which ports the websocket services should run on
-contentSyncPort  = "8002"
-navSyncPort      = "8003"
+autoReloadPort = "8002"
+pageFollowPort = "8003"
 
 // pattern lab's xip host if you have it configured
 xipHostname = "http://patternlab.*.xip.io"
