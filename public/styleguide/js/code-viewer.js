@@ -106,7 +106,7 @@ var codeViewer = {
 			}
 			
 			// draw html
-			$("#sg-code-html-fill").text(html);
+			$("#sg-code-html-fill").html(html).text();
 			Prism.highlightElement(document.getElementById("sg-code-html-fill"));
 			
 			// draw CSS
