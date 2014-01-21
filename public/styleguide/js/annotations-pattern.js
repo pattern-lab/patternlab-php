@@ -12,7 +12,7 @@ var annotationsPattern = {
 	commentsOverlay:        false,
 	commentsEmbeddedActive: false,
 	commentsEmbedded:       false,
-	commentsGathered:       { "commentOverlay": "on", "count": 0, "comments": { } },
+	commentsGathered:       { "commentOverlay": "on", "comments": { } },
 	
 	/**
 	* record which annotations are related to this pattern so they can be sent to the viewer when called
@@ -35,6 +35,7 @@ var annotationsPattern = {
 					for (var i = 0; i < els.length; ++i) {
 						els[i].onclick = (function(item) {
 							return function(e) {
+								
 								e.preventDefault();
 								e.stopPropagation();
 								var obj = {};
@@ -53,7 +54,7 @@ var annotationsPattern = {
 				
 				
 			}
-						
+			
 		} else {
 			
 			var obj = { "commentOverlay": "off" };
@@ -164,22 +165,36 @@ var annotationsPattern = {
 			// if comments overlay is turned on add the has-annotation class and pointer
 			if (annotationsPattern.commentsOverlayActive) {
 				
+				count = 0;
+				
 				for (i = 0; i < comments.comments.length; i++) {
 					item = comments.comments[i];
-					els  = document.querySelectorAll(item.el),
-					displayNum = i+1;
+					els  = document.querySelectorAll(item.el);
 					
-					//Loop through all items with annotations
-					for (k = 0; k < els.length; k++) {
-						els[k].classList.add("has-annotation");
+					if (els.length) {
 						
-						var numberDiv = document.createElement("a");
-						numberDiv.href = "#annotation-" + displayNum;
-						numberDiv.classList.add("annotation-tip");
+						count++;
 						
-						els[k].appendChild(numberDiv);
-						numberDiv.innerHTML = displayNum;
+						//Loop through all items with annotations
+						for (k = 0; k < els.length; k++) {
+							
+							els[k].classList.add("has-annotation");
+							
+							var numberDiv       = document.createElement("a");
+							numberDiv.href      = "#annotation-" + count;
+							numberDiv.classList.add("annotation-tip");
+							numberDiv.innerHTML = count;
+							
+							var span            = document.createElement("span");
+							span.appendChild(numberDiv);
+							span.style.display  = "block";
+							
+							els[k].appendChild(span);
+							
+						}
+						
 					}
+					
 				}
 				
 				// count elements so it can be used when displaying the results in the viewer
@@ -193,13 +208,11 @@ var annotationsPattern = {
 					
 					// if an element is found in the given pattern add it to the overall object so it can be passed when the overlay is turned on
 					if (els.length > 0) {
-						annotationsPattern.commentsGathered.comments[count] = { "el": item.el, "title": item.title, "comment": item.comment };
 						count++;
+						annotationsPattern.commentsGathered.comments[count] = { "el": item.el, "title": item.title, "comment": item.comment, "number": count };
 					}
 				
 				}
-				
-				annotationsPattern.commentsGathered.count = count;
 				
 				// send the list of annotations for the page back to the parent
 				var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
