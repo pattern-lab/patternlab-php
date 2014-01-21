@@ -105,8 +105,8 @@ class Builder {
 	*/
 	protected function loadMustacheFileSystemLoaderInstance() {
 		$this->mfs = new Engine(array(
-						"loader" => new FilesystemLoader(__DIR__."../../templates/"),
-						"partials_loader" => new FilesystemLoader(__DIR__."../../templates/partials/")
+						"loader" => new FilesystemLoader(__DIR__."/../../templates/"),
+						"partials_loader" => new FilesystemLoader(__DIR__."/../../templates/partials/")
 		));
 	}
 	
