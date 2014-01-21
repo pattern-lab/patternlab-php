@@ -28,7 +28,7 @@
  */
 
 // the version of pattern lab
-const VERSION = "0.7.0dev2";
+const VERSION = "0.7.0dev1";
 
 // auto-load classes
 require(__DIR__."/lib/SplClassLoader.php");
