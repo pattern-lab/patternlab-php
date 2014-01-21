@@ -62,10 +62,6 @@ if (isset($args["g"]) || isset($args["w"])) {
 	$co     = new PatternLab\Configurer;
 	$config = $co->getConfig(VERSION);
 	
-	// make sure files are moved appropriately
-	$m      = new PatternLab\Migrator;
-	$m->migrate(VERSION);
-	
 	$g = new PatternLab\Generator($config);
 	$c = false;
 	
