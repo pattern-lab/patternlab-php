@@ -74,7 +74,7 @@ var annotationsViewer = {
 		$('#sg-annotation-container').css('bottom',-pos);
 	},
 	
-	updateComments: function(count, comments) {
+	updateComments: function(comments) {
 		
 		var commentsContainer = document.getElementById("sg-comments-container");
 		
@@ -82,18 +82,22 @@ var annotationsViewer = {
 			commentsContainer.innerHTML = "";
 		}
 		
+		var count = Object.keys(comments).length;
 		if (count > 0) {
 			
-			for(i = 0; i < count; i++) {
-				var displayNum = i +1;
-				var commentDiv = document.createElement("div"); // for loop and add them to a doc frag and join it
+			for (i = 1; i <= count; i++) {
+				
+				var displayNum = comments[i].number;
+				
 				var h2 = document.createElement("h2");
-				var div = document.createElement("div");
-				commentDiv.classList.add("sg-comment-container");
-				commentDiv.id = "annotation-" + displayNum;
 				h2.innerHTML  = displayNum + ". " + comments[i].title;
+				
+				var div = document.createElement("div");
 				div.innerHTML = comments[i].comment;
 				
+				var commentDiv = document.createElement("div");
+				commentDiv.classList.add("sg-comment-container");
+				commentDiv.id = "annotation-" + displayNum;
 				commentDiv.appendChild(h2);
 				commentDiv.appendChild(div);
 				
@@ -103,15 +107,14 @@ var annotationsViewer = {
 			
 		} else {
 			
-			// for loop and add them to a doc frag and join it
-			var commentDiv = document.createElement("div");
-			commentDiv.classList.add("sg-comment-container");
-			
 			var h2        = document.createElement("h2");
-			var div       = document.createElement("div");
 			h2.innerHTML  = "No Annotations";
+			
+			var div       = document.createElement("div");
 			div.innerHTML = "There are no annotations for this pattern.";
 			
+			var commentDiv = document.createElement("div");
+			commentDiv.classList.add("sg-comment-container");
 			commentDiv.appendChild(h2);
 			commentDiv.appendChild(div);
 			
@@ -138,7 +141,7 @@ var annotationsViewer = {
 		
 		if (event.data.commentOverlay !== undefined) {
 			if (event.data.commentOverlay === "on") {
-				annotationsViewer.updateComments(event.data.count, event.data.comments);
+				annotationsViewer.updateComments(event.data.comments);
 			} else {
 				annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			}

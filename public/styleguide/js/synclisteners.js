@@ -25,7 +25,7 @@ function connectPageFollowSync() {
 	if ('WebSocket' in window && window.WebSocket.CLOSING === 2) {
 		
 		var navSyncCopy = "Page Follow";
-		wsn = new WebSocket("ws://"+host+":"+navSyncPort+"/pagefollow");
+		wsn = new WebSocket("ws://"+host+":"+pageFollowPort+"/pagefollow");
 		
 		// when trying to open a connection to WebSocket update the pattern lab nav bar
 		wsn.onopen = function () {
@@ -92,7 +92,7 @@ function connectAutoReloadSync() {
 		
 		var contentSyncCopy = "Auto-reload";
 		
-		wsc = new WebSocket("ws://"+host+":"+contentSyncPort+"/autoreload");
+		wsc = new WebSocket("ws://"+host+":"+autoReloadPort+"/autoreload");
 		
 		// when trying to open a connection to WebSocket update the pattern lab nav bar
 		wsc.onopen = function () {
