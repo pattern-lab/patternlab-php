@@ -379,6 +379,9 @@ class Builder {
 		if (file_exists($this->sd."/_data/_data.json")) {
 			$this->d = json_decode(file_get_contents($this->sd."/_data/_data.json"),true);
 			$this->jsonLastErrorMsg("_data/_data.json");
+		} else {
+			print "Missing a required file, source/_data/_data.json. Aborting.\n";
+			exit;
 		}
 		
 		$reservedKeys = array("listItems","cacheBuster","link","patternSpecific");
