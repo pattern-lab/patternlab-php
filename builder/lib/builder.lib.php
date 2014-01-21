@@ -198,7 +198,7 @@ class Buildr {
 		$pp = $this->getPatternPartial($f);
 		$fr = str_replace("{{ patternPartial }}",$pp,$fr);
 		$fr = str_replace("{{ lineage }}",json_encode($this->patternLineages[$pp]),$fr);
-		$fr = str_replace("{{ patternHTML }}",$rf,$fr);
+		$fr = str_replace("{{ patternHTML }}",htmlentities($rf),$fr);
 		
 		// set-up the mark-up for CSS Rule Saver so it can figure out which rules to save
 		if ($this->enableCSS) {
@@ -620,7 +620,8 @@ class Buildr {
 						$patternParts         = explode("/",$path);
 						$patternName          = $this->getPatternName($patternParts[2]);
 						$patternLink          = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
-						$patternCode          = $this->renderPattern($path.".mustache");
+						$patternCodeHTML      = $this->renderPattern($path.".mustache");
+						$patternCode          = htmlentities($patternCodeHTML);
 						$patternPartial       = $this->getPatternPartial($path);
 						$patternLineageExists = (count($this->patternLineages[$patternPartial]) > 0) ? true : false;
 						$patternLineages      = $this->patternLineages[$patternPartial];
@@ -630,7 +631,8 @@ class Buildr {
 						$p["partials"][] = array("patternName" => ucwords($patternName), 
 						                         "patternLink" => $patternLink, 
 						                         "patternPartialPath" => $patternType."-".$pattern, 
-						                         "patternPartial" => $patternCode,
+						                         "patternCode"    => $patternCode,
+						                         "patternPartial" => $patternCodeHTML,
 						                         "patternCSS" => $patternCSS,
 						                         "patternLineageExists" => $patternLineageExists,
 						                         "patternLineages" => $patternLineages,
@@ -678,7 +680,8 @@ class Buildr {
 				// create the pattern name & link, render the partial, and stick it all into the pattern array
 				$patternName          = $this->getPatternName($patternParts[2]);
 				$patternLink          = str_replace("/","-",$path)."/".str_replace("/","-",$path).".html";
-				$patternCode          = $this->renderPattern($path.".mustache");
+				$patternCodeHTML      = $this->renderPattern($path.".mustache");
+				$patternCode          = htmlentities($patternCodeHTML);
 				$patternPartial       = $this->getPatternPartial($path);
 				$patternLineages      = $this->patternLineages[$patternPartial];
 				$patternLineageExists = (count($patternLineages) > 0) ? true : false;
@@ -687,8 +690,9 @@ class Buildr {
 				
 				$p["partials"][] = array("patternName" => ucwords($patternName), 
 				                         "patternLink" => $patternLink, 
-				                         "patternPartialPath" => str_replace(" ","-",$patternTypeClean)."-".str_replace(" ","-",$patternName), 
-				                         "patternPartial" => $patternCode,
+				                         "patternPartialPath" => str_replace(" ","-",$patternTypeClean)."-".str_replace(" ","-",$patternName),
+				                         "patternCode"    => $patternCode,
+				                         "patternPartial" => $patternCodeHTML,
 				                         "patternCSS" => $patternCSS,
 				                         "patternLineageExists" => $patternLineageExists,
 				                         "patternLineages" => $patternLineages,
