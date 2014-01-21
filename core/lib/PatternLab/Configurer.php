@@ -54,7 +54,7 @@ class Configurer {
 		
 		// check the config
 		print "configuring pattern lab...\n";
-		if (!($config = parse_ini_file($this->userConfigPath))) {
+		if (!($config = @parse_ini_file($this->userConfigPath))) {
 			
 			// config.ini didn't exist so attempt to create it using the default file
 			if (!@copy($this->plConfigPath, $this->userConfigPath)) {
