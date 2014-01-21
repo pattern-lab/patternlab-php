@@ -114,13 +114,14 @@ class Generator extends Builder {
 		// update the change time so the auto-reload will fire (doesn't work for the index and style guide)
 		$this->updateChangeTime();
 		
+		// print out how long it took to generate the site
 		if ($timePL) {
 			$mtime = microtime(); 
 			$mtime = explode(" ",$mtime); 
 			$mtime = $mtime[1] + $mtime[0]; 
 			$endtime = $mtime; 
 			$totaltime = ($endtime - $starttime); 
-			print "PL site generation took ".$totaltime." seconds...\n";
+			print "site generation took ".$totaltime." seconds...\n";
 		}
 		
 	}
