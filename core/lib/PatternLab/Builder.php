@@ -159,7 +159,7 @@ class Builder {
 		if ($this->addPatternHF) {
 			$patternHead = $this->mv->render($this->patternHead,$d);
 			$patternFoot = $this->mv->render($this->patternFoot,$d);
-			$patternFoot = str_replace("{% patternHTML %}",$pattern,$patternFoot);
+			$patternFoot = str_replace("{% patternHTML %}",htmlentities($pattern),$patternFoot);
 			$pattern     = $patternHead.$pattern.$patternFoot;
 		}
 		
@@ -771,7 +771,8 @@ class Builder {
 						// add patterns to $this->patternPartials
 						foreach ($patternSubtypeValues["patternSubtypeItems"] as $patternSubtypeItem) {
 							
-							$patternCode          = $this->renderPattern($patternSubtypeItem["patternSrcPath"],$patternSubtypeItem["patternPartial"]);
+							$patternCodeRaw       = $this->renderPattern($patternSubtypeItem["patternSrcPath"],$patternSubtypeItem["patternPartial"]);
+							$patternCodeEncoded   = htmlentities($patternCodeRaw);
 							$patternCSSExists     = $this->enableCSS;
 							$patternCSS           = ($this->enableCSS) ? $this->patternCSS[$patternSubtypeItem["patternPartial"]] : "";
 							$patternLineageExists = (count($this->patternLineages[$patternSubtypeItem["patternPartial"]]) > 0) ? true : false;
@@ -780,7 +781,8 @@ class Builder {
 							$this->patternPartials[$patternTypeDash."-".$patternSubtypeDash][] = array("patternName"          => $patternSubtypeItem["patternName"], 
 																									   "patternLink"          => $patternSubtypeItem["patternPath"], 
 																									   "patternPartial"       => $patternSubtypeItem["patternPartial"], 
-																									   "patternPartialCode"   => $patternCode,
+																									   "patternPartialCode"   => $patternCodeRaw,
+																									   "patternPartialCodeE"  => $patternCodeEncoded,
 																									   "patternCSSExists"     => $patternCSSExists,
 																									   "patternCSS"           => $patternCSS,
 																									   "patternLineageExists" => $patternLineageExists,
