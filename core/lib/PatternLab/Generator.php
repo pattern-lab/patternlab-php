@@ -116,12 +116,13 @@ class Generator extends Builder {
 		
 		// print out how long it took to generate the site
 		if ($timePL) {
-			$mtime = microtime(); 
-			$mtime = explode(" ",$mtime); 
-			$mtime = $mtime[1] + $mtime[0]; 
-			$endtime = $mtime; 
-			$totaltime = ($endtime - $starttime); 
-			print "site generation took ".$totaltime." seconds...\n";
+			$mtime = microtime();
+			$mtime = explode(" ",$mtime);
+			$mtime = $mtime[1] + $mtime[0];
+			$endtime = $mtime;
+			$totaltime = ($endtime - $starttime);
+			$mem = round((memory_get_peak_usage(true)/1024)/1024,2);
+			print "site generation took ".$totaltime." seconds and used ".$mem."MB of memory...\n";
 		}
 		
 	}
