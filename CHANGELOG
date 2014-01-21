@@ -1,5 +1,9 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.6.4
+ - FIX: using # for a link won't cause a jump
+ - THX: thanks to @tylersticka for the heads up
+
 PL-v0.6.3
  - FIX: making sure code view is properly encoded
  - THX: thanks to @tylersticka for the heads up

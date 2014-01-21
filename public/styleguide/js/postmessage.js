@@ -29,7 +29,10 @@ if (self != top) {
 	for (a in aTags) {
 		aTags[a].onclick = function(e) {
 			e.preventDefault();
-			window.location.replace(this.getAttribute("href"));
+			var href = this.getAttribute("href");
+			if (href != "#") {
+				window.location.replace(href);
+			}
 		};
 	}
 	
