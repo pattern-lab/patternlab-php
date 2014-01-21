@@ -30,8 +30,8 @@ class Builder {
 	protected $ie;                // extensions to ignore
 	protected $id;                // directories to ignore
 	protected $xipHostname;       // the xip address for the pattern lab site if using one
-	protected $contentSyncPort;   // for populating the websockets template partial
-	protected $navSyncPort;       // for populating the websockets template partial
+	protected $autoReloadPort;    // for populating the websockets template partial
+	protected $pageFollowPort;    // for populating the websockets template partial
 	protected $patternTypes;      // a list of pattern types that match the directory structure
 	protected $patternPaths;      // the paths to patterns for use with mustache partials
 	protected $patternLineages;   // the list of patterns that make up a particular pattern
@@ -188,13 +188,13 @@ class Builder {
 		}
 		
 		// render out the main pages and move them to public
-		$this->navItems['contentsyncport'] = $this->contentSyncPort;
-		$this->navItems['navsyncport']     = $this->navSyncPort;
-		$this->navItems['patternpaths']    = json_encode($patternPathDests);
-		$this->navItems['viewallpaths']    = json_encode($this->viewAllPaths);
-		$this->navItems['mqs']             = $this->gatherMQs();
-		$this->navItems['ipaddress']       = getHostByName(getHostName());
-		$this->navItems['xiphostname']     = $this->xipHostname;
+		$this->navItems['autoreloadport'] = $this->autoReloadPort;
+		$this->navItems['pagefollowport'] = $this->pageFollowPort;
+		$this->navItems['patternpaths']   = json_encode($patternPathDests);
+		$this->navItems['viewallpaths']   = json_encode($this->viewAllPaths);
+		$this->navItems['mqs']            = $this->gatherMQs();
+		$this->navItems['ipaddress']      = getHostByName(getHostName());
+		$this->navItems['xiphostname']    = $this->xipHostname;
 		
 		// grab the partials into a data object for the style guide
 		$sd = array("partials" => array());
