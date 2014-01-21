@@ -31,7 +31,10 @@ if (self != top) {
 	for (var i = 0; i < aTags.length; i++) {
 		aTags[i].onclick = function(e) {
 			e.preventDefault();
-			window.location.replace(this.getAttribute("href")+'?'+Date.now());
+			var href = this.getAttribute("href");
+			if (href != "#") {
+				window.location.replace(href);
+			}
 		};
 	}
 	
