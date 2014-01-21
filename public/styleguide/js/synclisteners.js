@@ -146,7 +146,7 @@ $('#navSyncButton').click(function() {
 		$(this).removeClass("active");
 		$(this).html('Nav Sync Off');
 	} else {
-		connectNavSync();
+		connectPageFollow();
 		$(this).attr("data-state","on");
 		$(this).addClass("connected");
 		$(this).addClass("active");
@@ -162,7 +162,7 @@ $('#contentSyncButton').click(function() {
 		$(this).removeClass("active");
 		$(this).html('Content Sync Off');
 	} else {
-		connectContentSync();
+		connectAutoReloadSync();
 		$(this).attr("data-state","on");
 		$(this).addClass("connected");
 		$(this).addClass("active");
