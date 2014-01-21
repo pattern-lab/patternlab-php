@@ -364,11 +364,13 @@
 	// capture the viewport width that was loaded and modify it so it fits with the pull bar
 	var origViewportWidth = $("#sg-viewport").width();
 	$("#sg-gen-container").width(origViewportWidth);
-	$("#sg-viewport").width(origViewportWidth - 14);
+	if (screen.width != $(window).width()) {
+		$("#sg-viewport").width(origViewportWidth - 14);
+	} else {
+		$("#sg-rightpull-container").width(0);
+	}
 	updateSizeReading($("#sg-viewport").width());
-
 	
-
 	// get the request vars
 	var oGetVars = urlHandler.getRequestVars();
 	
