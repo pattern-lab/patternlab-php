@@ -52,7 +52,7 @@ var codeViewer = {
 	codeContainerInit: function() {
 		
 		if (document.getElementById("sg-code-container") === null) {
-			$('<div id="sg-code-container" class="sg-view-container"></div>').html('<a href="#" id="sg-code-close-btn" class="sg-view-close-btn">Close</a><div id="sg-code-lineage" style="display: none;"><p>This pattern contains the following patterns: <span id="sg-code-lineage-fill"></span></p></div><div id="sg-code-html"><h2>HTML</h2><pre><code id="sg-code-html-fill" class="language-markup"></code></pre></div><div id="sg-code-css" class="with-css" style="display: none;"><h2>CSS</h2><pre><code id="sg-code-css-fill" class="language-css"></code></pre></div>').appendTo('body').css('bottom',-$(document).outerHeight());
+			$('<div id="sg-code-container" class="sg-view-container"></div>').html('<a href="#" id="sg-code-close-btn" class="sg-view-close-btn">Close</a><div id="sg-code-lineage" style="display: none;"><p>This pattern contains the following patterns: <span id="sg-code-lineage-fill"></span></p></div><div id="sg-code-lineager" style="display: none;"><p>This pattern is included in the following patterns: <span id="sg-code-lineager-fill"></span></p></div><div id="sg-code-html"><h2>HTML</h2><pre><code id="sg-code-html-fill" class="language-markup"></code></pre></div><div id="sg-code-css" class="with-css" style="display: none;"><h2>CSS</h2><pre><code id="sg-code-css-fill" class="language-css"></code></pre></div>').appendTo('body').css('bottom',-$(document).outerHeight());
 		}
 		
 		//Close Code View Button
@@ -67,7 +67,7 @@ var codeViewer = {
 		$('#sg-code-container').css('bottom',-pos);
 	},
 	
-	updateCode: function(lineage,html,css) {
+	updateCode: function(lineage,lineageR,html,css) {
 			
 			// draw lineage
 			var lineageList = "";
@@ -87,6 +87,28 @@ var codeViewer = {
 			$("#sg-code-lineage-fill").html(lineageList);
 			
 			$('#sg-code-lineage-fill a').on("click", function(e){
+				e.preventDefault();
+				document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+			});
+			
+			// draw reverse lineage
+			var lineageRList = "";
+			$("#sg-code-lineager").css("display","none");
+			
+			if (lineageR.length !== 0) {
+				$("#sg-code-lineager").css("display","block");
+				
+				for (var i = 0; i < lineageR.length; i++) {
+					lineageRList += (i === 0) ? "" : ", ";
+					lineageRList += "<a href='"+lineageR[i].lineagePath+"' data-patternPartial='"+lineageR[i].lineagePattern+"'>"+lineageR[i].lineagePattern+"</a>";
+					i++;
+				}
+				
+			}
+			
+			$("#sg-code-lineager-fill").html(lineageRList);
+			
+			$('#sg-code-lineager-fill a').on("click", function(e){
 				e.preventDefault();
 				document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
 			});
@@ -122,7 +144,7 @@ var codeViewer = {
 		if (event.data.codeOverlay !== undefined) {
 			if (event.data.codeOverlay === "on") {
 				
-				codeViewer.updateCode(event.data.lineage,event.data.html,event.data.css);
+				codeViewer.updateCode(event.data.lineage,event.data.lineageR,event.data.html,event.data.css);
 				
 			} else {
 				

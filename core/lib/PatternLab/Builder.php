@@ -35,6 +35,7 @@ class Builder {
 	protected $patternTypes;      // a list of pattern types that match the directory structure
 	protected $patternPaths;      // the paths to patterns for use with mustache partials
 	protected $patternLineages;   // the list of patterns that make up a particular pattern
+	protected $patternLineagesR;  // the list of patterns where a particular pattern is used
 	protected $patternTypesRegex; // the simple regex for the pattern types. used in getPath()
 	protected $navItems;          // the items for the nav. includes view all links
 	protected $viewAllPaths;      // the paths to the view all pages
@@ -280,6 +281,7 @@ class Builder {
 		// the footer isn't rendered as mustache but we have some variables there any way. find & replace.
 		$rf = str_replace("{% patternPartial %}",$p,$rf);
 		$rf = str_replace("{% lineage %}",json_encode($this->patternLineages[$p]),$rf);
+		$rf = str_replace("{% lineager %}",json_encode($this->patternLineagesR[$p]),$rf);
 		
 		// set-up the mark-up for CSS Rule Saver so it can figure out which rules to save
 		if ($this->enableCSS) {
@@ -400,15 +402,17 @@ class Builder {
 	}
 	
 	/**
-	* Finds the Lineages for the patterns
+	* Finds the regular and reverse lineages for the patterns
 	*
 	* @return {Array}        an array of patterns with their lineages
 	*/
 	protected function gatherLineages() {
 		
-		$this->patternLineages = array();
-		$foundLineages         = array();
+		$this->patternLineages  = array();
+		$this->patternLineagesR = array();
+		$foundLineages          = array();
 		
+		// check for the regular lineages
 		foreach($this->patternPaths as $patternType => $patterns) {
 			
 			foreach ($patterns as $pattern => $patternInfo) {
@@ -438,6 +442,33 @@ class Builder {
 				$this->patternLineages[$patternType."-".$pattern] = $patternLineage;
 				
 			}
+			
+		}
+		
+		// check for the reverse lineages
+		foreach ($this->patternLineages as $needlePartial => $needleLineages) {
+			
+			$patternLineageR = array();
+			
+			foreach ($this->patternLineages as $haystackPartial => $haystackLineages) {
+				
+				foreach ($haystackLineages as $haystackLineage) {
+					if ($haystackLineage["lineagePattern"] == $needlePartial) {
+						$patternBits  = explode("-",$haystackPartial,2); // BUG: this is making an assumption
+						if (isset($this->patternPaths[$patternBits[0]][$patternBits[1]])) {
+							$path = $this->patternPaths[$patternBits[0]][$patternBits[1]]["patternDestPath"];
+							$patternLineageR[] = array("lineagePattern" => $haystackPartial, "lineagePath" => "../../patterns/".$path."/".$path.".html");
+						} else {
+							if (strpos($lineage, '/') === false) {
+								print "You may have a typo in ".$patternInfo["patternSrcPath"].". {{> ".$lineage." }} is not a valid pattern.\n";
+							}
+						}
+					}
+				}
+				
+			}
+			
+			$this->patternLineagesR[$needlePartial] = $patternLineageR;
 			
 		}
 		
