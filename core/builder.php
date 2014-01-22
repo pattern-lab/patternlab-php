@@ -74,6 +74,11 @@ if (isset($args["g"]) || isset($args["w"])) {
 	
 	print "your site has been generated...\n";
 	
+	// have some fun
+	if (!isset($args["w"])) {
+		$g->printSaying();
+	}
+	
 }
 
 // watch the source directory and regenerate any changed files

@@ -127,4 +127,23 @@ class Generator extends Builder {
 		
 	}
 	
+	/**
+	* Randomly prints a saying after the generate is complete
+	*/
+	public function printSaying() {
+		
+		$randomNumber = rand(0,20);
+		$sayings = array(
+		                   "have fun storming the castle",
+		                   "be well, do good work, and keep in touch",
+		                   "you and i will meet again",
+		                   "may the sun shine, all day long",
+		                   "smile"
+		                );
+		if (isset($sayings[$randomNumber])) {
+			print $sayings[$randomNumber]."...\n";
+		}
+		
+	}
+	
 }
