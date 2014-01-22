@@ -50,7 +50,7 @@ var codePattern = {
 			if (codePattern.codeOverlayActive) {
 				
 				var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-				var obj = { "codeOverlay": "on", "lineage": lineage, "html": document.getElementById("sg-pattern-html").textContent, "css": document.getElementById("sg-pattern-css").textContent };
+				var obj = { "codeOverlay": "on", "lineage": lineage, "lineageR": lineageR, "html": document.getElementById("sg-pattern-html").textContent, "css": document.getElementById("sg-pattern-css").textContent };
 				parent.postMessage(obj,targetOrigin);
 				
 			} else if (codePattern.codeEmbeddedActive) {
