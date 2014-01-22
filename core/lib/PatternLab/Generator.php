@@ -132,14 +132,22 @@ class Generator extends Builder {
 	*/
 	public function printSaying() {
 		
-		$randomNumber = rand(0,20);
+		$randomNumber = rand(0,60);
 		$sayings = array(
 		                   "have fun storming the castle",
 		                   "be well, do good work, and keep in touch",
-		                   "you and i will meet again",
 		                   "may the sun shine, all day long",
 		                   "smile",
-		                   "namaste"
+		                   "namaste",
+		                   "walk as if you are kissing the earth with your feet",
+		                   "to be beautiful means to be yourself",
+		                   "i was thinking of the immortal words of socrates, who said \"...i drank what?\"",
+		                   "let me take this moment to compliment you on your fashion sense, particularly your slippers",
+		                   "42",
+		                   "he who controls the spice controls the universe",
+		                   "the greatest thing you'll ever learn is just to love and be loved in return",
+		                   "nice wand",
+		                   "i don't have time for a grudge match with every poseur in a parka"
 		                );
 		if (isset($sayings[$randomNumber])) {
 			print $sayings[$randomNumber]."...\n";
