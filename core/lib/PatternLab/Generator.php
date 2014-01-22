@@ -138,7 +138,8 @@ class Generator extends Builder {
 		                   "be well, do good work, and keep in touch",
 		                   "you and i will meet again",
 		                   "may the sun shine, all day long",
-		                   "smile"
+		                   "smile",
+		                   "namaste"
 		                );
 		if (isset($sayings[$randomNumber])) {
 			print $sayings[$randomNumber]."...\n";
