@@ -15,5 +15,8 @@ id = "scss,.svn"
 autoReloadPort = "8002"
 pageFollowPort = "8003"
 
+// whether the public directory should be cleaned when generating your site
+cleanPublic = "true"
+
 // pattern lab's xip host if you have it configured
 xipHostname = "http://patternlab.*.xip.io"

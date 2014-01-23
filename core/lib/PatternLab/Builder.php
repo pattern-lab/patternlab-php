@@ -48,6 +48,7 @@ class Builder {
 	protected $mainPageHead;      // the header to be included on main pages
 	protected $mainPageFoot;      // the footer to be included on main pages
 	protected $addPatternHF;      // should the pattern header and footer be added
+	protected $cleanPublic;       // whether the public directory should be cleaned out or not on generate
 	
 	/**
 	* When initializing the Builder class or the sub-classes make sure the base properties are configured
