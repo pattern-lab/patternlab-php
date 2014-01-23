@@ -1078,7 +1078,10 @@ class Builder {
 	*/
 	protected function initializeCSSRuleSaver() {
 		
-		$this->cssRuleSaver = new \cssRuleSaver;
+		$loader = new \SplClassLoader('CSSRuleSaver', __DIR__.'/../../lib');
+		$loader->register();
+		
+		$this->cssRuleSaver = new \CSSRuleSaver\CSSRuleSaver;
 		
 		foreach(glob($this->sd."/css/*.css") as $filename) {
 			$this->cssRuleSaver->loadCSS($filename);
