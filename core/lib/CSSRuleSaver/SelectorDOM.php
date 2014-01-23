@@ -1,5 +1,7 @@
 <?php
 
+namespace CSSRuleSaver;
+
 /**
  * SelectorDOM.
  * (c) Copyright TJ Holowaychuk <tj@vision-media.ca> MIT Licensed
@@ -61,11 +63,11 @@ class SelectorDOM {
         $lib_xml_errors = libxml_use_internal_errors(true);
 
         if (is_a($data, 'DOMDocument')) {
-            $this->xpath = new DOMXpath($data);
+            $this->xpath = new \DOMXpath($data);
         } else {
-            $dom = new DOMDocument();
+            $dom = new \DOMDocument();
             $dom->loadHTML($data);
-            $this->xpath = new DOMXpath($dom);
+            $this->xpath = new \DOMXpath($dom);
         }
 
         # Clear any errors and restore the original value
