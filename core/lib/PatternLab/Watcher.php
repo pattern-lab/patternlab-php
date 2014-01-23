@@ -71,51 +71,39 @@ class Watcher extends Builder {
 					// make sure this isn't a hidden pattern
 					$patternParts = explode(DIRECTORY_SEPARATOR,$fileName);
 					$pattern      = isset($patternParts[2]) ? $patternParts[2] : $patternParts[1];
-					if ($pattern[0] != "_") {
+					
+					
+					// make sure the pattern still exists in source just in case it's been deleted during the iteration
+					if (file_exists($name)) {
 						
-						// make sure the pattern still exists in source just in case it's been deleted during the iteration
-						if (file_exists($name)) {
-							
-							$mt = $object->getMTime();
-							if (isset($o->patterns->$fileName) && ($o->patterns->$fileName != $mt)) {
-								$o->patterns->$fileName = $mt;
-								$this->updateSite($fileName,"changed");
-							} else if (!isset($o->patterns->$fileName) && $c) {
-								$o->patterns->$fileName = $mt;
-								$this->updateSite($fileName,"added");
-								if ($object->getExtension() == "mustache") {
-									$patternSrcPath  = str_replace(".mustache","",$fileName);
-									$patternDestPath = str_replace("/","-",$patternSrcPath);
-									$this->patternPaths[$patternParts[0]][$pattern] = array("patternSrcPath" => $patternSrcPath, "patternDestPath" => $patternDestPath, "render" => true);
-								}
-							} else if (!isset($o->patterns->$fileName)) {
-								$o->patterns->$fileName = $mt;
+						$mt = $object->getMTime();
+						if (isset($o->patterns->$fileName) && ($o->patterns->$fileName != $mt)) {
+							$o->patterns->$fileName = $mt;
+							$this->updateSite($fileName,"changed");
+						} else if (!isset($o->patterns->$fileName) && $c) {
+							$o->patterns->$fileName = $mt;
+							$this->updateSite($fileName,"added");
+							if ($object->getExtension() == "mustache") {
+								$patternSrcPath  = str_replace(".mustache","",$fileName);
+								$patternDestPath = str_replace("/","-",$patternSrcPath);
+								$render = ($pattern[0] != "_") ? true : false;
+								$this->patternPaths[$patternParts[0]][$pattern] = array("patternSrcPath" => $patternSrcPath, "patternDestPath" => $patternDestPath, "render" => $render);
 							}
-							
-							if ($c && isset($o->patterns->$fileName)) {
-								unset($cp->$fileName);
-							}
-							
-						} else {
-							
-							// the file was removed during the iteration so remove references to the item
-							unset($o->patterns->$fileName);
-							unset($cp->$fileName);
-							unset($this->patternPaths[$patternParts[0]][$pattern]);
-							$this->updateSite($fileName,"removed");
-							
+						} else if (!isset($o->patterns->$fileName)) {
+							$o->patterns->$fileName = $mt;
 						}
 						
-					} elseif (isset($o->patterns->$fileNameClean)) {
+						if ($c && isset($o->patterns->$fileName)) {
+							unset($cp->$fileName);
+						}
 						
-						// the file was hidden so remove references to the item
-						$patternParts = explode(DIRECTORY_SEPARATOR,$fileNameClean);
-						$pattern      = isset($patternParts[2]) ? $patternParts[2] : $patternParts[1];
+					} else {
 						
-						unset($o->patterns->$fileNameClean);
-						unset($cp->$fileNameClean);
+						// the file was removed during the iteration so remove references to the item
+						unset($o->patterns->$fileName);
+						unset($cp->$fileName);
 						unset($this->patternPaths[$patternParts[0]][$pattern]);
-						$this->updateSite($fileNameClean,"hidden");
+						$this->updateSite($fileName,"removed");
 						
 					}
 					
