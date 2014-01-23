@@ -58,14 +58,6 @@ function connectPageFollowSync() {
 				
 				document.getElementById('sg-viewport').contentWindow.location.replace(mLocation);
 				
-				// make sure the pop doesn't fire and push the pattern
-				urlHandler.doPop = false;
-				urlHandler.pushPattern(data.patternpartial);
-				
-				// reset the defaults
-				urlHandler.doPop    = true;
-				urlHandler.skipBack = false;
-				
 			}
 		};
 		
