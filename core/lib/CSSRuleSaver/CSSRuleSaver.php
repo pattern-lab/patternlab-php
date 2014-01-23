@@ -8,10 +8,9 @@
  *
  */
 
-// load php-selector
-require __DIR__."/lib/php-selector/selector.php";
+namespace CSSRuleSaver;
 
-class cssRuleSaver {
+class CSSRuleSaver {
 	
 	// default vars for cssRuleSaver
 	protected $htmlData = "";
