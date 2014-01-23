@@ -30,19 +30,19 @@ var codeViewer = {
 			} else {
 				codeViewer.openCode();
 			}
-
+			
 			codeViewer.codeContainerInit();
 			
 		});
 	},
-
+	
 	openCode: function() {
 		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 		codeViewer.codeActive = true;
 		document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "on" },targetOrigin);
 		$('#sg-t-code').addClass('active');
 	},
-
+	
 	closeCode: function() {
 		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 		codeViewer.codeActive = false;
@@ -71,63 +71,63 @@ var codeViewer = {
 	
 	updateCode: function(lineage,lineageR,html,css) {
 			
-			// draw lineage
-			var lineageList = "";
-			$("#sg-code-lineage").css("display","none");
+		// draw lineage
+		var lineageList = "";
+		$("#sg-code-lineage").css("display","none");
+		
+		if (lineage.length !== 0) {
+			$("#sg-code-lineage").css("display","block");
 			
-			if (lineage.length !== 0) {
-				$("#sg-code-lineage").css("display","block");
-				
-				for (var i = 0; i < lineage.length; i++) {
-					lineageList += (i === 0) ? "" : ", ";
-					lineageList += "<a href='"+lineage[i].lineagePath+"' data-patternPartial='"+lineage[i].lineagePattern+"'>"+lineage[i].lineagePattern+"</a>";
-					i++;
-				}
-				
+			for (var i = 0; i < lineage.length; i++) {
+				lineageList += (i === 0) ? "" : ", ";
+				lineageList += "<a href='"+lineage[i].lineagePath+"' data-patternPartial='"+lineage[i].lineagePattern+"'>"+lineage[i].lineagePattern+"</a>";
+				i++;
 			}
 			
-			$("#sg-code-lineage-fill").html(lineageList);
+		}
+		
+		$("#sg-code-lineage-fill").html(lineageList);
+		
+		$('#sg-code-lineage-fill a').on("click", function(e){
+			e.preventDefault();
+			document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+		});
+		
+		// draw reverse lineage
+		var lineageRList = "";
+		$("#sg-code-lineager").css("display","none");
+		
+		if (lineageR.length !== 0) {
+			$("#sg-code-lineager").css("display","block");
 			
-			$('#sg-code-lineage-fill a').on("click", function(e){
-				e.preventDefault();
-				document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
-			});
-			
-			// draw reverse lineage
-			var lineageRList = "";
-			$("#sg-code-lineager").css("display","none");
-			
-			if (lineageR.length !== 0) {
-				$("#sg-code-lineager").css("display","block");
-				
-				for (var i = 0; i < lineageR.length; i++) {
-					lineageRList += (i === 0) ? "" : ", ";
-					lineageRList += "<a href='"+lineageR[i].lineagePath+"' data-patternPartial='"+lineageR[i].lineagePattern+"'>"+lineageR[i].lineagePattern+"</a>";
-					i++;
-				}
-				
+			for (var i = 0; i < lineageR.length; i++) {
+				lineageRList += (i === 0) ? "" : ", ";
+				lineageRList += "<a href='"+lineageR[i].lineagePath+"' data-patternPartial='"+lineageR[i].lineagePattern+"'>"+lineageR[i].lineagePattern+"</a>";
+				i++;
 			}
 			
-			$("#sg-code-lineager-fill").html(lineageRList);
-			
-			$('#sg-code-lineager-fill a').on("click", function(e){
-				e.preventDefault();
-				document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
-			});
-			
-			// draw html
-			$("#sg-code-html-fill").html(html).text();
-			Prism.highlightElement(document.getElementById("sg-code-html-fill"));
-			
-			// draw CSS
-			if (css.indexOf("{% patternCSS %}") === -1) {
-				$("#sg-code-html").addClass("with-css");
-				$("#sg-code-css").css("display","block");
-				$("#sg-code-css-fill").text(css);
-				Prism.highlightElement(document.getElementById("sg-code-css-fill"));
-			}
-			
-			codeViewer.slideCode(0);
+		}
+		
+		$("#sg-code-lineager-fill").html(lineageRList);
+		
+		$('#sg-code-lineager-fill a').on("click", function(e){
+			e.preventDefault();
+			document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+		});
+		
+		// draw html
+		$("#sg-code-html-fill").html(html).text();
+		Prism.highlightElement(document.getElementById("sg-code-html-fill"));
+		
+		// draw CSS
+		if (css.indexOf("{% patternCSS %}") === -1) {
+			$("#sg-code-html").addClass("with-css");
+			$("#sg-code-css").css("display","block");
+			$("#sg-code-css-fill").text(css);
+			Prism.highlightElement(document.getElementById("sg-code-css-fill"));
+		}
+		
+		codeViewer.slideCode(0);
 			
 	},
 	
