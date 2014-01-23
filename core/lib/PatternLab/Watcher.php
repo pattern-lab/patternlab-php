@@ -37,6 +37,7 @@ class Watcher extends Builder {
 		if ($reload) {
 			$path = str_replace("lib/PatternLab","autoReloadServer.php",__DIR__);
 			$fp = popen("php ".$path." -s", "r"); 
+			print "starting page auto-reload...\n";
 		}
 		
 		$c  = false;           // track that one loop through the pattern file listing has completed
@@ -44,6 +45,8 @@ class Watcher extends Builder {
 		$cp = new \stdClass(); // create an object to hold a clone of $o
 		
 		$o->patterns = new \stdClass();
+		
+		print "watching your site for changes...\n";
 		
 		// run forever
 		while (true) {

@@ -72,8 +72,6 @@ if (isset($args["g"]) || isset($args["w"])) {
 	
 	$g->generate($c);
 	
-	print "your site has been generated...\n";
-	
 	// have some fun
 	if (!isset($args["w"])) {
 		$g->printSaying();
@@ -88,11 +86,8 @@ if (isset($args["w"])) {
 	$a = false;
 	
 	if (isset($args["r"])) {
-		print "starting page auto-reload...\n";
 		$a = true;
 	}
-	
-	print "watching your site for changes...\n";
 	
 	$w->watch($a);
 	
