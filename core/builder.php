@@ -27,9 +27,6 @@
  *
  */
 
-// the version of pattern lab
-const VERSION = "0.7.0dev1";
-
 // auto-load classes
 require(__DIR__."/lib/SplClassLoader.php");
 
@@ -49,18 +46,18 @@ if (php_sapi_name() != 'cli') {
 // grab the arguments from the command line
 $args = getopt("gwcrv");
 
+// load Pattern Lab's config, if first time set-up move files appropriately too
+$co     = new PatternLab\Configurer;
+$config = $co->getConfig();
+
 // show the version of Pattern Lab
 if (isset($args["v"])) {
-	print "You're running v".VERSION." of the PHP version of Pattern Lab.\n";
+	print "You're running v".$config["v"]." of the PHP version of Pattern Lab.\n";
 	exit;
 }
 
 // generate the pattern lab site if appropriate
 if (isset($args["g"]) || isset($args["w"])) {
-	
-	// load Pattern Lab's config, if first time set-up move files appropriately too
-	$co     = new PatternLab\Configurer;
-	$config = $co->getConfig(VERSION);
 	
 	$g = new PatternLab\Generator($config);
 	$c = false;

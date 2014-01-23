@@ -3,7 +3,7 @@
  * If config.ini doesn't exist Pattern Lab will try to create a new version
  */
 
-v  = "0.7.0dev1"
+v  = "0.7.0dev3"
 
 // file extensions to ignore when building or watching the source dir, separate with a comma
 ie = "scss,DS_Store,less"

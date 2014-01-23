@@ -34,13 +34,11 @@ class Configurer {
 	*
 	* @return {Array}        the configuration
 	*/
-	public function getConfig($version = "") {
+	public function getConfig() {
 		
-		// make sure a version number has been set
-		if ($version == "") {
-			print "Calling getConfig() requires a version number.\n";
-			exit;
-		}
+		// make sure migrate doesn't happen by default
+		$migrate     = false;
+		$diffVersion = false;
 		
 		// double-check the default config file exists
 		if (!file_exists($this->plConfigPath)) {
@@ -48,29 +46,26 @@ class Configurer {
 			exit;
 		}
 		
-		// make sure migrate doesn't happen by default
-		$migrate     = false;
-		$diffVersion = false;
+		// set the default config using the pattern lab config
+		$config        = parse_ini_file($this->plConfigPath);
+		$defaultConfig = $config;
 		
-		// check the config
+		// check to see if the user config exists, if not create it
 		print "configuring pattern lab...\n";
-		if (!($config = @parse_ini_file($this->userConfigPath))) {
-			
-			// config.ini didn't exist so attempt to create it using the default file
+		if (!file_exists($this->userConfigPath)) {
 			if (!@copy($this->plConfigPath, $this->userConfigPath)) {
-				print "Please make sure config.ini.default exists before trying to have Pattern Lab build the config.ini file automagically. Check permissions of config/.\n";
+				print "Please make sure that Pattern Lab can write a new config to config/.\n";
 				exit;
 			}
-			
-			$config  = parse_ini_file($this->userConfigPath);
 			$migrate = true;
-			
+		} else {
+			$config = parse_ini_file($this->userConfigPath);
 		}
 		
 		// check the config version and update it if necessary
-		if (!isset($config["v"]) || ($config["v"] != $version)) {
+		if (!isset($config["v"]) || ($config["v"] != $defaultConfig["v"])) {
 			print "upgrading your version of pattern lab...\n";
-			$config = $this->writeNewConfig($config);
+			$config = $this->writeNewConfig($config,$defaultConfig);
 			$diffVersion = true;
 		}
 		
@@ -86,36 +81,31 @@ class Configurer {
 	}
 	
 	/**
-	* Write out a new config using the previous version
-	* @param  {Array}        the old configuration file
+	* Use the default config as a base and update it with old config options. Write out a new user config.
+	* @param  {Array}        the old configuration file options
+	* @param  {Array}        the default configuration file options
 	*
 	* @return {Array}        the new configuration
 	*/
-	protected function writeNewConfig($config) {
-		
-		// set-up
-		$configOutput = "";
-		$oldConfig    = $config;
-		
-		// get the new config options
-		$config       = parse_ini_file($this->plConfigPath);
+	protected function writeNewConfig($oldConfig,$defaultConfig) {
 		
 		// iterate over the old config and replace values in the new config
 		foreach ($oldConfig as $key => $value) {
 			if ($key != "v") {
-				$config[$key] = $value;
+				$defaultConfig[$key] = $value;
 			}
 		}
 		
 		// create the output data
-		foreach ($config as $key => $value) {
+		$configOutput = "";
+		foreach ($defaultConfig as $key => $value) {
 			$configOutput .= $key." = \"".$value."\"\n";
 		}
 		
 		// write out the new config file
 		file_put_contents($this->userConfigPath,$configOutput);
 		
-		return $config;
+		return $defaultConfig;
 		
 	}
 	
