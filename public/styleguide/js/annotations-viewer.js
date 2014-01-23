@@ -23,6 +23,8 @@ var annotationsViewer = {
 			var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 			document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "off" },targetOrigin);
 			codeViewer.slideCode(999);
+			
+			$('#sg-t-toggle').removeClass('active');
 				
 			annotationsViewer.toggleComments();
 			annotationsViewer.commentContainerInit();

@@ -23,6 +23,8 @@ var codeViewer = {
 			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },targetOrigin);
 			annotationsViewer.slideComment(999);
 			
+			$('#sg-t-toggle').removeClass('active');
+			
 			if ($(this).hasClass('active')) {
 				codeViewer.closeCode();
 			} else {
