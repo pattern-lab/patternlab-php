@@ -283,12 +283,8 @@ class Builder {
 		$rf = str_replace("{% lineage %}",json_encode($this->patternLineages[$p]),$rf);
 		$rf = str_replace("{% lineager %}",json_encode($this->patternLineagesR[$p]),$rf);
 		
-		// set-up the mark-up for CSS Rule Saver so it can figure out which rules to save
-		if ($this->enableCSS) {
-			$this->cssRuleSaver->loadHTML($rf,false);
-			$patternCSS = $this->cssRuleSaver->saveRules();
-			$this->patternCSS[$p] = $patternCSS;
-			$rf = str_replace("{% patternCSS %}",$patternCSS,$rf);
+		if ($this->enableCSS && isset($this->patternCSS[$p])) {
+			$rf = str_replace("{% patternCSS %}",$this->patternCSS[$p],$rf);
 		}
 		
 		return $rf;
@@ -804,10 +800,17 @@ class Builder {
 							
 							$patternCodeRaw       = $this->renderPattern($patternSubtypeItem["patternSrcPath"],$patternSubtypeItem["patternPartial"]);
 							$patternCodeEncoded   = htmlentities($patternCodeRaw);
-							$patternCSSExists     = $this->enableCSS;
-							$patternCSS           = ($this->enableCSS) ? $this->patternCSS[$patternSubtypeItem["patternPartial"]] : "";
 							$patternLineageExists = (count($this->patternLineages[$patternSubtypeItem["patternPartial"]]) > 0) ? true : false;
 							$patternLineages      = $this->patternLineages[$patternSubtypeItem["patternPartial"]];
+							
+							// set-up the mark-up for CSS Rule Saver so it can figure out which rules to save
+							$patternCSSExists     = $this->enableCSS;
+							$patternCSS           = "";
+							if ($this->enableCSS) {
+								$this->cssRuleSaver->loadHTML($patternCodeRaw,false);
+								$patternCSS = $this->cssRuleSaver->saveRules();
+								$this->patternCSS[$patternSubtypeItem["patternPartial"]] = $patternCSS;
+							}
 							
 							$this->patternPartials[$patternTypeDash."-".$patternSubtypeDash][] = array("patternName"          => $patternSubtypeItem["patternName"], 
 																									   "patternLink"          => $patternSubtypeItem["patternPath"], 
