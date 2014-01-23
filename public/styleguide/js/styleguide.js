@@ -449,7 +449,7 @@
 			
 			if (!urlHandler.skipBack) {
 				
-				if ((history.state === null) || (history.state.pattern !== event.data.patternpartial)) {
+				if ((history.state === undefined) || (history.state === null) || (history.state.pattern !== event.data.patternpartial)) {
 					urlHandler.pushPattern(event.data.patternpartial, event.data.path);
 				}
 				
