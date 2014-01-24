@@ -431,6 +431,17 @@
 	$('#sg-vp-wrap').click(function() {
 		closePanels();
 	});
+	
+	// Listen for resize changes
+	var origOrientation = window.orientation;
+	window.addEventListener("orientationchange", function() {
+		if (window.orientation != origOrientation) {
+			$("#sg-gen-container").width($(window).width());
+			$("#sg-viewport").width($(window).width());
+			updateSizeReading($(window).width());
+			origOrientation = window.orientation;
+		}
+	}, false);
 
 	// watch the iframe source so that it can be sent back to everyone else.
 	// based on the great MDN docs at https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
