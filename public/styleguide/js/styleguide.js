@@ -253,7 +253,10 @@
 		
 		$('#sg-gen-container').width(theSize+viewportResizeHandleWidth); //Resize viewport wrapper to desired size + size of drag resize handler
 		$sgViewport.width(theSize); //Resize viewport to desired size
-
+		
+		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		document.getElementById('sg-viewport').contentWindow.postMessage({ "resize": "true" },targetOrigin);
+		
 		updateSizeReading(theSize); //Update values in toolbar
 		saveSize(theSize); //Save current viewport to cookie
 	}

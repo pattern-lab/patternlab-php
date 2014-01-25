@@ -13,6 +13,7 @@ var annotationsPattern = {
 	commentsEmbeddedActive: false,
 	commentsEmbedded:       false,
 	commentsGathered:       { "commentOverlay": "on", "comments": { } },
+	trackedElements:        [ ],
 	
 	/**
 	* record which annotations are related to this pattern so they can be sent to the viewer when called
@@ -130,7 +131,18 @@ var annotationsPattern = {
 			return;
 		}
 		
-		if (event.data.commentToggle !== undefined) {
+		if (event.data.resize !== undefined) {
+			
+			for (var i = 0; i < annotationsPattern.trackedElements.length; ++i) {
+				var el = annotationsPattern.trackedElements[i];
+				if (window.getComputedStyle(el,null).getPropertyValue("max-height") == "0px") {
+					el.firstChild.style.display = "none";
+				} else {
+					el.firstChild.style.display = "block";
+				}
+			}
+			
+		} else if (event.data.commentToggle !== undefined) {
 			
 			var i, els, item, displayNum;
 			
@@ -150,6 +162,10 @@ var annotationsPattern = {
 				els = document.querySelectorAll(".has-annotation");
 				for (i = 0; i < els.length; i++) {
 					els[i].classList.remove("has-annotation");
+				}
+				els = document.querySelectorAll(".annotation-tip");
+				for (i = 0; i < els.length; i++) {
+					els[i].style.display = "none";
 				}
 			}
 			
@@ -179,16 +195,17 @@ var annotationsPattern = {
 							
 							els[k].classList.add("has-annotation");
 							
-							var numberDiv       = document.createElement("a");
-							numberDiv.href      = "#annotation-" + count;
-							numberDiv.classList.add("annotation-tip");
-							numberDiv.innerHTML = count;
+							var span              = document.createElement("span");
+							span.innerHTML        = count;
+							span.classList.add("annotation-tip");
 							
-							var span            = document.createElement("span");
-							span.appendChild(numberDiv);
-							span.style.display  = "block";
+							annotationsPattern.trackedElements.push(els[k]);
 							
-							els[k].appendChild(span);
+							if (window.getComputedStyle(els[k],null).getPropertyValue("max-height") == "0px") {
+								span.style.display = "none";
+							}
+							
+							els[k].insertBefore(span,els[k].firstChild);
 							
 						}
 						
@@ -234,6 +251,10 @@ var annotationsPattern = {
 				// if comment embedding is turned on and comments have been embedded simply display them
 				els = document.getElementsByClassName("sg-annotations");
 				for (i = 0; i < els.length; ++i) {
+					els[i].style.display = "block";
+				}
+				els = document.querySelectorAll(".annotation-tip");
+				for (i = 0; i < els.length; i++) {
 					els[i].style.display = "block";
 				}
 				
