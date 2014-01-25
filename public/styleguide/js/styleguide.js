@@ -366,7 +366,7 @@
 	$("#sg-gen-container").width(origViewportWidth);
 	if (screen.width != $(window).width()) {
 		$("#sg-viewport").width(origViewportWidth - 14);
-	} else {
+	} else if ('ontouchstart' in document.documentElement) {
 		$("#sg-rightpull-container").width(0);
 	}
 	updateSizeReading($("#sg-viewport").width());
