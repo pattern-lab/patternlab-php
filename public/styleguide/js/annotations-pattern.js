@@ -48,7 +48,6 @@ var annotationsPattern = {
 								
 							}
 						})(item);
-						
 					}
 				}
 				

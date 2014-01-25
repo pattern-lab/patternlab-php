@@ -235,7 +235,7 @@
 	//'animate' is a boolean for switching the CSS animation on or off. 'animate' is true by default, but can be set to false for things like nudging and dragging
 	function sizeiframe(size,animate) {
 		var theSize;
-
+		
 		if(size>maxViewportWidth) { //If the entered size is larger than the max allowed viewport size, cap value at max vp size
 			theSize = maxViewportWidth;
 		} else if(size<minViewportWidth) { //If the entered size is less than the minimum allowed viewport size, cap value at min vp size
@@ -243,14 +243,14 @@
 		} else {
 			theSize = size;
 		}
-
+		
 		//Conditionally remove CSS animation class from viewport
 		if(animate===false) {
 			$('#sg-gen-container,#sg-viewport').removeClass("vp-animate"); //If aninate is set to false, remove animate class from viewport
 		} else {
 			$('#sg-gen-container,#sg-viewport').addClass("vp-animate");
 		}
-
+		
 		$('#sg-gen-container').width(theSize+viewportResizeHandleWidth); //Resize viewport wrapper to desired size + size of drag resize handler
 		$sgViewport.width(theSize); //Resize viewport to desired size
 
