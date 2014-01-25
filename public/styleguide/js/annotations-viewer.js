@@ -91,8 +91,17 @@ var annotationsViewer = {
 				
 				var displayNum = comments[i].number;
 				
+				var span = document.createElement("span");
+				span.id = "annotation-state-" + displayNum;
+				span.style.fontSize = "0.8em";
+				span.style.color    = "#666";
+				if (comments[i].state === false) {
+					span.innerHTML  = " hidden";
+				}
+				
 				var h2 = document.createElement("h2");
 				h2.innerHTML  = displayNum + ". " + comments[i].title;
+				h2.appendChild(span);
 				
 				var div = document.createElement("div");
 				div.innerHTML = comments[i].comment;
@@ -147,6 +156,8 @@ var annotationsViewer = {
 			} else {
 				annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			}
+		} else if (event.data.annotationState !== undefined) {
+			document.getElementById("annotation-state-"+event.data.displayNumber).innerHTML = (event.data.annotationState == true) ? "" : " hidden";
 		} else if (event.data.displaynumber !== undefined) {
 			var top = document.getElementById("annotation-"+event.data.displaynumber).offsetTop;
 			$('#sg-annotation-container').animate({scrollTop: top - 10}, 600);

@@ -131,14 +131,18 @@ var annotationsPattern = {
 			return;
 		}
 		
-		if (event.data.resize !== undefined) {
+		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		
+		if ((event.data.resize !== undefined) && (annotationsPattern.commentsOverlayActive)) {
 			
 			for (var i = 0; i < annotationsPattern.trackedElements.length; ++i) {
 				var el = annotationsPattern.trackedElements[i];
-				if (window.getComputedStyle(el,null).getPropertyValue("max-height") == "0px") {
-					el.firstChild.style.display = "none";
+				if (window.getComputedStyle(el.element,null).getPropertyValue("max-height") == "0px") {
+					el.element.firstChild.style.display = "none";
+					parent.postMessage({"annotationState": false, "displayNumber": el.displayNumber },targetOrigin);
 				} else {
-					el.firstChild.style.display = "block";
+					el.element.firstChild.style.display = "block";
+					parent.postMessage({"annotationState": true, "displayNumber": el.displayNumber },targetOrigin);
 				}
 			}
 			
@@ -180,11 +184,13 @@ var annotationsPattern = {
 			// if comments overlay is turned on add the has-annotation class and pointer
 			if (annotationsPattern.commentsOverlayActive) {
 				
-				count = 0;
+				var count = 0;
 				
 				for (i = 0; i < comments.comments.length; i++) {
 					item = comments.comments[i];
 					els  = document.querySelectorAll(item.el);
+					
+					var state = true;
 					
 					if (els.length) {
 						
@@ -199,11 +205,12 @@ var annotationsPattern = {
 							span.innerHTML        = count;
 							span.classList.add("annotation-tip");
 							
-							annotationsPattern.trackedElements.push(els[k]);
-							
 							if (window.getComputedStyle(els[k],null).getPropertyValue("max-height") == "0px") {
 								span.style.display = "none";
+								state = false;
 							}
+							
+							annotationsPattern.trackedElements.push({ "itemel": item.el, "element": els[k], "displayNumber": count, "state": state });
 							
 							els[k].insertBefore(span,els[k].firstChild);
 							
@@ -219,19 +226,25 @@ var annotationsPattern = {
 				// iterate over the comments in annotations.js
 				for(i = 0; i < comments.comments.length; i++) {
 					
+					var state = true;
+					
 					var item = comments.comments[i];
 					var els  = document.querySelectorAll(item.el);
 					
 					// if an element is found in the given pattern add it to the overall object so it can be passed when the overlay is turned on
 					if (els.length > 0) {
 						count++;
-						annotationsPattern.commentsGathered.comments[count] = { "el": item.el, "title": item.title, "comment": item.comment, "number": count };
+						for (k = 0; k < els.length; k++) {
+							if (window.getComputedStyle(els[k],null).getPropertyValue("max-height") == "0px") {
+								state = false;
+							}
+						}
+						annotationsPattern.commentsGathered.comments[count] = { "el": item.el, "title": item.title, "comment": item.comment, "number": count, "state": state };
 					}
 				
 				}
 				
 				// send the list of annotations for the page back to the parent
-				var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 				parent.postMessage(annotationsPattern.commentsGathered,targetOrigin);
 				
 			} else if (annotationsPattern.commentsEmbeddedActive && !annotationsPattern.commentsEmbedded) {
@@ -251,10 +264,6 @@ var annotationsPattern = {
 				// if comment embedding is turned on and comments have been embedded simply display them
 				els = document.getElementsByClassName("sg-annotations");
 				for (i = 0; i < els.length; ++i) {
-					els[i].style.display = "block";
-				}
-				els = document.querySelectorAll(".annotation-tip");
-				for (i = 0; i < els.length; i++) {
 					els[i].style.display = "block";
 				}
 				
