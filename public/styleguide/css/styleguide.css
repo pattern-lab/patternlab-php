@@ -515,34 +515,29 @@
 .has-annotation {
   cursor: help !important;
   box-shadow: 0 0 10px gray;
-  position: relative !important;
-  overflow: visible !important; }
+ }
   .has-annotation a, .has-annotation input {
     cursor: help !important; }
   .has-annotation:hover {
     box-shadow: 0 0 10px #222222; }
   .has-annotation.active {
     box-shadow: inset 0 0 20px gray; }
-  .has-annotation .annotation-tip {
-    display: block !important; }
 
 .annotation-tip {
-  position: absolute !important;
-  top: -2px !important;
-  left: -6px !important;
-  background: gray !important;
-  color: #dddddd !important;
-  opacity: 0.8 !important;
-  display: none !important;
-  font-size: 11px !important;
-  width: 18px !important;
-  height: 18px !important;
-  padding: 0 !important;
-  text-align: center !important;
-  border-radius: 10px !important; }
-  .annotation-tip:hover, .annotation-tip:focus {
-    opacity: 1 !important;
-    color: #fff !important; }
+	display: block;
+	position: absolute;
+	margin-top: -10px !important;
+	margin-left: -10px !important;
+	width: 25px !important;
+	height: 25px !important;
+	border-radius: 13px !important;
+	text-align: center !important;
+	background: #444 !important;
+	color: #fff !important;
+	font-weight: bold !important;
+	font-size: 16px !important;
+	z-index: 100;
+}
 
 #sg-comments-container {
   max-width: 60em;
