@@ -57,7 +57,23 @@ var qrCodeGenerator = {
 				
 			},
 			error: function(e) {
-				console.log(e.message);
+				
+				var a                 = document.createElement("a");
+				a.href                = "#";
+				a.innerHTML           = "the mini qr service is unavailable"
+				a.style.textTransform = "lowercase";
+				
+				var li                = document.createElement("li");
+				li.style.textAlign    = "center";
+				li.appendChild(a);
+				
+				var ul = document.querySelector(".sg-tools ul");
+				if (qrCodeGenerator.liAdded) {
+					ul.removeChild(ul.lastChild);
+				}
+				ul.appendChild(li);
+				qrCodeGenerator.liAdded = true;
+				
 			}
 		});
 		
