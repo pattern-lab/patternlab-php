@@ -261,6 +261,11 @@
 		saveSize(theSize); //Save current viewport to cookie
 	}
 	
+	$("#sg-gen-container").on('transitionend webkitTransitionEnd', function(e){
+		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		document.getElementById('sg-viewport').contentWindow.postMessage({ "resize": "true" },targetOrigin);
+	});
+	
 	function saveSize(size) {
 		if (!DataSaver.findValue('vpWidth')) {
 			DataSaver.addValue("vpWidth",size);
