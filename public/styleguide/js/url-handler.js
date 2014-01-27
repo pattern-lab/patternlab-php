@@ -1,7 +1,7 @@
 /*!
  * URL Handler - v0.1
  *
- * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
+ * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
  * Helps handle the initial iFrame source. Parses a string to see if it matches
@@ -27,7 +27,7 @@ var urlHandler = {
 		var baseDir     = "patterns";
 		var fileName    = "";
 		
-		if (name == undefined) {
+		if (name === undefined) {
 			return fileName;
 		}
 		
@@ -36,20 +36,20 @@ var urlHandler = {
 		}
 		
 		var paths = (name.indexOf("viewall-") != -1) ? viewAllPaths : patternPaths;
-		nameClean = name.replace("viewall-","");
+		var nameClean = name.replace("viewall-","");
 		
 		// look at this as a regular pattern
 		var bits        = this.getPatternInfo(nameClean, paths);
 		var patternType = bits[0];
 		var pattern     = bits[1];
 		
-		if ((paths[patternType] != undefined) && (paths[patternType][pattern] != undefined)) {
+		if ((paths[patternType] !== undefined) && (paths[patternType][pattern] !== undefined)) {
 			
 			fileName = paths[patternType][pattern];
 			
-		} else if (paths[patternType] != undefined) {
+		} else if (paths[patternType] !== undefined) {
 			
-			for (patternMatchKey in paths[patternType]) {
+			for (var patternMatchKey in paths[patternType]) {
 				if (patternMatchKey.indexOf(pattern) != -1) {
 					fileName = paths[patternType][patternMatchKey];
 					break;
@@ -58,14 +58,14 @@ var urlHandler = {
 		
 		}
 		
-		if (fileName == "") {
+		if (fileName === "") {
 			return fileName;
 		}
 		
 		var regex = /\//g;
-		if ((name.indexOf("viewall-") != -1) && (fileName != "")) {
+		if ((name.indexOf("viewall-") != -1) && (fileName !== "")) {
 			fileName = baseDir+"/"+fileName.replace(regex,"-")+"/index.html";
-		} else if (fileName != "") {
+		} else if (fileName !== "") {
 			fileName = baseDir+"/"+fileName.replace(regex,"-")+"/"+fileName.replace(regex,"-")+".html";
 		}
 		
@@ -87,12 +87,12 @@ var urlHandler = {
 		var c = patternBits.length;
 		
 		var patternType = patternBits[0];
-		while ((paths[patternType] == undefined) && (i < c)) {
+		while ((paths[patternType] === undefined) && (i < c)) {
 			patternType += "-"+patternBits[i];
 			i++;
 		}
 		
-		pattern = name.slice(patternType.length+1,name.length);
+		var pattern = name.slice(patternType.length+1,name.length);
 		
 		return [patternType, pattern];
 		
@@ -107,12 +107,12 @@ var urlHandler = {
 		
 		// the following is taken from https://developer.mozilla.org/en-US/docs/Web/API/window.location
 		var oGetVars = new (function (sSearch) {
-		  if (sSearch.length > 1) {
-		    for (var aItKey, nKeyId = 0, aCouples = sSearch.substr(1).split("&"); nKeyId < aCouples.length; nKeyId++) {
-		      aItKey = aCouples[nKeyId].split("=");
-		      this[unescape(aItKey[0])] = aItKey.length > 1 ? unescape(aItKey[1]) : "";
-		    }
-		  }
+			if (sSearch.length > 1) {
+				for (var aItKey, nKeyId = 0, aCouples = sSearch.substr(1).split("&"); nKeyId < aCouples.length; nKeyId++) {
+					aItKey = aCouples[nKeyId].split("=");
+					this[unescape(aItKey[0])] = aItKey.length > 1 ? unescape(aItKey[1]) : "";
+				}
+			}
 		})(window.location.search);
 		
 		return oGetVars;
@@ -146,18 +146,19 @@ var urlHandler = {
 	*/
 	popPattern: function (e) {
 		
+		var patternName;
 		var state = e.state;
 		
-		if (state == null) {
+		if (state === null) {
 			this.skipBack = false;
 			return;
-		} else if (state != null) {
-			var patternName = state.pattern;
+		} else if (state !== null) {
+			patternName = state.pattern;
 		} 
 		
 		var iFramePath = "";
 		iFramePath = this.getFileName(patternName);
-		if (iFramePath == "") {
+		if (iFramePath === "") {
 			iFramePath = "styleguide/html/styleguide.html";
 		}
 		
@@ -171,7 +172,7 @@ var urlHandler = {
 		
 	}
 	
-}
+};
 
 /**
 * handle the onpopstate event
@@ -179,4 +180,4 @@ var urlHandler = {
 window.onpopstate = function (event) {
 	urlHandler.skipBack = true;
 	urlHandler.popPattern(event);
-}
+};

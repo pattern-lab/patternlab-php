@@ -1,7 +1,7 @@
 /*!
  * Annotations Support for Patterns - v0.3
  *
- * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
+ * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
  */
@@ -10,59 +10,57 @@ var annotationsPattern = {
 	
 	commentsOverlayActive:  false,
 	commentsOverlay:        false,
-	commentsOverlayElement: "",
 	commentsEmbeddedActive: false,
 	commentsEmbedded:       false,
+	commentsGathered:       { "commentOverlay": "on", "comments": { } },
+	trackedElements:        [ ],
 	
 	/**
-	* add an onclick handler to each element in the pattern that has an annotation
+	* record which annotations are related to this pattern so they can be sent to the viewer when called
 	*/
-	showComments: function() {
+	gatherComments: function() {
 		
 		// make sure this only added when we're on a pattern specific view
-		var body = document.getElementsByTagName("body");
-		if (!body[0].classList.contains("sg-pattern-list")) {
+		if (document.getElementById("sg-patterns") === null) {
+			
+			var count = 0;
+			
 			for (comment in comments.comments) {
 				var item = comments.comments[comment];
 				var els  = document.querySelectorAll(item.el);
-				for (var i = 0; i < els.length; ++i) {
-					els[i].onclick = (function(item) {
-						return function(e) {
-							e.preventDefault();
-							e.stopPropagation();
-							var obj = {};
-							
-							if (annotationsPattern.commentsOverlayActive && !annotationsPattern.commentsOverlay) {
+				if (els.length > 0) {
+					
+					count++;
+					item.displaynumber = count;
+					
+					for (var i = 0; i < els.length; ++i) {
+						els[i].onclick = (function(item) {
+							return function(e) {
 								
-								// if this is for an overlay and comments overlay is false set the payload to turn the overlay on
-								annotationsPattern.commentsOverlay = true;
-								obj = { "commentOverlay": "on", "swapOverlay": false, "el": item.el, "title": item.title, "comment": item.comment };
+								e.preventDefault();
+								e.stopPropagation();
+								var obj = {};
 								
-							} else if (annotationsPattern.commentsOverlayActive && annotationsPattern.commentsOverlay) {
+								// if an element was clicked on while the overlay was already on swap it
+								obj = { "displaynumber": item.displaynumber, "el": item.el, "title": item.title, "comment": item.comment };
 								
-								if (item.el == annotationsPattern.commentsOverlayElement) {
-									
-									// if the last element was clicked again turn off the overlay
-									annotationsPattern.commentsOverlay = false;
-									obj = { "commentOverlay": "off" };
-									
-								} else {
-									
-									// if an element was clicked on while the overlay was already on swap it
-									obj = { "commentOverlay": "on", "swapOverlay": true, "el": item.el, "title": item.title, "comment": item.comment };
-									
-								}
+								var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+								parent.postMessage(obj,targetOrigin);
 								
 							}
-							
-							annotationsPattern.commentsOverlayElement = item.el;
-							var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-							parent.postMessage(obj,targetOrigin);
-							
-						}
-					})(item);
+						})(item);
+					}
 				}
+				
+				
 			}
+			
+		} else {
+			
+			var obj = { "commentOverlay": "off" };
+			var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+			parent.postMessage(obj,targetOrigin);
+			
 		}
 		
 	},
@@ -109,10 +107,12 @@ var annotationsPattern = {
 	*/
 	findParent: function(el) {
 		
+		var parentEl;
+		
 		if (el.parentNode.classList.contains("sg-pattern")) {
 			return el.parentNode;
 		} else {
-			var parentEl = annotationsPattern.findParent(el.parentNode);
+			parentEl = annotationsPattern.findParent(el.parentNode);
 		}
 		
 		return parentEl;
@@ -131,55 +131,130 @@ var annotationsPattern = {
 			return;
 		}
 		
-		if (event.data.commentToggle != undefined) {
+		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		
+		if ((event.data.resize !== undefined) && (annotationsPattern.commentsOverlayActive)) {
+			
+			for (var i = 0; i < annotationsPattern.trackedElements.length; ++i) {
+				var el = annotationsPattern.trackedElements[i];
+				if (window.getComputedStyle(el.element,null).getPropertyValue("max-height") == "0px") {
+					el.element.firstChild.style.display = "none";
+					parent.postMessage({"annotationState": false, "displayNumber": el.displayNumber },targetOrigin);
+				} else {
+					el.element.firstChild.style.display = "block";
+					parent.postMessage({"annotationState": true, "displayNumber": el.displayNumber },targetOrigin);
+				}
+			}
+			
+		} else if (event.data.commentToggle !== undefined) {
+			
+			var i, els, item, displayNum;
 			
 			// if this is an overlay make sure it's active for the onclick event
 			annotationsPattern.commentsOverlayActive  = false;
 			annotationsPattern.commentsEmbeddedActive = false;
 			
 			// see which flag to toggle based on if this is a styleguide or view-all page
-			var body = document.getElementsByTagName("body");
-			if ((event.data.commentToggle == "on") && (body[0].classList.contains("sg-pattern-list"))) {
+			if ((event.data.commentToggle === "on") && (document.getElementById("sg-patterns") !== null)) {
 				annotationsPattern.commentsEmbeddedActive = true;
-			} else if (event.data.commentToggle == "on") {
+			} else if (event.data.commentToggle === "on") {
 				annotationsPattern.commentsOverlayActive  = true;
 			}
 			
-			// if comments overlay is turned off make sure to remove the has-comment class and pointer
+			// if comments overlay is turned off make sure to remove the has-annotation class and pointer
 			if (!annotationsPattern.commentsOverlayActive) {
-				var els = document.querySelectorAll(".has-comment");
-				for (var i = 0; i < els.length; i++) {
-					els[i].classList.remove("has-comment");
+				els = document.querySelectorAll(".has-annotation");
+				for (i = 0; i < els.length; i++) {
+					els[i].classList.remove("has-annotation");
+				}
+				els = document.querySelectorAll(".annotation-tip");
+				for (i = 0; i < els.length; i++) {
+					els[i].style.display = "none";
 				}
 			}
 			
 			// if comments embedding is turned off make sure to hide the annotations div
 			if (!annotationsPattern.commentsEmbeddedActive) {
-				var els = document.getElementsByClassName("sg-annotations");
-				for (var i = 0; i < els.length; i++) {
+				els = document.getElementsByClassName("sg-annotations");
+				for (i = 0; i < els.length; i++) {
 					els[i].style.display = "none";
 				}
 			}
 			
-			// if comments overlay is turned on add the has-comment class and pointer
+			// if comments overlay is turned on add the has-annotation class and pointer
 			if (annotationsPattern.commentsOverlayActive) {
 				
-				for (comment in comments.comments) {
-					var item = comments.comments[comment];
-					var els  = document.querySelectorAll(item.el);
-					for (var i = 0; i < els.length; i++) {
-						els[i].classList.add("has-comment");
+				var count = 0;
+				
+				for (i = 0; i < comments.comments.length; i++) {
+					item = comments.comments[i];
+					els  = document.querySelectorAll(item.el);
+					
+					var state = true;
+					
+					if (els.length) {
+						
+						count++;
+						
+						//Loop through all items with annotations
+						for (k = 0; k < els.length; k++) {
+							
+							els[k].classList.add("has-annotation");
+							
+							var span              = document.createElement("span");
+							span.innerHTML        = count;
+							span.classList.add("annotation-tip");
+							
+							if (window.getComputedStyle(els[k],null).getPropertyValue("max-height") == "0px") {
+								span.style.display = "none";
+								state = false;
+							}
+							
+							annotationsPattern.trackedElements.push({ "itemel": item.el, "element": els[k], "displayNumber": count, "state": state });
+							
+							els[k].insertBefore(span,els[k].firstChild);
+							
+						}
+						
 					}
+					
 				}
+				
+				// count elements so it can be used when displaying the results in the viewer
+				var count = 0;
+				
+				// iterate over the comments in annotations.js
+				for(i = 0; i < comments.comments.length; i++) {
+					
+					var state = true;
+					
+					var item = comments.comments[i];
+					var els  = document.querySelectorAll(item.el);
+					
+					// if an element is found in the given pattern add it to the overall object so it can be passed when the overlay is turned on
+					if (els.length > 0) {
+						count++;
+						for (k = 0; k < els.length; k++) {
+							if (window.getComputedStyle(els[k],null).getPropertyValue("max-height") == "0px") {
+								state = false;
+							}
+						}
+						annotationsPattern.commentsGathered.comments[count] = { "el": item.el, "title": item.title, "comment": item.comment, "number": count, "state": state };
+					}
+				
+				}
+				
+				// send the list of annotations for the page back to the parent
+				parent.postMessage(annotationsPattern.commentsGathered,targetOrigin);
 				
 			} else if (annotationsPattern.commentsEmbeddedActive && !annotationsPattern.commentsEmbedded) {
 				
 				// if comment embedding is turned on and comments haven't been embedded yet do it
-				for (comment in comments.comments) {
-					var item = comments.comments[comment];
-					var els  = document.querySelectorAll(item.el);
+				for (i = 0; i < comments.comments.length; i++)  {
+					item = comments.comments[i];
+					els  = document.querySelectorAll(item.el);
 					if (els.length > 0) {
-						annotationsPattern.embedComments(els[0],item.title,item.comment);
+						annotationsPattern.embedComments(els[0],item.title,item.comment); //Embed the comment
 					}
 					annotationsPattern.commentsEmbedded = true;
 				}
@@ -187,8 +262,8 @@ var annotationsPattern = {
 			} else if (annotationsPattern.commentsEmbeddedActive && annotationsPattern.commentsEmbedded) {
 				
 				// if comment embedding is turned on and comments have been embedded simply display them
-				var els = document.getElementsByClassName("sg-annotations");
-				for (var i = 0; i < els.length; ++i) {
+				els = document.getElementsByClassName("sg-annotations");
+				for (i = 0; i < els.length; ++i) {
 					els[i].style.display = "block";
 				}
 				
@@ -201,12 +276,12 @@ var annotationsPattern = {
 };
 
 // add the onclick handlers to the elements that have an annotations
-annotationsPattern.showComments();
+annotationsPattern.gatherComments();
 window.addEventListener("message", annotationsPattern.receiveIframeMessage, false);
 
 // before unloading the iframe make sure any active overlay is turned off/closed
 window.onbeforeunload = function() {
 	var obj = { "commentOverlay": "off" };
-	var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+	var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 	parent.postMessage(obj,targetOrigin);
 };

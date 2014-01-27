@@ -74,7 +74,7 @@
 /*!
  * Data Saver - v0.1
  *
- * Copyright (c) 2013 Dave Olsen, http://dmolsen.com
+ * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  */
 
@@ -90,11 +90,7 @@ var DataSaver = {
 	*/
 	addValue: function (name,val) {
 		var cookieVal = $.cookie(this.cookieName);
-		if ((cookieVal == null) || (cookieVal == "")) {
-			cookieVal = name+"~"+val;
-		} else {
-			cookieVal = cookieVal+"|"+name+"~"+val;
-		}
+		cookieVal = ((cookieVal === null) || (cookieVal === "")) ? name+"~"+val : cookieVal+"|"+name+"~"+val;
 		$.cookie(this.cookieName,cookieVal);
 	},
 	
@@ -109,14 +105,10 @@ var DataSaver = {
 			var cookieVals = $.cookie(this.cookieName).split("|");
 			for (var i = 0; i < cookieVals.length; i++) {
 				var fieldVals = cookieVals[i].split("~");
-	 			if (fieldVals[0] == name) {
+				if (fieldVals[0] == name) {
 					fieldVals[1] = val;
 				}
-				if (i > 0) {
-						updateCookieVals += "|"+fieldVals[0]+"~"+fieldVals[1];
-				} else {
-						updateCookieVals += fieldVals[0]+"~"+fieldVals[1];
-				}	
+				updateCookieVals += (i > 0) ? "|"+fieldVals[0]+"~"+fieldVals[1] : fieldVals[0]+"~"+fieldVals[1];
 			}
 			$.cookie(this.cookieName,updateCookieVals);
 		} else {
@@ -133,13 +125,9 @@ var DataSaver = {
 		var cookieVals = $.cookie(this.cookieName).split("|");
 		var k = 0;
 		for (var i = 0; i < cookieVals.length; i++) {
-	    	var fieldVals = cookieVals[i].split("~");
-	    	if (fieldVals[0] != name) {
-				if (k == 0) {
-					updateCookieVals += fieldVals[0]+"~"+fieldVals[1];
-				} else {
-					updateCookieVals += "|"+fieldVals[0]+"~"+fieldVals[1];
-				}
+			var fieldVals = cookieVals[i].split("~");
+			if (fieldVals[0] != name) {
+				updateCookieVals += (k === 0) ? fieldVals[0]+"~"+fieldVals[1] : "|"+fieldVals[0]+"~"+fieldVals[1];
 				k++;
 			}
 		}
@@ -155,10 +143,9 @@ var DataSaver = {
 	findValue: function (name) {
 		if ($.cookie(this.cookieName)) {
 			var cookieVals = $.cookie(this.cookieName).split("|");
-			var k = 0;
 			for (var i = 0; i < cookieVals.length; i++) {
-		    	var fieldVals = cookieVals[i].split("~");
-		    	if (fieldVals[0] == name) {
+				var fieldVals = cookieVals[i].split("~");
+				if (fieldVals[0] == name) {
 					return fieldVals[1];
 				}
 			}

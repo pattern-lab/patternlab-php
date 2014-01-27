@@ -1,4 +1,4 @@
-(function(w){
+(function (w) {
 	
 	var sw = document.body.clientWidth, //Viewport Width
 		sh = document.body.clientHeight, //Viewport Height
@@ -9,23 +9,31 @@
 		$sizePx = $('.sg-size-px'), //Px size input element in toolbar
 		$sizeEms = $('.sg-size-em'), //Em size input element in toolbar
 		$bodySize = parseInt($('body').css('font-size')), //Body size of the document
-		$vp = Object,
-		$sgPattern = Object,
 		discoID = false,
 		discoMode = false,
 		hayMode = false;
 	
-	
-	$(w).resize(function(){ //Update dimensions on resize
+	//Update dimensions on resize
+	$(w).resize(function() {
 		sw = document.body.clientWidth;
 		sh = document.body.clientHeight;
 	});
 
-	/* Pattern Lab accordion dropdown */
+	/* Accordion dropdown */
 	$('.sg-acc-handle').on("click", function(e){
-		var $this = $(this),
-			$panel = $this.next('.sg-acc-panel');
 		e.preventDefault();
+
+		var $this = $(this),
+			$panel = $this.next('.sg-acc-panel'),
+			subnav = $this.parent().parent().hasClass('sg-acc-panel');
+
+		//Close other panels if link isn't a subnavigation item
+		if (!subnav) {
+			$('.sg-acc-handle').not($this).removeClass('active');
+			$('.sg-acc-panel').not($panel).removeClass('active');
+		}
+
+		//Activate selected panel
 		$this.toggleClass('active');
 		$panel.toggleClass('active');
 	});
@@ -59,7 +67,7 @@
 			$bodySize = 1;
 		}
 		
-		val = val.replace(/[^\d.-]/g,'')		
+		val = val.replace(/[^\d.-]/g,'');
 		sizeiframe(Math.floor(val*$bodySize));
 	});
 	
@@ -142,7 +150,7 @@
 		if (hayMode) {
 			killHay();
 		} else {
-			startHay();	
+			startHay();
 		}
 	});
 
@@ -159,7 +167,7 @@
 	function startHay() {
 		hayMode = true;
 		$('#sg-gen-container').removeClass("vp-animate").width(minViewportWidth+viewportResizeHandleWidth);
-		$sgViewport.removeClass("vp-animate").width(minViewportWidth);		
+		$sgViewport.removeClass("vp-animate").width(minViewportWidth);
 		
 		var timeoutID = window.setTimeout(function(){
 			$('#sg-gen-container').addClass('hay-mode').width(maxViewportWidth+viewportResizeHandleWidth);
@@ -173,21 +181,20 @@
 	$sizePx.on('keydown', function(e){
 		var val = Math.floor($(this).val());
 
-		if(e.keyCode == 38) { //If the up arrow key is hit
+		if(e.keyCode === 38) { //If the up arrow key is hit
 			val++;
 			sizeiframe(val,false);
-		} else if(e.keyCode == 40) { //If the down arrow key is hit
+		} else if(e.keyCode === 40) { //If the down arrow key is hit
 			val--;
 			sizeiframe(val,false);
-		} else if(e.keyCode == 13) { //If the Enter key is hit
-	    	e.preventDefault();
+		} else if(e.keyCode === 13) { //If the Enter key is hit
+			e.preventDefault();
 			sizeiframe(val); //Size Iframe to value of text box
 			$(this).blur();
-	    }
-	    
+		}
 	});
 
-	$sizePx.on('keyup', function(e){
+	$sizePx.on('keyup', function(){
 		var val = Math.floor($(this).val());
 		updateSizeReading(val,'px','updateEmInput');
 	});
@@ -196,19 +203,19 @@
 	$sizeEms.on('keydown', function(e){
 		var val = parseFloat($(this).val());
 
-	    if(e.keyCode == 38) { //If the up arrow key is hit
+		if(e.keyCode === 38) { //If the up arrow key is hit
 			val++;
 			sizeiframe(Math.floor(val*$bodySize),false);
-		} else if(e.keyCode == 40) { //If the down arrow key is hit
+		} else if(e.keyCode === 40) { //If the down arrow key is hit
 			val--;
 			sizeiframe(Math.floor(val*$bodySize),false);
-		} else if(e.keyCode == 13) { //If the Enter key is hit
-	    	e.preventDefault();
+		} else if(e.keyCode === 13) { //If the Enter key is hit
+			e.preventDefault();
 			sizeiframe(Math.floor(val*$bodySize)); //Size Iframe to value of text box
-	    } 
+		}
 	});
 
-	$sizeEms.on('keyup', function(e){
+	$sizeEms.on('keyup', function(){
 		var val = parseFloat($(this).val());
 		updateSizeReading(val,'em','updatePxInput');
 	});
@@ -217,9 +224,9 @@
 	$('#sg-mq a').on("click", function(e){
 		e.preventDefault();
 		var val = $(this).html();
-		var type = (val.indexOf("px") != -1) ? "px" : "em";
+		var type = (val.indexOf("px") !== -1) ? "px" : "em";
 		val = val.replace(type,"");
-		var width = (type == "px") ? val*1 : val*$bodySize;
+		var width = (type === "px") ? val*1 : val*$bodySize;
 		sizeiframe(width,true);
 	});
 	
@@ -228,7 +235,7 @@
 	//'animate' is a boolean for switching the CSS animation on or off. 'animate' is true by default, but can be set to false for things like nudging and dragging
 	function sizeiframe(size,animate) {
 		var theSize;
-
+		
 		if(size>maxViewportWidth) { //If the entered size is larger than the max allowed viewport size, cap value at max vp size
 			theSize = maxViewportWidth;
 		} else if(size<minViewportWidth) { //If the entered size is less than the minimum allowed viewport size, cap value at min vp size
@@ -236,20 +243,28 @@
 		} else {
 			theSize = size;
 		}
-
+		
 		//Conditionally remove CSS animation class from viewport
-		if(animate==false) { 
+		if(animate===false) {
 			$('#sg-gen-container,#sg-viewport').removeClass("vp-animate"); //If aninate is set to false, remove animate class from viewport
 		} else {
 			$('#sg-gen-container,#sg-viewport').addClass("vp-animate");
 		}
-
+		
 		$('#sg-gen-container').width(theSize+viewportResizeHandleWidth); //Resize viewport wrapper to desired size + size of drag resize handler
 		$sgViewport.width(theSize); //Resize viewport to desired size
-
+		
+		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		document.getElementById('sg-viewport').contentWindow.postMessage({ "resize": "true" },targetOrigin);
+		
 		updateSizeReading(theSize); //Update values in toolbar
 		saveSize(theSize); //Save current viewport to cookie
 	}
+	
+	$("#sg-gen-container").on('transitionend webkitTransitionEnd', function(e){
+		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		document.getElementById('sg-viewport').contentWindow.postMessage({ "resize": "true" },targetOrigin);
+	});
 	
 	function saveSize(size) {
 		if (!DataSaver.findValue('vpWidth')) {
@@ -265,7 +280,9 @@
 	//'unit' is the type of unit: either px or em. Default is px. Accepted values are 'px' and 'em'
 	//'target' is what inputs to update. Defaults to both
 	function updateSizeReading(size,unit,target) {
-		if(unit=='em') { //If size value is in em units
+		var emSize, pxSize;
+
+		if(unit==='em') { //If size value is in em units
 			emSize = size;
 			pxSize = Math.floor(size*$bodySize);
 		} else { //If value is px or absent
@@ -273,28 +290,42 @@
 			emSize = size/$bodySize;
 		}
 		
-		if (target == 'updatePxInput') {
+		if (target === 'updatePxInput') {
 			$sizePx.val(pxSize);
-		} else if (target == 'updateEmInput') {
+		} else if (target === 'updateEmInput') {
 			$sizeEms.val(emSize.toFixed(2));
 		} else {
 			$sizeEms.val(emSize.toFixed(2));
 			$sizePx.val(pxSize);
-		}	
+		}
 	}
 	
 	/* Returns a random number between min and max */
 	function getRandom (min, max) {
-	    return Math.random() * (max - min) + min;
+		return Math.floor(Math.random() * (max - min) + min);
 	}
 	
+	//Update The viewport size
 	function updateViewportWidth(size) {
-	
 		$("#sg-viewport").width(size);
 		$("#sg-gen-container").width(size*1 + 14);
 		
 		updateSizeReading(size);
 	}
+
+	//Detect larger screen and no touch support
+	/*
+	if('ontouchstart' in document.documentElement && window.matchMedia("(max-width: 700px)").matches) {
+		$('body').addClass('no-resize');
+		$('#sg-viewport ').width(sw);
+
+		alert('workit');
+	} else {
+		
+	}
+	*/
+	
+	$('#sg-gen-container').on('touchstart', function(event){});
 
 	// handles widening the "viewport"
 	//   1. on "mousedown" store the click location
@@ -311,8 +342,9 @@
 		
 		// add the mouse move event and capture data. also update the viewport width
 		$('#sg-cover').mousemove(function(event) {
+			var viewportWidth;
 			
-			viewportWidth = (origClientX > event.clientX) ? origViewportWidth - ((origClientX - event.clientX)*2) : origViewportWidth + ((event.clientX - origClientX)*2);
+			viewportWidth = (origClientX > event.clientX) ? origViewportWidth - (origClientX - event.clientX) : origViewportWidth + (event.clientX - origClientX);
 			
 			if (viewportWidth > minViewportWidth) {
 				
@@ -325,33 +357,47 @@
 				sizeiframe(viewportWidth,false);
 			}
 		});
+		
+		return false;
+		
 	});
 
 	// on "mouseup" we unbind the "mousemove" event and hide the cover again
-	$('body').mouseup(function(event) {
+	$('body').mouseup(function() {
 		$('#sg-cover').unbind('mousemove');
 		$('#sg-cover').css("display","none");
 	});
 
+
 	// capture the viewport width that was loaded and modify it so it fits with the pull bar
 	var origViewportWidth = $("#sg-viewport").width();
 	$("#sg-gen-container").width(origViewportWidth);
-	$("#sg-viewport").width(origViewportWidth - 14);
+	
+	var testWidth = screen.width;
+	if (window.orientation !== undefined) {
+		testWidth = (window.orientation == 0) ? screen.width : screen.height;
+	}
+	if (($(window).width() == testWidth) && ('ontouchstart' in document.documentElement) && ($(window).width() <= 1024)) {
+		$("#sg-rightpull-container").width(0);
+	} else {
+		$("#sg-viewport").width(origViewportWidth - 14);
+	}
 	updateSizeReading($("#sg-viewport").width());
-
+	
 	// get the request vars
 	var oGetVars = urlHandler.getRequestVars();
 	
 	// pre-load the viewport width
 	var vpWidth = 0;
 	var trackViewportWidth = true; // can toggle this feature on & off
-	if ((oGetVars.h != undefined) || (oGetVars.hay != undefined)) {
+
+	if ((oGetVars.h !== undefined) || (oGetVars.hay !== undefined)) {
 		startHay();
-	} else if ((oGetVars.d != undefined) || (oGetVars.disco != undefined)) {
+	} else if ((oGetVars.d !== undefined) || (oGetVars.disco !== undefined)) {
 		startDisco();
-	} else if ((oGetVars.w != undefined) || (oGetVars.width != undefined)) {
-		vpWidth = (oGetVars.w != undefined) ? oGetVars.w : oGetVars.width;
-		vpWidth = (vpWidth.indexOf("em") != -1) ? Math.floor(Math.floor(vpWidth.replace("em",""))*$bodySize) : Math.floor(vpWidth.replace("px",""));
+	} else if ((oGetVars.w !== undefined) || (oGetVars.width !== undefined)) {
+		vpWidth = (oGetVars.w !== undefined) ? oGetVars.w : oGetVars.width;
+		vpWidth = (vpWidth.indexOf("em") !== -1) ? Math.floor(Math.floor(vpWidth.replace("em",""))*$bodySize) : Math.floor(vpWidth.replace("px",""));
 		DataSaver.updateValue("vpWidth",vpWidth);
 		updateViewportWidth(vpWidth);
 	} else if (trackViewportWidth && (vpWidth = DataSaver.findValue("vpWidth"))) {
@@ -362,13 +408,13 @@
 	var patternName = "all";
 	var patternPath = "";
 	var iFramePath  = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"styleguide/html/styleguide.html";
-	if ((oGetVars.p != undefined) || (oGetVars.pattern != undefined)) {
-		patternName = (oGetVars.p != undefined) ? oGetVars.p : oGetVars.pattern;
+	if ((oGetVars.p !== undefined) || (oGetVars.pattern !== undefined)) {
+		patternName = (oGetVars.p !== undefined) ? oGetVars.p : oGetVars.pattern;
 		patternPath = urlHandler.getFileName(patternName);
-		iFramePath  = (patternPath != "") ? window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+patternPath : iFramePath;
+		iFramePath  = (patternPath !== "") ? window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+patternPath : iFramePath;
 	}
 	
-	if (patternName != "all") {
+	if (patternName !== "all") {
 		document.getElementById("title").innerHTML = "Pattern Lab - "+patternName;
 		history.replaceState({ "pattern": patternName }, null, null);
 	}
@@ -377,85 +423,82 @@
 	
 	urlHandler.skipBack = true;
 	document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
+
 	
-	//IFrame functionality
+
+	//Close all dropdowns and navigation
+	function closePanels() {
+		$('.sg-nav-container, .sg-nav-toggle, .sg-acc-handle, .sg-acc-panel').removeClass('active');
+	}
+
+	// update the iframe with the source from clicked element in pull down menu. also close the menu
+	// having it outside fixes an auto-close bug i ran into
+	$('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
+		e.preventDefault();
+		// update the iframe via the history api handler
+		document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+		closePanels();
+	});
+
+	// handle when someone clicks on the grey area of the viewport so it auto-closes the nav
+	$('#sg-vp-wrap').click(function() {
+		closePanels();
+	});
+	
+	// Listen for resize changes
+	if (window.orientation !== undefined) {
+		var origOrientation = window.orientation;
+		window.addEventListener("orientationchange", function() {
+			if (window.orientation != origOrientation) {
+				$("#sg-gen-container").width($(window).width());
+				$("#sg-viewport").width($(window).width());
+				updateSizeReading($(window).width());
+				origOrientation = window.orientation;
+			}
+		}, false);
+		
+	}
+	
+	// watch the iframe source so that it can be sent back to everyone else.
+	// based on the great MDN docs at https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
+	function receiveIframeMessage(event) {
+		
+		// does the origin sending the message match the current host? if not dev/null the request
+		if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
+			return;
+		}
+		
+		if (event.data.bodyclick !== undefined) {
+			
+			closePanels();
+			
+		} else if (event.data.patternpartial !== undefined) {
+			
+			if (!urlHandler.skipBack) {
+				
+				if ((history.state === undefined) || (history.state === null) || (history.state.pattern !== event.data.patternpartial)) {
+					urlHandler.pushPattern(event.data.patternpartial, event.data.path);
+				}
+				
+				if (wsnConnected) {
+					var iFramePath = urlHandler.getFileName(event.data.patternpartial);
+					wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
+				}
+			}
+			
+			// reset the defaults
+			urlHandler.skipBack = false;
+			
+		}
+	}
+	window.addEventListener("message", receiveIframeMessage, false);
+	
+	$('.sg-tools').click(function() {
+		if ((qrCodeGenerator.lastGenerated == "") || (qrCodeGenerator.lastGenerated != window.location.search)) {
+			qrCodeGenerator.getQRCode();
+			qrCodeGenerator.lastGenerated = window.location.search;
+		}
+	});
 	
 })(this);
 
-// update the iframe with the source from clicked element in pull down menu. also close the menu
-// having it outside fixes an auto-close bug i ran into
-$('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
-	
-	e.preventDefault();
-	
-	// update the iframe via the history api handler
-	document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
-	
-	// close up the menu
-	$(this).parents('.sg-acc-panel').toggleClass('active');
-	$(this).parents('.sg-acc-panel').siblings('.sg-acc-handle').toggleClass('active');
-	
-	return false;
-	
-});
-
-// handle when someone clicks on the grey area of the viewport so it auto-closes the nav
-function closePanels() {
-	// close up the menu
-	$('.sg-acc-panel').each(function() {
-		if ($(this).hasClass('active')) {
-			$(this).toggleClass('active');
-		}
-	});
-	
-	$('.sg-acc-handle').each(function() {
-		if ($(this).hasClass('active')) {
-			$(this).toggleClass('active');
-		}
-	});
-}
-
-$('#sg-vp-wrap').click(function(e) {
-	
-	closePanels();
-	
-});
-
-// watch the iframe source so that it can be sent back to everyone else.
-// based on the great MDN docs at https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
-function receiveIframeMessage(event) {
-	
-	// does the origin sending the message match the current host? if not dev/null the request
-	if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
-		return;
-	}
-	
-	if (event.data.bodyclick != undefined) {
-		
-		closePanels();
-		
-	} else if (event.data.patternpartial != undefined) {
-		
-		if (!urlHandler.skipBack) {
-			
-			if ((history.state == null) || (history.state.pattern != event.data.patternpartial)) {
-				urlHandler.pushPattern(event.data.patternpartial, event.data.path);
-			}
-			
-			if (wsnConnected) {
-				var iFramePath = urlHandler.getFileName(event.data.patternpartial);
-				wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
-			}
-			
-		}
-		
-		// for testing purposes
-		console.log(event.data.lineage);
-		
-		// reset the defaults
-		urlHandler.skipBack = false;
-		
-	}
-	
-}
-window.addEventListener("message", receiveIframeMessage, false);

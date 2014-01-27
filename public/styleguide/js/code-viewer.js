@@ -9,8 +9,6 @@
 var codeViewer = {
 	
 	codeActive:     false,
-	sw:             document.documentElement.clientWidth,
-	breakpoint:     650,
 	
 	onReady: function() {
 		
@@ -21,103 +19,115 @@ var codeViewer = {
 			// make sure the annotations overlay is off
 			$('#sg-t-annotations').removeClass('active');
 			annotationsViewer.commentsActive = false;
-			var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+			var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },targetOrigin);
 			annotationsViewer.slideComment(999);
 			
-			codeViewer.toggleCode();
+			$('#sg-t-toggle').removeClass('active');
+			
+			if ($(this).hasClass('active')) {
+				codeViewer.closeCode();
+			} else {
+				codeViewer.openCode();
+			}
+			
 			codeViewer.codeContainerInit();
 			
 		});
-		
 	},
 	
-	toggleCode: function() {
-		
-		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-		$('#sg-t-code').toggleClass('active');
-		
-		if (!codeViewer.codeActive) {
-			
-			codeViewer.codeActive = true;
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "on" },targetOrigin);
-			
-		} else {
-			
-			codeViewer.codeActive = false;
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "off" },targetOrigin);
-			codeViewer.slideCode(999);
-			
-		}
-		
+	openCode: function() {
+		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		codeViewer.codeActive = true;
+		document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "on" },targetOrigin);
+		$('#sg-t-code').addClass('active');
+	},
+	
+	closeCode: function() {
+		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+		codeViewer.codeActive = false;
+		document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "off" },targetOrigin);
+		codeViewer.slideCode($('#sg-code-container').outerHeight());
+		$('#sg-t-code').removeClass('active');
 	},
 	
 	codeContainerInit: function() {
 		
-		if (document.getElementById("sg-code-container") == undefined) {
-			$('<div id="sg-code-container" style="display: none;"></div>').html('<a href="#" id="sg-code-close-btn">Close</a><div id="sg-code-lineage" style="display: none;"><h2>Lineage</h2><p>This pattern contains the following patterns: <span id="sg-code-lineage-fill"></span></p></div><div id="sg-code-html"><h2>HTML</h2><pre><code id="sg-code-html-fill" class="language-markup"></code></pre></div><div id="sg-code-css" class="with-css" style="display: none;"><h2>CSS</h2><pre><code id="sg-code-css-fill" class="language-css"></code></pre></div>').appendTo('body').css('bottom',-$(document).outerHeight());
+		if (document.getElementById("sg-code-container") === null) {
+			$('<div id="sg-code-container" class="sg-view-container"></div>').html('<a href="#" id="sg-code-close-btn" class="sg-view-close-btn">Close</a><div id="sg-code-lineage" style="display: none;"><p>This pattern contains the following patterns: <span id="sg-code-lineage-fill"></span></p></div><div id="sg-code-lineager" style="display: none;"><p>This pattern is included in the following patterns: <span id="sg-code-lineager-fill"></span></p></div><div id="sg-code-html"><h2>HTML</h2><pre><code id="sg-code-html-fill" class="language-markup"></code></pre></div><div id="sg-code-css" class="with-css" style="display: none;"><h2>CSS</h2><pre><code id="sg-code-css-fill" class="language-css"></code></pre></div>').appendTo('body').css('bottom',-$(document).outerHeight());
 		}
 		
-		if (codeViewer.sw < codeViewer.breakpoint) {
-			$('#sg-code-container').hide();
-		} else {
-			$('#sg-code-container').show();
-		}
-		
-		$('body').delegate('#sg-code-close-btn','click',function(e) {
-			codeViewer.slideCode($('#sg-code-container').outerHeight());
+		//Close Code View Button
+		$('body').delegate('#sg-code-close-btn','click',function() {
+			codeViewer.closeCode();
 			return false;
 		});
 		
 	},
 	
 	slideCode: function(pos) {
-		
-		$('#sg-code-container').show();
-		
-		if (codeViewer.sw > codeViewer.breakpoint) {
-			$('#sg-code-container').css('bottom',-pos);
-		} else {
-			var offset = $('#sg-code-container').offset().top;
-			$('html,body').animate({scrollTop: offset}, 500);
-		}
-		
+		$('#sg-code-container').css('bottom',-pos);
 	},
 	
-	updateCode: function(lineage,html,css) {
+	updateCode: function(lineage,lineageR,html,css) {
 			
-			// draw lineage
-			if (lineage.length != 0) {
-				$("#sg-code-lineage").css("display","block");
-				var i = 0;
-				var lineageList = "";
-				for (pattern in lineage) {
-					lineageList += (i == 0) ? "" : ", ";
-					lineageList += "<a href='"+lineage[pattern]["lineagePath"]+"' data-patternPartial='"+lineage[pattern]["lineagePattern"]+"'>"+lineage[pattern]["lineagePattern"]+"</a>";
-					i++;
-				}
-				
-				$("#sg-code-lineage-fill").html(lineageList);
-				
-				$('#sg-code-lineage-fill a').on("click", function(e){
-					e.preventDefault();
-					document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
-				});
+		// draw lineage
+		var lineageList = "";
+		$("#sg-code-lineage").css("display","none");
+		
+		if (lineage.length !== 0) {
+			$("#sg-code-lineage").css("display","block");
+			
+			for (var i = 0; i < lineage.length; i++) {
+				lineageList += (i === 0) ? "" : ", ";
+				lineageList += "<a href='"+lineage[i].lineagePath+"' data-patternPartial='"+lineage[i].lineagePattern+"'>"+lineage[i].lineagePattern+"</a>";
+				i++;
 			}
 			
-			// draw html
-			$("#sg-code-html-fill").html(html).text();
-			Prism.highlightElement(document.getElementById("sg-code-html-fill"));
+		}
+		
+		$("#sg-code-lineage-fill").html(lineageList);
+		
+		$('#sg-code-lineage-fill a').on("click", function(e){
+			e.preventDefault();
+			document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+		});
+		
+		// draw reverse lineage
+		var lineageRList = "";
+		$("#sg-code-lineager").css("display","none");
+		
+		if (lineageR.length !== 0) {
+			$("#sg-code-lineager").css("display","block");
 			
-			// draw CSS
-			if (css.indexOf("{{ patternCSS }}") == -1) {
-				$("#sg-code-html").addClass("with-css");
-				$("#sg-code-css").css("display","block");
-				$("#sg-code-css-fill").text(css);
-				Prism.highlightElement(document.getElementById("sg-code-css-fill"));
+			for (var i = 0; i < lineageR.length; i++) {
+				lineageRList += (i === 0) ? "" : ", ";
+				lineageRList += "<a href='"+lineageR[i].lineagePath+"' data-patternPartial='"+lineageR[i].lineagePattern+"'>"+lineageR[i].lineagePattern+"</a>";
+				i++;
 			}
 			
-			codeViewer.slideCode(0);
+		}
+		
+		$("#sg-code-lineager-fill").html(lineageRList);
+		
+		$('#sg-code-lineager-fill a').on("click", function(e){
+			e.preventDefault();
+			document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+		});
+		
+		// draw html
+		$("#sg-code-html-fill").html(html).text();
+		Prism.highlightElement(document.getElementById("sg-code-html-fill"));
+		
+		// draw CSS
+		if (css.indexOf("{% patternCSS %}") === -1) {
+			$("#sg-code-html").addClass("with-css");
+			$("#sg-code-css").css("display","block");
+			$("#sg-code-css-fill").text(css);
+			Prism.highlightElement(document.getElementById("sg-code-css-fill"));
+		}
+		
+		codeViewer.slideCode(0);
 			
 	},
 	
@@ -129,14 +139,14 @@ var codeViewer = {
 	receiveIframeMessage: function(event) {
 		
 		// does the origin sending the message match the current host? if not dev/null the request
-		if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
+		if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 			return;
 		}
 		
-		if (event.data.codeOverlay != undefined) {
-			if (event.data.codeOverlay == "on") {
+		if (event.data.codeOverlay !== undefined) {
+			if (event.data.codeOverlay === "on") {
 				
-				codeViewer.updateCode(event.data.lineage,event.data.html,event.data.css);
+				codeViewer.updateCode(event.data.lineage,event.data.lineageR,event.data.html,event.data.css);
 				
 			} else {
 				
@@ -147,7 +157,7 @@ var codeViewer = {
 		
 	}
 	
-}
+};
 
 $(document).ready(function() { codeViewer.onReady(); });
 window.addEventListener("message", codeViewer.receiveIframeMessage, false);
