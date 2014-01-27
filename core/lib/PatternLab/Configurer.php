@@ -63,7 +63,7 @@ class Configurer {
 		}
 		
 		// check the config version and update it if necessary
-		if (!isset($config["v"]) || ($config["v"] != $defaultConfig["v"])) {
+		if ($migrate || ($config["v"] != $defaultConfig["v"])) {
 			print "upgrading your version of pattern lab...\n";
 			$config = $this->writeNewConfig($config,$defaultConfig);
 			$diffVersion = true;
