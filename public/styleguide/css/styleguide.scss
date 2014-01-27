@@ -1,9 +1,9 @@
 /*------------------------------------*\
-    $STYLE GUIDE CONTAINER STYLES
+    $PATTERN LAB STYLES
 \*------------------------------------*/
 /**
- * NOTE: These styles are specific to the style guide container and should not be modified. 
- * Use style.scss for all content styles that don't pertain to the style guide container.
+ * NOTE: These styles are specific to Pattern Lab and should not be modified. 
+ * Edit all project styles in /source/css/
  * 
  * Second note: Any important declarations are to prevent brand styles from overriding style guide 
  */
@@ -20,14 +20,13 @@
  * -----Defaults
  * -----Breakpoints
  * MIXINS---------------------------------Sass mixins 
- * RESET----------------------------------Set reset defaults
  * GLOBAL ELEMENTS------------------------Establish global styles
  * -----Main
  * -----Headings
  * -----Text-related elements (p, blockquote, lists)
  * -----Defaults
  * -----Breakpoints
- * STYLE GUIDE INTERFACE------------------CSS for the Style Guide Container. Should not influence the containing styles at all.
+ * STYLE GUIDE INTERFACE------------------CSS for the Pattern Lab Container.
  * -----Header
  * -----Navigation
  * -----Controls
@@ -35,6 +34,7 @@
  * -----Viewport
  * -----Section Headers
  * -----Code View
+ * -----Icon Fonts
  */
 
 
@@ -42,7 +42,7 @@
 
 
 /*------------------------------------*\
-    $STYLE GUIDE VARIABLES 
+    $PATTERN LAB VARIABLES 
 \*------------------------------------*/
 /*Fonts*/
 $sg-font : "HelveticaNeue", "Helvetica", "Arial", sans-serif;
@@ -52,7 +52,7 @@ $sg-primary : #222;
 $sg-secondary : #808080;
 $sg-tertiary : #ddd;
 $sg-quaternary : #fff;
-$sg-quinary : #f7f7f7;
+$sg-quinary : #999;
 $sg-tint : rgba(255,255,255,0.05);
 $sg-tint-2 : rgba(255,255,255,0.25);
 $sg-tone : rgba(0,0,0,0.1);
@@ -76,7 +76,7 @@ $offset-top: 2em;
 $sg-bp-small : 24em;
 $sg-bp-small-2 : 30em;
 $sg-bp-med : 44em;
-$sg-bp-large : 65em;
+$sg-bp-large : 69.5em;
 $sg-bp-xl : 80em;
 
 $animate-quick: 0.2s;
@@ -86,7 +86,7 @@ $animate-quick: 0.2s;
 
 
 /*------------------------------------*\
-    $STYLE GUIDE MIXINS 
+    $PATTERN LAB MIXINS 
 \*------------------------------------*/
 @mixin sg-transition($transition-property, $transition-time, $method) {
 	-webkit-transition: $transition-property $transition-time $method;
@@ -102,7 +102,7 @@ $animate-quick: 0.2s;
 
 
 /*------------------------------------*\
-    $STYLE GUIDE INTERFACE 
+    $PATTERN LAB INTERFACE 
 \*------------------------------------*/
 
 #patternlab-html, #patternlab-body {
@@ -128,10 +128,24 @@ $animate-quick: 0.2s;
 }
 
 
+//Clearfix
+.sg-cf {
+    /**zoom: 1;*/
+
+    &:before, &:after {
+    	content: " ";
+    	display: table;
+    }
+
+    &:after {
+	    clear: both;
+	}
+}
+
 
 
 /*------------------------------------*\
-    $STYLE GUIDE HEADER 
+    $PATTERN LAB HEADER 
 \*------------------------------------*/
 /* Header */
 .sg-header {
@@ -164,6 +178,7 @@ $animate-quick: 0.2s;
 		list-style: none;
 		border-bottom: 1px solid $sg-tint;
 	}
+
 	a {
 		font-size: $sg-font-size-sm;
 		color: $sg-secondary;
@@ -180,35 +195,28 @@ $animate-quick: 0.2s;
 		}
 	}
 
-	ol{
-    li{
-      ol{
-        li{
-          ol{
-            li{
-              //3rd level nav item
-							a {
-								padding-left: 2em;
-								text-transform: none;
-							}
-            }
-          }
-        }
-      }
+	ol ol ol a { //3rd level nav item
+		padding-left: 2em;
+		text-transform: none;
     }
-  }
-  
 }
 
 
 
 /* Navigation */
 .sg-header .sg-nav-toggle {
-	@extend .icon-menu;
-	padding: $sg-pad;
+	display: inline-block;
+	padding: 0.9em $sg-pad;
 	border-bottom: 1px solid rgba(0,0,0,0);
 	position: relative;
+	text-transform: uppercase;
 	z-index: 2;
+	
+	span {
+		display: inline-block;
+		padding-right: 0.2em;
+	}
+
 	@media all and (min-width: $sg-bp-med) {
 		display: none;
 	}
@@ -218,7 +226,7 @@ $animate-quick: 0.2s;
 	@media all and (max-width: $sg-bp-med) {
 		overflow: hidden;
 		max-height: 0;
-		@include sg-transition(max-height,0.5s,ease-out);
+		@include sg-transition(max-height,0.1s,ease-out);
 		
 		&.active {
 			max-height: 50em;
@@ -233,7 +241,8 @@ $animate-quick: 0.2s;
 	list-style: none;
 	
 	> li {
-		
+		cursor: pointer;
+
 		@media all and (min-width: $sg-bp-med) {
 			border-bottom: 0;
 			border-right: 1px solid $sg-tint;
@@ -286,7 +295,7 @@ $animate-quick: 0.2s;
 	max-height: 0;
 	min-width: 10em;
 	background: $sg-primary;
-	@include sg-transition(max-height,0.5s,ease-out);
+	@include sg-transition(max-height,0.1s,ease-out);
 
 	&.active {
 		max-height: 50em;
@@ -308,7 +317,7 @@ $animate-quick: 0.2s;
 	z-index: 2;
 	
 	.sg-acc-panel.active {
-		max-height: 17em;
+		max-height: 19em;
 	}
 	
 	.sg-nav-phases .sg-acc-panel {
@@ -317,6 +326,10 @@ $animate-quick: 0.2s;
 	  &.active {
 	  max-height: none;
 	  }
+	}
+
+	@media all and (min-width: $sg-bp-large) {
+		width: 41.5em;
 	}
 }
 
@@ -335,20 +348,12 @@ $animate-quick: 0.2s;
 
 .sg-control {
 	> li {
+		float: left;
+
 		@media all and (min-width: $sg-bp-med) {
-			float: left;
 			border-bottom: 0;
 			border-left: 1px solid $sg-tint;
 		}
-	}
-}
-
-
-
-
-.sg-control {
-	> li {
-		float: left;
 	}
 	
 	.sg-input {
@@ -367,59 +372,41 @@ $animate-quick: 0.2s;
 	}
 }
 
-.sg-quarter {
-	@media all and (max-width: $sg-bp-large) {
-		float: left;
-		width: 25%;
-		border-left: 1px solid $sg-tint;
-		text-align: center;
-
-		&:first-child {
-			border-left: 0;
-		}
-	}
-}
-
-.sg-half {
-	@media all and (max-width: $sg-bp-large) {
-		float: left;
-		width: 50%;
-		border-left: 1px solid $sg-tint;
-		text-align: center;
-
-		&:nth-child(odd) {
-			border-left: 0;
-		}
-	}
-}
-
 .sg-current-size {
-		font-size: 70%;
-		color: $sg-secondary;
-		padding: 0.8em 0.95em;
+	font-size: 70%;
+	color: $sg-secondary;
+	padding: 0.85em 0.7em;
 
-		&:hover {
-			.sg-input {
-				background: $sg-quinary;
-				color: #000;
-			}
-		}
-
-		@media all and (min-width: $sg-bp-large) {
-			float: left;
+	&:hover {
+		.sg-input {
+			background: $sg-quinary;
+			color: #000;
 		}
 	}
-
-.sg-size-options {
-	max-width: 10em;
 
 	@media all and (min-width: $sg-bp-large) {
+		float: left;
+	}
+}
+
+.sg-size {
+	width: 135px;
+
+	@media all and (min-width: $sg-bp-med) {
+		width: auto;
+	}
+}
+
+.sg-size-options {
+
+	@media all and (min-width: $sg-bp-large) {
+		float: left;
 		position: static;
 		max-height: none;
 		max-width: none;
 
 		> li {
-			float: left;
+			display: inline-block;
 			border: 0;
 			border-left: 1px solid $sg-tint;
 		}
@@ -434,11 +421,15 @@ $animate-quick: 0.2s;
 .sg-input {
 	margin: -2px 0 0 0;
 	padding: 0;
-	border: 1px solid #222;
+	border: 0;
 	background-color: #222;
 	color: gray;
-	width: 35px;
+	width: 25px;
 	text-align: right;
+
+	@media all and (min-width: $sg-bp-med) {
+		width: 35px;
+	}
 }
 
 .sg-input-active {
@@ -473,22 +464,19 @@ $animate-quick: 0.2s;
 
 
 /*------------------------------------*\
-    $STYLE GUIDE VIEWPORT
+    $PATTERN LAB VIEWPORT
 \*------------------------------------*/
 
 /* Viewport */
 #sg-vp-wrap {
 	text-align: center;
 	width: 100%;
-
-	@media all and (min-width: $sg-bp-med) {
-	  position: fixed;
-	  top: $offset-top;
-	  bottom: 0;
-	  left: 0;
-	  right: 0;
-	  z-index: 0;
-	}
+	position: fixed;
+	top: $offset-top;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 0;
 
 	&.wrap-animate {
 		-webkit-transition: left 0.3s ease-out;
@@ -501,10 +489,16 @@ $animate-quick: 0.2s;
 }
 
 #sg-viewport {
-  border: 0;
-  x-margin: 0 auto;
-  height: 100%;
-  width: 100%; 
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 
   &.hay-mode {
 		-webkit-transition: all 40s linear;
@@ -513,6 +507,17 @@ $animate-quick: 0.2s;
 	    -o-transition: all 40s linear;
 	    transition: all 40s linear;
 	}
+}
+
+.no-resize {
+	#sg-cover, #sg-rightpull-container {
+		display: none;
+	}
+
+	#sg-viewport {
+		overflow: hidden !important;
+	}
+	
 }
 
 #sg-cover {
@@ -525,11 +530,13 @@ $animate-quick: 0.2s;
 }
 
 #sg-gen-container {
-	height: 100%; 
+	height: 100%;
+	position: relative;
 	text-align: center; 
 	margin: 0 auto;
 	-webkit-overflow-scrolling: touch;
-  	overflow: scroll;
+	overflow-y: auto;
+	overflow-x: hidden;
 
 	&.hay-mode {
 		-webkit-transition: all 40s linear;
@@ -541,7 +548,7 @@ $animate-quick: 0.2s;
 }
 
 #sg-rightpull-container {
-	width: 10px; 
+	width: 14px; 
 	float: right; 
 	margin: 0; 
 	height: 100%; 
@@ -550,7 +557,7 @@ $animate-quick: 0.2s;
 
 #sg-rightpull {
 	margin: 0; 
-	width: 10px; 
+	width: 100%; 
 	height: 100%; 
 	background: #999;
 	-webkit-transition: background $animate-quick ease-out;
@@ -582,13 +589,13 @@ $animate-quick: 0.2s;
 
 
 /*------------------------------------*\
-    $STYLE GUIDE CONTENT 
+    $PATTERN LAB CONTENT 
 \*------------------------------------*/
 
 /* Section Pattern */
 .sg-pattern {
 	margin-bottom: $sg-doublespace;
-	overflow: hidden;
+	@extend .sg-cf;
 }
 
 /* Section Head */
@@ -617,8 +624,149 @@ $animate-quick: 0.2s;
 	padding: 0;
 }
 
+// Style Guide color swatches
+.sg-colors {
+	overflow: hidden;
 
-// Code View Blocks
+	li {
+		overflow: hidden;
+		border: 1px solid $sg-tertiary;
+		padding: 0.3em;
+		margin: 0 0.2em 0.2em 0;
+
+		@media all and (min-width: $sg-bp-small-2) {
+			float: left;
+			width: 5em;
+		}
+	}
+}
+
+.sg-swatch {
+	display: block;
+	height: 1.5em;
+	width: 50%;
+	
+	@media all and (max-width: $sg-bp-small-2) {
+		float: left;
+		margin-right: 0.3em;
+	}
+
+	@media all and (min-width: $sg-bp-small-2) {
+		width: 100%;
+		height: 4em;
+		margin-bottom: 0.2em;
+	}
+	
+}
+
+.sg-label {
+	line-height: 1;
+}
+
+//Annotations and code view container
+.sg-view-container {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	font-family: $sg-font;
+	line-height: 1.4;
+	font-size: 90%;
+	background: $sg-primary;
+	color: $sg-secondary;
+	position: fixed;
+	top: auto;
+	padding: $sg-pad;
+	bottom: 0;
+	left: 0;
+	z-index: 2;
+	width: 100%;
+	height: 50%;
+	overflow-y: auto;
+	overflow-x: hidden;
+
+  	a {
+    	color: $sg-quinary;
+    }
+
+     pre {
+		padding: 0 1em;
+	}
+
+	&.anim-ready {
+		-webkit-transition: bottom 0.3s ease-out;
+		-moz-transition: bottom 0.3s ease-out;
+	  	-webkit-transition: bottom 0.3s ease-out;
+	  	-ms-transition: bottom 0.3s ease-out; 
+	  	-o-transition: bottom 0.3s ease-out;
+	  	transition:  bottom 0.3s ease-out;
+	}
+}
+
+//Annotation and code view close button
+.sg-view-close-btn {
+	color: #fff;
+	position: absolute;
+	top: 1em;
+	right: 1em;
+	text-transform: uppercase;
+	text-decoration: none;
+	text-align: right;
+}
+
+//Visually emphasize annotated elements
+.has-annotation {
+	cursor: help !important;
+	box-shadow: 0 0 10px $sg-secondary;
+
+	a, input {
+		cursor: help !important;
+	}
+
+	&:hover {
+		box-shadow: 0 0 10px $sg-primary;
+	}
+
+	&.active {
+		box-shadow: inset 0 0 20px $sg-secondary;
+	}
+	
+}
+
+.annotation-tip {
+	display: block;
+	position: absolute;
+	margin-top: -10px !important;
+	margin-left: -10px !important;
+	width: 25px !important;
+	height: 25px !important;
+	border-radius: 13px !important;
+	text-align: center !important;
+	background: #444 !important;
+	color: #fff !important;
+	font-weight: bold !important;
+	font-size: 16px !important;
+	z-index: 100;
+}
+
+#sg-comments-container {
+	max-width: 60em;
+	margin: 0 auto;
+}
+
+.sg-comment-container {
+	padding-bottom: 2em;
+	margin-bottom: $sg-space;
+	border-bottom: 1px solid $sg-tint-2;
+
+	p:last-child {
+		margin-bottom: 0;
+	}
+
+	h2 {
+		margin-bottom: 0.25em;
+	}
+}
+
 .sg-code, .sg-annotations {
 	clear: both;
 	background: $sg-tertiary;
@@ -661,6 +809,58 @@ $animate-quick: 0.2s;
 	color: $sg-secondary;
 	font-size: 1em;
 }
+
+
+/* Pattern Lab icon fonts */
+@font-face {
+	font-family: 'icons';
+	src:url('../assets/icons.eot');
+	src:url('../assets/icons.eot?#iefix') format('embedded-opentype'),
+		url('../assets/icons.woff') format('woff'),
+		url('../assets/icons.ttf') format('truetype'),
+		url('../assets/icons.svg#icons') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+
+.icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-checkbox-unchecked, .icon-checkbox-checked, .icon-eye {
+	font-family: 'icons';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+.icon-reload:before {
+	content: "\e002";
+}
+.icon-cog:before {
+	content: "\e000";
+}
+.icon-minus:before {
+	content: "\e003";
+}
+.icon-plus:before {
+	content: "\e004";
+}
+.icon-menu:before {
+	content: "\e005";
+}
+.icon-checkbox-unchecked:before {
+	content: "\e006";
+}
+.icon-checkbox-checked:before {
+	content: "\e007";
+}
+.icon-eye:before {
+	content: "\e001";
+}
+
+/******************************************************************/
+/* End Pattern Lab Interface code */
 
 // Demo to show grid system - in this stylesheet because it shouldn't be included in the production styles
 .demo {
@@ -716,154 +916,4 @@ $animate-quick: 0.2s;
 			margin-left: -20px;
 		}
 	}
-}
-
-// Style Guide color swatches
-.sg-colors {
-	overflow: hidden;
-
-	li {
-		overflow: hidden;
-		border: 1px solid $sg-tertiary;
-		padding: 0.3em;
-		margin: 0 0.2em 0.2em 0;
-
-		@media all and (min-width: $sg-bp-small-2) {
-			float: left;
-			width: 5em;
-		}
-	}
-}
-
-.sg-swatch {
-	display: block;
-	height: 1.5em;
-	width: 50%;
-	
-	@media all and (max-width: $sg-bp-small-2) {
-		float: left;
-		margin-right: 0.3em;
-	}
-
-	@media all and (min-width: $sg-bp-small-2) {
-		width: 100%;
-		height: 4em;
-		margin-bottom: 0.2em;
-	}
-	
-}
-
-.sg-label {
-	line-height: 1;
-}
-
-//Annotation
-#sg-annotation-container {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	z-index: 99;
-	width: 100%;
-	padding: $sg-pad;
-}
-
-
-/* Annotations */
-#sg-annotation-container, #sg-code-container {
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-	font-family: $sg-font;
-	font-size: 90%;
-	background: $sg-primary;
-	color: $sg-secondary;
-	position: fixed;
-	top: auto;
-	padding: 1rem 1rem 4rem;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	z-index: 2;
-	-webkit-transition: bottom 0.3s ease-out;
-	-moz-transition: bottom 0.3s ease-out;
-  	-webkit-transition: bottom 0.3s ease-out;
-  	-ms-transition: bottom 0.3s ease-out; 
-  	-o-transition: bottom 0.3s ease-out; 
-  	transition:  bottom 0.3s ease-out;
-
-  	a {
-    	color: $sg-tertiary;
-    }
-}
-
-#sg-code-container pre {
-	max-height: 300px;
-	padding: 0 1em;
-}
-
-#sg-code-container .with-css pre {
-	max-height: 200px;
-}
-
-#sg-annotation-close-btn, #sg-code-close-btn {
-	color: #fff;
-	position: absolute;
-	top: 1em;
-	right: 1em;
-	text-transform: uppercase;
-	text-decoration: none;
-	text-align: right;
-}
-
-.has-comment, .has-comment a {
-	cursor: help !important;
-}
-
-// Icon Font
-
-@font-face {
-	font-family: 'icons';
-	src:url('../assets/icons.eot');
-	src:url('../assets/icons.eot?#iefix') format('embedded-opentype'),
-		url('../assets/icons.woff') format('woff'),
-		url('../assets/icons.ttf') format('truetype'),
-		url('../assets/icons.svg#icons') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-
-/* Pattern Lab icon fonts */
-.icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-checkbox-unchecked, .icon-checkbox-checked, .icon-eye {
-	font-family: 'icons';
-	speak: none;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	line-height: 1;
-	-webkit-font-smoothing: antialiased;
-}
-.icon-reload:before {
-	content: "\e002";
-}
-.icon-cog:before {
-	content: "\e000";
-}
-.icon-minus:before {
-	content: "\e003";
-}
-.icon-plus:before {
-	content: "\e004";
-}
-.icon-menu:before {
-	content: "\e005";
-}
-.icon-checkbox-unchecked:before {
-	content: "\e006";
-}
-.icon-checkbox-checked:before {
-	content: "\e007";
-}
-.icon-eye:before {
-	content: "\e001";
 }
