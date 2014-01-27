@@ -1,0 +1,22 @@
+/*
+ * Configuration Options for Pattern Lab
+ * If config.ini doesn't exist Pattern Lab will try to create a new version
+ */
+
+v  = "0.7.0"
+
+// file extensions to ignore when building or watching the source dir, separate with a comma
+ie = "scss,DS_Store,less"
+
+// directories and files to ignore when building or watching the source dir, separate with a comma
+id = "scss,.svn"
+
+// choose which ports the websocket services should run on
+autoReloadPort = "8002"
+pageFollowPort = "8003"
+
+// whether the public directory should be cleaned when generating your site
+cleanPublic = "true"
+
+// pattern lab's xip host if you have it configured
+xipHostname = "http://patternlab.*.xip.io"

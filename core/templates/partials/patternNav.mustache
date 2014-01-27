@@ -1,0 +1,17 @@
+<ol class="sg-nav">
+	{{# patternTypes }}
+		<li class="sg-nav-{{ patternTypeLC }}"><a class="sg-acc-handle">{{ patternTypeUC }}</a><ol class="sg-acc-panel">
+		{{# patternTypeItems }}
+			<li class="sg-nav-{{ patternSubtypeLC }}"><a class="sg-acc-handle">{{ patternSubtypeUC }}</a><ol class="sg-acc-panel">
+			{{# patternSubtypeItems }}
+				<li><a href="patterns/{{ patternPath }}" class="sg-pop" data-patternpartial="{{ patternPartial }}">{{ patternName }}</a></li>
+			{{/ patternSubtypeItems }}
+			</ol></li>
+		{{/ patternTypeItems }}
+		{{# patternItems }}
+			<li><a href="patterns/{{ patternPath }}" class="sg-pop" data-patternpartial="{{ patternPartial }}">{{ patternName }}</a></li>
+		{{/ patternItems }}
+		</ol></li>
+	{{/ patternTypes }}
+	<li><a href="styleguide/html/styleguide.html" class="sg-pop" data-patternpartial="all">All</a></li>
+</ol>

@@ -12,6 +12,7 @@ The PHP version of Pattern Lab should be relatively easy for anyone to get up an
 
 * [Requirements](http://pattern-lab.info/docs/requirements.html)
 * [Installing the PHP Version of Pattern Lab](http://pattern-lab.info/docs/installation.html)
+* [Upgrading the PHP Version of Pattern Lab](http://pattern-lab.info/docs/ugprading.html)
 * [Generating the Pattern Lab Website for the First Time](http://pattern-lab.info/docs/first-run.html)
 * [Editing the Pattern Lab Website Source Files](http://pattern-lab.info/docs/editing-source-files.html)
 * [Using the Command-line Options](http://pattern-lab.info/docs/command-line.html)
@@ -24,12 +25,14 @@ Patterns are the core element of Pattern Lab. Understanding how they work is the
 * [How Patterns Are Organized](http://pattern-lab.info/docs/pattern-organization.html)
 * [Adding New Patterns](http://pattern-lab.info/docs/pattern-add-new.html)
 * [Reorganizing Patterns](http://pattern-lab.info/docs/pattern-reorganizing.html)
-* [Converting Old Patterns](https://github.com/pattern-lab/patternlab-php/wiki/Converting-Old-Patterns)
-* ["Hiding" Patterns in the Navigation](http://pattern-lab.info/docs/pattern-hiding.html)
 * [Including One Pattern Within Another via Partials](http://pattern-lab.info/docs/pattern-including.html)
-* [Linking Directly to a Pattern](http://pattern-lab.info/docs/pattern-linking.html)
 * [Managing Assets for a Pattern: JavaScript, images, CSS, etc.](http://pattern-lab.info/docs/pattern-managing-assets.html)
+* [Modifying the Pattern Header and Footer](http://pattern-lab.info/docs/pattern-header-footer.html)
+* [Using Pseudo-Patterns](http://pattern-lab.info/docs/pattern-pseudo-patterns.html)
+* [Using Pattern Parameters](http://pattern-lab.info/docs/pattern-parameters.html)
+* ["Hiding" Patterns in the Navigation](http://pattern-lab.info/docs/pattern-hiding.html)
 * [Adding Annotations](http://pattern-lab.info/docs/pattern-adding-annotations.html)
+* [Viewing Patterns on a Mobile Device](http://pattern-lab.info/docs/pattern-mobile-view.html)
 
 ## Creating & Working With Dynamic Data for a Pattern
 
@@ -47,3 +50,7 @@ By default, the Pattern Lab assets can be manually generated and the Pattern Lab
 * [Watching for Changes and Auto-Regenerating Patterns](http://pattern-lab.info/docs/advanced-auto-regenerate.html)
 * [Auto-Reloading the Browser Window When Changes Are Made](http://pattern-lab.info/docs/advanced-reload-browser.html)
 * [Multi-browser & Multi-device Testing with Page Follow](http://pattern-lab.info/docs/advanced-page-follow.html)
+* [Special Pattern Lab-specific Query String Variables ](http://pattern-lab.info/docs/pattern-linking.html)
+* [Preventing the Cleaning of public/](http://pattern-lab.info/docs/advanced-clean-public.html)
+* [Generating CSS](http://pattern-lab.info/docs/advanced-generated-css.html)
+* [Integration with Compass](http://pattern-lab.info/docs/advanced-integration-with-compass.html)
