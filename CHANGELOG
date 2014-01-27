@@ -1,5 +1,39 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.7.0
+ - ADD: auto-reload server can be started directly from the watcher
+ - ADD: pattern parameter support
+ - ADD: styleModifier support
+ - ADD: pseudo-pattern support
+ - ADD: RAM usage now outputted when generating the site
+ - ADD: an easter egg
+ - ADD: configuration flag for cleanPublic
+ - ADD: dedicated pattern header and footer files
+ - ADD: QR code generator to make mobile testing easier
+ - ADD: reverse lineages to see where a pattern is used
+ - ADD: if _data.json contains a reserved keyword an error is thrown
+ - ADD: closer to being PSR-0 and PSR-1 compatible
+ - ADD: migrator class to handle file moves/updates between versions
+ - ADD: configurer class to handle managing the configuration file
+ - FIX: ran JS hint against project JavaScript
+ - FIX: attempted to add better cache busting
+ - FIX: reorganized the project for better upgradeability by moving lots to core/
+ - FIX: malformed JSON throws error and gives file name
+ - FIX: code view styles
+ - FIX: annotation styles and functionality are now more robust
+ - FIX: mobile styles are more robust including scrolling on iOS7
+ - FIX: drop down interaction
+ - FIX: refactored how patterns and view all pages are gathered and generated
+ - FIX: lineage list now hidden if pattern doesn't have a lineage
+ - FIX: listitems.json and data.json default attributes match
+ - FIX: an existing config.ini file is automatically updated with new version
+ - FIX: pull bar now works in Firefox
+ - FIX: history now works in Firefox
+ - FIX: renamed the websocket servers
+ - THX: thanks to @faustgertz for some fixes with the new watcher class
+ - THX: thanks to @coding-stuff for the original idea and original code for pattern parameters
+ - THX: thanks to @mattwellss for inspiring the PSR compliant changes as well as changes to the configuration
+
 PL-v0.6.4
  - FIX: using # for a link won't cause a jump
  - THX: thanks to @tylersticka for the heads up
