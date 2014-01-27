@@ -716,7 +716,9 @@ class Builder {
 						$this->d["patternSpecific"][$patternPartial]["listItems"] = array();
 					}
 					
-					$this->d["patternSpecific"][$patternPartial]["data"] = array_merge($patternDataBase, $patternData);
+					if (is_array($patternDataBase) && is_array($patternData)) {
+						$this->d["patternSpecific"][$patternPartial]["data"] = array_merge($patternDataBase, $patternData);
+					}
 					
 				}
 						
