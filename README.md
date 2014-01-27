@@ -12,7 +12,7 @@ The PHP version of Pattern Lab should be relatively easy for anyone to get up an
 
 * [Requirements](http://pattern-lab.info/docs/requirements.html)
 * [Installing the PHP Version of Pattern Lab](http://pattern-lab.info/docs/installation.html)
-* [Upgrading the PHP Version of Pattern Lab](http://pattern-lab.info/docs/ugprading.html)
+* [Upgrading the PHP Version of Pattern Lab](http://pattern-lab.info/docs/upgrading.html)
 * [Generating the Pattern Lab Website for the First Time](http://pattern-lab.info/docs/first-run.html)
 * [Editing the Pattern Lab Website Source Files](http://pattern-lab.info/docs/editing-source-files.html)
 * [Using the Command-line Options](http://pattern-lab.info/docs/command-line.html)
@@ -52,5 +52,5 @@ By default, the Pattern Lab assets can be manually generated and the Pattern Lab
 * [Multi-browser & Multi-device Testing with Page Follow](http://pattern-lab.info/docs/advanced-page-follow.html)
 * [Special Pattern Lab-specific Query String Variables ](http://pattern-lab.info/docs/pattern-linking.html)
 * [Preventing the Cleaning of public/](http://pattern-lab.info/docs/advanced-clean-public.html)
-* [Generating CSS](http://pattern-lab.info/docs/advanced-generated-css.html)
+* [Generating CSS](http://pattern-lab.info/docs/advanced-generating-css.html)
 * [Integration with Compass](http://pattern-lab.info/docs/advanced-integration-with-compass.html)
