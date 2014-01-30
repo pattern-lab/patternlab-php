@@ -206,9 +206,6 @@ class Builder {
 			}
 		}
 		
-		// sort partials by patternLink
-		usort($sd['partials'], "PatternLab\Builder::sortPartials");
-		
 		// render the "view all" pages
 		$this->generateViewAllPages();
 		
@@ -1132,17 +1129,6 @@ class Builder {
 	*/
 	public function trim(&$v) {
 		$v = trim($v);
-	}
-	
-	/**
-	* Sort the partials generated for the styleguide so that any new ones show up in the correct place
-	* @param  {Array}        items from from one pattern to compare
-	* @param  {Array}        items from another pattern to compare
-	*
-	* @return {Integer}      the result of the string comparison
-	*/
-	public function sortPartials($a,$b) {
-		return strcmp($a["patternLink"],$b["patternLink"]);
 	}
 	
 	/**
