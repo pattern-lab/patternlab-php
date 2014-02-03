@@ -507,6 +507,7 @@ class Builder {
 		$patternType        = "";
 		$patternSubtype     = "";
 		$patternSubtypeSet  = false;
+		$dirSep             = DIRECTORY_SEPARATOR;
 		
 		// initialize various arrays
 		$this->navItems                 = array();
@@ -524,7 +525,7 @@ class Builder {
 		foreach($patternObjects as $name => $object) {
 			
 			$name  = str_replace(__DIR__.$this->sp,"",$name);
-			$depth = substr_count($name,"/");
+			$depth = substr_count($name,$dirSep);
 			
 			// track old types and subtypes for increment purposes
 			
@@ -595,10 +596,10 @@ class Builder {
 				
 				if ($patternSubtypeSet) {
 					$patternPath     = $patternType."/".$patternSubtype."/".$pattern; // 00-atoms/01-global/00-colors
-					$patternPathDash = str_replace("/","-",$patternPath);             // 00-atoms-01-global-00-colors (file path)
+					$patternPathDash = str_replace($dirSep,"-",$patternPath);         // 00-atoms-01-global-00-colors (file path)
 				} else {
-					$patternPath     = $patternType."/".$pattern;                     // 00-atoms/00-colors
-					$patternPathDash = str_replace("/","-",$patternPath);             // 00-atoms-00-colors (file path)
+					$patternPath     = $patternType.$dirSep.$pattern;                 // 00-atoms/00-colors
+					$patternPathDash = str_replace($dirSep,"-",$patternPath);         // 00-atoms-00-colors (file path)
 				}
 				
 				// track to see if this pattern should get rendered
@@ -608,9 +609,9 @@ class Builder {
 				if ($patternFull[0] != "_") {
 					
 					// set-up the names                            
-					$patternDash    = $this->getPatternName($pattern,false);             // colors
-					$patternClean   = str_replace("-"," ",$patternDash);                 // colors (dashes replaced with spaces)
-					$patternPartial = $patternTypeDash."-".$patternDash;                 // atoms-colors
+					$patternDash    = $this->getPatternName($pattern,false);                  // colors
+					$patternClean   = str_replace("-"," ",$patternDash);                      // colors (dashes replaced with spaces)
+					$patternPartial = $patternTypeDash."-".$patternDash;                      // atoms-colors
 					
 					// set-up the info for the nav
 					$patternInfo = array("patternPath"    => $patternPathDash."/".$patternPathDash.".html",
@@ -670,11 +671,11 @@ class Builder {
 					
 					// add to patternPaths
 					if ($patternSubtypeSet) {
-						$patternPath     = $patternType."/".$patternSubtype."/".$pattern;            // 00-atoms/01-global/00-colors
-						$patternPathDash = str_replace("/","-",$patternPath);                        // 00-atoms-01-global-00-colors (file path)
+						$patternPath     = $patternType.$dirSep.$patternSubtype.$dirSep.$pattern;            // 00-atoms/01-global/00-colors
+						$patternPathDash = str_replace($dirSep,"-",$patternPath);                        // 00-atoms-01-global-00-colors (file path)
 					} else {
-						$patternPath     = $patternType."/".$pattern;                                // 00-atoms/00-colors
-						$patternPathDash = str_replace("/","-",$patternPath);                        // 00-atoms-00-colors (file path)
+						$patternPath     = $patternType.$dirSep.$pattern;                                // 00-atoms/00-colors
+						$patternPathDash = str_replace($dirSep,"-",$patternPath);                        // 00-atoms-00-colors (file path)
 					}
 					
 					// add all patterns to patternPaths
