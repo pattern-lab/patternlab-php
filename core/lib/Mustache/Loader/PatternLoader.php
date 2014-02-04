@@ -144,6 +144,7 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
         
         $fileName = "";
         $dirSep   = DIRECTORY_SEPARATOR;
+        
         // test to see what kind of path was supplied
         $posDash  = strpos($name,"-");
         $posSlash = strpos($name,$dirSep);
