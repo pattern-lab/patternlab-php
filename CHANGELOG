@@ -1,5 +1,11 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.7.1
+ - FIX: annotation event should only fire when overlay is active
+ - FIX: styleguide should properly sort patterns
+ - THX: thanks to @jplhomer for the heads up on the annotations issue
+ - THX: thanks to @tylersticka for the heads up on the styleguide issue
+
 PL-v0.7.0
  - ADD: auto-reload server can be started directly from the watcher
  - ADD: pattern parameter support

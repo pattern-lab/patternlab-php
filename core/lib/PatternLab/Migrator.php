@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Migrator Class - v0.7.0
+ * Pattern Lab Migrator Class - v0.7.1
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license

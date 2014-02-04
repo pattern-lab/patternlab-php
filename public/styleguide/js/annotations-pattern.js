@@ -37,15 +37,19 @@ var annotationsPattern = {
 						els[i].onclick = (function(item) {
 							return function(e) {
 								
-								e.preventDefault();
-								e.stopPropagation();
-								var obj = {};
-								
-								// if an element was clicked on while the overlay was already on swap it
-								obj = { "displaynumber": item.displaynumber, "el": item.el, "title": item.title, "comment": item.comment };
-								
-								var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-								parent.postMessage(obj,targetOrigin);
+								if (annotationsPattern.commentsOverlayActive) {
+									
+									e.preventDefault();
+									e.stopPropagation();
+									var obj = {};
+									
+									// if an element was clicked on while the overlay was already on swap it
+									obj = { "displaynumber": item.displaynumber, "el": item.el, "title": item.title, "comment": item.comment };
+									
+									var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+									parent.postMessage(obj,targetOrigin);
+									
+								}
 								
 							}
 						})(item);
