@@ -1,5 +1,9 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.7.2
+ - FIX: proper support for Windows with the changes that happened in v0.7.0
+ - THX: thanks to @chriskevin and @MattKohnen for reporting the issue
+
 PL-v0.7.1
  - FIX: annotation event should only fire when overlay is active
  - FIX: styleguide should properly sort patterns
