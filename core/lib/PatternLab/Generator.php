@@ -56,7 +56,8 @@ class Generator extends Builder {
 		
 		// gather all of the various pattern info
 		$this->gatherPatternInfo();
-		
+
+
 		// clean the public directory to remove old files
 		if ($this->cleanPublic == "true") {
 			$this->cleanPublic();
