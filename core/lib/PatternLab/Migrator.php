@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Migrator Class - v0.7.1
+ * Pattern Lab Migrator Class - v0.7.2
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -35,10 +35,11 @@ class Migrator {
 			
 			if (!$migration->isDot() && $migration->isFile() && ($filename[0] != "_")) {
 				
+				$basePath        = __DIR__."/../../../";
 				$migrationData   = json_decode(file_get_contents($migration->getPathname()));
-				$sourcePath      = __DIR__."/../../../".$migrationData->sourcePath;
-				$destinationPath = __DIR__."/../../../".$migrationData->destinationPath;
 				$checkType       = $migrationData->checkType;
+				$sourcePath      = ($checkType == "fileExists") ? $basePath.$migrationData->sourcePath : $basePath.$migrationData->sourcePath.DIRECTORY_SEPARATOR;
+				$destinationPath = ($checkType == "fileExists") ? $basePath.$migrationData->destinationPath : $basePath.$migrationData->destinationPath.DIRECTORY_SEPARATOR;
 				
 				if ($checkType == "dirEmpty") {
 					
@@ -118,7 +119,7 @@ class Migrator {
 				$fileName = str_replace($sourcePath,"",$object->getPathname());
 				
 				// check to see if it's a new directory
-				if ($object->isDir() && !is_dir($destinationPath.$fileName)) {
+				if ($object->isDir() && !is_dir($destinationPath.$fileName)) {	
 					mkdir($destinationPath.$fileName);
 				} else if ($object->isFile()) {
 					copy($sourcePath.$fileName,$destinationPath.$fileName);

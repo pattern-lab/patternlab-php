@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Configurer Class - v0.7.1
+ * Pattern Lab Configurer Class - v0.7.2
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
