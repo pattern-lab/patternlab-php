@@ -157,15 +157,16 @@ class Builder {
 		}
 		
 		$pattern = $this->mpl->render($f,$d);
+		$escaped = htmlentities($pattern);
 		
 		if ($this->addPatternHF) {
 			$patternHead = $this->mv->render($this->patternHead,$d);
 			$patternFoot = $this->mv->render($this->patternFoot,$d);
-			$patternFoot = str_replace("{% patternHTML %}",htmlentities($pattern),$patternFoot);
+			//$patternFoot = str_replace("{% patternHTML %}",,$patternFoot);
 			$pattern     = $patternHead.$pattern.$patternFoot;
 		}
 		
-		return $pattern;
+		return array($pattern,$escaped);
 		
 	}
 	
@@ -246,16 +247,18 @@ class Builder {
 				// make sure this pattern should be rendered
 				if ($pathInfo["render"]) {
 					
-					$r = $this->generatePatternFile($pathInfo["patternSrcPath"].".mustache",$pathInfo["patternPartial"]);
+					list($r,$e) = $this->generatePatternFile($pathInfo["patternSrcPath"].".mustache",$pathInfo["patternPartial"]);
+					$m = file_get_contents(__DIR__.$this->sp.$pathInfo["patternSrcPath"].".mustache")
 					
 					// if the pattern directory doesn't exist create it
 					$path = $pathInfo["patternDestPath"];
 					if (!is_dir(__DIR__.$this->pp.$path)) {
 						mkdir(__DIR__.$this->pp.$path);
-						file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$r);
-					} else {
-						file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$r);
 					}
+					
+					file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$r);
+					file_put_contents(__DIR__.$this->pp.$path."/".$path.".escaped.html",$e);
+					file_put_contents(__DIR__.$this->pp.$path."/".$path.".mustache",$m);
 					
 				}
 				
@@ -274,7 +277,7 @@ class Builder {
 	*/
 	private function generatePatternFile($f,$p) {
 		
-		$rf = $this->renderPattern($f,$p);
+		list($rf,$e) = $this->renderPattern($f,$p);
 		
 		// the footer isn't rendered as mustache but we have some variables there any way. find & replace.
 		$rf = str_replace("{% patternPartial %}",$p,$rf);
@@ -285,7 +288,7 @@ class Builder {
 			$rf = str_replace("{% patternCSS %}",$this->patternCSS[$p],$rf);
 		}
 		
-		return $rf;
+		return array($rf,$e);
 		
 	}
 	
