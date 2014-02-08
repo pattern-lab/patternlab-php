@@ -252,3 +252,14 @@ $('#sg-viewport').load(function() {
 		document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "on" },targetOrigin);
 	}
 });
+
+jwerty.key('cmd+a', function (e) {
+	if (codeViewer.codeActive) {
+		selection = window.getSelection();        
+		range = document.createRange();
+		range.selectNodeContents(document.getElementById("sg-code-fill"));
+		selection.removeAllRanges();
+		selection.addRange(range);
+		return false;
+	}
+});
