@@ -56,7 +56,7 @@ var annotationsViewer = {
 	commentContainerInit: function() {
 		
 		if (document.getElementById("sg-annotation-container") === null) {
-			$('<div id="sg-annotation-container" class="sg-view-container"></div>').html('<a href="#" id="sg-annotation-close-btn" class="sg-view-close-btn">Close</a><div id="sg-comments-container"></div>').appendTo('body').css('bottom',-$(document).outerHeight());
+			$('<div id="sg-annotation-container" class="sg-view-container"></div>').html($("#annotations-template").html()).appendTo('body').css('bottom',-$(document).outerHeight());
 			
 			setTimeout(function(){ $('#sg-annotation-container').addClass('anim-ready'); },50); //Add animation class once container is positioned out of frame
 		}
