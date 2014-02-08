@@ -36,7 +36,7 @@ class Migrator {
 			if (!$migration->isDot() && $migration->isFile() && ($filename[0] != "_")) {
 				
 				$basePath        = __DIR__."/../../../";
-				$migrationData   = json_decode(file_get_contents($migration->getPathname()));
+				$migrationData   = \json_decode(\file_get_contents($migration->getPathname()));
 				$checkType       = $migrationData->checkType;
 				$sourcePath      = ($checkType == "fileExists") ? $basePath.$migrationData->sourcePath : $basePath.$migrationData->sourcePath.DIRECTORY_SEPARATOR;
 				$destinationPath = ($checkType == "fileExists") ? $basePath.$migrationData->destinationPath : $basePath.$migrationData->destinationPath.DIRECTORY_SEPARATOR;
