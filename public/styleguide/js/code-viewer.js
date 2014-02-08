@@ -9,6 +9,10 @@
 var codeViewer = {
 	
 	codeActive:     false,
+	tabActive:        "e",
+	encoded:           "",
+	mustache:          "",
+	css:               "",
 	
 	onReady: function() {
 		
@@ -63,14 +67,90 @@ var codeViewer = {
 			return false;
 		});
 		
+		//make sure the click events are handled
+		$('#sg-code-title-html').click(function() {
+			$('.sg-code-title-active').removeClass('sg-code-title-active');
+			$(this).toggleClass("sg-code-title-active");
+			codeViewer.swapCode("e");
+		});
+		
+		$('#sg-code-title-mustache').click(function() {
+			$('.sg-code-title-active').removeClass('sg-code-title-active');
+			$(this).toggleClass("sg-code-title-active");
+			codeViewer.swapCode("m");
+		});
+		
+		$('#sg-code-title-css').click(function() {
+			$('.sg-code-title-active').removeClass('sg-code-title-active');
+			$(this).toggleClass("sg-code-title-active");
+			codeViewer.swapCode("c");
+		});
+		
+
+		
 	},
 	
 	slideCode: function(pos) {
 		$('#sg-code-container').css('bottom',-pos);
 	},
 	
-	updateCode: function(lineage,lineageR,html,css) {
-			
+	saveEncoded: function() {
+		codeViewer.encoded = this.responseText;
+		if (codeViewer.tabActive == "e") {
+			codeViewer.activateDefaultTab("e",this.responseText);
+		}
+	},
+	
+	saveMustache: function() {
+		codeViewer.mustache = this.responseText;
+		if (codeViewer.tabActive == "m") {
+			codeViewer.activateDefaultTab("m",this.responseText);
+		}
+	},
+	
+	saveCSS: function() {
+		$('#sg-code-title-css').css("display","block");
+		codeViewer.css = this.responseText;
+		if (codeViewer.tabActive == "c") {
+			codeViewer.activateDefaultTab("c",this.responseText);
+		}
+	},
+	
+	swapCode: function(type) {
+		var fill      = "";
+		var className = (type == "c") ? "css" : "markup";
+		$("#sg-code-fill").removeClass().addClass("language-"+className);
+		if (type == "m") {
+			fill = codeViewer.mustache;
+		} else if (type == "e") {
+			fill = codeViewer.encoded;
+		} else if (type == "c") {
+			fill = codeViewer.css;
+		}
+		$("#sg-code-fill").html(fill).text();
+		codeViewer.tabActive = type;
+		Prism.highlightElement(document.getElementById("sg-code-fill"));
+	},
+	
+	activateDefaultTab: function(type,code) {
+		var typeName  = "";
+		var className = (type == "c") ? "css" : "markup";
+		if (type == "m") {
+			typeName = "mustache";
+		} else if (type == "e") {
+			typeName = "html";
+		} else if (type == "c") {
+			typeName = "css";
+		}
+		$('.sg-code-title-active').removeClass('sg-code-title-active');
+		$('#sg-code-title-'+typeName).addClass('sg-code-title-active');
+		$("#sg-code-fill").removeClass().addClass("language-"+className);
+		$("#sg-code-fill").html(code).text();
+		Prism.highlightElement(document.getElementById("sg-code-fill"));
+	},
+	
+	updateCode: function(lineage,lineageR,patternPartial,cssEnabled) {
+		
 		// draw lineage
 		var lineageList = "";
 		$("#sg-code-lineage").css("display","none");
@@ -115,16 +195,23 @@ var codeViewer = {
 			document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
 		});
 		
-		// draw html
-		$("#sg-code-html-fill").html(html).text();
-		Prism.highlightElement(document.getElementById("sg-code-html-fill"));
+		var fileName = urlHandler.getFileName(patternPartial);
 		
-		// draw CSS
-		if (css.indexOf("{% patternCSS %}") === -1) {
-			$("#sg-code-html").addClass("with-css");
-			$("#sg-code-css").css("display","block");
-			$("#sg-code-css-fill").text(css);
-			Prism.highlightElement(document.getElementById("sg-code-css-fill"));
+		var e = new XMLHttpRequest();
+		e.onload = this.saveEncoded;
+		e.open("GET", fileName.replace(/\.html/,".escaped.html") + "?" + (new Date()).getTime(), true);
+		e.send();
+		
+		var m = new XMLHttpRequest();
+		m.onload = this.saveMustache;
+		m.open("GET", fileName.replace(/\.html/,".mustache") + "?" + (new Date()).getTime(), true);
+		m.send();
+		
+		if (cssEnabled) {
+			var c = new XMLHttpRequest();
+			c.onload = this.saveCSS;
+			c.open("GET", fileName.replace(/\.html/,".css") + "?" + (new Date()).getTime(), true);
+			c.send();
 		}
 		
 		codeViewer.slideCode(0);
@@ -145,13 +232,9 @@ var codeViewer = {
 		
 		if (event.data.codeOverlay !== undefined) {
 			if (event.data.codeOverlay === "on") {
-				
-				codeViewer.updateCode(event.data.lineage,event.data.lineageR,event.data.html,event.data.css);
-				
+				codeViewer.updateCode(event.data.lineage,event.data.lineageR,event.data.codePatternPartial,event.data.cssEnabled);
 			} else {
-				
 				codeViewer.slideCode($('#sg-code-container').outerHeight());
-				
 			}
 		}
 		
