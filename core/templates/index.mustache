@@ -66,6 +66,8 @@
 			clear: both;
 		}
 	</style>
+	
+	<!-- the template for the code view slider -->
 	<script type="text/html" id="code-template">
 		<a href="#" id="sg-code-close-btn" class="sg-view-close-btn">Close</a>
 		<div id="sg-code-lineage" style="display: none;">
@@ -89,6 +91,14 @@
 			</div>
 		</div>
 	</script>
+	
+	<!-- the template for the annotations viewer slider -->
+	<script type="text/html" id="annotations-template">
+		<a href="#" id="sg-annotation-close-btn" class="sg-view-close-btn">Close</a>
+		<div id="sg-comments-container"></div>
+	</script>
+	
+	<!-- the mess of javascript that is included to make things work -->
 	<script src="styleguide/js/vendor/prism.js?{{ cacheBuster }}"></script>
 	<script src="styleguide/js/vendor/jwerty.js?{{ cacheBuster }}"></script>
 	<script src="styleguide/js/data-saver.js?{{ cacheBuster }}"></script>
