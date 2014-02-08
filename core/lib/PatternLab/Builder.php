@@ -157,15 +157,15 @@ class Builder {
 		}
 		
 		$pattern = $this->mpl->render($f,$d);
+		$escaped = htmlentities($pattern);
 		
 		if ($this->addPatternHF) {
 			$patternHead = $this->mv->render($this->patternHead,$d);
 			$patternFoot = $this->mv->render($this->patternFoot,$d);
-			$patternFoot = str_replace("{% patternHTML %}",htmlentities($pattern),$patternFoot);
 			$pattern     = $patternHead.$pattern.$patternFoot;
 		}
 		
-		return $pattern;
+		return array($pattern,$escaped);
 		
 	}
 	
@@ -246,16 +246,8 @@ class Builder {
 				// make sure this pattern should be rendered
 				if ($pathInfo["render"]) {
 					
-					$r = $this->generatePatternFile($pathInfo["patternSrcPath"].".mustache",$pathInfo["patternPartial"]);
-					
-					// if the pattern directory doesn't exist create it
-					$path = $pathInfo["patternDestPath"];
-					if (!is_dir(__DIR__.$this->pp.$path)) {
-						mkdir(__DIR__.$this->pp.$path);
-						file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$r);
-					} else {
-						file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$r);
-					}
+					// get the rendered, escaped, and mustache pattern
+					$this->generatePatternFile($pathInfo["patternSrcPath"].".mustache",$pathInfo["patternPartial"],$pathInfo["patternDestPath"]);
 					
 				}
 				
@@ -266,26 +258,40 @@ class Builder {
 	}
 	
 	/**
-	* Generates a pattern with a header & footer
+	* Generates a pattern with a header & footer, the escaped version of a pattern, the msutache template, and the css if appropriate
 	* @param  {String}       the filename of the file to be rendered
 	* @param  {String}       the pattern partial
-	*
-	* @return {String}       the final rendered pattern including the standard header and footer for a pattern
+	* @param  {String}       path where the files need to be written too
 	*/
-	private function generatePatternFile($f,$p) {
+	private function generatePatternFile($f,$p,$path) {
 		
-		$rf = $this->renderPattern($f,$p);
+		// render the pattern and return it as well as the encoded version
+		list($rf,$e) = $this->renderPattern($f,$p);
 		
-		// the footer isn't rendered as mustache but we have some variables there any way. find & replace.
+		// the core footer isn't rendered as mustache but we have some variables there any way. find & replace.
 		$rf = str_replace("{% patternPartial %}",$p,$rf);
 		$rf = str_replace("{% lineage %}",json_encode($this->patternLineages[$p]),$rf);
 		$rf = str_replace("{% lineager %}",json_encode($this->patternLineagesR[$p]),$rf);
 		
-		if ($this->enableCSS && isset($this->patternCSS[$p])) {
-			$rf = str_replace("{% patternCSS %}",$this->patternCSS[$p],$rf);
+		// figure out what to put in the css section
+		$c  = $this->enableCSS && isset($this->patternCSS[$p]) ? "true" : "false";
+		$rf = str_replace("{% cssEnabled %}",$c,$rf);
+		
+		// get the original mustache template
+		$m = htmlentities(file_get_contents(__DIR__.$this->sp.$f));
+		
+		// if the pattern directory doesn't exist create it
+		if (!is_dir(__DIR__.$this->pp.$path)) {
+			mkdir(__DIR__.$this->pp.$path);
 		}
 		
-		return $rf;
+		// write out the various pattern files
+		file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$rf);
+		file_put_contents(__DIR__.$this->pp.$path."/".$path.".escaped.html",$e);
+		file_put_contents(__DIR__.$this->pp.$path."/".$path.".mustache",$m);
+		if ($this->enableCSS && isset($this->patternCSS[$p])) {
+			file_put_contents(__DIR__.$this->pp.$path."/".$path.".css",htmlentities($this->patternCSS[$p]));
+		}
 		
 	}
 	
@@ -799,8 +805,9 @@ class Builder {
 						// add patterns to $this->patternPartials
 						foreach ($patternSubtypeValues["patternSubtypeItems"] as $patternSubtypeItem) {
 							
-							$patternCodeRaw       = $this->renderPattern($patternSubtypeItem["patternSrcPath"],$patternSubtypeItem["patternPartial"]);
-							$patternCodeEncoded   = htmlentities($patternCodeRaw);
+							$patternCode          = $this->renderPattern($patternSubtypeItem["patternSrcPath"],$patternSubtypeItem["patternPartial"]);
+							$patternCodeRaw       = $patternCode[0];
+							$patternCodeEncoded   = $patternCode[1];
 							$patternLineageExists = (count($this->patternLineages[$patternSubtypeItem["patternPartial"]]) > 0) ? true : false;
 							$patternLineages      = $this->patternLineages[$patternSubtypeItem["patternPartial"]];
 							

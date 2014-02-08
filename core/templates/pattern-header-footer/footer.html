@@ -2,11 +2,22 @@
 		(function() {
 			if (self != top) {
 				var cb = '{{ cacheBuster}}';
-				var js = ["styleguide/js/postmessage.js","data/annotations.js","styleguide/js/annotations-pattern.js","styleguide/js/code-pattern.js"]
+				var js = [{"src": "styleguide/js/postmessage.js" }, { "src": "data/annotations.js", "dep": [{ "src": "styleguide/js/annotations-pattern.js" }]},{ "src": "styleguide/js/code-pattern.js"}];
 				var s  = document.getElementById('pl-js-insert-{{ cacheBuster }}'); 
 				for (var i = 0; i < js.length; i++) {
 					var c = document.createElement('script');
-					c.src = '../../'+js[i]+'?'+cb;
+					c.src = '../../'+js[i].src+'?'+cb;
+					if (js[i].dep !== undefined) {
+						c.onload = function(dep) {
+							return function() {
+								for (var k = 0; k < dep.length; k++) {
+									var d = document.createElement('script');
+									d.src = '../../'+dep[k].src+'?'+cb;
+									s.parentNode.insertBefore(d,s);
+								}
+							}
+						}(js[i].dep);
+					}
 					s.parentNode.insertBefore(c,s);
 				}
 			}
