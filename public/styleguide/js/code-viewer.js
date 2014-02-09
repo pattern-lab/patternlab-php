@@ -203,7 +203,6 @@ var codeViewer = {
 			for (var i = 0; i < lineage.length; i++) {
 				lineageList += (i === 0) ? "" : ", ";
 				lineageList += "<a href='"+lineage[i].lineagePath+"' data-patternPartial='"+lineage[i].lineagePattern+"'>"+lineage[i].lineagePattern+"</a>";
-				i++;
 			}
 			$("#sg-code-lineage-fill").html(lineageList);
 		} else {
@@ -224,7 +223,6 @@ var codeViewer = {
 			for (var i = 0; i < lineageR.length; i++) {
 				lineageRList += (i === 0) ? "" : ", ";
 				lineageRList += "<a href='"+lineageR[i].lineagePath+"' data-patternPartial='"+lineageR[i].lineagePattern+"'>"+lineageR[i].lineagePattern+"</a>";
-				i++;
 			}
 			$("#sg-code-lineager-fill").html(lineageRList);
 		} else {
