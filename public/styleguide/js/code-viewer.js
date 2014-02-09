@@ -72,7 +72,7 @@ var codeViewer = {
 	},
 	
 	/**
-	* after clicking the code view link close the panel
+	* add the basic mark-up and events for the code container
 	*/
 	codeContainerInit: function() {
 		
