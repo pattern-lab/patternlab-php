@@ -136,7 +136,9 @@ var urlHandler = {
 			var addressReplacement = (window.location.protocol == "file:") ? null : window.location.protocol+"//"+window.location.host+window.location.pathname.replace("index.html","")+"?p="+pattern;
 			history.pushState(data, null, addressReplacement);
 			document.getElementById("title").innerHTML = "Pattern Lab - "+pattern;
-			document.getElementById("sg-raw").setAttribute("href",urlHandler.getFileName(pattern));
+			if (document.getElementById("sg-raw") != undefined) {
+				document.getElementById("sg-raw").setAttribute("href",urlHandler.getFileName(pattern));
+			}
 		}
 	},
 	
