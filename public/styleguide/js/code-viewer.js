@@ -79,6 +79,7 @@ var codeViewer = {
 		// the bulk of this template is in core/templates/index.mustache
 		if (document.getElementById("sg-code-container") === null) {
 			$('<div id="sg-code-container" class="sg-view-container"></div>').html($("#code-template").html()).appendTo('body').css('bottom',-$(document).outerHeight());
+			setTimeout(function(){ $('#sg-code-container').addClass('anim-ready'); },50); //Add animation class once container is positioned out of frame
 		}
 		
 		// make sure the close button handles the click
@@ -130,7 +131,7 @@ var codeViewer = {
 	},
 	
 	/**
-	* this is supposed to slide the panel in and out but i think a css animation was dropped at some point...
+	* slides the panel
 	*/
 	slideCode: function(pos) {
 		$('#sg-code-container').css('bottom',-pos);
