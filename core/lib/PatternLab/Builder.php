@@ -70,6 +70,15 @@ class Builder {
 				$values = explode(",",$value);
 				array_walk($values,'PatternLab\Builder::trim');
 				$this->$key = $values;
+			} else if ($key == "ishControlsHide") {
+				$this->$key = new \stdClass();
+				if ($value != "") {
+					$values = explode(",",$value);
+					foreach($values as $value2) {
+						$value2 = trim($value2);
+						$this->$key->$value2 = true;
+					}
+				}
 			} else {
 				$this->$key = $value;
 			}
@@ -190,13 +199,14 @@ class Builder {
 		}
 		
 		// render out the main pages and move them to public
-		$this->navItems['autoreloadport'] = $this->autoReloadPort;
-		$this->navItems['pagefollowport'] = $this->pageFollowPort;
-		$this->navItems['patternpaths']   = json_encode($patternPathDests);
-		$this->navItems['viewallpaths']   = json_encode($this->viewAllPaths);
-		$this->navItems['mqs']            = $this->gatherMQs();
-		$this->navItems['ipaddress']      = getHostByName(getHostName());
-		$this->navItems['xiphostname']    = $this->xipHostname;
+		$this->navItems['autoreloadport']  = $this->autoReloadPort;
+		$this->navItems['pagefollowport']  = $this->pageFollowPort;
+		$this->navItems['patternpaths']    = json_encode($patternPathDests);
+		$this->navItems['viewallpaths']    = json_encode($this->viewAllPaths);
+		$this->navItems['mqs']             = $this->gatherMQs();
+		$this->navItems['ipaddress']       = getHostByName(getHostName());
+		$this->navItems['xiphostname']     = $this->xipHostname;
+		$this->navItems['ishControlsHide'] = $this->ishControlsHide;
 		
 		// grab the partials into a data object for the style guide
 		$sd = array("partials" => array());

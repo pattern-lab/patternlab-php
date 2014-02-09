@@ -10,13 +10,14 @@
 						</form><!--end #sg-form-->
 					</div><!--end #sg-current-size-->
 					<ul class="sg-acc-panel sg-size-options">
-						<li class="sg-quarter"><a href="#" id="sg-size-s">S</a></li> 
-						<li class="sg-quarter"><a href="#" id="sg-size-m">M</a></li>
-						<li class="sg-quarter"><a href="#" id="sg-size-l">L</a></li>
-						<li class="sg-half"><a href="#" id="sg-size-full">Full</a></li>
-						<li class="sg-half"><a href="#" id="sg-size-random">Random</a></li>
-						<li class="sg-half"><a href="#" class="mode-link" id="sg-size-disco">Disco</a></li>
-						<li class="sg-half"><a href="#" class="mode-link" id="sg-size-hay">Hay!</a></li>
+						{{^ ishControlsHide.s }}<li class="sg-quarter"><a href="#" id="sg-size-s">S</a></li>{{/ ishControlsHide.s }}
+						{{^ ishControlsHide.m }}<li class="sg-quarter"><a href="#" id="sg-size-m">M</a></li>{{/ ishControlsHide.m }}
+						{{^ ishControlsHide.l }}<li class="sg-quarter"><a href="#" id="sg-size-l">L</a></li>{{/ ishControlsHide.l }}
+						{{^ ishControlsHide.full }}<li class="sg-half"><a href="#" id="sg-size-full">Full</a></li>{{/ ishControlsHide.full }}
+						{{^ ishControlsHide.random }}<li class="sg-half"><a href="#" id="sg-size-random">Random</a></li>{{/ ishControlsHide.random }}
+						{{^ ishControlsHide.disco }}<li class="sg-half"><a href="#" class="mode-link" id="sg-size-disco">Disco</a></li>{{/ ishControlsHide.disco }}
+						{{^ ishControlsHide.hay }}<li class="sg-half"><a href="#" class="mode-link" id="sg-size-hay">Hay!</a></li>{{/ ishControlsHide.hay }}
+						{{^ ishControlsHide.mqs }}
 						<li class="sg-half">
 							<a href="#" class="mode-link sg-acc-handle" id="sg-size-mq" title="Media query values found in stylesheet">MQ</a>
 							<ul class="sg-acc-panel sg-right" id="sg-mq">
@@ -25,24 +26,29 @@
 								{{/ mqs }}
 							</ul>
 						</li>
+						{{/ ishControlsHide.mqs }}
 					</ul>
 				</li>
+				{{^ ishControlsHide.views-all }}
 				<li class="sg-view">
 					<a href="#" class="sg-acc-handle sg-control-trigger sg-icon icon-eye" id="sg-t-toggle"><span class="is-vishidden">View</span></a>
 					<ul class="sg-view sg-acc-panel sg-right sg-checklist" id="sg-view">
-						<li><a href="#" class="sg-checkbox" id="sg-t-annotations">Annotations</a></li>
-						<li><a href="#" class="sg-checkbox" id="sg-t-code">Code</a></li>
-						<li><a href="#" target="_blank" id="sg-raw">Open in New Window</a></li>
+						{{^ ishControlsHide.views-annotations }}<li><a href="#" class="sg-checkbox" id="sg-t-annotations">Annotations</a></li>{{/ ishControlsHide.views-annotations }}
+						{{^ ishControlsHide.views-code }}<li><a href="#" class="sg-checkbox" id="sg-t-code">Code</a></li>{{/ ishControlsHide.views-code }}
+						{{^ ishControlsHide.views-new }}<li><a href="#" target="_blank" id="sg-raw">Open in New Window</a></li>{{/ ishControlsHide.views-new }}
 					</ul>
 				</li>
+				{{/ ishControlsHide.views-all }}
+				{{^ ishControlsHide.tools-all }}
 				<li class="sg-tools">
 					<a href="#" class="sg-acc-handle sg-tools-toggle sg-icon icon-cog" id="sg-tools-toggle"><span class="is-vishidden">Tools</span></a>
 					<ul class="sg-acc-panel sg-right sg-checklist">
-						<li><a href="#" id="navSyncButton" class="sg-checkbox sg-page-follow" data-state="off">Page Follow</a></li>
-						<li><a href="#" id="contentSyncButton" class="sg-checkbox sg-auto-reload" data-state="off">Auto-reload</a></li>
-						<li><a href="http://pattern-lab.info/docs/" target="_blank">Pattern Lab Documentation</a>
+						{{^ ishControlsHide.tools-follow }}<li><a href="#" id="navSyncButton" class="sg-checkbox sg-page-follow" data-state="off">Page Follow</a></li>{{/ ishControlsHide.tools-follow }}
+						{{^ ishControlsHide.tools-reload }}<li><a href="#" id="contentSyncButton" class="sg-checkbox sg-auto-reload" data-state="off">Auto-reload</a></li>{{/ ishControlsHide.tools-reload }}
+						{{^ ishControlsHide.tools-docs }}<li><a href="http://pattern-lab.info/docs/" target="_blank">Pattern Lab Documentation</a>{{/ ishControlsHide.tools-docs }}
 					</ul>
 				</li>
+				{{/ ishControlsHide.tools-all }}
 			</ul>
 			
 		</div>

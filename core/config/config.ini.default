@@ -20,3 +20,6 @@ cleanPublic = "true"
 
 // pattern lab's xip host if you have it configured
 xipHostname = "http://patternlab.*.xip.io"
+
+// which, if any, controls to hide in the nav
+ishControlsHide = ""
