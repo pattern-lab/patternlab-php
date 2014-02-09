@@ -8,44 +8,55 @@
 
 var annotationsViewer = {
 	
+	// set-up default sections
 	commentsActive: false,
+	targetOrigin: (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
 	
+	/**
+	* add the onclick handler to the annotations link in the main nav
+	*/
 	onReady: function() {
 		
+		// not sure this is used anymore...
 		$('body').addClass('comments-ready');
 		$('#sg-t-annotations').click(function(e) {
 			
 			e.preventDefault();
 			
-			// make sure the code view overlay is off
+			// make sure the code view overlay is off before showing the annotations view
 			$('#sg-t-code').removeClass('active');
 			codeViewer.codeActive = false;
-			var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "off" },targetOrigin);
+			document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "off" },annotationsViewer.targetOrigin);
 			codeViewer.slideCode(999);
 			
+			// remove the class from the "eye" nav item
 			$('#sg-t-toggle').removeClass('active');
-				
+			
+			// turn the annotations section on and off
 			annotationsViewer.toggleComments();
-			annotationsViewer.commentContainerInit();
 			
 		});
+		
+		// initialize the annotations viewer
+		annotationsViewer.commentContainerInit();
+		
 	},
 	
+	/**
+	* decide on if the annotations panel should be open or closed
+	*/
 	toggleComments: function() {
-		
-		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
 		
 		if (!annotationsViewer.commentsActive) {
 			
 			annotationsViewer.commentsActive = true;
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "on" },targetOrigin);
+			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "on" },annotationsViewer.targetOrigin);
 			$('#sg-t-annotations').addClass('active');
 			
 		} else {
 			
 			annotationsViewer.commentsActive = false;
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },targetOrigin);
+			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },annotationsViewer.targetOrigin);
 			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			$('#sg-t-annotations').removeClass('active');
 			
@@ -53,37 +64,49 @@ var annotationsViewer = {
 		
 	},
 	
+	/**
+	* add the basic mark-up and events for the annotations container
+	*/
 	commentContainerInit: function() {
 		
+		// the bulk of this template is in core/templates/index.mustache
 		if (document.getElementById("sg-annotation-container") === null) {
 			$('<div id="sg-annotation-container" class="sg-view-container"></div>').html($("#annotations-template").html()).appendTo('body').css('bottom',-$(document).outerHeight());
-			
 			setTimeout(function(){ $('#sg-annotation-container').addClass('anim-ready'); },50); //Add animation class once container is positioned out of frame
 		}
 		
-		//Close Annotation View Button
+		// make sure the close button handles the click
 		$('body').delegate('#sg-annotation-close-btn','click',function() {
 			annotationsViewer.commentsActive = false;
 			$('#sg-t-annotations').removeClass('active');
 			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
-			var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },targetOrigin);
+			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },annotationsViewer.targetOrigin);
 			return false;
 		});
+		
 	},
 	
+	/**
+	* slides the panel
+	*/
 	slideComment: function(pos) {
 		$('#sg-annotation-container').css('bottom',-pos);
 	},
 	
+	/**
+	* when turning on or switching between patterns with annotations view on make sure we get
+	* the annotations from from the pattern via post message
+	*/
 	updateComments: function(comments) {
 		
 		var commentsContainer = document.getElementById("sg-comments-container");
 		
+		// clear out the comments container
 		if (commentsContainer.innerHTML !== "") {
 			commentsContainer.innerHTML = "";
 		}
 		
+		// see how many comments this pattern might have. if more than zero write them out. if not alert the user to the fact their aren't any
 		var count = Object.keys(comments).length;
 		if (count > 0) {
 			
@@ -133,7 +156,7 @@ var annotationsViewer = {
 			
 		}
 		
-		
+		// slide the comment section into view
 		annotationsViewer.slideComment(0);
 		
 	},
@@ -167,10 +190,7 @@ var annotationsViewer = {
 	
 };
 
-$(document).ready(function() {
-	annotationsViewer.onReady();
-});
-
+$(document).ready(function() { annotationsViewer.onReady(); });
 window.addEventListener("message", annotationsViewer.receiveIframeMessage, false);
 
 // make sure if a new pattern or view-all is loaded that comments are turned on as appropriate
