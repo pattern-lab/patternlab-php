@@ -419,7 +419,9 @@
 		history.replaceState({ "pattern": patternName }, null, null);
 	}
 	
-	document.getElementById("sg-raw").setAttribute("href",urlHandler.getFileName(patternName));
+	if (document.getElementById("sg-raw") != undefined) {
+		document.getElementById("sg-raw").setAttribute("href",urlHandler.getFileName(patternName));
+	}
 	
 	urlHandler.skipBack = true;
 	document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
