@@ -89,7 +89,8 @@ class Mustache_Loader_PatternLoader implements Mustache_Loader
             }
         }
         
-        return $this->templates[$name];
+        return (isset($this->templates[$name])) ? $this->templates[$name] : false;
+        
     }
 
     /**
