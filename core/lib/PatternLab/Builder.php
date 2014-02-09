@@ -428,7 +428,7 @@ class Builder {
 				if (count($foundLineages) > 0) {
 					foreach ($foundLineages as $lineage) {
 						$patternBits  = explode("-",$lineage,2); // BUG: this is making an assumption
-						if (isset($this->patternPaths[$patternBits[0]][$patternBits[1]])) {
+						if ((count($patternBits) == 2) && isset($this->patternPaths[$patternBits[0]][$patternBits[1]])) {
 							$path = $this->patternPaths[$patternBits[0]][$patternBits[1]]["patternDestPath"];
 							$patternLineage[] = array("lineagePattern" => $lineage, "lineagePath" => "../../patterns/".$path."/".$path.".html");
 						} else {
