@@ -4,12 +4,12 @@
 		{{# patternTypeItems }}
 			<li class="sg-nav-{{ patternSubtypeLC }}"><a class="sg-acc-handle">{{ patternSubtypeUC }}</a><ol class="sg-acc-panel">
 			{{# patternSubtypeItems }}
-				<li><a href="patterns/{{ patternPath }}" class="sg-pop" data-patternpartial="{{ patternPartial }}">{{ patternName }}</a></li>
+				<li {{# patternState }}class="{{ . }}"{{/ patternState }}><a href="patterns/{{ patternPath }}" class="sg-pop" data-patternpartial="{{ patternPartial }}">{{ patternName }}</a></li>
 			{{/ patternSubtypeItems }}
 			</ol></li>
 		{{/ patternTypeItems }}
 		{{# patternItems }}
-			<li><a href="patterns/{{ patternPath }}" class="sg-pop" data-patternpartial="{{ patternPartial }}">{{ patternName }}</a></li>
+			<li{{# patternState }}class="{{ . }}"{{/ patternState }}><a href="patterns/{{ patternPath }}" class="sg-pop" data-patternpartial="{{ patternPartial }}">{{ patternName }}</a></li>
 		{{/ patternItems }}
 		</ol></li>
 	{{/ patternTypes }}

@@ -37,6 +37,7 @@ class Builder {
 	protected $patternLineages;   // the list of patterns that make up a particular pattern
 	protected $patternLineagesR;  // the list of patterns where a particular pattern is used
 	protected $patternTypesRegex; // the simple regex for the pattern types. used in getPath()
+	protected $patternStates;     // the states from the config to be used in the state comparison
 	protected $navItems;          // the items for the nav. includes view all links
 	protected $viewAllPaths;      // the paths to the view all pages
 	protected $enableCSS;         // decide if we'll enable CSS parsing
@@ -66,7 +67,7 @@ class Builder {
 		foreach ($config as $key => $value) {
 			
 			// if the variables are array-like make sure the properties are validated/trimmed/lowercased before saving
-			if (($key == "ie") || ($key == "id")) {
+			if (($key == "ie") || ($key == "id") || ($key == "patternStates")) {
 				$values = explode(",",$value);
 				array_walk($values,'PatternLab\Builder::trim');
 				$this->$key = $values;
@@ -437,10 +438,11 @@ class Builder {
 				
 				if (count($foundLineages) > 0) {
 					foreach ($foundLineages as $lineage) {
-						$patternBits  = explode("-",$lineage,2); // BUG: this is making an assumption
+						$patternBits = $this->getPatternInfo($lineage);
 						if ((count($patternBits) == 2) && isset($this->patternPaths[$patternBits[0]][$patternBits[1]])) {
 							$path = $this->patternPaths[$patternBits[0]][$patternBits[1]]["patternDestPath"];
-							$patternLineage[] = array("lineagePattern" => $lineage, "lineagePath" => "../../patterns/".$path."/".$path.".html");
+							$patternLineage[] = array("lineagePattern" => $lineage,
+													  "lineagePath"    => "../../patterns/".$path."/".$path.".html");
 						} else {
 							if (strpos($lineage, '/') === false) {
 								print "You may have a typo in ".$patternInfo["patternSrcPath"].". {{> ".$lineage." }} is not a valid pattern.\n";
@@ -463,17 +465,28 @@ class Builder {
 			foreach ($this->patternLineages as $haystackPartial => $haystackLineages) {
 				
 				foreach ($haystackLineages as $haystackLineage) {
+					
 					if ($haystackLineage["lineagePattern"] == $needlePartial) {
-						$patternBits  = explode("-",$haystackPartial,2); // BUG: this is making an assumption
-						if (isset($this->patternPaths[$patternBits[0]][$patternBits[1]])) {
-							$path = $this->patternPaths[$patternBits[0]][$patternBits[1]]["patternDestPath"];
-							$patternLineageR[] = array("lineagePattern" => $haystackPartial, "lineagePath" => "../../patterns/".$path."/".$path.".html");
-						} else {
-							if (strpos($lineage, '/') === false) {
-								print "You may have a typo in ".$patternInfo["patternSrcPath"].". {{> ".$lineage." }} is not a valid pattern.\n";
+						
+						$foundAlready = false;
+						foreach ($patternLineageR as $patternCheck) {
+							if ($patternCheck["lineagePattern"] == $haystackPartial) {
+								$foundAlready = true;
+								break;
 							}
 						}
+						
+						if (!$foundAlready) {
+							$patternBits = $this->getPatternInfo($haystackPartial);
+							if (isset($this->patternPaths[$patternBits[0]][$patternBits[1]])) {
+								$path = $this->patternPaths[$patternBits[0]][$patternBits[1]]["patternDestPath"];
+								$patternLineageR[] = array("lineagePattern" => $haystackPartial, 
+														   "lineagePath"    => "../../patterns/".$path."/".$path.".html");
+							}
+						}
+						
 					}
+					
 				}
 				
 			}
@@ -604,8 +617,16 @@ class Builder {
 				 *    Mustache patterns
 				 *************************************/
 				
-				$patternFull = $object->getFilename();                                        // 00-colors.mustache
-				$pattern     = str_replace(".mustache","",$patternFull);                      // 00-colors
+				$patternFull  = $object->getFilename();                                        // 00-colors.mustache
+				$pattern      = str_replace(".mustache","",$patternFull);                      // 00-colors
+				
+				// check for pattern state
+				$patternState = "";
+				if (strpos($pattern,"@") !== false) {
+					$patternBits  = explode("@",$pattern,2);
+					$pattern      = $patternBits[0];
+					$patternState = $patternBits[1];
+				}
 				
 				if ($patternSubtypeSet) {
 					$patternPath     = $patternType.$dirSep.$patternSubtype.$dirSep.$pattern; // 00-atoms/01-global/00-colors
@@ -630,6 +651,7 @@ class Builder {
 					$patternInfo = array("patternPath"    => $patternPathDash."/".$patternPathDash.".html",
 										 "patternSrcPath" => str_replace(__DIR__.$this->sp,"",$object->getPathname()),
 										 "patternName"    => ucwords($patternClean),
+										 "patternState"   => $patternState,
 										 "patternPartial" => $patternPartial);
 					
 					// add to the nav
@@ -654,12 +676,17 @@ class Builder {
 				}
 				
 				// add all patterns to patternPaths
-				$patternSrcPath  = $patternPath;
+				$patternSrcPath  = str_replace(__DIR__.$this->sp,"",str_replace(".mustache","",$object->getPathname()));
 				$patternDestPath = $patternPathDash;
-				$this->patternPaths[$patternTypeDash][$patternDash] = array("patternSrcPath" => $patternSrcPath, "patternDestPath" => $patternDestPath, "patternPartial" => $patternPartial, "render" => $render);
+				$this->patternPaths[$patternTypeDash][$patternDash] = array("patternSrcPath"  => $patternSrcPath,
+																			"patternDestPath" => $patternDestPath,
+																			"patternPartial"  => $patternPartial,
+																			"patternState"    => $patternState,
+																			"patternType"     => $patternTypeDash,
+																			"render"          => $render);
 				
 			} else if ($object->isFile() && ($object->getExtension() == "json") && (strpos($object->getFilename(),"~") !== false)) {
-					
+				
 				/*************************************
 				 * This section is for:
 				 *    JSON psuedo-patterns
@@ -682,6 +709,14 @@ class Builder {
 					$patternClean    = str_replace("-"," ",$patternDash);                            // homepage emergency
 					$patternPartial  = $patternTypeDash."-".$patternDash;                            // pages-homepage-emergency
 					
+					// check for pattern state
+					$patternState = "";
+					if (strpos($pattern,"@") !== false) {
+						$patternBits  = explode("@",$pattern,2);
+						$pattern      = $patternBits[0];
+						$patternState = $patternBits[1];
+					}
+					
 					// add to patternPaths
 					if ($patternSubtypeSet) {
 						$patternPath     = $patternType.$dirSep.$patternSubtype.$dirSep.$pattern;    // 00-atoms/01-global/00-colors
@@ -694,12 +729,18 @@ class Builder {
 					// add all patterns to patternPaths
 					$patternSrcPath  = str_replace(__DIR__.$this->sp,"",preg_replace("/\~(.*)\.json/","",$object->getPathname()));
 					$patternDestPath = $patternPathDash;
-					$this->patternPaths[$patternTypeDash][$patternDash] = array("patternSrcPath" => $patternSrcPath, "patternDestPath" => $patternDestPath, "patternPartial" => $patternPartial, "render" => true);
+					$this->patternPaths[$patternTypeDash][$patternDash] = array("patternSrcPath"  => $patternSrcPath,
+																				"patternDestPath" => $patternDestPath,
+																				"patternPartial"  => $patternPartial,
+																				"patternState"    => $patternState,
+																				"patternType"     => $patternTypeDash,
+																				"render"          => true);
 					
 					// set-up the info for the nav
 					$patternInfo = array("patternPath"    => $patternPathDash."/".$patternPathDash.".html",
 										 "patternSrcPath" => str_replace(__DIR__.$this->sp,"",preg_replace("/\~(.*)\.json/",".mustache",$object->getPathname())),
 										 "patternName"    => ucwords($patternClean),
+										 "patternState"   => $patternState,
 										 "patternPartial" => $patternPartial);
 					
 					// add to the nav
@@ -772,6 +813,109 @@ class Builder {
 		
 		// get all of the lineages
 		$this->gatherLineages();
+		
+		// check on the states of the patterns
+		foreach($this->patternPaths as $patternTypeS => $patterns) {
+			
+			foreach ($patterns as $pattern => $patternInfo) {
+				
+				// make sure the pattern has a given state
+				if ($patternInfo["patternState"] != "") {
+					
+					// set-up some defaults
+					$patternState = array_search($patternInfo["patternState"], $this->patternStates);
+					$patternType  = $patternInfo["patternType"];
+					
+					// iterate over each of the reverse lineages for a given pattern to update their state
+					foreach ($this->patternLineagesR[$patternTypeS."-".$pattern] as $patternCheckInfo) {
+						$patternBits = $this->getPatternInfo($patternCheckInfo["lineagePattern"]);
+						if ($this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"] == "") {
+							// change pattern State on nav Items too
+							$this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"] = $patternInfo["patternState"];
+						} else {
+							$patternCheckState = array_search($this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"], $this->patternStates);
+							if ($patternState < $patternCheckState) {
+								// change patternstate on nav items
+								$this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"] = $patternInfo["patternState"];
+							}
+						}
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		// check on the states of the patterns
+		foreach($this->patternPaths as $patternTypeS => $patterns) {
+			
+			foreach ($patterns as $pattern => $patternInfo) {
+				
+				// make sure the pattern has a given state
+				if ($patternInfo["patternState"] != "") {
+					
+					// set-up some defaults
+					$patternState = array_search($patternInfo["patternState"], $this->patternStates);
+					$patternType  = $patternInfo["patternType"];
+					
+					// iterate over each of the reverse lineages for a given pattern to update their state
+					foreach ($this->patternLineagesR[$patternTypeS."-".$pattern] as $patternCheckInfo) {
+						$patternBits = $this->getPatternInfo($patternCheckInfo["lineagePattern"]);
+						if ($this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"] == "") {
+							// change pattern State on nav Items too
+							$this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"] = $patternInfo["patternState"];
+						} else {
+							$patternCheckState = array_search($this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"], $this->patternStates);
+							if ($patternState < $patternCheckState) {
+								// change patternstate on nav items
+								$this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"] = $patternInfo["patternState"];
+							}
+						}
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		// run through the nav items and generate pattern partials and the view all pages
+		foreach ($this->navItems["patternTypes"] as $patternTypeKey => $patternTypeValues) {
+			
+			$patternType     = $patternTypeValues["patternType"];
+			$patternTypeDash = $patternTypeValues["patternTypeDash"];
+			
+			// if this has a second level of patterns check them out (means we don't process pages & templates)
+			if (isset($patternTypeValues["patternTypeItems"])) {
+				
+				foreach ($patternTypeValues["patternTypeItems"] as $patternSubtypeKey => $patternSubtypeValues) {
+						
+						// add patterns to $this->patternPartials
+						foreach ($patternSubtypeValues["patternSubtypeItems"] as $patternSubtypeItem) {
+							
+							if ($patternSubtypeItem["patternState"] != "") {
+								$this->setPatternState($)
+						
+							
+						}
+						
+					}
+					
+				}
+				
+			} else {
+				
+				foreach ($patternTypeValues["patternItems"] as $patternSubtypeKey => $patternSubtypeItem) {
+					
+					$patternSubtypeItem["patternState"];
+					
+				}
+				
+			}
+			
+		}
+		
 		
 		// make sure $this->mpl is refreshed
 		$this->loadMustachePatternLoaderInstance();
@@ -952,6 +1096,33 @@ class Builder {
 	}
 	
 	/**
+	* Helper function to return the parts of a partial name
+	* @param  {String}       the name of the partial
+	*
+	* @return {Array}        the pattern type and the name of the pattern
+	*/
+	private function getPatternInfo($name) {
+		
+		$patternBits = explode("-",$name);
+		
+		$i = 1;
+		$k = 2;
+		$c = count($patternBits);
+		$patternType = $patternBits[0];
+		while (!isset($this->patternPaths[$patternType]) && ($i < $c)) {
+			$patternType .= "-".$patternBits[$i];
+			$i++;
+			$k++;
+		}
+		
+		$patternBits = explode("-",$name,$k);
+		$pattern = $patternBits[count($patternBits)-1];
+		
+		return array($patternType, $pattern);
+		
+	}
+
+	/**
 	* Get the name for a given pattern sans any possible digits used for reordering
 	* @param  {String}       the pattern based on the filesystem name
 	* @param  {Boolean}      whether or not to strip slashes from the pattern name
@@ -959,9 +1130,34 @@ class Builder {
 	* @return {String}       a lower-cased version of the pattern name
 	*/
 	protected function getPatternName($pattern, $clean = true) {
-		$patternBits  = explode("-",$pattern,2);
+		$patternBits = explode("-",$pattern,2);
 		$patternName = (((int)$patternBits[0] != 0) || ($patternBits[0] == '00')) ? $patternBits[1] : $pattern;
 		return ($clean) ? (str_replace("-"," ",$patternName)) : $patternName;
+	}
+	
+	protected function setPatternState($patternState, $patternPartial, $patternTypeI, $patternSubTypeI = 0) {
+		
+		// set-up some defaults
+		$patternState = array_search($patternState, $this->patternStates);
+		
+		// iterate over each of the reverse lineages for a given pattern to update their state
+		foreach ($this->patternLineagesR[$patternPartial] as $patternCheckInfo) {
+			$patternBits = $this->getPatternInfo($patternCheckInfo["lineagePattern"]);
+			if ($depth == 2) {
+				
+			}
+			if ($this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"] == "") {
+				// change pattern State on nav Items too
+				$this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"] = $patternState;
+			} else {
+				$patternCheckState = array_search($this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"], $this->patternStates);
+				if ($patternState < $patternCheckState) {
+					$this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"] = $patternState;
+				}
+			}
+		}
+		
+		return $patternStateFinal;
 	}
 	
 	/**
