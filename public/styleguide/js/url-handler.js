@@ -127,7 +127,9 @@ var urlHandler = {
 	pushPattern: function (pattern, givenPath) {
 		var data         = { "pattern": pattern };
 		var fileName     = urlHandler.getFileName(pattern);
-		var expectedPath = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("public/index.html","public/")+fileName;
+		var path         = window.location.pathname;
+		path             = (window.location.protocol === "file") ? path.replace("/public/index.html","public/") : path.replace(/\/index\.html/,"/");
+		var expectedPath = window.location.protocol+"//"+window.location.host+path+fileName;
 		if (givenPath != expectedPath) {
 			// make sure to update the iframe because there was a click
 			document.getElementById("sg-viewport").contentWindow.postMessage( { "path": fileName }, urlHandler.targetOrigin);
