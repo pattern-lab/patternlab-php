@@ -438,7 +438,8 @@
 	$('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
 		e.preventDefault();
 		// update the iframe via the history api handler
-		document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+		var data =
+		document.getElementById("sg-viewport").contentWindow.postMessage( JSON.stringify({ "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }), urlHandler.targetOrigin);
 		closePanels();
 	});
 

@@ -50,32 +50,35 @@ body[0].onclick = function() {
 // watch the iframe source so that it can be sent back to everyone else.
 function receiveIframeMessage(event) {
 	
+	console.log("received message");
 	var path;
 	
+	var data = JSON.parse(event.data);
+	console.log(data.path);
 	// does the origin sending the message match the current host? if not dev/null the request
 	if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 		return;
 	}
 	
 	// see if it got a path to replace
-	if (event.data.path !== undefined) {
+	if (data.path !== undefined) {
 		
 		if (patternPartial !== "") {
 			
 			// handle patterns and the view all page
 			var re = /patterns\/(.*)$/;
-			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace(re,'')+event.data.path+'?'+Date.now();
+			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace(re,'')+data.path+'?'+Date.now();
 			window.location.replace(path);
 			
 		} else {
 			
 			// handle the style guide
-			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("styleguide\/html\/styleguide.html","")+event.data.path+'?'+Date.now();
+			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("styleguide\/html\/styleguide.html","")+data.path+'?'+Date.now();
 			window.location.replace(path);
 			
 		}
 		
-	} else if (event.data.reload !== undefined) {
+	} else if (data.reload !== undefined) {
 		
 		// reload the location if there was a message to do so
 		window.location.reload();
