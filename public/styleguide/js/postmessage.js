@@ -50,11 +50,9 @@ body[0].onclick = function() {
 // watch the iframe source so that it can be sent back to everyone else.
 function receiveIframeMessage(event) {
 	
-	console.log("received message");
-	var path;
-	
+	var path;	
 	var data = JSON.parse(event.data);
-	console.log(data.path);
+	
 	// does the origin sending the message match the current host? if not dev/null the request
 	if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 		return;
@@ -82,6 +80,7 @@ function receiveIframeMessage(event) {
 		
 		// reload the location if there was a message to do so
 		window.location.reload();
+		
 	}
 	
 }

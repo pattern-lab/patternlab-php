@@ -26,7 +26,8 @@ var annotationsViewer = {
 			// make sure the code view overlay is off before showing the annotations view
 			$('#sg-t-code').removeClass('active');
 			codeViewer.codeActive = false;
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "off" },annotationsViewer.targetOrigin);
+			var obj = JSON.stringify({ "codeToggle": "off" });
+			document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
 			codeViewer.slideCode(999);
 			
 			// remove the class from the "eye" nav item
@@ -50,13 +51,15 @@ var annotationsViewer = {
 		if (!annotationsViewer.commentsActive) {
 			
 			annotationsViewer.commentsActive = true;
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "on" },annotationsViewer.targetOrigin);
+			var obj = JSON.stringify({ "commentToggle": "on" });
+			document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
 			$('#sg-t-annotations').addClass('active');
 			
 		} else {
 			
 			annotationsViewer.commentsActive = false;
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },annotationsViewer.targetOrigin);
+			var obj = JSON.stringify({ "commentToggle": "off" });
+			document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
 			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			$('#sg-t-annotations').removeClass('active');
 			
@@ -80,7 +83,8 @@ var annotationsViewer = {
 			annotationsViewer.commentsActive = false;
 			$('#sg-t-annotations').removeClass('active');
 			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },annotationsViewer.targetOrigin);
+			var obj = JSON.stringify({ "commentToggle": "off" });
+			document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
 			return false;
 		});
 		
@@ -168,21 +172,23 @@ var annotationsViewer = {
 	*/
 	receiveIframeMessage: function(event) {
 		
+		var data = JSON.parse(event.data);
+		
 		// does the origin sending the message match the current host? if not dev/null the request
 		if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 			return;
 		}
 		
-		if (event.data.commentOverlay !== undefined) {
-			if (event.data.commentOverlay === "on") {
-				annotationsViewer.updateComments(event.data.comments);
+		if (data.commentOverlay !== undefined) {
+			if (data.commentOverlay === "on") {
+				annotationsViewer.updateComments(data.comments);
 			} else {
 				annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			}
-		} else if (event.data.annotationState !== undefined) {
-			document.getElementById("annotation-state-"+event.data.displayNumber).innerHTML = (event.data.annotationState == true) ? "" : " hidden";
-		} else if (event.data.displaynumber !== undefined) {
-			var top = document.getElementById("annotation-"+event.data.displaynumber).offsetTop;
+		} else if (data.annotationState !== undefined) {
+			document.getElementById("annotation-state-"+data.displayNumber).innerHTML = (data.annotationState == true) ? "" : " hidden";
+		} else if (data.displaynumber !== undefined) {
+			var top = document.getElementById("annotation-"+data.displaynumber).offsetTop;
 			$('#sg-annotation-container').animate({scrollTop: top - 10}, 600);
 		}
 		
@@ -196,8 +202,8 @@ window.addEventListener("message", annotationsViewer.receiveIframeMessage, false
 // make sure if a new pattern or view-all is loaded that comments are turned on as appropriate
 $('#sg-viewport').load(function() {
 	if (annotationsViewer.commentsActive) {
-		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-		document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "on" },targetOrigin);
+		var obj = JSON.stringify({ "commentToggle": "on" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
 	}
 });
 
