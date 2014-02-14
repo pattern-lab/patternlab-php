@@ -466,7 +466,7 @@
 	// based on the great MDN docs at https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
 	function receiveIframeMessage(event) {
 		
-		var data = JSON.parse(event.data);
+		var data = (typeof event.data !== "string") ? event.data : JSON.parse(event.data);
 		
 		// does the origin sending the message match the current host? if not dev/null the request
 		if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {

@@ -44,14 +44,15 @@ if (self != top) {
 var body = document.getElementsByTagName('body');
 body[0].onclick = function() {
 	var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-	parent.postMessage( { "bodyclick": "bodyclick" }, targetOrigin);
+	var obj = JSON.stringify({ "bodyclick": "bodyclick" });
+	parent.postMessage(obj,targetOrigin);
 };
 
 // watch the iframe source so that it can be sent back to everyone else.
 function receiveIframeMessage(event) {
 	
-	var path;	
-	var data = JSON.parse(event.data);
+	var path;
+	var data = (typeof event.data !== "string") ? event.data : JSON.parse(event.data);
 	
 	// does the origin sending the message match the current host? if not dev/null the request
 	if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
