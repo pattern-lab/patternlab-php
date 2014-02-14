@@ -9,12 +9,12 @@
 var codeViewer = {
 	
 	// set up some defaults
-	targetOrigin: (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
 	codeActive:   false,
 	tabActive:    "e",
 	encoded:      "",
 	mustache:     "",
 	css:          "",
+	targetOrigin: (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
 	
 	/**
 	* add the onclick handler to the code link in the main nav
@@ -32,7 +32,8 @@ var codeViewer = {
 			// make sure the annotations overlay is off before showing code view
 			$('#sg-t-annotations').removeClass('active');
 			annotationsViewer.commentsActive = false;
-			document.getElementById('sg-viewport').contentWindow.postMessage({ "commentToggle": "off" },codeViewer.targetOrigin);
+			var obj = JSON.stringify({ "commentToggle": "off" });
+			document.getElementById('sg-viewport').contentWindow.postMessage(obj,codeViewer.targetOrigin);
 			annotationsViewer.slideComment(999);
 			
 			// remove the class from the "eye" nav item
@@ -56,7 +57,8 @@ var codeViewer = {
 	* after clicking the code view link open the panel
 	*/
 	openCode: function() {
-		document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "on" },codeViewer.targetOrigin);
+		var obj = JSON.stringify({ "codeToggle": "on" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,codeViewer.targetOrigin);
 		codeViewer.codeActive = true;
 		$('#sg-t-code').addClass('active');
 	},
@@ -65,7 +67,8 @@ var codeViewer = {
 	* after clicking the code view link close the panel
 	*/
 	closeCode: function() {
-		document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "off" },codeViewer.targetOrigin);
+		var obj = JSON.stringify({ "codeToggle": "off" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,codeViewer.targetOrigin);
 		codeViewer.codeActive = false;
 		codeViewer.slideCode($('#sg-code-container').outerHeight());
 		$('#sg-t-code').removeClass('active');
@@ -214,7 +217,8 @@ var codeViewer = {
 		// when clicking on a lineage item change the iframe source
 		$('#sg-code-lineage-fill a').on("click", function(e){
 			e.preventDefault();
-			document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+			var obj = JSON.stringify({ "path": urlHandler.getFileName($(this).attr("data-patternpartial")) });
+			document.getElementById("sg-viewport").contentWindow.postMessage(obj,codeViewer.targetOrigin);
 		});
 		
 		// draw reverse lineage
@@ -233,7 +237,8 @@ var codeViewer = {
 		// when clicking on a reverse lineage item change the iframe source
 		$('#sg-code-lineager-fill a').on("click", function(e){
 			e.preventDefault();
-			document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+			var obj = JSON.stringify( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) });
+			document.getElementById("sg-viewport").contentWindow.postMessage(obj,codeViewer.targetOrigin);
 		});
 		
 		// get the file name of the pattern so we can get the various editions of the code that can show in code view
@@ -271,15 +276,17 @@ var codeViewer = {
 	*/
 	receiveIframeMessage: function(event) {
 		
+		var data = (typeof event.data !== "string") ? event.data : JSON.parse(event.data);
+		
 		// does the origin sending the message match the current host? if not dev/null the request
 		if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 			return;
 		}
 		
 		// if the message contains the codeOverlay attribute act on it as appropriate
-		if (event.data.codeOverlay !== undefined) {
-			if (event.data.codeOverlay === "on") {
-				codeViewer.updateCode(event.data.lineage,event.data.lineageR,event.data.codePatternPartial,event.data.cssEnabled);
+		if (data.codeOverlay !== undefined) {
+			if (data.codeOverlay === "on") {
+				codeViewer.updateCode(data.lineage,data.lineageR,data.codePatternPartial,data.cssEnabled);
 			} else {
 				codeViewer.slideCode($('#sg-code-container').outerHeight());
 			}
@@ -296,8 +303,8 @@ window.addEventListener("message", codeViewer.receiveIframeMessage, false);
 // make sure if a new pattern or view-all is loaded that comments are turned on as appropriate
 $('#sg-viewport').load(function() {
 	if (codeViewer.codeActive) {
-		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-		document.getElementById('sg-viewport').contentWindow.postMessage({ "codeToggle": "on" },targetOrigin);
+		var obj = JSON.stringify({ "codeToggle": "on" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,codeViewer.targetOrigin);
 	}
 });
 

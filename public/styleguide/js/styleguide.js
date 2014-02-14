@@ -255,7 +255,8 @@
 		$sgViewport.width(theSize); //Resize viewport to desired size
 		
 		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-		document.getElementById('sg-viewport').contentWindow.postMessage({ "resize": "true" },targetOrigin);
+		var obj = JSON.stringify({ "resize": "true" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,targetOrigin);
 		
 		updateSizeReading(theSize); //Update values in toolbar
 		saveSize(theSize); //Save current viewport to cookie
@@ -263,7 +264,8 @@
 	
 	$("#sg-gen-container").on('transitionend webkitTransitionEnd', function(e){
 		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-		document.getElementById('sg-viewport').contentWindow.postMessage({ "resize": "true" },targetOrigin);
+		var obj = JSON.stringify({ "resize": "true" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,targetOrigin);
 	});
 	
 	function saveSize(size) {
@@ -426,8 +428,6 @@
 	urlHandler.skipBack = true;
 	document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
 
-	
-
 	//Close all dropdowns and navigation
 	function closePanels() {
 		$('.sg-nav-container, .sg-nav-toggle, .sg-acc-handle, .sg-acc-panel').removeClass('active');
@@ -438,7 +438,8 @@
 	$('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
 		e.preventDefault();
 		// update the iframe via the history api handler
-		document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+		var obj = JSON.stringify({ "path": urlHandler.getFileName($(this).attr("data-patternpartial")) });
+		document.getElementById("sg-viewport").contentWindow.postMessage(obj, urlHandler.targetOrigin);
 		closePanels();
 	});
 
@@ -465,25 +466,27 @@
 	// based on the great MDN docs at https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
 	function receiveIframeMessage(event) {
 		
+		var data = (typeof event.data !== "string") ? event.data : JSON.parse(event.data);
+		
 		// does the origin sending the message match the current host? if not dev/null the request
 		if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 			return;
 		}
 		
-		if (event.data.bodyclick !== undefined) {
+		if (data.bodyclick !== undefined) {
 			
 			closePanels();
 			
-		} else if (event.data.patternpartial !== undefined) {
+		} else if (data.patternpartial !== undefined) {
 			
 			if (!urlHandler.skipBack) {
 				
-				if ((history.state === undefined) || (history.state === null) || (history.state.pattern !== event.data.patternpartial)) {
-					urlHandler.pushPattern(event.data.patternpartial, event.data.path);
+				if ((history.state === undefined) || (history.state === null) || (history.state.pattern !== data.patternpartial)) {
+					urlHandler.pushPattern(data.patternpartial, data.path);
 				}
 				
 				if (wsnConnected) {
-					var iFramePath = urlHandler.getFileName(event.data.patternpartial);
+					var iFramePath = urlHandler.getFileName(data.patternpartial);
 					wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
 				}
 			}

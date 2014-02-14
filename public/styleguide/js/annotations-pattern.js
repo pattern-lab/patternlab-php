@@ -14,6 +14,7 @@ var annotationsPattern = {
 	commentsEmbedded:       false,
 	commentsGathered:       { "commentOverlay": "on", "comments": { } },
 	trackedElements:        [ ],
+	targetOrigin:           (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host,
 	
 	/**
 	* record which annotations are related to this pattern so they can be sent to the viewer when called
@@ -41,13 +42,10 @@ var annotationsPattern = {
 									
 									e.preventDefault();
 									e.stopPropagation();
-									var obj = {};
 									
 									// if an element was clicked on while the overlay was already on swap it
-									obj = { "displaynumber": item.displaynumber, "el": item.el, "title": item.title, "comment": item.comment };
-									
-									var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-									parent.postMessage(obj,targetOrigin);
+									var obj = JSON.stringify({ "displaynumber": item.displaynumber, "el": item.el, "title": item.title, "comment": item.comment });
+									parent.postMessage(obj,annotationsPattern.targetOrigin);
 									
 								}
 								
@@ -61,9 +59,8 @@ var annotationsPattern = {
 			
 		} else {
 			
-			var obj = { "commentOverlay": "off" };
-			var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-			parent.postMessage(obj,targetOrigin);
+			var obj = JSON.stringify({ "commentOverlay": "off" });
+			parent.postMessage(obj,annotationsPattern.targetOrigin);
 			
 		}
 		
@@ -130,27 +127,29 @@ var annotationsPattern = {
 	*/
 	receiveIframeMessage: function(event) {
 		
+		var data = (typeof event.data !== "string") ? event.data : JSON.parse(event.data);
+		
 		// does the origin sending the message match the current host? if not dev/null the request
 		if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 			return;
 		}
 		
-		var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-		
-		if ((event.data.resize !== undefined) && (annotationsPattern.commentsOverlayActive)) {
+		if ((data.resize !== undefined) && (annotationsPattern.commentsOverlayActive)) {
 			
 			for (var i = 0; i < annotationsPattern.trackedElements.length; ++i) {
 				var el = annotationsPattern.trackedElements[i];
 				if (window.getComputedStyle(el.element,null).getPropertyValue("max-height") == "0px") {
 					el.element.firstChild.style.display = "none";
-					parent.postMessage({"annotationState": false, "displayNumber": el.displayNumber },targetOrigin);
+					var obj = JSON.stringify({"annotationState": false, "displayNumber": el.displayNumber });
+					parent.postMessage(obj,annotationsPattern.targetOrigin);
 				} else {
 					el.element.firstChild.style.display = "block";
-					parent.postMessage({"annotationState": true, "displayNumber": el.displayNumber },targetOrigin);
+					var obj = JSON.stringify({"annotationState": true, "displayNumber": el.displayNumber });
+					parent.postMessage(obj,annotationsPattern.targetOrigin);
 				}
 			}
 			
-		} else if (event.data.commentToggle !== undefined) {
+		} else if (data.commentToggle !== undefined) {
 			
 			var i, els, item, displayNum;
 			
@@ -159,9 +158,9 @@ var annotationsPattern = {
 			annotationsPattern.commentsEmbeddedActive = false;
 			
 			// see which flag to toggle based on if this is a styleguide or view-all page
-			if ((event.data.commentToggle === "on") && (document.getElementById("sg-patterns") !== null)) {
+			if ((data.commentToggle === "on") && (document.getElementById("sg-patterns") !== null)) {
 				annotationsPattern.commentsEmbeddedActive = true;
-			} else if (event.data.commentToggle === "on") {
+			} else if (data.commentToggle === "on") {
 				annotationsPattern.commentsOverlayActive  = true;
 			}
 			
@@ -205,8 +204,8 @@ var annotationsPattern = {
 							
 							els[k].classList.add("has-annotation");
 							
-							var span              = document.createElement("span");
-							span.innerHTML        = count;
+							var span       = document.createElement("span");
+							span.innerHTML = count;
 							span.classList.add("annotation-tip");
 							
 							if (window.getComputedStyle(els[k],null).getPropertyValue("max-height") == "0px") {
@@ -232,8 +231,8 @@ var annotationsPattern = {
 					
 					var state = true;
 					
-					var item = comments.comments[i];
-					var els  = document.querySelectorAll(item.el);
+					var item  = comments.comments[i];
+					var els   = document.querySelectorAll(item.el);
 					
 					// if an element is found in the given pattern add it to the overall object so it can be passed when the overlay is turned on
 					if (els.length > 0) {
@@ -249,7 +248,8 @@ var annotationsPattern = {
 				}
 				
 				// send the list of annotations for the page back to the parent
-				parent.postMessage(annotationsPattern.commentsGathered,targetOrigin);
+				var obj = JSON.stringify(annotationsPattern.commentsGathered);
+				parent.postMessage(obj,annotationsPattern.targetOrigin);
 				
 			} else if (annotationsPattern.commentsEmbeddedActive && !annotationsPattern.commentsEmbedded) {
 				
@@ -285,7 +285,6 @@ window.addEventListener("message", annotationsPattern.receiveIframeMessage, fals
 
 // before unloading the iframe make sure any active overlay is turned off/closed
 window.onbeforeunload = function() {
-	var obj = { "commentOverlay": "off" };
-	var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-	parent.postMessage(obj,targetOrigin);
+	var obj = JSON.stringify({ "commentOverlay": "off" });
+	parent.postMessage(obj,annotationsPattern.targetOrigin);
 };
