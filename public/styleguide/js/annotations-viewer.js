@@ -49,22 +49,32 @@ var annotationsViewer = {
 	toggleComments: function() {
 		
 		if (!annotationsViewer.commentsActive) {
-			
-			annotationsViewer.commentsActive = true;
-			var obj = JSON.stringify({ "commentToggle": "on" });
-			document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
-			$('#sg-t-annotations').addClass('active');
-			
+			annotationsViewer.openComments();
 		} else {
-			
-			annotationsViewer.commentsActive = false;
-			var obj = JSON.stringify({ "commentToggle": "off" });
-			document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
-			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
-			$('#sg-t-annotations').removeClass('active');
-			
+			annotationsViewer.closeComments();
 		}
 		
+	},
+	
+	/**
+	* open the annotations panel
+	*/
+	openComments: function() {
+		annotationsViewer.commentsActive = true;
+		var obj = JSON.stringify({ "commentToggle": "on" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
+		$('#sg-t-annotations').addClass('active');
+	},
+	
+	/**
+	* close the annotations panel
+	*/
+	closeComments: function() {
+		annotationsViewer.commentsActive = false;
+		var obj = JSON.stringify({ "commentToggle": "off" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
+		annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
+		$('#sg-t-annotations').removeClass('active');
 	},
 	
 	/**

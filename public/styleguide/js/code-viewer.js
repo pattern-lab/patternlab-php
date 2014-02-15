@@ -54,6 +54,19 @@ var codeViewer = {
 	},
 	
 	/**
+	* decide on if the code panel should be open or closed
+	*/
+	toggleCode: function() {
+		
+		if (!codeViewer.codeActive) {
+			codeViewer.openCode();
+		} else {
+			codeViewer.closeCode();
+		}
+		
+	},
+	
+	/**
 	* after clicking the code view link open the panel
 	*/
 	openCode: function() {
