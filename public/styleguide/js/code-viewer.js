@@ -321,14 +321,28 @@ $('#sg-viewport').load(function() {
 	}
 });
 
+// toggle the code panel
+jwerty.key('cmd+shift+c/ctrl+shift+c', function (e) {
+	codeViewer.toggleCode();
+	return false;
+});
+
 // when the code panel is open hijack cmd+a so that it only selects the code view
-jwerty.key('cmd+a', function (e) {
+jwerty.key('cmd+a/ctrl+a', function (e) {
 	if (codeViewer.codeActive) {
 		selection = window.getSelection();
 		range = document.createRange();
 		range.selectNodeContents(document.getElementById("sg-code-fill"));
 		selection.removeAllRanges();
 		selection.addRange(range);
+		return false;
+	}
+});
+
+// close the code panel if using escape
+jwerty.key('esc', function (e) {
+	if (codeViewer.codeActive) {
+		codeViewer.closeCode();
 		return false;
 	}
 });

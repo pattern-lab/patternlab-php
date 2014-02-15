@@ -222,3 +222,17 @@ $('#sg-view li a').click(function() {
 	$(this).parent().parent().removeClass('active');
 	$(this).parent().parent().parent().parent().removeClass('active');
 });
+
+// toggle the annotations panel
+jwerty.key('cmd+shift+a/ctrl+shift+a', function (e) {
+	annotationsViewer.toggleComments();
+	return false;
+});
+
+// close the annotations panel if using escape
+jwerty.key('esc', function (e) {
+	if (annotationsViewer.commentsActive) {
+		annotationsViewer.closeComments();
+		return false;
+	}
+});
