@@ -49,22 +49,32 @@ var annotationsViewer = {
 	toggleComments: function() {
 		
 		if (!annotationsViewer.commentsActive) {
-			
-			annotationsViewer.commentsActive = true;
-			var obj = JSON.stringify({ "commentToggle": "on" });
-			document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
-			$('#sg-t-annotations').addClass('active');
-			
+			annotationsViewer.openComments();
 		} else {
-			
-			annotationsViewer.commentsActive = false;
-			var obj = JSON.stringify({ "commentToggle": "off" });
-			document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
-			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
-			$('#sg-t-annotations').removeClass('active');
-			
+			annotationsViewer.closeComments();
 		}
 		
+	},
+	
+	/**
+	* open the annotations panel
+	*/
+	openComments: function() {
+		annotationsViewer.commentsActive = true;
+		var obj = JSON.stringify({ "commentToggle": "on" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
+		$('#sg-t-annotations').addClass('active');
+	},
+	
+	/**
+	* close the annotations panel
+	*/
+	closeComments: function() {
+		annotationsViewer.commentsActive = false;
+		var obj = JSON.stringify({ "commentToggle": "off" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
+		annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
+		$('#sg-t-annotations').removeClass('active');
 	},
 	
 	/**
@@ -211,4 +221,18 @@ $('#sg-viewport').load(function() {
 $('#sg-view li a').click(function() {
 	$(this).parent().parent().removeClass('active');
 	$(this).parent().parent().parent().parent().removeClass('active');
+});
+
+// toggle the annotations panel
+jwerty.key('cmd+shift+a/ctrl+shift+a', function (e) {
+	annotationsViewer.toggleComments();
+	return false;
+});
+
+// close the annotations panel if using escape
+jwerty.key('esc', function (e) {
+	if (annotationsViewer.commentsActive) {
+		annotationsViewer.closeComments();
+		return false;
+	}
 });

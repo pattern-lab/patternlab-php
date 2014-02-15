@@ -73,28 +73,55 @@
 	
 	//Size View Events
 
-	//Click Size Small Button
-	$('#sg-size-s').on("click", function(e){
-		e.preventDefault();
+	// handle small button
+	function goSmall() {
 		killDisco();
 		killHay();
 		sizeiframe(getRandom(minViewportWidth,500));
+	}
+	
+	$('#sg-size-s').on("click", function(e){
+		e.preventDefault();
+		goSmall();
 	});
 	
-	//Click Size Medium Button
-	$('#sg-size-m').on("click", function(e){
-		e.preventDefault();
+	jwerty.key('cmd+shift+s/ctrl+shift+s', function(e) {
+		goSmall();
+		return false;
+	});
+	
+	// handle medium button
+	function goMedium() {
 		killDisco();
 		killHay();
 		sizeiframe(getRandom(500,800));
+	}
+	
+	$('#sg-size-m').on("click", function(e){
+		e.preventDefault();
+		goMedium();
 	});
 	
-	//Click Size Large Button
-	$('#sg-size-l').on("click", function(e){
-		e.preventDefault();
+	jwerty.key('cmd+shift+m/ctrl+shift+m', function(e) {
+		goLarge();
+		return false;
+	});
+	
+	// handle large button
+	function goLarge() {
 		killDisco();
 		killHay();
 		sizeiframe(getRandom(800,1200));
+	}
+	
+	$('#sg-size-l').on("click", function(e){
+		e.preventDefault();
+		goLarge();
+	});
+	
+	jwerty.key('cmd+shift+l/ctrl+shift+l', function(e) {
+		goLarge();
+		return false;
 	});
 
 	//Click Full Width Button
@@ -141,12 +168,20 @@
 		discoMode = true;
 		discoID = setInterval(disco, 800);
 	}
+	
+	jwerty.key('cmd+shift+d/ctrl+shift+d', function(e) {
+		if (!discoMode) {
+			startDisco();
+		} else {
+			killDisco();
+		}
+		return false;
+	});
 
 	//Stephen Hay Mode - "Start with the small screen first, then expand until it looks like shit. Time for a breakpoint!"
 	$('#sg-size-hay').on("click", function(e){
 		e.preventDefault();
 		killDisco();
-
 		if (hayMode) {
 			killHay();
 		} else {
@@ -176,6 +211,16 @@
 			setInterval(function(){ var vpSize = $sgViewport.width(); updateSizeReading(vpSize); },100);
 		}, 200);
 	}
+	
+	// start hay from a keyboard shortcut
+	jwerty.key('cmd+shift+h/ctrl+shift+h', function(e) {
+		if (hayMode) {
+			startHay();
+		} else {
+			killHay();
+		}
+		return false;
+	});
 
 	//Pixel input
 	$sizePx.on('keydown', function(e){
@@ -220,14 +265,40 @@
 		updateSizeReading(val,'em','updatePxInput');
 	});
 	
-	// handle the MQ click
-	$('#sg-mq a').on("click", function(e){
+	// set 0 to 320px as a default
+	jwerty.key('ctrl+shift+0', function(e) {
 		e.preventDefault();
-		var val = $(this).html();
-		var type = (val.indexOf("px") !== -1) ? "px" : "em";
-		val = val.replace(type,"");
-		var width = (type === "px") ? val*1 : val*$bodySize;
-		sizeiframe(width,true);
+		sizeiframe(320,true);
+		return false;
+	});
+	
+	// handle the MQ click
+	$('#sg-mq a').each(function(i) {
+		
+		// bind the click
+		$(this).on("click", function(i,k) {
+			return function(e) {
+				e.preventDefault();
+				var val = $(k).html();
+				var type = (val.indexOf("px") !== -1) ? "px" : "em";
+				val = val.replace(type,"");
+				var width = (type === "px") ? val*1 : val*$bodySize;
+				sizeiframe(width,true);
+			}
+		}(i,this));
+		
+		// bind the keyboard shortcut. can't use cmd on a mac because 3 & 4 are for screenshots
+		jwerty.key('ctrl+shift+'+(i+1), function (k) {
+			return function(e) {
+				var val = $(k).html();
+				var type = (val.indexOf("px") !== -1) ? "px" : "em";
+				val = val.replace(type,"");
+				var width = (type === "px") ? val*1 : val*$bodySize;
+				sizeiframe(width,true);
+				return false;
+			}
+		}(this));
+		
 	});
 	
 	//Resize the viewport
