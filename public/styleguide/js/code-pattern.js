@@ -96,6 +96,20 @@ jwerty.key('cmd+shift+a/ctrl+shift+a/cmd+a/ctrl+a', function (e) {
 	return false;
 });
 
+// open the mustache panel
+jwerty.key('cmd+shift+u/ctrl+shift+u', function (e) {
+	var obj = JSON.stringify({ "keyPress": "cmd+shift+u" });
+	parent.postMessage(obj,codePattern.targetOrigin);
+	return false;
+});
+
+// open the html panel
+jwerty.key('cmd+shift+h/ctrl+shift+h', function (e) {
+	var obj = JSON.stringify({ "keyPress": "cmd+shift+h" });
+	parent.postMessage(obj,codePattern.targetOrigin);
+	return false;
+});
+
 // close the code panel if using escape
 jwerty.key('esc', function (e) {
 	var obj = JSON.stringify({ "keyPress": "esc" });

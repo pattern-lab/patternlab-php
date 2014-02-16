@@ -14,6 +14,7 @@ var codeViewer = {
 	encoded:      "",
 	mustache:     "",
 	css:          "",
+	ids:          { "e": "#sg-code-title-html", "m": "#sg-code-title-mustache", "c": "#sg-code-title-css" },
 	targetOrigin: (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
 	
 	/**
@@ -105,23 +106,17 @@ var codeViewer = {
 		});
 		
 		// make sure the click events are handled on the HTML tab
-		$('#sg-code-title-html').click(function() {
-			$('.sg-code-title-active').removeClass('sg-code-title-active');
-			$(this).toggleClass("sg-code-title-active");
+		$(codeViewer.ids["e"]).click(function() {
 			codeViewer.swapCode("e");
 		});
 		
 		// make sure the click events are handled on the Mustache tab
-		$('#sg-code-title-mustache').click(function() {
-			$('.sg-code-title-active').removeClass('sg-code-title-active');
-			$(this).toggleClass("sg-code-title-active");
+		$(codeViewer.ids["m"]).click(function() {
 			codeViewer.swapCode("m");
 		});
 		
 		// make sure the click events are handled on the CSS tab
-		$('#sg-code-title-css').click(function() {
-			$('.sg-code-title-active').removeClass('sg-code-title-active');
-			$(this).toggleClass("sg-code-title-active");
+		$(codeViewer.ids["c"]).click(function() {
 			codeViewer.swapCode("c");
 		});
 		
@@ -131,6 +126,7 @@ var codeViewer = {
 	* depending on what tab is clicked this swaps out the code container. makes sure prism highlight is added.
 	*/
 	swapCode: function(type) {
+		
 		var fill      = "";
 		var className = (type == "c") ? "css" : "markup";
 		$("#sg-code-fill").removeClass().addClass("language-"+className);
@@ -144,6 +140,8 @@ var codeViewer = {
 		$("#sg-code-fill").html(fill).text();
 		codeViewer.tabActive = type;
 		Prism.highlightElement(document.getElementById("sg-code-fill"));
+		$('.sg-code-title-active').removeClass('sg-code-title-active');
+		$(codeViewer.ids[type]).toggleClass("sg-code-title-active");
 	},
 	
 	/**
@@ -156,7 +154,6 @@ var codeViewer = {
 			range.selectNodeContents(document.getElementById("sg-code-fill"));
 			selection.removeAllRanges();
 			selection.addRange(range);
-			return false;
 		}
 	},
 	
@@ -323,6 +320,17 @@ var codeViewer = {
 				return false;
 			} else if (data.keyPress == 'cmd+a') {
 				codeViewer.selectCode();
+				return false;
+			} else if (data.keyPress == 'cmd+shift+u') {
+				if (codeViewer.codeActive) {
+					codeViewer.swapCode("m");
+					return false;
+				}
+			} else if (data.keyPress == 'cmd+shift+h') {
+				if (codeViewer.codeActive) {
+					codeViewer.swapCode("h");
+					return false;
+				}
 			} else if (data.keyPress == 'esc') {
 				if (codeViewer.codeActive) {
 					codeViewer.closeCode();
@@ -354,8 +362,25 @@ jwerty.key('cmd+shift+c/ctrl+shift+c', function (e) {
 });
 
 // when the code panel is open hijack cmd+a so that it only selects the code view
-jwerty.key('cmd+shift+a/ctrl+shift+a/cmd+a/ctrl+a', function (e) {
+jwerty.key('cmd+a/ctrl+a', function (e) {
 	codeViewer.selectCode();
+	return false;
+});
+
+// open the mustache panel
+jwerty.key('cmd+shift+u/ctrl+shift+u', function (e) {
+	if (codeViewer.codeActive) {
+		codeViewer.swapCode("m");
+		return false;
+	}
+});
+
+// open the html panel
+jwerty.key('cmd+shift+h/ctrl+shift+h', function (e) {
+	if (codeViewer.codeActive) {
+		codeViewer.swapCode("e");
+		return false;
+	}
 });
 
 // close the code panel if using escape
