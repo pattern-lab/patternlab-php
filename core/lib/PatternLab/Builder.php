@@ -535,6 +535,9 @@ class Builder {
 		$patternObjects  = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(__DIR__.$this->sp), \RecursiveIteratorIterator::SELF_FIRST);
 		$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
 		
+		$patternObjects = iterator_to_array($patternObjects);
+		ksort($patternObjects);
+		
 		foreach($patternObjects as $name => $object) {
 			
 			$name  = str_replace(__DIR__.$this->sp,"",$name);
