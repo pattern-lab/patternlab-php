@@ -79,3 +79,26 @@ window.onbeforeunload = function() {
 	var obj = JSON.stringify({ "codeOverlay": "off" });
 	parent.postMessage(obj,codePattern.targetOrigin);
 };
+
+// tell the parent iframe that keys were pressed
+
+// toggle the code panel
+jwerty.key('cmd+shift+c/ctrl+shift+c', function (e) {
+	var obj = JSON.stringify({ "keyPress": "cmd+shift+c" });
+	parent.postMessage(obj,codePattern.targetOrigin);
+	return false;
+});
+
+// when the code panel is open hijack cmd+a so that it only selects the code view
+jwerty.key('cmd+shift+a/ctrl+shift+a/cmd+a/ctrl+a', function (e) {
+	var obj = JSON.stringify({ "keyPress": "cmd+a" });
+	parent.postMessage(obj,codePattern.targetOrigin);
+	return false;
+});
+
+// close the code panel if using escape
+jwerty.key('esc', function (e) {
+	var obj = JSON.stringify({ "keyPress": "esc" });
+	parent.postMessage(obj,codePattern.targetOrigin);
+	return false;
+});

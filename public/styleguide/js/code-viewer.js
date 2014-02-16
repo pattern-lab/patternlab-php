@@ -147,6 +147,20 @@ var codeViewer = {
 	},
 	
 	/**
+	* select the code where using cmd+a/ctrl+a
+	*/
+	selectCode: function() {
+		if (codeViewer.codeActive) {
+			selection = window.getSelection();
+			range = document.createRange();
+			range.selectNodeContents(document.getElementById("sg-code-fill"));
+			selection.removeAllRanges();
+			selection.addRange(range);
+			return false;
+		}
+	},
+	
+	/**
 	* slides the panel
 	*/
 	slideCode: function(pos) {
@@ -296,12 +310,24 @@ var codeViewer = {
 			return;
 		}
 		
-		// if the message contains the codeOverlay attribute act on it as appropriate
+		// switch based on stuff related to the postmessage
 		if (data.codeOverlay !== undefined) {
 			if (data.codeOverlay === "on") {
 				codeViewer.updateCode(data.lineage,data.lineageR,data.codePatternPartial,data.cssEnabled);
 			} else {
 				codeViewer.slideCode($('#sg-code-container').outerHeight());
+			}
+		} else if (data.keyPress !== undefined) {
+			if (data.keyPress == 'cmd+shift+c') {
+				codeViewer.toggleCode();
+				return false;
+			} else if (data.keyPress == 'cmd+a') {
+				codeViewer.selectCode();
+			} else if (data.keyPress == 'esc') {
+				if (codeViewer.codeActive) {
+					codeViewer.closeCode();
+					return false;
+				}
 			}
 		}
 		
@@ -328,15 +354,8 @@ jwerty.key('cmd+shift+c/ctrl+shift+c', function (e) {
 });
 
 // when the code panel is open hijack cmd+a so that it only selects the code view
-jwerty.key('cmd+a/ctrl+a', function (e) {
-	if (codeViewer.codeActive) {
-		selection = window.getSelection();
-		range = document.createRange();
-		range.selectNodeContents(document.getElementById("sg-code-fill"));
-		selection.removeAllRanges();
-		selection.addRange(range);
-		return false;
-	}
+jwerty.key('cmd+shift+a/ctrl+shift+a/cmd+a/ctrl+a', function (e) {
+	codeViewer.selectCode();
 });
 
 // close the code panel if using escape

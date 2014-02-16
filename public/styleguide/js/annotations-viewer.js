@@ -200,6 +200,16 @@ var annotationsViewer = {
 		} else if (data.displaynumber !== undefined) {
 			var top = document.getElementById("annotation-"+data.displaynumber).offsetTop;
 			$('#sg-annotation-container').animate({scrollTop: top - 10}, 600);
+		} else if (data.keyPress !== undefined) {
+			if (data.keyPress == 'cmd+shift+a') {
+				annotationsViewer.toggleComments();
+				return false;
+			} else if (data.keyPress == 'esc') {
+				if (annotationsViewer.commentsActive) {
+					annotationsViewer.closeComments();
+					return false;
+				}
+			}
 		}
 		
 	}
