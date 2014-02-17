@@ -203,7 +203,8 @@ var codeViewer = {
 			$("#sg-code-lineage").css("display","block");
 			for (var i = 0; i < lineage.length; i++) {
 				lineageList += (i === 0) ? "" : ", ";
-				lineageList += "<a href='"+lineage[i].lineagePath+"' data-patternPartial='"+lineage[i].lineagePattern+"'>"+lineage[i].lineagePattern+"</a>";
+				var cssClass  = (lineage[i].lineageState != undefined) ? "sg-pattern-state "+lineage[i].lineageState : "";
+				lineageList += "<a href='"+lineage[i].lineagePath+"' class='"+cssClass+"' data-patternPartial='"+lineage[i].lineagePattern+"'>"+lineage[i].lineagePattern+"</a>";
 			}
 			$("#sg-code-lineage-fill").html(lineageList);
 		} else {
@@ -223,7 +224,8 @@ var codeViewer = {
 			$("#sg-code-lineager").css("display","block");
 			for (var i = 0; i < lineageR.length; i++) {
 				lineageRList += (i === 0) ? "" : ", ";
-				lineageRList += "<a href='"+lineageR[i].lineagePath+"' data-patternPartial='"+lineageR[i].lineagePattern+"'>"+lineageR[i].lineagePattern+"</a>";
+				var cssClass  = (lineageR[i].lineageState != undefined) ? lineageR[i].lineageState : "";
+				lineageRList += "<a href='"+lineageR[i].lineagePath+"' class='"+cssClass+"' data-patternPartial='"+lineageR[i].lineagePattern+"'>"+lineageR[i].lineagePattern+"</a>";
 			}
 			$("#sg-code-lineager-fill").html(lineageRList);
 		} else {
