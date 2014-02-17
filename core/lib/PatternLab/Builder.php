@@ -827,8 +827,8 @@ class Builder {
 				// make sure the pattern has a given state
 				if ($patternState != "") {
 					
-					if ($patternStateDigit = array_search($patternState, $this->patternStates)) {
-						
+					$patternStateDigit = array_search($patternState, $this->patternStates);
+					if ($patternStateDigit !== false) {
 						// iterate over each of the reverse lineages for a given pattern to update their state
 						foreach ($this->patternLineagesR[$patternType."-".$pattern] as $patternCheckInfo) {
 							$patternBits = $this->getPatternInfo($patternCheckInfo["lineagePattern"]);
