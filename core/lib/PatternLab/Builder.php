@@ -817,7 +817,7 @@ class Builder {
 		$this->gatherLineages();
 		
 		// check on the states of the patterns
-		$patternStateLast  = count($this->patternStates) - 1;
+		$patternStateLast = count($this->patternStates) - 1;
 		foreach($this->patternPaths as $patternType => $patterns) {
 			
 			foreach ($patterns as $pattern => $patternInfo) {
