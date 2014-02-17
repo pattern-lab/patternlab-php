@@ -201,7 +201,7 @@ var annotationsViewer = {
 			var top = document.getElementById("annotation-"+data.displaynumber).offsetTop;
 			$('#sg-annotation-container').animate({scrollTop: top - 10}, 600);
 		} else if (data.keyPress !== undefined) {
-			if (data.keyPress == 'cmd+shift+a') {
+			if (data.keyPress == 'ctrl+shift+a') {
 				annotationsViewer.toggleComments();
 				return false;
 			} else if (data.keyPress == 'esc') {
@@ -234,7 +234,7 @@ $('#sg-view li a').click(function() {
 });
 
 // toggle the annotations panel
-jwerty.key('cmd+shift+a/ctrl+shift+a', function (e) {
+jwerty.key('ctrl+shift+a', function (e) {
 	annotationsViewer.toggleComments();
 	return false;
 });

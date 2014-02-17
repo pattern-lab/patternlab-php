@@ -292,8 +292,8 @@ window.onbeforeunload = function() {
 // tell the parent iframe that keys were pressed
 
 // toggle the annotations panel
-jwerty.key('cmd+shift+a/ctrl+shift+a', function (e) {
-	var obj = JSON.stringify({ "keyPress": "cmd+shift+a" });
+jwerty.key('ctrl+shift+a', function (e) {
+	var obj = JSON.stringify({ "keyPress": "ctrl+shift+a" });
 	parent.postMessage(obj,codePattern.targetOrigin);
 	return false;
 });

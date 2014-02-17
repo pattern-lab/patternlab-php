@@ -315,18 +315,18 @@ var codeViewer = {
 				codeViewer.slideCode($('#sg-code-container').outerHeight());
 			}
 		} else if (data.keyPress !== undefined) {
-			if (data.keyPress == 'cmd+shift+c') {
+			if (data.keyPress == 'ctrl+shift+c') {
 				codeViewer.toggleCode();
 				return false;
 			} else if (data.keyPress == 'cmd+a') {
 				codeViewer.selectCode();
 				return false;
-			} else if (data.keyPress == 'cmd+shift+u') {
+			} else if (data.keyPress == 'ctrl+shift+u') {
 				if (codeViewer.codeActive) {
 					codeViewer.swapCode("m");
 					return false;
 				}
-			} else if (data.keyPress == 'cmd+shift+h') {
+			} else if (data.keyPress == 'ctrl+shift+h') {
 				if (codeViewer.codeActive) {
 					codeViewer.swapCode("h");
 					return false;
@@ -356,7 +356,7 @@ $('#sg-viewport').load(function() {
 });
 
 // toggle the code panel
-jwerty.key('cmd+shift+c/ctrl+shift+c', function (e) {
+jwerty.key('ctrl+shift+c', function (e) {
 	codeViewer.toggleCode();
 	return false;
 });
@@ -368,7 +368,7 @@ jwerty.key('cmd+a/ctrl+a', function (e) {
 });
 
 // open the mustache panel
-jwerty.key('cmd+shift+u/ctrl+shift+u', function (e) {
+jwerty.key('ctrl+shift+u', function (e) {
 	if (codeViewer.codeActive) {
 		codeViewer.swapCode("m");
 		return false;
@@ -376,7 +376,7 @@ jwerty.key('cmd+shift+u/ctrl+shift+u', function (e) {
 });
 
 // open the html panel
-jwerty.key('cmd+shift+h/ctrl+shift+h', function (e) {
+jwerty.key('ctrl+shift+h', function (e) {
 	if (codeViewer.codeActive) {
 		codeViewer.swapCode("e");
 		return false;

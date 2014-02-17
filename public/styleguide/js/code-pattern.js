@@ -83,29 +83,29 @@ window.onbeforeunload = function() {
 // tell the parent iframe that keys were pressed
 
 // toggle the code panel
-jwerty.key('cmd+shift+c/ctrl+shift+c', function (e) {
-	var obj = JSON.stringify({ "keyPress": "cmd+shift+c" });
+jwerty.key('ctrl+shift+c', function (e) {
+	var obj = JSON.stringify({ "keyPress": "ctrl+shift+c" });
 	parent.postMessage(obj,codePattern.targetOrigin);
 	return false;
 });
 
 // when the code panel is open hijack cmd+a so that it only selects the code view
-jwerty.key('cmd+shift+a/ctrl+shift+a/cmd+a/ctrl+a', function (e) {
+jwerty.key('cmd+a/ctrl+a', function (e) {
 	var obj = JSON.stringify({ "keyPress": "cmd+a" });
 	parent.postMessage(obj,codePattern.targetOrigin);
 	return false;
 });
 
 // open the mustache panel
-jwerty.key('cmd+shift+u/ctrl+shift+u', function (e) {
-	var obj = JSON.stringify({ "keyPress": "cmd+shift+u" });
+jwerty.key('ctrl+shift+u', function (e) {
+	var obj = JSON.stringify({ "keyPress": "ctrl+shift+u" });
 	parent.postMessage(obj,codePattern.targetOrigin);
 	return false;
 });
 
 // open the html panel
-jwerty.key('cmd+shift+h/ctrl+shift+h', function (e) {
-	var obj = JSON.stringify({ "keyPress": "cmd+shift+h" });
+jwerty.key('ctrl+shift+h', function (e) {
+	var obj = JSON.stringify({ "keyPress": "ctrl+shift+h" });
 	parent.postMessage(obj,codePattern.targetOrigin);
 	return false;
 });
