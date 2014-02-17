@@ -1,0 +1,29 @@
+.sg-pattern-state:before {
+	margin-right: 4px;
+	content: "\2022";
+	display: inline-block;
+}
+
+.sg-nav .sg-pattern-state:before {
+	margin-left: -4px;
+	height: 20px;
+	display: block;
+	float: left;
+}
+
+.sg-sub-nav .sg-pattern-state:before {
+	margin-left: -11px;
+	margin-right: 4px;
+}
+
+.inprogress:before {
+	color: rgb(210, 30, 30) !important;
+}
+
+.inreview:before {
+	color: rgb(255, 164, 3) !important;
+}
+
+.complete:before {
+	color: rgb(3, 202, 3) !important;
+}
