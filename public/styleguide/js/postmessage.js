@@ -38,6 +38,32 @@ if (self != top) {
 		};
 	}
 	
+	// bind the keyboard shortcuts for various viewport resizings
+	var keys = [ "s", "m", "l", "d", "h" ];
+	for (var i = 0; i < keys.length; i++) {
+		jwerty.key('ctrl+shift+'+keys[i],  function (k,t) {
+			return function(e) {
+				var obj = JSON.stringify({ "keyPress": "ctrl+shift+"+k });
+				parent.postMessage(obj,t);
+				return false;
+			}
+		}(keys[i],targetOrigin));
+	}
+	
+	// bind the keyboard shortcuts for mqs
+	var i = 0;
+	while (i < 10) {
+		jwerty.key('ctrl+shift+'+i, function (k,t) {
+			return function(e) {
+				var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+				var obj = JSON.stringify({ "keyPress": "ctrl+shift+"+k });
+				parent.postMessage(obj,t);
+				return false;
+			}
+		}(i,targetOrigin));
+		i++;
+	}
+	
 }
 
 // if there are clicks on the iframe make sure the nav in the iframe parent closes
