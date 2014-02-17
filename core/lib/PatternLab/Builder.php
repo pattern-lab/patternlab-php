@@ -850,6 +850,27 @@ class Builder {
 			
 		}
 		
+		// make sure we update the lineages with the pattern state if appropriate
+		foreach($this->patternLineages as $pattern => $patternLineages) {
+			foreach($patternLineages as $key => $patternLineageInfo) {
+				$patternBits  = $this->getPatternInfo($patternLineageInfo["lineagePattern"]);
+				$patternState = $this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"];
+				if (($patternState != "") && ($patternState != null)) {
+					$this->patternLineages[$pattern][$key]["lineageState"] = $patternState;
+				}
+			}
+		}
+		
+		foreach($this->patternLineagesR as $pattern => $patternLineages) {
+			foreach($patternLineages as $key => $patternLineageInfo) {
+				$patternBits  = $this->getPatternInfo($patternLineageInfo["lineagePattern"]);
+				$patternState = $this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"];
+				if (($patternState != "") && ($patternState != null)) {
+					$this->patternLineages[$pattern][$key]["lineageState"] = $patternState;
+				}
+			}
+		}
+		
 		// make sure $this->mpl is refreshed
 		$this->loadMustachePatternLoaderInstance();
 		
