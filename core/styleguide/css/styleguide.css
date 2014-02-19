@@ -49,7 +49,6 @@
 /*------------------------------------*\
     $PATTERN LAB INTERFACE 
 \*------------------------------------*/
-
 #patternlab-html, #patternlab-body {
   margin: 0;
   padding: 0;
@@ -70,7 +69,7 @@
   clip: rect(1px, 1px, 1px, 1px); }
 
 .sg-cf, .sg-pattern {
-  /*zoom: 1;*/ }
+  /**zoom: 1;*/ }
   .sg-cf:before, .sg-pattern:before, .sg-cf:after, .sg-pattern:after {
     content: " ";
     display: table; }
@@ -328,8 +327,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 0; 
-}
+  z-index: 0; }
   #sg-vp-wrap.wrap-animate {
     -webkit-transition: left 0.3s ease-out;
     -moz-transition: left 0.3s ease-out;
@@ -348,7 +346,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-}
+  background-color: white; }
   #sg-viewport.hay-mode {
     -webkit-transition: all 40s linear;
     -moz-transition: all 40s linear;
@@ -376,8 +374,7 @@
   margin: 0 auto;
   -webkit-overflow-scrolling: touch;
   overflow-y: auto;
-  overflow-x: hidden;
-}
+  overflow-x: hidden; }
   #sg-gen-container.hay-mode {
     -webkit-transition: all 40s linear;
     -moz-transition: all 40s linear;
@@ -390,8 +387,7 @@
   float: right;
   margin: 0;
   height: 100%;
-  cursor: col-resize; 
-}
+  cursor: col-resize; }
 
 #sg-rightpull {
   margin: 0;
@@ -514,8 +510,7 @@
 
 .has-annotation {
   cursor: help !important;
-  box-shadow: 0 0 10px gray;
- }
+  box-shadow: 0 0 10px gray; }
   .has-annotation a, .has-annotation input {
     cursor: help !important; }
   .has-annotation:hover {
@@ -524,20 +519,19 @@
     box-shadow: inset 0 0 20px gray; }
 
 .annotation-tip {
-	display: block;
-	position: absolute;
-	margin-top: -10px !important;
-	margin-left: -10px !important;
-	width: 25px !important;
-	height: 25px !important;
-	border-radius: 13px !important;
-	text-align: center !important;
-	background: #444 !important;
-	color: #fff !important;
-	font-weight: bold !important;
-	font-size: 16px !important;
-	z-index: 100;
-}
+  display: block;
+  position: absolute;
+  margin-top: -10px !important;
+  margin-left: -10px !important;
+  width: 25px !important;
+  height: 25px !important;
+  border-radius: 13px !important;
+  text-align: center !important;
+  background: #444 !important;
+  color: #fff !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+  z-index: 100; }
 
 #sg-comments-container {
   max-width: 60em;
