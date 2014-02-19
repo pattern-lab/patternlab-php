@@ -348,6 +348,7 @@
   bottom: 0;
   left: 0;
   right: 0;
+  background-color: white;
 }
   #sg-viewport.hay-mode {
     -webkit-transition: all 40s linear;
@@ -524,19 +525,19 @@
     box-shadow: inset 0 0 20px gray; }
 
 .annotation-tip {
-	display: block;
-	position: absolute;
-	margin-top: -10px !important;
-	margin-left: -10px !important;
-	width: 25px !important;
-	height: 25px !important;
-	border-radius: 13px !important;
-	text-align: center !important;
-	background: #444 !important;
-	color: #fff !important;
-	font-weight: bold !important;
-	font-size: 16px !important;
-	z-index: 100;
+  display: block;
+  position: absolute;
+  margin-top: -10px !important;
+  margin-left: -10px !important;
+  width: 25px !important;
+  height: 25px !important;
+  border-radius: 13px !important;
+  text-align: center !important;
+  background: #444 !important;
+  color: #fff !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+  z-index: 100;
 }
 
 #sg-comments-container {
