@@ -10,7 +10,8 @@ var annotationsViewer = {
 	
 	// set-up default sections
 	commentsActive: false,
-	targetOrigin: (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
+	targetOrigin:   (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
+	moveToOnInit:   0,
 	
 	/**
 	* add the onclick handler to the annotations link in the main nav
@@ -33,6 +34,15 @@ var annotationsViewer = {
 		
 		// initialize the annotations viewer
 		annotationsViewer.commentContainerInit();
+		
+		// load the query strings in case code view has to show by default
+		var queryStringVars = urlHandler.getRequestVars();
+		if ((queryStringVars.view !== undefined) && ((queryStringVars.view === "annotations") || (queryStringVars.view === "a"))) {
+			annotationsViewer.openComments();
+			if (queryStringVars.number !== undefined) {
+				annotationsViewer.moveToOnInit = queryStringVars.number;
+			}
+		}
 		
 	},
 	
@@ -186,6 +196,11 @@ var annotationsViewer = {
 		
 		// slide the comment section into view
 		annotationsViewer.slideComment(0);
+		
+		if (annotationsViewer.moveToOnInit != "0") {
+			annotationsViewer.moveTo(annotationsViewer.moveToOnInit);
+			annotationsViewer.moveToOnInit = "0";
+		}
 		
 	},
 	
