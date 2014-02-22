@@ -587,6 +587,28 @@
   color: gray;
   font-size: 1em; }
 
+#sg-code-loader {
+  display: none;
+  position: absolute;
+  left: 45%;
+  top: 20%;
+  width: 150px;
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px;
+  background-color: #000;
+  z-index: 100; }
+
+.spinner {
+  height: 30px;
+  width: 30px;
+  margin-left: auto; margin-right: auto;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background: url('../assets/spinner.gif');
+  border-radius: 50%;
+  opacity: .7; }
+
 /* Pattern Lab icon fonts */
 @font-face {
   font-family: 'icons';
