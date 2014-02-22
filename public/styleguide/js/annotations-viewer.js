@@ -23,13 +23,6 @@ var annotationsViewer = {
 			
 			e.preventDefault();
 			
-			// make sure the code view overlay is off before showing the annotations view
-			$('#sg-t-code').removeClass('active');
-			codeViewer.codeActive = false;
-			var obj = JSON.stringify({ "codeToggle": "off" });
-			document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
-			codeViewer.slideCode(999);
-			
 			// remove the class from the "eye" nav item
 			$('#sg-t-toggle').removeClass('active');
 			
@@ -60,9 +53,20 @@ var annotationsViewer = {
 	* open the annotations panel
 	*/
 	openComments: function() {
-		annotationsViewer.commentsActive = true;
+		
+		// make sure the code view overlay is off before showing the annotations view
+		$('#sg-t-code').removeClass('active');
+		codeViewer.codeActive = false;
+		var obj = JSON.stringify({ "codeToggle": "off" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
+		codeViewer.slideCode(999);
+		
+		// tell the iframe annotation view has been turned on
 		var obj = JSON.stringify({ "commentToggle": "on" });
 		document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
+		
+		// note that it's turned on in the viewer
+		annotationsViewer.commentsActive = true;
 		$('#sg-t-annotations').addClass('active');
 	},
 	
