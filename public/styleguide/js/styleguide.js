@@ -505,6 +505,7 @@
 	//Close all dropdowns and navigation
 	function closePanels() {
 		$('.sg-nav-container, .sg-nav-toggle, .sg-acc-handle, .sg-acc-panel').removeClass('active');
+		patternFinder.closeFinder();
 	}
 
 	// update the iframe with the source from clicked element in pull down menu. also close the menu

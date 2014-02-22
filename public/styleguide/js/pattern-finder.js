@@ -8,7 +8,8 @@
 
 var patternFinder = {
 	
-	data: [],
+	data:   [],
+	active: false,
 	
 	init: function() {
 		
@@ -43,9 +44,7 @@ var patternFinder = {
 	
 	passPath: function(item) {
 		// update the iframe via the history api handler
-		$('#sg-find').removeClass('show-overflow');
-		$('#sg-find .typeahead').val("");
-		$('.sg-acc-handle, .sg-acc-panel').removeClass('active');
+		patternFinder.closeFinder();
 		var obj = JSON.stringify({ "path": urlHandler.getFileName(item.patternPartial) });
 		document.getElementById("sg-viewport").contentWindow.postMessage(obj, urlHandler.targetOrigin);
 	},
@@ -58,22 +57,66 @@ var patternFinder = {
 		patternFinder.passPath(item);
 	},
 	
-	toggleFinder: function() {},
+	toggleFinder: function() {
+		if (!patternFinder.active) {
+			patternFinder.openFinder();
+		} else {
+			patternFinder.closeFinder();
+		}
+	},
 	
-	openFinder: function() {},
+	openFinder: function() {
+		patternFinder.active = true;
+		$('#sg-find .typeahead').val("");
+		$("#sg-find").addClass('show-overflow');
+		$('#sg-find .typeahead').focus();
+	},
 	
-	closeFinder: function() {}
-
+	closeFinder: function() {
+		patternFinder.active = false;
+		$("#sg-find").removeClass('show-overflow');
+		$('.sg-acc-handle, .sg-acc-panel').removeClass('active');
+		$('#sg-find .typeahead').val("");
+	},
+	
+	receiveIframeMessage: function(event) {
+		
+		var data = (typeof event.data !== "string") ? event.data : JSON.parse(event.data);
+		
+		// does the origin sending the message match the current host? if not dev/null the request
+		if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
+			return;
+		}
+		
+		if (data.keyPress !== undefined) {
+			if (data.keyPress == 'ctrl+shift+f') {
+				patternFinder.toggleFinder();
+				return false;
+			}
+		}
+		
+	}
+	
 }
 
 patternFinder.init();
 
-$('#sg-find').click(function(){ $(this).toggleClass('show-overflow') });
+window.addEventListener("message", patternFinder.receiveIframeMessage, false);
+
+$('#sg-find .typeahead').focus(function() {
+	if (!patternFinder.active) {
+		patternFinder.openFinder();
+	}
+});
+
+$('#sg-find .typeahead').blur(function() {
+	patternFinder.closeFinder();
+});
 
 // jwerty stuff
 // toggle the annotations panel
-jwerty.key('cmd+shift+f/ctrl+shif+f', function (e) {
+jwerty.key('ctrl+shift+f', function (e) {
 	$('.sg-find .sg-acc-handle, .sg-find .sg-acc-panel').addClass('active');
-	$('#sg-find .typeahead').focus();
+	patternFinder.toggleFinder();
 	return false;
 });
