@@ -703,14 +703,17 @@ $animate-quick: 0.2s;
 }
 
 //Annotation and code view close button
+.sg-view-close {
+	width: 100%;
+	margin-bottom: -10px;
+}
+
 .sg-view-close-btn {
 	color: #fff;
-	position: absolute;
-	top: 1em;
-	right: 1em;
 	text-transform: uppercase;
 	text-decoration: none;
 	text-align: right;
+	display: block;
 }
 
 //Visually emphasize annotated elements
@@ -810,6 +813,63 @@ $animate-quick: 0.2s;
 	font-size: 1em;
 }
 
+#sg-code-markup {
+	padding-top: 10px;
+}
+
+#sg-code-tabs {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#sg-code-tabs li {
+	float: left;
+	background-color: #333;
+	font-size: 1.3em;
+	font-weight: bold;
+	padding: 5px 15px;
+	border-top: 2px solid #666;
+	margin-right: 2px;
+	cursor: pointer;
+}
+
+.sg-code-title-active {
+	color: #bbb;
+	background-color: #272822 !important;
+}
+
+div.clear {
+	clear: both;
+}
+
+.sg-code-patternname {
+	color: #aaa; 
+}
+
+#sg-code-loader {
+	display: none;
+	position: absolute;
+	left: 45%;
+	top: 20%;
+	width: 150px;
+	padding: 10px;
+	text-align: center;
+	border-radius: 10px;
+	background-color: #000;
+	z-index: 100; 
+}
+
+.spinner {
+	height: 30px;
+	width: 30px;
+	margin-left: auto; margin-right: auto;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background: url('../assets/spinner.gif');
+	border-radius: 50%;
+	opacity: .7;
+}
 
 /* Pattern Lab icon fonts */
 @font-face {

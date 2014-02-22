@@ -288,3 +288,19 @@ window.onbeforeunload = function() {
 	var obj = JSON.stringify({ "commentOverlay": "off" });
 	parent.postMessage(obj,annotationsPattern.targetOrigin);
 };
+
+// tell the parent iframe that keys were pressed
+
+// toggle the annotations panel
+jwerty.key('ctrl+shift+a', function (e) {
+	var obj = JSON.stringify({ "keyPress": "ctrl+shift+a" });
+	parent.postMessage(obj,codePattern.targetOrigin);
+	return false;
+});
+
+// close the annotations panel if using escape
+jwerty.key('esc', function (e) {
+	var obj = JSON.stringify({ "keyPress": "esc" });
+	parent.postMessage(obj,codePattern.targetOrigin);
+	return false;
+});

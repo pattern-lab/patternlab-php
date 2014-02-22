@@ -8,7 +8,7 @@
 		 */
 		
 		var scriptLoader = {
-		
+			
 			run: function(js,cb,target) {
 				var s  = document.getElementById(target+'-'+cb); 
 				for (var i = 0; i < js.length; i++) {
@@ -17,15 +17,11 @@
 					c.src   = '../../'+src+'?'+cb;
 					if (typeof js[i] != "string") {
 						if (js[i].dep !== undefined) {
-							c.onload = function(dep) {
+							c.onload = function(dep,cb,target) {
 								return function() {
-									for (var k = 0; k < dep.length; k++) {
-										var d = document.createElement('script');
-										d.src = '../../'+dep[k]+'?'+cb;
-										s.parentNode.insertBefore(d,s);
-									}
+									scriptLoader.run(dep,cb,target);
 								}
-							}(js[i].dep);
+							}(js[i].dep,cb,target);
 						}
 					}
 					s.parentNode.insertBefore(c,s);
@@ -50,7 +46,7 @@
 		(function() {
 			if (self != top) {
 				var cb = '{{ cacheBuster}}';
-				var js = [ "styleguide/js/postmessage.js", { "src": "data/annotations.js", "dep": [ "styleguide/js/annotations-pattern.js" ] }, "styleguide/js/code-pattern.js"];
+				var js = [ { "src": "styleguide/js/vendor/jwerty.js", "dep": [ "styleguide/js/postmessage.js", { "src": "data/annotations.js", "dep": [ "styleguide/js/annotations-pattern.js" ] }, "styleguide/js/code-pattern.js" ] } ];
 				scriptLoader.run(js,cb,'pl-js-insert');
 			}
 		})();

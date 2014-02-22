@@ -85,7 +85,7 @@
 		goSmall();
 	});
 	
-	jwerty.key('cmd+shift+s/ctrl+shift+s', function(e) {
+	jwerty.key('ctrl+shift+s', function(e) {
 		goSmall();
 		return false;
 	});
@@ -102,7 +102,7 @@
 		goMedium();
 	});
 	
-	jwerty.key('cmd+shift+m/ctrl+shift+m', function(e) {
+	jwerty.key('ctrl+shift+m', function(e) {
 		goLarge();
 		return false;
 	});
@@ -119,7 +119,7 @@
 		goLarge();
 	});
 	
-	jwerty.key('cmd+shift+l/ctrl+shift+l', function(e) {
+	jwerty.key('ctrl+shift+l', function(e) {
 		goLarge();
 		return false;
 	});
@@ -169,7 +169,7 @@
 		discoID = setInterval(disco, 800);
 	}
 	
-	jwerty.key('cmd+shift+d/ctrl+shift+d', function(e) {
+	jwerty.key('ctrl+shift+d', function(e) {
 		if (!discoMode) {
 			startDisco();
 		} else {
@@ -213,7 +213,7 @@
 	}
 	
 	// start hay from a keyboard shortcut
-	jwerty.key('cmd+shift+h/ctrl+shift+h', function(e) {
+	jwerty.key('ctrl+shift+h', function(e) {
 		if (hayMode) {
 			startHay();
 		} else {
@@ -273,7 +273,10 @@
 	});
 	
 	// handle the MQ click
+	var mqs = [];
 	$('#sg-mq a').each(function(i) {
+		
+		mqs.push($(this).html());
 		
 		// bind the click
 		$(this).on("click", function(i,k) {
@@ -565,6 +568,35 @@
 			// reset the defaults
 			urlHandler.skipBack = false;
 			
+		} else if (data.keyPress !== undefined) {
+			if (data.keyPress == 'ctrl+shift+s') {
+				goSmall();
+			} else if (data.keyPress == 'ctrl+shift+m') {
+				goMedium();
+			} else if (data.keyPress == 'ctrl+shift+l') {
+				goLarge();
+			} else if (data.keyPress == 'ctrl+shift+d') {
+				if (!discoMode) {
+					startDisco();
+				} else {
+					killDisco();
+				}
+			} else if (data.keyPress == 'ctrl+shift+h') {
+				if (hayMode) {
+					startHay();
+				} else {
+					killHay();
+				}
+			} else if (data.keyPress == 'ctrl+shift+0') {
+				sizeiframe(320,true);
+			} else if (found = data.keyPress.match(/ctrl\+shift\+([1-9])/)) {
+				var val = mqs[(found[1]-1)];
+				var type = (val.indexOf("px") !== -1) ? "px" : "em";
+				val = val.replace(type,"");
+				var width = (type === "px") ? val*1 : val*$bodySize;
+				sizeiframe(width,true);
+			}
+			return false;
 		}
 	}
 	window.addEventListener("message", receiveIframeMessage, false);

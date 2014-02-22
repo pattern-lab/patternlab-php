@@ -10,7 +10,8 @@ var annotationsViewer = {
 	
 	// set-up default sections
 	commentsActive: false,
-	targetOrigin: (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
+	targetOrigin:   (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
+	moveToOnInit:   0,
 	
 	/**
 	* add the onclick handler to the annotations link in the main nav
@@ -23,13 +24,6 @@ var annotationsViewer = {
 			
 			e.preventDefault();
 			
-			// make sure the code view overlay is off before showing the annotations view
-			$('#sg-t-code').removeClass('active');
-			codeViewer.codeActive = false;
-			var obj = JSON.stringify({ "codeToggle": "off" });
-			document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
-			codeViewer.slideCode(999);
-			
 			// remove the class from the "eye" nav item
 			$('#sg-t-toggle').removeClass('active');
 			
@@ -40,6 +34,15 @@ var annotationsViewer = {
 		
 		// initialize the annotations viewer
 		annotationsViewer.commentContainerInit();
+		
+		// load the query strings in case code view has to show by default
+		var queryStringVars = urlHandler.getRequestVars();
+		if ((queryStringVars.view !== undefined) && ((queryStringVars.view === "annotations") || (queryStringVars.view === "a"))) {
+			annotationsViewer.openComments();
+			if (queryStringVars.number !== undefined) {
+				annotationsViewer.moveToOnInit = queryStringVars.number;
+			}
+		}
 		
 	},
 	
@@ -60,9 +63,20 @@ var annotationsViewer = {
 	* open the annotations panel
 	*/
 	openComments: function() {
-		annotationsViewer.commentsActive = true;
+		
+		// make sure the code view overlay is off before showing the annotations view
+		$('#sg-t-code').removeClass('active');
+		codeViewer.codeActive = false;
+		var obj = JSON.stringify({ "codeToggle": "off" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
+		codeViewer.slideCode(999);
+		
+		// tell the iframe annotation view has been turned on
 		var obj = JSON.stringify({ "commentToggle": "on" });
 		document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
+		
+		// note that it's turned on in the viewer
+		annotationsViewer.commentsActive = true;
 		$('#sg-t-annotations').addClass('active');
 	},
 	
@@ -105,6 +119,16 @@ var annotationsViewer = {
 	*/
 	slideComment: function(pos) {
 		$('#sg-annotation-container').css('bottom',-pos);
+	},
+	
+	/**
+	* moves to a particular item in the viewer
+	*/
+	moveTo: function(number) {
+		if (document.getElementById("annotation-"+number) !== undefined) {
+			var top = document.getElementById("annotation-"+number).offsetTop;
+			$('#sg-annotation-container').animate({scrollTop: top - 10}, 600);
+		}
 	},
 	
 	/**
@@ -173,6 +197,11 @@ var annotationsViewer = {
 		// slide the comment section into view
 		annotationsViewer.slideComment(0);
 		
+		if (annotationsViewer.moveToOnInit != "0") {
+			annotationsViewer.moveTo(annotationsViewer.moveToOnInit);
+			annotationsViewer.moveToOnInit = "0";
+		}
+		
 	},
 	
 	/**
@@ -198,8 +227,17 @@ var annotationsViewer = {
 		} else if (data.annotationState !== undefined) {
 			document.getElementById("annotation-state-"+data.displayNumber).innerHTML = (data.annotationState == true) ? "" : " hidden";
 		} else if (data.displaynumber !== undefined) {
-			var top = document.getElementById("annotation-"+data.displaynumber).offsetTop;
-			$('#sg-annotation-container').animate({scrollTop: top - 10}, 600);
+			annotationsViewer.moveTo(data.displaynumber);
+		} else if (data.keyPress !== undefined) {
+			if (data.keyPress == 'ctrl+shift+a') {
+				annotationsViewer.toggleComments();
+				return false;
+			} else if (data.keyPress == 'esc') {
+				if (annotationsViewer.commentsActive) {
+					annotationsViewer.closeComments();
+					return false;
+				}
+			}
 		}
 		
 	}
@@ -224,7 +262,7 @@ $('#sg-view li a').click(function() {
 });
 
 // toggle the annotations panel
-jwerty.key('cmd+shift+a/ctrl+shift+a', function (e) {
+jwerty.key('ctrl+shift+a', function (e) {
 	annotationsViewer.toggleComments();
 	return false;
 });

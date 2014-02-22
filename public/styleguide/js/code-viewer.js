@@ -14,7 +14,9 @@ var codeViewer = {
 	encoded:      "",
 	mustache:     "",
 	css:          "",
+	ids:          { "e": "#sg-code-title-html", "m": "#sg-code-title-mustache", "c": "#sg-code-title-css" },
 	targetOrigin: (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
+	copyOnInit:   false,
 	
 	/**
 	* add the onclick handler to the code link in the main nav
@@ -28,13 +30,6 @@ var codeViewer = {
 		$('#sg-t-code').click(function(e) {
 			
 			e.preventDefault();
-			
-			// make sure the annotations overlay is off before showing code view
-			$('#sg-t-annotations').removeClass('active');
-			annotationsViewer.commentsActive = false;
-			var obj = JSON.stringify({ "commentToggle": "off" });
-			document.getElementById('sg-viewport').contentWindow.postMessage(obj,codeViewer.targetOrigin);
-			annotationsViewer.slideComment(999);
 			
 			// remove the class from the "eye" nav item
 			$('#sg-t-toggle').removeClass('active');
@@ -50,6 +45,13 @@ var codeViewer = {
 		
 		// initialize the code viewer
 		codeViewer.codeContainerInit();
+		
+		// load the query strings in case code view has to show by default
+		var queryStringVars = urlHandler.getRequestVars();
+		if ((queryStringVars.view !== undefined) && ((queryStringVars.view === "code") || (queryStringVars.view === "c"))) {
+			codeViewer.copyOnInit = ((queryStringVars.copy !== undefined) && (queryStringVars.copy === "true")) ? true : false;
+			codeViewer.openCode();
+		}
 		
 	},
 	
@@ -70,10 +72,22 @@ var codeViewer = {
 	* after clicking the code view link open the panel
 	*/
 	openCode: function() {
+		
+		// make sure the annotations overlay is off before showing code view
+		$('#sg-t-annotations').removeClass('active');
+		annotationsViewer.commentsActive = false;
+		var obj = JSON.stringify({ "commentToggle": "off" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,codeViewer.targetOrigin);
+		annotationsViewer.slideComment(999);
+		
+		// tell the iframe code view has been turned on
 		var obj = JSON.stringify({ "codeToggle": "on" });
 		document.getElementById('sg-viewport').contentWindow.postMessage(obj,codeViewer.targetOrigin);
+		
+		// note it's turned on in the viewer
 		codeViewer.codeActive = true;
 		$('#sg-t-code').addClass('active');
+		
 	},
 	
 	/**
@@ -105,23 +119,17 @@ var codeViewer = {
 		});
 		
 		// make sure the click events are handled on the HTML tab
-		$('#sg-code-title-html').click(function() {
-			$('.sg-code-title-active').removeClass('sg-code-title-active');
-			$(this).toggleClass("sg-code-title-active");
+		$(codeViewer.ids["e"]).click(function() {
 			codeViewer.swapCode("e");
 		});
 		
 		// make sure the click events are handled on the Mustache tab
-		$('#sg-code-title-mustache').click(function() {
-			$('.sg-code-title-active').removeClass('sg-code-title-active');
-			$(this).toggleClass("sg-code-title-active");
+		$(codeViewer.ids["m"]).click(function() {
 			codeViewer.swapCode("m");
 		});
 		
 		// make sure the click events are handled on the CSS tab
-		$('#sg-code-title-css').click(function() {
-			$('.sg-code-title-active').removeClass('sg-code-title-active');
-			$(this).toggleClass("sg-code-title-active");
+		$(codeViewer.ids["c"]).click(function() {
 			codeViewer.swapCode("c");
 		});
 		
@@ -131,6 +139,8 @@ var codeViewer = {
 	* depending on what tab is clicked this swaps out the code container. makes sure prism highlight is added.
 	*/
 	swapCode: function(type) {
+		
+		codeViewer.clearSelection();
 		var fill      = "";
 		var className = (type == "c") ? "css" : "markup";
 		$("#sg-code-fill").removeClass().addClass("language-"+className);
@@ -144,6 +154,34 @@ var codeViewer = {
 		$("#sg-code-fill").html(fill).text();
 		codeViewer.tabActive = type;
 		Prism.highlightElement(document.getElementById("sg-code-fill"));
+		$('.sg-code-title-active').removeClass('sg-code-title-active');
+		$(codeViewer.ids[type]).toggleClass("sg-code-title-active");
+	},
+	
+	/**
+	* select the code where using cmd+a/ctrl+a
+	*/
+	selectCode: function() {
+		if (codeViewer.codeActive) {
+			selection = window.getSelection();
+			range = document.createRange();
+			range.selectNodeContents(document.getElementById("sg-code-fill"));
+			selection.removeAllRanges();
+			selection.addRange(range);
+		}
+	},
+	
+	/**
+	* clear any selection of code when swapping tabs or opening a new pattern
+	*/
+	clearSelection: function() {
+		if (codeViewer.codeActive) {
+			if (window.getSelection().empty) {
+				window.getSelection().empty();
+			} else if (window.getSelection().removeAllRanges) {
+				window.getSelection().removeAllRanges();
+			}
+		}
 	},
 	
 	/**
@@ -205,6 +243,10 @@ var codeViewer = {
 		$("#sg-code-fill").removeClass().addClass("language-"+className);
 		$("#sg-code-fill").html(code).text();
 		Prism.highlightElement(document.getElementById("sg-code-fill"));
+		if (codeViewer.copyOnInit) {
+			codeViewer.selectCode();
+			codeViewer.copyOnInit = false;
+		}
 	},
 	
 	/**
@@ -213,26 +255,22 @@ var codeViewer = {
 	*/
 	updateCode: function(lineage,lineageR,patternPartial,cssEnabled) {
 		
+		// clear any selections that might have been made
+		codeViewer.clearSelection();
+		
 		// draw lineage
 		if (lineage.length !== 0) {
 			var lineageList = "";
 			$("#sg-code-lineage").css("display","block");
 			for (var i = 0; i < lineage.length; i++) {
 				lineageList += (i === 0) ? "" : ", ";
-				lineageList += "<a href='"+lineage[i].lineagePath+"' data-patternPartial='"+lineage[i].lineagePattern+"'>"+lineage[i].lineagePattern+"</a>";
+				var cssClass  = (lineage[i].lineageState != undefined) ? "sg-pattern-state "+lineage[i].lineageState : "";
+				lineageList += "<a href='"+lineage[i].lineagePath+"' class='"+cssClass+"' data-patternPartial='"+lineage[i].lineagePattern+"'>"+lineage[i].lineagePattern+"</a>";
 			}
 			$("#sg-code-lineage-fill").html(lineageList);
 		} else {
 			$("#sg-code-lineage").css("display","none");
 		}
-		
-		
-		// when clicking on a lineage item change the iframe source
-		$('#sg-code-lineage-fill a').on("click", function(e){
-			e.preventDefault();
-			var obj = JSON.stringify({ "path": urlHandler.getFileName($(this).attr("data-patternpartial")) });
-			document.getElementById("sg-viewport").contentWindow.postMessage(obj,codeViewer.targetOrigin);
-		});
 		
 		// draw reverse lineage
 		if (lineageR.length !== 0) {
@@ -240,19 +278,23 @@ var codeViewer = {
 			$("#sg-code-lineager").css("display","block");
 			for (var i = 0; i < lineageR.length; i++) {
 				lineageRList += (i === 0) ? "" : ", ";
-				lineageRList += "<a href='"+lineageR[i].lineagePath+"' data-patternPartial='"+lineageR[i].lineagePattern+"'>"+lineageR[i].lineagePattern+"</a>";
+				var cssClass  = (lineageR[i].lineageState != undefined) ? "sg-pattern-state "+lineageR[i].lineageState : "";
+				lineageRList += "<a href='"+lineageR[i].lineagePath+"' class='"+cssClass+"' data-patternPartial='"+lineageR[i].lineagePattern+"'>"+lineageR[i].lineagePattern+"</a>";
 			}
 			$("#sg-code-lineager-fill").html(lineageRList);
 		} else {
 			$("#sg-code-lineager").css("display","none");
 		}
 		
-		// when clicking on a reverse lineage item change the iframe source
-		$('#sg-code-lineager-fill a').on("click", function(e){
+		// when clicking on a lineage item change the iframe source
+		$('#sg-code-lineage-fill a, #sg-code-lineager-fill a').on("click", function(e){
 			e.preventDefault();
-			var obj = JSON.stringify( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) });
+			$("#sg-code-loader").css("display","block");
+			var obj = JSON.stringify({ "path": urlHandler.getFileName($(this).attr("data-patternpartial")) });
 			document.getElementById("sg-viewport").contentWindow.postMessage(obj,codeViewer.targetOrigin);
 		});
+		
+		$('#sg-code-lineage-patternname, #sg-code-lineager-patternname').html(patternPartial);
 		
 		// get the file name of the pattern so we can get the various editions of the code that can show in code view
 		var fileName = urlHandler.getFileName(patternPartial);
@@ -279,7 +321,9 @@ var codeViewer = {
 		
 		// move the code into view
 		codeViewer.slideCode(0);
-			
+		
+		$("#sg-code-loader").css("display","none");
+		
 	},
 	
 	/**
@@ -296,12 +340,35 @@ var codeViewer = {
 			return;
 		}
 		
-		// if the message contains the codeOverlay attribute act on it as appropriate
+		// switch based on stuff related to the postmessage
 		if (data.codeOverlay !== undefined) {
 			if (data.codeOverlay === "on") {
 				codeViewer.updateCode(data.lineage,data.lineageR,data.codePatternPartial,data.cssEnabled);
 			} else {
 				codeViewer.slideCode($('#sg-code-container').outerHeight());
+			}
+		} else if (data.keyPress !== undefined) {
+			if (data.keyPress == 'ctrl+shift+c') {
+				codeViewer.toggleCode();
+				return false;
+			} else if (data.keyPress == 'cmd+a') {
+				codeViewer.selectCode();
+				return false;
+			} else if (data.keyPress == 'ctrl+shift+u') {
+				if (codeViewer.codeActive) {
+					codeViewer.swapCode("m");
+					return false;
+				}
+			} else if (data.keyPress == 'ctrl+shift+h') {
+				if (codeViewer.codeActive) {
+					codeViewer.swapCode("h");
+					return false;
+				}
+			} else if (data.keyPress == 'esc') {
+				if (codeViewer.codeActive) {
+					codeViewer.closeCode();
+					return false;
+				}
 			}
 		}
 		
@@ -322,19 +389,29 @@ $('#sg-viewport').load(function() {
 });
 
 // toggle the code panel
-jwerty.key('cmd+shift+c/ctrl+shift+c', function (e) {
+jwerty.key('ctrl+shift+c', function (e) {
 	codeViewer.toggleCode();
 	return false;
 });
 
 // when the code panel is open hijack cmd+a so that it only selects the code view
 jwerty.key('cmd+a/ctrl+a', function (e) {
+	codeViewer.selectCode();
+	return false;
+});
+
+// open the mustache panel
+jwerty.key('ctrl+shift+u', function (e) {
 	if (codeViewer.codeActive) {
-		selection = window.getSelection();
-		range = document.createRange();
-		range.selectNodeContents(document.getElementById("sg-code-fill"));
-		selection.removeAllRanges();
-		selection.addRange(range);
+		codeViewer.swapCode("m");
+		return false;
+	}
+});
+
+// open the html panel
+jwerty.key('ctrl+shift+h', function (e) {
+	if (codeViewer.codeActive) {
+		codeViewer.swapCode("e");
 		return false;
 	}
 });
