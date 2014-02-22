@@ -869,7 +869,7 @@ class Builder {
 				$patternBits  = $this->getPatternInfo($patternLineageInfo["lineagePattern"]);
 				$patternState = $this->patternPaths[$patternBits[0]][$patternBits[1]]["patternState"];
 				if (($patternState != "") && ($patternState != null)) {
-					$this->patternLineages[$pattern][$key]["lineageState"] = $patternState;
+					$this->patternLineagesR[$pattern][$key]["lineageState"] = $patternState;
 				}
 			}
 		}
