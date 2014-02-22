@@ -309,7 +309,7 @@
     top: 2em;
     left: 0; }
 
-.sg-checkbox:before {
+.sg-iconitem:before {
   display: inline-block;
   margin-right: 0.4em; }
 
@@ -646,7 +646,7 @@ div.clear {
 	font-style: normal;
 }
 
-.icon-search, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-radio-checked, .icon-radio-unchecked, .icon-file, .icon-link, .icon-keyboard, .icon-qrcode, .icon-eye, .sg-checkbox {
+.icon-search, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-radio-checked, .icon-radio-unchecked, .icon-file, .icon-link, .icon-keyboard, .icon-qrcode, .icon-eye, .sg-iconitem {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
