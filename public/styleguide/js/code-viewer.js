@@ -16,6 +16,7 @@ var codeViewer = {
 	css:          "",
 	ids:          { "e": "#sg-code-title-html", "m": "#sg-code-title-mustache", "c": "#sg-code-title-css" },
 	targetOrigin: (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
+	copyOnInit:   false,
 	
 	/**
 	* add the onclick handler to the code link in the main nav
@@ -44,6 +45,13 @@ var codeViewer = {
 		
 		// initialize the code viewer
 		codeViewer.codeContainerInit();
+		
+		// load the query strings in case code view has to show by default
+		var queryStringVars = urlHandler.getRequestVars();
+		if ((queryStringVars.view !== undefined) && (queryStringVars.view === "code")) {
+			codeViewer.copyOnInit = ((queryStringVars.copy !== undefined) && (queryStringVars.copy === "true")) ? true : false;
+			codeViewer.openCode();
+		}
 		
 	},
 	
@@ -221,6 +229,10 @@ var codeViewer = {
 		$("#sg-code-fill").removeClass().addClass("language-"+className);
 		$("#sg-code-fill").html(code).text();
 		Prism.highlightElement(document.getElementById("sg-code-fill"));
+		if (codeViewer.copyOnInit) {
+			codeViewer.selectCode();
+			codeViewer.copyOnInit = false;
+		}
 	},
 	
 	/**
