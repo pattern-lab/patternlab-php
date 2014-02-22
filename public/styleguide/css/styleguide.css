@@ -224,9 +224,6 @@
     min-width: 0; }
     .sg-controls .sg-nav-phases .sg-acc-panel.active {
       max-height: none; }
-  @media all and (min-width: 69.5em) {
-    .sg-controls {
-      width: 41.5em; } }
 
 .sg-control-trigger {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
@@ -263,7 +260,7 @@
   .sg-current-size:hover .sg-input {
     background: #999999;
     color: #000; }
-  @media all and (min-width: 69.5em) {
+  @media all and (min-width: 72.5em) {
     .sg-current-size {
       float: left; } }
 
@@ -273,7 +270,7 @@
     .sg-size {
       width: auto; } }
 
-@media all and (min-width: 69.5em) {
+@media all and (min-width: 72.5em) {
   .sg-size-options {
     float: left;
     position: static;
