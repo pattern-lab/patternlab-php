@@ -70,15 +70,21 @@
 	
 	<!-- the template for the code view slider -->
 	<script type="text/html" id="code-template">
-		<a href="#" id="sg-code-close-btn" class="sg-view-close-btn">Close</a>
+		<div id="sg-code-close" class="sg-view-close">
+			<a href="#" id="sg-code-close-btn" class="sg-view-close-btn">Close</a>
+		</div>
+		<div id="sg-code-loader">
+			<div class="spinner"></div>
+			Loading pattern...
+		</div>
 		<div id="sg-code-lineage" style="display: none;">
 			<p>
-				This pattern contains the following patterns: <span id="sg-code-lineage-fill"></span>
+				The <span id="sg-code-lineager-patternname" class="sg-code-patternname"></span> pattern contains the following patterns: <span id="sg-code-lineage-fill"></span>
 			</p>
 		</div>
 		<div id="sg-code-lineager" style="display: none;">
 			<p>
-				This pattern is included in the following patterns: <span id="sg-code-lineager-fill"></span>
+				The <span id="sg-code-lineager-patternname" class="sg-code-patternname"></span> pattern is included in the following patterns: <span id="sg-code-lineager-fill"></span>
 			</p>
 		</div>
 		<div id="sg-code-markup">
@@ -95,7 +101,9 @@
 	
 	<!-- the template for the annotations viewer slider -->
 	<script type="text/html" id="annotations-template">
-		<a href="#" id="sg-annotation-close-btn" class="sg-view-close-btn">Close</a>
+		<div id="sg-annotation-close" class="sg-view-close">
+			<a href="#" id="sg-annotation-close-btn" class="sg-view-close-btn">Close</a>
+		</div>
 		<div id="sg-comments-container"></div>
 	</script>
 	
