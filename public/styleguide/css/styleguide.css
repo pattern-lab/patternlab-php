@@ -503,14 +503,16 @@
     -o-transition: bottom 0.3s ease-out;
     transition: bottom 0.3s ease-out; }
 
+.sg-view-close {
+  width: 100%;
+  margin-bottom: -10px; }
+
 .sg-view-close-btn {
   color: #fff;
-  position: absolute;
-  top: 1em;
-  right: 1em;
   text-transform: uppercase;
   text-decoration: none;
-  text-align: right; }
+  text-align: right; 
+  display: block; }
 
 .has-annotation {
   cursor: help !important;

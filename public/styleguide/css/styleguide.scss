@@ -703,14 +703,17 @@ $animate-quick: 0.2s;
 }
 
 //Annotation and code view close button
+.sg-view-close {
+	width: 100%;
+	margin-bottom: -10px;
+}
+
 .sg-view-close-btn {
 	color: #fff;
-	position: absolute;
-	top: 1em;
-	right: 1em;
 	text-transform: uppercase;
 	text-decoration: none;
 	text-align: right;
+	display: block;
 }
 
 //Visually emphasize annotated elements
