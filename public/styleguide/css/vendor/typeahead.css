@@ -24,7 +24,7 @@
 }
 
 .typeahead:focus {
-  border: 2px solid #0097cf;
+  border: 2px solid #999;
 }
 
 .tt-query {
@@ -50,7 +50,7 @@
 }
 
 .tt-suggestion {
-  padding: 3px 20px;
+  padding: 3px 13px;
   font-size: 14px;
   line-height: 16px;
 }
