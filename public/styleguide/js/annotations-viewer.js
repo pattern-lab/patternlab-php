@@ -112,6 +112,16 @@ var annotationsViewer = {
 	},
 	
 	/**
+	* moves to a particular item in the viewer
+	*/
+	moveTo: function(number) {
+		if (document.getElementById("annotation-"+number) !== undefined) {
+			var top = document.getElementById("annotation-"+number).offsetTop;
+			$('#sg-annotation-container').animate({scrollTop: top - 10}, 600);
+		}
+	},
+	
+	/**
 	* when turning on or switching between patterns with annotations view on make sure we get
 	* the annotations from from the pattern via post message
 	*/
@@ -202,8 +212,7 @@ var annotationsViewer = {
 		} else if (data.annotationState !== undefined) {
 			document.getElementById("annotation-state-"+data.displayNumber).innerHTML = (data.annotationState == true) ? "" : " hidden";
 		} else if (data.displaynumber !== undefined) {
-			var top = document.getElementById("annotation-"+data.displaynumber).offsetTop;
-			$('#sg-annotation-container').animate({scrollTop: top - 10}, 600);
+			annotationsViewer.moveTo(data.displaynumber);
 		} else if (data.keyPress !== undefined) {
 			if (data.keyPress == 'ctrl+shift+a') {
 				annotationsViewer.toggleComments();
