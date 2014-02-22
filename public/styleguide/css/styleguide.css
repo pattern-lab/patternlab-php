@@ -588,7 +588,7 @@
   font-size: 1em; }
 
 .sg-code-patternname {
-  font-weight: bold; }
+  color: #aaa; }
 
 #sg-code-loader {
   display: none;
