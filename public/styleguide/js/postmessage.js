@@ -38,8 +38,8 @@ if (self != top) {
 		};
 	}
 	
-	// bind the keyboard shortcuts for various viewport resizings
-	var keys = [ "s", "m", "l", "d", "h" ];
+	// bind the keyboard shortcuts for various viewport resizings + pattern search
+	var keys = [ "s", "m", "l", "d", "h", "f" ];
 	for (var i = 0; i < keys.length; i++) {
 		jwerty.key('ctrl+shift+'+keys[i],  function (k,t) {
 			return function(e) {
