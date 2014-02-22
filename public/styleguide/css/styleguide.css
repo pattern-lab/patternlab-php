@@ -345,6 +345,7 @@
   bottom: 0;
   left: 0;
   right: 0;
+  background-color: white;
 }
   #sg-viewport.hay-mode {
     -webkit-transition: all 40s linear;
