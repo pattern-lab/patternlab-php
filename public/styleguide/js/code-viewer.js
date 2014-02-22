@@ -140,6 +140,7 @@ var codeViewer = {
 	*/
 	swapCode: function(type) {
 		
+		codeViewer.clearSelection();
 		var fill      = "";
 		var className = (type == "c") ? "css" : "markup";
 		$("#sg-code-fill").removeClass().addClass("language-"+className);
@@ -167,6 +168,19 @@ var codeViewer = {
 			range.selectNodeContents(document.getElementById("sg-code-fill"));
 			selection.removeAllRanges();
 			selection.addRange(range);
+		}
+	},
+	
+	/**
+	* clear any selection of code when swapping tabs or opening a new pattern
+	*/
+	clearSelection: function() {
+		if (codeViewer.codeActive) {
+			if (window.getSelection().empty) {
+				window.getSelection().empty();
+			} else if (window.getSelection().removeAllRanges) {
+				window.getSelection().removeAllRanges();
+			}
 		}
 	},
 	
@@ -240,6 +254,9 @@ var codeViewer = {
 	* the code from from the pattern via post message
 	*/
 	updateCode: function(lineage,lineageR,patternPartial,cssEnabled) {
+		
+		// clear any selections that might have been made
+		codeViewer.clearSelection();
 		
 		// draw lineage
 		if (lineage.length !== 0) {
