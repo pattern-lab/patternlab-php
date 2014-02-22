@@ -637,11 +637,11 @@ div.clear {
 /* Pattern Lab icon fonts */
 @font-face {
 	font-family: 'icomoon';
-	src:url('fonts/icomoon.eot?srsv7g');
-	src:url('fonts/icomoon.eot?#iefixsrsv7g') format('embedded-opentype'),
-		url('fonts/icomoon.woff?srsv7g') format('woff'),
-		url('fonts/icomoon.ttf?srsv7g') format('truetype'),
-		url('fonts/icomoon.svg?srsv7g#icomoon') format('svg');
+	src:url('../fonts/icomoon.eot?srsv7g');
+	src:url('../fonts/icomoon.eot?#iefixsrsv7g') format('embedded-opentype'),
+		url('../fonts/icomoon.woff?srsv7g') format('woff'),
+		url('../fonts/icomoon.ttf?srsv7g') format('truetype'),
+		url('../fonts/icomoon.svg?srsv7g#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
