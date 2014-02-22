@@ -30,13 +30,6 @@ var codeViewer = {
 			
 			e.preventDefault();
 			
-			// make sure the annotations overlay is off before showing code view
-			$('#sg-t-annotations').removeClass('active');
-			annotationsViewer.commentsActive = false;
-			var obj = JSON.stringify({ "commentToggle": "off" });
-			document.getElementById('sg-viewport').contentWindow.postMessage(obj,codeViewer.targetOrigin);
-			annotationsViewer.slideComment(999);
-			
 			// remove the class from the "eye" nav item
 			$('#sg-t-toggle').removeClass('active');
 			
@@ -71,10 +64,22 @@ var codeViewer = {
 	* after clicking the code view link open the panel
 	*/
 	openCode: function() {
+		
+		// make sure the annotations overlay is off before showing code view
+		$('#sg-t-annotations').removeClass('active');
+		annotationsViewer.commentsActive = false;
+		var obj = JSON.stringify({ "commentToggle": "off" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,codeViewer.targetOrigin);
+		annotationsViewer.slideComment(999);
+		
+		// tell the iframe code view has been turned on
 		var obj = JSON.stringify({ "codeToggle": "on" });
 		document.getElementById('sg-viewport').contentWindow.postMessage(obj,codeViewer.targetOrigin);
+		
+		// note it's turned on in the viewer
 		codeViewer.codeActive = true;
 		$('#sg-t-code').addClass('active');
+		
 	},
 	
 	/**
@@ -238,21 +243,13 @@ var codeViewer = {
 			$("#sg-code-lineage").css("display","none");
 		}
 		
-		
-		// when clicking on a lineage item change the iframe source
-		$('#sg-code-lineage-fill a').on("click", function(e){
-			e.preventDefault();
-			var obj = JSON.stringify({ "path": urlHandler.getFileName($(this).attr("data-patternpartial")) });
-			document.getElementById("sg-viewport").contentWindow.postMessage(obj,codeViewer.targetOrigin);
-		});
-		
 		// draw reverse lineage
 		if (lineageR.length !== 0) {
 			var lineageRList = "";
 			$("#sg-code-lineager").css("display","block");
 			for (var i = 0; i < lineageR.length; i++) {
 				lineageRList += (i === 0) ? "" : ", ";
-				var cssClass  = (lineageR[i].lineageState != undefined) ? lineageR[i].lineageState : "";
+				var cssClass  = (lineageR[i].lineageState != undefined) ? "sg-pattern-state "+lineageR[i].lineageState : "";
 				lineageRList += "<a href='"+lineageR[i].lineagePath+"' class='"+cssClass+"' data-patternPartial='"+lineageR[i].lineagePattern+"'>"+lineageR[i].lineagePattern+"</a>";
 			}
 			$("#sg-code-lineager-fill").html(lineageRList);
@@ -260,12 +257,15 @@ var codeViewer = {
 			$("#sg-code-lineager").css("display","none");
 		}
 		
-		// when clicking on a reverse lineage item change the iframe source
-		$('#sg-code-lineager-fill a').on("click", function(e){
+		// when clicking on a lineage item change the iframe source
+		$('#sg-code-lineage-fill a, #sg-code-lineager-fill a').on("click", function(e){
 			e.preventDefault();
-			var obj = JSON.stringify( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) });
+			$("#sg-code-loader").css("display","block");
+			var obj = JSON.stringify({ "path": urlHandler.getFileName($(this).attr("data-patternpartial")) });
 			document.getElementById("sg-viewport").contentWindow.postMessage(obj,codeViewer.targetOrigin);
 		});
+		
+		$('#sg-code-lineage-patternname, #sg-code-lineager-patternname').html(patternPartial);
 		
 		// get the file name of the pattern so we can get the various editions of the code that can show in code view
 		var fileName = urlHandler.getFileName(patternPartial);
@@ -292,7 +292,9 @@ var codeViewer = {
 		
 		// move the code into view
 		codeViewer.slideCode(0);
-			
+		
+		$("#sg-code-loader").css("display","none");
+		
 	},
 	
 	/**
