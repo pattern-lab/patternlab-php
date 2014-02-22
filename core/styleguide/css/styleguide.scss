@@ -499,6 +499,7 @@ $animate-quick: 0.2s;
 	bottom: 0;
 	left: 0;
 	right: 0;
+	background-color: white;
 
   &.hay-mode {
 		-webkit-transition: all 40s linear;
@@ -703,14 +704,17 @@ $animate-quick: 0.2s;
 }
 
 //Annotation and code view close button
+.sg-view-close {
+	width: 100%;
+	margin-bottom: -10px;
+}
+
 .sg-view-close-btn {
 	color: #fff;
-	position: absolute;
-	top: 1em;
-	right: 1em;
 	text-transform: uppercase;
 	text-decoration: none;
 	text-align: right;
+	display: block;
 }
 
 //Visually emphasize annotated elements
@@ -810,53 +814,126 @@ $animate-quick: 0.2s;
 	font-size: 1em;
 }
 
+#sg-code-markup {
+	padding-top: 10px;
+}
+
+#sg-code-tabs {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#sg-code-tabs li {
+	float: left;
+	background-color: #333;
+	font-size: 1.3em;
+	font-weight: bold;
+	padding: 5px 15px;
+	border-top: 2px solid #666;
+	margin-right: 2px;
+	cursor: pointer;
+}
+
+.sg-code-title-active {
+	color: #bbb;
+	background-color: #272822 !important;
+}
+
+div.clear {
+	clear: both;
+}
+
+.sg-code-patternname {
+	color: #aaa; 
+}
+
+#sg-code-loader {
+	display: none;
+	position: absolute;
+	left: 45%;
+	top: 20%;
+	width: 150px;
+	padding: 10px;
+	text-align: center;
+	border-radius: 10px;
+	background-color: #000;
+	z-index: 100; 
+}
+
+.spinner {
+	height: 30px;
+	width: 30px;
+	margin-left: auto; margin-right: auto;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background: url('../images/spinner.gif');
+	border-radius: 50%;
+	opacity: .7;
+}
 
 /* Pattern Lab icon fonts */
+/* Pattern Lab icon fonts */
 @font-face {
-	font-family: 'icons';
-	src:url('../assets/icons.eot');
-	src:url('../assets/icons.eot?#iefix') format('embedded-opentype'),
-		url('../assets/icons.woff') format('woff'),
-		url('../assets/icons.ttf') format('truetype'),
-		url('../assets/icons.svg#icons') format('svg');
+	font-family: 'icomoon';
+	src:url('../fonts/icomoon.eot?srsv7g');
+	src:url('../fonts/icomoon.eot?#iefixsrsv7g') format('embedded-opentype'),
+		url('../fonts/icomoon.woff?srsv7g') format('woff'),
+		url('../fonts/icomoon.ttf?srsv7g') format('truetype'),
+		url('../fonts/icomoon.svg?srsv7g#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
 
-
-.icon-reload, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-checkbox-unchecked, .icon-checkbox-checked, .icon-eye {
-	font-family: 'icons';
+.icon-search, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-radio-checked, .icon-radio-unchecked, .icon-file, .icon-link, .icon-keyboard, .icon-qrcode, .icon-eye, .sg-checkbox {
+	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
 	font-variant: normal;
 	text-transform: none;
 	line-height: 1;
+
+	/* Better Font Rendering =========== */
 	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
-.icon-reload:before {
-	content: "\e002";
+
+.icon-search:before {
+	content: "\e600";
 }
 .icon-cog:before {
-	content: "\e000";
+	content: "\e601";
 }
 .icon-minus:before {
-	content: "\e003";
+	content: "\e602";
 }
 .icon-plus:before {
-	content: "\e004";
+	content: "\e603";
 }
 .icon-menu:before {
-	content: "\e005";
+	content: "\e604";
 }
-.icon-checkbox-unchecked:before {
-	content: "\e006";
+.icon-radio-checked:before, .sg-checkbox.active:before {
+	content: "\e605";
 }
-.icon-checkbox-checked:before {
-	content: "\e007";
+.icon-radio-unchecked:before, .sg-checkbox:before {
+	content: "\e606";
+}
+.icon-file:before {
+	content: "\e607";
+}
+.icon-link:before {
+	content: "\e608";
+}
+.icon-keyboard:before {
+	content: "\e609";
+}
+.icon-qrcode:before {
+	content: "\e60a";
 }
 .icon-eye:before {
-	content: "\e001";
+	content: "\e60b";
 }
 
 /******************************************************************/

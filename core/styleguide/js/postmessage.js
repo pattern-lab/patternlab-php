@@ -38,19 +38,47 @@ if (self != top) {
 		};
 	}
 	
+	// bind the keyboard shortcuts for various viewport resizings + pattern search
+	var keys = [ "s", "m", "l", "d", "h", "f" ];
+	for (var i = 0; i < keys.length; i++) {
+		jwerty.key('ctrl+shift+'+keys[i],  function (k,t) {
+			return function(e) {
+				var obj = JSON.stringify({ "keyPress": "ctrl+shift+"+k });
+				parent.postMessage(obj,t);
+				return false;
+			}
+		}(keys[i],targetOrigin));
+	}
+	
+	// bind the keyboard shortcuts for mqs
+	var i = 0;
+	while (i < 10) {
+		jwerty.key('ctrl+shift+'+i, function (k,t) {
+			return function(e) {
+				var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
+				var obj = JSON.stringify({ "keyPress": "ctrl+shift+"+k });
+				parent.postMessage(obj,t);
+				return false;
+			}
+		}(i,targetOrigin));
+		i++;
+	}
+	
 }
 
 // if there are clicks on the iframe make sure the nav in the iframe parent closes
 var body = document.getElementsByTagName('body');
 body[0].onclick = function() {
 	var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-	parent.postMessage( { "bodyclick": "bodyclick" }, targetOrigin);
+	var obj = JSON.stringify({ "bodyclick": "bodyclick" });
+	parent.postMessage(obj,targetOrigin);
 };
 
 // watch the iframe source so that it can be sent back to everyone else.
 function receiveIframeMessage(event) {
 	
 	var path;
+	var data = (typeof event.data !== "string") ? event.data : JSON.parse(event.data);
 	
 	// does the origin sending the message match the current host? if not dev/null the request
 	if ((window.location.protocol != "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
@@ -58,27 +86,28 @@ function receiveIframeMessage(event) {
 	}
 	
 	// see if it got a path to replace
-	if (event.data.path !== undefined) {
+	if (data.path !== undefined) {
 		
 		if (patternPartial !== "") {
 			
 			// handle patterns and the view all page
 			var re = /patterns\/(.*)$/;
-			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace(re,'')+event.data.path+'?'+Date.now();
+			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace(re,'')+data.path+'?'+Date.now();
 			window.location.replace(path);
 			
 		} else {
 			
 			// handle the style guide
-			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("styleguide\/html\/styleguide.html","")+event.data.path+'?'+Date.now();
+			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("styleguide\/html\/styleguide.html","")+data.path+'?'+Date.now();
 			window.location.replace(path);
 			
 		}
 		
-	} else if (event.data.reload !== undefined) {
+	} else if (data.reload !== undefined) {
 		
 		// reload the location if there was a message to do so
 		window.location.reload();
+		
 	}
 	
 }

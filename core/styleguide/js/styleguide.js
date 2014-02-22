@@ -73,28 +73,55 @@
 	
 	//Size View Events
 
-	//Click Size Small Button
-	$('#sg-size-s').on("click", function(e){
-		e.preventDefault();
+	// handle small button
+	function goSmall() {
 		killDisco();
 		killHay();
 		sizeiframe(getRandom(minViewportWidth,500));
+	}
+	
+	$('#sg-size-s').on("click", function(e){
+		e.preventDefault();
+		goSmall();
 	});
 	
-	//Click Size Medium Button
-	$('#sg-size-m').on("click", function(e){
-		e.preventDefault();
+	jwerty.key('ctrl+shift+s', function(e) {
+		goSmall();
+		return false;
+	});
+	
+	// handle medium button
+	function goMedium() {
 		killDisco();
 		killHay();
 		sizeiframe(getRandom(500,800));
+	}
+	
+	$('#sg-size-m').on("click", function(e){
+		e.preventDefault();
+		goMedium();
 	});
 	
-	//Click Size Large Button
-	$('#sg-size-l').on("click", function(e){
-		e.preventDefault();
+	jwerty.key('ctrl+shift+m', function(e) {
+		goLarge();
+		return false;
+	});
+	
+	// handle large button
+	function goLarge() {
 		killDisco();
 		killHay();
 		sizeiframe(getRandom(800,1200));
+	}
+	
+	$('#sg-size-l').on("click", function(e){
+		e.preventDefault();
+		goLarge();
+	});
+	
+	jwerty.key('ctrl+shift+l', function(e) {
+		goLarge();
+		return false;
 	});
 
 	//Click Full Width Button
@@ -141,12 +168,20 @@
 		discoMode = true;
 		discoID = setInterval(disco, 800);
 	}
+	
+	jwerty.key('ctrl+shift+d', function(e) {
+		if (!discoMode) {
+			startDisco();
+		} else {
+			killDisco();
+		}
+		return false;
+	});
 
 	//Stephen Hay Mode - "Start with the small screen first, then expand until it looks like shit. Time for a breakpoint!"
 	$('#sg-size-hay').on("click", function(e){
 		e.preventDefault();
 		killDisco();
-
 		if (hayMode) {
 			killHay();
 		} else {
@@ -176,6 +211,16 @@
 			setInterval(function(){ var vpSize = $sgViewport.width(); updateSizeReading(vpSize); },100);
 		}, 200);
 	}
+	
+	// start hay from a keyboard shortcut
+	jwerty.key('ctrl+shift+h', function(e) {
+		if (hayMode) {
+			startHay();
+		} else {
+			killHay();
+		}
+		return false;
+	});
 
 	//Pixel input
 	$sizePx.on('keydown', function(e){
@@ -220,14 +265,43 @@
 		updateSizeReading(val,'em','updatePxInput');
 	});
 	
-	// handle the MQ click
-	$('#sg-mq a').on("click", function(e){
+	// set 0 to 320px as a default
+	jwerty.key('ctrl+shift+0', function(e) {
 		e.preventDefault();
-		var val = $(this).html();
-		var type = (val.indexOf("px") !== -1) ? "px" : "em";
-		val = val.replace(type,"");
-		var width = (type === "px") ? val*1 : val*$bodySize;
-		sizeiframe(width,true);
+		sizeiframe(320,true);
+		return false;
+	});
+	
+	// handle the MQ click
+	var mqs = [];
+	$('#sg-mq a').each(function(i) {
+		
+		mqs.push($(this).html());
+		
+		// bind the click
+		$(this).on("click", function(i,k) {
+			return function(e) {
+				e.preventDefault();
+				var val = $(k).html();
+				var type = (val.indexOf("px") !== -1) ? "px" : "em";
+				val = val.replace(type,"");
+				var width = (type === "px") ? val*1 : val*$bodySize;
+				sizeiframe(width,true);
+			}
+		}(i,this));
+		
+		// bind the keyboard shortcut. can't use cmd on a mac because 3 & 4 are for screenshots
+		jwerty.key('ctrl+shift+'+(i+1), function (k) {
+			return function(e) {
+				var val = $(k).html();
+				var type = (val.indexOf("px") !== -1) ? "px" : "em";
+				val = val.replace(type,"");
+				var width = (type === "px") ? val*1 : val*$bodySize;
+				sizeiframe(width,true);
+				return false;
+			}
+		}(this));
+		
 	});
 	
 	//Resize the viewport
@@ -255,7 +329,8 @@
 		$sgViewport.width(theSize); //Resize viewport to desired size
 		
 		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-		document.getElementById('sg-viewport').contentWindow.postMessage({ "resize": "true" },targetOrigin);
+		var obj = JSON.stringify({ "resize": "true" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,targetOrigin);
 		
 		updateSizeReading(theSize); //Update values in toolbar
 		saveSize(theSize); //Save current viewport to cookie
@@ -263,7 +338,8 @@
 	
 	$("#sg-gen-container").on('transitionend webkitTransitionEnd', function(e){
 		var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-		document.getElementById('sg-viewport').contentWindow.postMessage({ "resize": "true" },targetOrigin);
+		var obj = JSON.stringify({ "resize": "true" });
+		document.getElementById('sg-viewport').contentWindow.postMessage(obj,targetOrigin);
 	});
 	
 	function saveSize(size) {
@@ -426,11 +502,10 @@
 	urlHandler.skipBack = true;
 	document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
 
-	
-
 	//Close all dropdowns and navigation
 	function closePanels() {
 		$('.sg-nav-container, .sg-nav-toggle, .sg-acc-handle, .sg-acc-panel').removeClass('active');
+		patternFinder.closeFinder();
 	}
 
 	// update the iframe with the source from clicked element in pull down menu. also close the menu
@@ -438,7 +513,8 @@
 	$('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
 		e.preventDefault();
 		// update the iframe via the history api handler
-		document.getElementById("sg-viewport").contentWindow.postMessage( { "path": urlHandler.getFileName($(this).attr("data-patternpartial")) }, urlHandler.targetOrigin);
+		var obj = JSON.stringify({ "path": urlHandler.getFileName($(this).attr("data-patternpartial")) });
+		document.getElementById("sg-viewport").contentWindow.postMessage(obj, urlHandler.targetOrigin);
 		closePanels();
 	});
 
@@ -465,25 +541,27 @@
 	// based on the great MDN docs at https://developer.mozilla.org/en-US/docs/Web/API/window.postMessage
 	function receiveIframeMessage(event) {
 		
+		var data = (typeof event.data !== "string") ? event.data : JSON.parse(event.data);
+		
 		// does the origin sending the message match the current host? if not dev/null the request
 		if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
 			return;
 		}
 		
-		if (event.data.bodyclick !== undefined) {
+		if (data.bodyclick !== undefined) {
 			
 			closePanels();
 			
-		} else if (event.data.patternpartial !== undefined) {
+		} else if (data.patternpartial !== undefined) {
 			
 			if (!urlHandler.skipBack) {
 				
-				if ((history.state === undefined) || (history.state === null) || (history.state.pattern !== event.data.patternpartial)) {
-					urlHandler.pushPattern(event.data.patternpartial, event.data.path);
+				if ((history.state === undefined) || (history.state === null) || (history.state.pattern !== data.patternpartial)) {
+					urlHandler.pushPattern(data.patternpartial, data.path);
 				}
 				
 				if (wsnConnected) {
-					var iFramePath = urlHandler.getFileName(event.data.patternpartial);
+					var iFramePath = urlHandler.getFileName(data.patternpartial);
 					wsn.send( '{"url": "'+iFramePath+'", "patternpartial": "'+event.data.patternpartial+'" }' );
 				}
 			}
@@ -491,6 +569,35 @@
 			// reset the defaults
 			urlHandler.skipBack = false;
 			
+		} else if (data.keyPress !== undefined) {
+			if (data.keyPress == 'ctrl+shift+s') {
+				goSmall();
+			} else if (data.keyPress == 'ctrl+shift+m') {
+				goMedium();
+			} else if (data.keyPress == 'ctrl+shift+l') {
+				goLarge();
+			} else if (data.keyPress == 'ctrl+shift+d') {
+				if (!discoMode) {
+					startDisco();
+				} else {
+					killDisco();
+				}
+			} else if (data.keyPress == 'ctrl+shift+h') {
+				if (hayMode) {
+					startHay();
+				} else {
+					killHay();
+				}
+			} else if (data.keyPress == 'ctrl+shift+0') {
+				sizeiframe(320,true);
+			} else if (found = data.keyPress.match(/ctrl\+shift\+([1-9])/)) {
+				var val = mqs[(found[1]-1)];
+				var type = (val.indexOf("px") !== -1) ? "px" : "em";
+				val = val.replace(type,"");
+				var width = (type === "px") ? val*1 : val*$bodySize;
+				sizeiframe(width,true);
+			}
+			return false;
 		}
 	}
 	window.addEventListener("message", receiveIframeMessage, false);

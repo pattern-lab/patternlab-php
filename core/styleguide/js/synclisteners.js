@@ -110,7 +110,8 @@ function connectAutoReloadSync() {
 		// as a request var to, hopefully, bust caches... cachi(?)
 		wsc.onmessage = function () {
 			var targetOrigin = (window.location.protocol == "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-			document.getElementById('sg-viewport').contentWindow.postMessage( { "reload": true }, targetOrigin);
+			var obj = JSON.stringify({ "reload": true });
+			document.getElementById('sg-viewport').contentWindow.postMessage(obj,targetOrigin);
 		};
 		
 		// when there's an error update the pattern lab nav bar
