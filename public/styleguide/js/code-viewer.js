@@ -48,7 +48,7 @@ var codeViewer = {
 		
 		// load the query strings in case code view has to show by default
 		var queryStringVars = urlHandler.getRequestVars();
-		if ((queryStringVars.view !== undefined) && (queryStringVars.view === "code")) {
+		if ((queryStringVars.view !== undefined) && ((queryStringVars.view === "code") || (queryStringVars.view === "c"))) {
 			codeViewer.copyOnInit = ((queryStringVars.copy !== undefined) && (queryStringVars.copy === "true")) ? true : false;
 			codeViewer.openCode();
 		}
