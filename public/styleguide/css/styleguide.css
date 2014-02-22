@@ -587,6 +587,9 @@
   color: gray;
   font-size: 1em; }
 
+.sg-code-patternname {
+  font-weight: bold; }
+
 #sg-code-loader {
   display: none;
   position: absolute;
