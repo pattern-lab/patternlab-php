@@ -433,7 +433,7 @@ class Builder {
 				
 				// if a file doesn't exist it assumes it's a pseudo-pattern and will use the last lineage found
 				if (file_exists(__DIR__.$this->sp.$filename.".mustache")) {
-					$foundLineages  = $this->getLineage($filename);
+					$foundLineages = array_unique($this->getLineage($filename));
 				}
 				
 				if (count($foundLineages) > 0) {
