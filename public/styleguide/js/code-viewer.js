@@ -359,9 +359,9 @@ var codeViewer = {
 					codeViewer.swapCode("m");
 					return false;
 				}
-			} else if (data.keyPress == 'ctrl+shift+h') {
+			} else if (data.keyPress == 'ctrl+shift+y') {
 				if (codeViewer.codeActive) {
-					codeViewer.swapCode("h");
+					codeViewer.swapCode("e");
 					return false;
 				}
 			} else if (data.keyPress == 'esc') {
@@ -409,7 +409,7 @@ jwerty.key('ctrl+shift+u', function (e) {
 });
 
 // open the html panel
-jwerty.key('ctrl+shift+h', function (e) {
+jwerty.key('ctrl+shift+y', function (e) {
 	if (codeViewer.codeActive) {
 		codeViewer.swapCode("e");
 		return false;
