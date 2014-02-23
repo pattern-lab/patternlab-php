@@ -62,18 +62,16 @@ class Configurer {
 			$config = parse_ini_file($this->userConfigPath);
 		}
 		
-		// check the config version and update it if necessary
-		if ($migrate || ($config["v"] != $defaultConfig["v"])) {
-			print "upgrading your version of pattern lab...\n";
-			$config = $this->writeNewConfig($config,$defaultConfig);
-			$diffVersion = true;
-		}
+		// compare version numbers
+		$diffVersion = ($config["v"] != $defaultConfig["v"]) ? true : false;
 		
-		// if either migrate or diff version run the migrations
+		// run an upgrade and migrations if necessary
 		if ($migrate || $diffVersion) {
+			print "upgrading your version of pattern lab...\n";
 			print "checking for migrations...\n";
 			$m = new Migrator;
 			$m->migrate($diffVersion);
+			$config = $this->writeNewConfig($config,$defaultConfig);
 		}
 		
 		return $config;
