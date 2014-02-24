@@ -210,6 +210,9 @@
     position: absolute;
     left: auto;
     right: 0; }
+  .sg-acc-panel.sg-left {
+    position: absolute;
+    left: auto; }
 
 /* Controls (sizing, view mode) */
 .sg-controls {
