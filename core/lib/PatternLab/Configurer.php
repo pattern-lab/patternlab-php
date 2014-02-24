@@ -53,10 +53,6 @@ class Configurer {
 		// check to see if the user config exists, if not create it
 		print "configuring pattern lab...\n";
 		if (!file_exists($this->userConfigPath)) {
-			if (!@copy($this->plConfigPath, $this->userConfigPath)) {
-				print "Please make sure that Pattern Lab can write a new config to config/.\n";
-				exit;
-			}
 			$migrate = true;
 		} else {
 			$config = parse_ini_file($this->userConfigPath);
@@ -70,8 +66,15 @@ class Configurer {
 			print "upgrading your version of pattern lab...\n";
 			print "checking for migrations...\n";
 			$m = new Migrator;
-			$m->migrate($diffVersion);
-			$config = $this->writeNewConfig($config,$defaultConfig);
+			$m->migrate(true);
+			if ($migrate) {
+				if (!@copy($this->plConfigPath, $this->userConfigPath)) {
+					print "Please make sure that Pattern Lab can write a new config to config/.\n";
+					exit;
+				}
+			} else {
+				$config = $this->writeNewConfig($config,$defaultConfig);
+			}
 		}
 		
 		return $config;
