@@ -1,5 +1,9 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.7.6
+ - FIX: pattern search now searches the entire name of a pattern
+ - FIX: the MQ menu lines up with the navigation item
+
 PL-v0.7.5
  - ADD: a quick pattern search using typeahead
  - ADD: keyboard shortcuts for a bunch of features using jwerty
@@ -24,6 +28,7 @@ PL-v0.7.5
  - THX: thanks to @joshrcook for some styling fixes and hitting on the cause of the start-up issues on ubuntu
  - THX: thanks to @tylersticka for lots of ideas: pattern states, cmd+a, boolean pattern parameters and the feedback on the watcher
  - THX: thanks to @nikvm for the fix for properly sorting the styleguide view
+ - THX: thanks to @aarongustafson for the idea to only load the JS when it's in the iframe
 
 PL-v0.7.2
  - FIX: proper support for Windows with the changes that happened in v0.7.0

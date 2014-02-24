@@ -306,6 +306,11 @@ $animate-quick: 0.2s;
 		left: auto;
 		right: 0;
 	}
+	
+	&.sg-left {
+		position: absolute;
+		left: auto;
+	}
 }
 
 /* Controls (sizing, view mode) */
