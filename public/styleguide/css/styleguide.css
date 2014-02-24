@@ -139,11 +139,11 @@
   .sg-header .sg-nav-toggle span {
     display: inline-block;
     padding-right: 0.2em; }
-  @media all and (min-width: 44em) {
+  @media all and (min-width: 48em) {
     .sg-header .sg-nav-toggle {
       display: none; } }
 
-@media all and (max-width: 44em) {
+@media all and (max-width: 48em) {
   .sg-nav-container {
     overflow: hidden;
     max-height: 0;
@@ -162,7 +162,7 @@
   list-style: none; }
   .sg-nav > li {
     cursor: pointer; }
-    @media all and (min-width: 44em) {
+    @media all and (min-width: 48em) {
       .sg-nav > li {
         border-bottom: 0;
         border-right: 1px solid rgba(255, 255, 255, 0.05);
@@ -178,7 +178,7 @@
   content: ' +';
   float: right;
   font-size: 70%; }
-  @media all and (min-width: 44em) {
+  @media all and (min-width: 48em) {
     .sg-acc-handle:after {
       float: none; } }
 .sg-acc-handle.active {
@@ -227,7 +227,7 @@
 
 .sg-control-trigger {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-  @media all and (min-width: 44em) {
+  @media all and (min-width: 48em) {
     .sg-control-trigger {
       border: 0; } }
   @media all and (min-width: 69.5em) {
@@ -237,7 +237,7 @@
 
 .sg-control > li {
   float: left; }
-  @media all and (min-width: 44em) {
+  @media all and (min-width: 48em) {
     .sg-control > li {
       border-bottom: 0;
       border-left: 1px solid rgba(255, 255, 255, 0.05); } }
@@ -266,7 +266,7 @@
 
 .sg-size {
   width: 135px; }
-  @media all and (min-width: 44em) {
+  @media all and (min-width: 48em) {
     .sg-size {
       width: auto; } }
 
@@ -304,7 +304,7 @@
   color: gray;
   width: 25px;
   text-align: right; }
-  @media all and (min-width: 44em) {
+  @media all and (min-width: 48em) {
     .sg-input {
       width: 35px; } }
 
