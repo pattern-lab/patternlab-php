@@ -214,12 +214,11 @@
 	
 	// start hay from a keyboard shortcut
 	jwerty.key('ctrl+shift+h', function(e) {
-		if (hayMode) {
+		if (!hayMode) {
 			startHay();
 		} else {
 			killHay();
 		}
-		return false;
 	});
 
 	//Pixel input
@@ -583,7 +582,7 @@
 					killDisco();
 				}
 			} else if (data.keyPress == 'ctrl+shift+h') {
-				if (hayMode) {
+				if (!hayMode) {
 					startHay();
 				} else {
 					killHay();

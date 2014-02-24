@@ -253,7 +253,7 @@ var codeViewer = {
 	* when turning on or switching between patterns with code view on make sure we get
 	* the code from from the pattern via post message
 	*/
-	updateCode: function(lineage,lineageR,patternPartial,cssEnabled) {
+	updateCode: function(lineage,lineageR,patternPartial,patternState,cssEnabled) {
 		
 		// clear any selections that might have been made
 		codeViewer.clearSelection();
@@ -294,7 +294,17 @@ var codeViewer = {
 			document.getElementById("sg-viewport").contentWindow.postMessage(obj,codeViewer.targetOrigin);
 		});
 		
-		$('#sg-code-lineage-patternname, #sg-code-lineager-patternname').html(patternPartial);
+		// show pattern state
+		if (patternState != "") {
+			$("#sg-code-patternstate").css("display","block");
+			var patternStateItem = "<span class=\"sg-pattern-state "+patternState+"\">"+patternState+"</span>";
+			$("#sg-code-patternstate-fill").html(patternStateItem);
+		} else {
+			$("#sg-code-patternstate").css("display","none");
+		}
+		
+		// fill in the name of the pattern
+		$('#sg-code-lineage-patternname, #sg-code-lineager-patternname, #sg-code-patternstate-patternname').html(patternPartial);
 		
 		// get the file name of the pattern so we can get the various editions of the code that can show in code view
 		var fileName = urlHandler.getFileName(patternPartial);
@@ -343,7 +353,7 @@ var codeViewer = {
 		// switch based on stuff related to the postmessage
 		if (data.codeOverlay !== undefined) {
 			if (data.codeOverlay === "on") {
-				codeViewer.updateCode(data.lineage,data.lineageR,data.codePatternPartial,data.cssEnabled);
+				codeViewer.updateCode(data.lineage,data.lineageR,data.patternPartial,data.patternState,data.cssEnabled);
 			} else {
 				codeViewer.slideCode($('#sg-code-container').outerHeight());
 			}
@@ -359,9 +369,9 @@ var codeViewer = {
 					codeViewer.swapCode("m");
 					return false;
 				}
-			} else if (data.keyPress == 'ctrl+shift+h') {
+			} else if (data.keyPress == 'ctrl+shift+y') {
 				if (codeViewer.codeActive) {
-					codeViewer.swapCode("h");
+					codeViewer.swapCode("e");
 					return false;
 				}
 			} else if (data.keyPress == 'esc') {
@@ -409,7 +419,7 @@ jwerty.key('ctrl+shift+u', function (e) {
 });
 
 // open the html panel
-jwerty.key('ctrl+shift+h', function (e) {
+jwerty.key('ctrl+shift+y', function (e) {
 	if (codeViewer.codeActive) {
 		codeViewer.swapCode("e");
 		return false;
