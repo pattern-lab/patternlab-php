@@ -1,3 +1,4 @@
+/* basic styling */
 .sg-pattern-state:before {
 	margin-right: 4px;
 	content: "\2022";
@@ -7,6 +8,7 @@
 	vertical-align: bottom;
 }
 
+/* nav styling */
 .sg-nav .sg-pattern-state:before {
 	margin-top: -4px;
 	margin-bottom: 0;
@@ -21,6 +23,17 @@
 	margin-right: 4px;
 }
 
+/* call out for pattern's pattern state */
+span.sg-pattern-state {
+	color: #999;
+}
+
+span.sg-pattern-state:before {
+	margin-bottom: -3px;
+	margin-left: 4px;
+}
+
+/* pattern states */
 .inprogress:before {
 	color: #FF4136 !important;
 }
