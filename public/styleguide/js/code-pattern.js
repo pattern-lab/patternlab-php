@@ -52,7 +52,7 @@ var codePattern = {
 			// if comments overlay is turned on add the has-comment class and pointer
 			if (codePattern.codeOverlayActive) {
 				
-				var obj = JSON.stringify({ "codeOverlay": "on", "lineage": lineage, "lineageR": lineageR, "codePatternPartial": patternPartial, "cssEnabled": cssEnabled });
+				var obj = JSON.stringify({ "codeOverlay": "on", "lineage": lineage, "lineageR": lineageR, "patternPartial": patternPartial, "patternState": patternState, "cssEnabled": cssEnabled });
 				parent.postMessage(obj,codePattern.targetOrigin);
 				
 			} else if (codePattern.codeEmbeddedActive) {
