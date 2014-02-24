@@ -26,8 +26,8 @@ var patternFinder = {
 		
 		// instantiate the bloodhound suggestion engine
 		var patterns = new Bloodhound({
-			datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.patternPartial); },
-			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			datumTokenizer: function(d) { return Bloodhound.tokenizers.nonword(d.patternPartial); },
+			queryTokenizer: Bloodhound.tokenizers.nonword,
 			limit: 10,
 			local: this.data
 		});
