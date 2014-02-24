@@ -413,6 +413,16 @@ $animate-quick: 0.2s;
 	}
 }
 
+.sg-find {
+	display: none;
+}
+
+@media all and (min-width: $sg-bp-med) {
+	.sg-find {
+		display: block;
+	}
+}
+
 #sg-form {
 	margin: 0;
 	border: 0;

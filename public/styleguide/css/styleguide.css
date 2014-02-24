@@ -281,6 +281,16 @@
       border: 0;
       border-left: 1px solid rgba(255, 255, 255, 0.05); } }
 
+.sg-find {
+	display: none;
+}
+
+@media all and (min-width: 48em) {
+	.sg-find {
+		display: block;
+	}
+}
+
 #sg-form {
   margin: 0;
   border: 0;
