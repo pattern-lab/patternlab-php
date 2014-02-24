@@ -1,5 +1,30 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.7.5
+ - ADD: a quick pattern search using typeahead
+ - ADD: keyboard shortcuts for a bunch of features using jwerty
+ - ADD: using cmd+a/ctrl+a when in code view selects the contents of the currently active tab
+ - ADD: code and annotation views can be opened automatically on load via query string params
+ - ADD: can use the config to remove items from pattern nav
+ - ADD: check for json support now that certain flavors of PHP 5.5.3 don't come with it
+ - ADD: can use boolean vars to enable/disable sections via pattern parameters
+ - ADD: pattern states for tracking progress on individual patterns
+ - FIX: updated icomoon icons
+ - FIX: code view has tabs
+ - FIX: code view shows mustache versions of a pattern
+ - FIX: patterns are properly sorted in style guide and view all views
+ - FIX: pattern lab-specific JS & CSS is only loaded when in the iframe
+ - FIX: classlist polyfill for better IE9 support
+ - FIX: stringified the postmessage messages for better IE9 support
+ - FIX: make sure history is only used by browsers that support it (e.g. IE9 doesn't)
+ - FIX: using watcher-launched auto-reload server now works on Windows
+ - FIX: various bugs with lineage
+ - FIX: vendored third-party JS and CSS
+ - FIX: infinite refresh bug squashed
+ - THX: thanks to @joshrcook for some styling fixes and hitting on the cause of the start-up issues on ubuntu
+ - THX: thanks to @tylersticka for lots of ideas: pattern states, cmd+a, boolean pattern parameters and the feedback on the watcher
+ - THX: thanks to @nikvm for the fix for properly sorting the styleguide view
+
 PL-v0.7.2
  - FIX: proper support for Windows with the changes that happened in v0.7.0
  - THX: thanks to @chriskevin and @MattKohnen for reporting the issue

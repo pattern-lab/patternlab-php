@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Configurer Class - v0.7.2
+ * Pattern Lab Configurer Class - v0.7.5
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -53,27 +53,28 @@ class Configurer {
 		// check to see if the user config exists, if not create it
 		print "configuring pattern lab...\n";
 		if (!file_exists($this->userConfigPath)) {
-			if (!@copy($this->plConfigPath, $this->userConfigPath)) {
-				print "Please make sure that Pattern Lab can write a new config to config/.\n";
-				exit;
-			}
 			$migrate = true;
 		} else {
 			$config = parse_ini_file($this->userConfigPath);
 		}
 		
-		// check the config version and update it if necessary
-		if ($migrate || ($config["v"] != $defaultConfig["v"])) {
-			print "upgrading your version of pattern lab...\n";
-			$config = $this->writeNewConfig($config,$defaultConfig);
-			$diffVersion = true;
-		}
+		// compare version numbers
+		$diffVersion = ($config["v"] != $defaultConfig["v"]) ? true : false;
 		
-		// if either migrate or diff version run the migrations
+		// run an upgrade and migrations if necessary
 		if ($migrate || $diffVersion) {
+			print "upgrading your version of pattern lab...\n";
 			print "checking for migrations...\n";
 			$m = new Migrator;
-			$m->migrate($diffVersion);
+			$m->migrate(true);
+			if ($migrate) {
+				if (!@copy($this->plConfigPath, $this->userConfigPath)) {
+					print "Please make sure that Pattern Lab can write a new config to config/.\n";
+					exit;
+				}
+			} else {
+				$config = $this->writeNewConfig($config,$defaultConfig);
+			}
 		}
 		
 		return $config;

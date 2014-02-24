@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Watcher Class - v0.7.2
+ * Pattern Lab Watcher Class - v0.7.5
  *
  * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -35,7 +35,7 @@ class Watcher extends Builder {
 		
 		// automatically start the auto-refresh tool
 		if ($reload) {
-			$path = str_replace("lib/PatternLab","autoReloadServer.php",__DIR__);
+			$path = str_replace("lib".DIRECTORY_SEPARATOR."PatternLab","autoReloadServer.php",__DIR__);
 			$fp = popen("php ".$path." -s", "r"); 
 			print "starting page auto-reload...\n";
 		}

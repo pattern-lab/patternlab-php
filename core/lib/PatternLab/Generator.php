@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Generator Class - v0.7.2
+ * Pattern Lab Generator Class - v0.7.5
  *
  * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -56,8 +56,7 @@ class Generator extends Builder {
 		
 		// gather all of the various pattern info
 		$this->gatherPatternInfo();
-
-
+		
 		// clean the public directory to remove old files
 		if ($this->cleanPublic == "true") {
 			$this->cleanPublic();

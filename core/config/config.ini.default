@@ -3,7 +3,7 @@
  * If config.ini doesn't exist Pattern Lab will try to create a new version
  */
 
-v  = "0.7.2"
+v  = "0.7.5"
 
 // file extensions to ignore when building or watching the source dir, separate with a comma
 ie = "scss,DS_Store,less"
@@ -20,3 +20,9 @@ cleanPublic = "true"
 
 // pattern lab's xip host if you have it configured
 xipHostname = "http://patternlab.*.xip.io"
+
+// which, if any, controls to hide in the nav
+ishControlsHide = ""
+
+// the order of pattern states
+patternStates = "inprogress,inreview,complete"
