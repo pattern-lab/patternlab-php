@@ -258,7 +258,7 @@ class Builder {
 				if ($pathInfo["render"]) {
 					
 					// get the rendered, escaped, and mustache pattern
-					$this->generatePatternFile($pathInfo["patternSrcPath"].".mustache",$pathInfo["patternPartial"],$pathInfo["patternDestPath"]);
+					$this->generatePatternFile($pathInfo["patternSrcPath"].".mustache",$pathInfo["patternPartial"],$pathInfo["patternDestPath"],$pathInfo["patternState"]);
 					
 				}
 				
@@ -273,8 +273,9 @@ class Builder {
 	* @param  {String}       the filename of the file to be rendered
 	* @param  {String}       the pattern partial
 	* @param  {String}       path where the files need to be written too
+	* @param  {String}       pattern state
 	*/
-	private function generatePatternFile($f,$p,$path) {
+	private function generatePatternFile($f,$p,$path,$state) {
 		
 		// render the pattern and return it as well as the encoded version
 		list($rf,$e) = $this->renderPattern($f,$p);
@@ -282,7 +283,8 @@ class Builder {
 		// the core footer isn't rendered as mustache but we have some variables there any way. find & replace.
 		$rf = str_replace("{% patternPartial %}",$p,$rf);
 		$rf = str_replace("{% lineage %}",json_encode($this->patternLineages[$p]),$rf);
-		$rf = str_replace("{% lineager %}",json_encode($this->patternLineagesR[$p]),$rf);
+		$rf = str_replace("{% lineageR %}",json_encode($this->patternLineagesR[$p]),$rf);
+		$rf = str_replace("{% patternState %}",$state,$rf);
 		
 		// figure out what to put in the css section
 		$c  = $this->enableCSS && isset($this->patternCSS[$p]) ? "true" : "false";
