@@ -17,18 +17,18 @@
 						{{^ ishControlsHide.random }}<li class="sg-half"><a href="#" id="sg-size-random">Random</a></li>{{/ ishControlsHide.random }}
 						{{^ ishControlsHide.disco }}<li class="sg-half"><a href="#" class="mode-link" id="sg-size-disco">Disco</a></li>{{/ ishControlsHide.disco }}
 						{{^ ishControlsHide.hay }}<li class="sg-half"><a href="#" class="mode-link" id="sg-size-hay">Hay!</a></li>{{/ ishControlsHide.hay }}
-						{{^ ishControlsHide.mqs }}
-						<li class="sg-half">
-							<a href="#" class="mode-link sg-acc-handle" id="sg-size-mq" title="Media query values found in stylesheet">MQ</a>
-							<ul class="sg-acc-panel sg-right" id="sg-mq">
-								{{# mqs }}
-									<li><a href="#">{{ . }}</a></li>
-								{{/ mqs }}
-							</ul>
-						</li>
-						{{/ ishControlsHide.mqs }}
 					</ul>
 				</li>
+				{{^ ishControlsHide.mqs }}
+				<li class="sg-half">
+					<a href="#" class="mode-link sg-acc-handle" id="sg-size-mq" title="Media query values found in stylesheet">MQ</a>
+					<ul class="sg-acc-panel sg-left" id="sg-mq">
+						{{# mqs }}
+							<li><a href="#">{{ . }}</a></li>
+						{{/ mqs }}
+					</ul>
+				</li>
+				{{/ ishControlsHide.mqs }}
 				{{^ ishControlsHide.find }}
 				<li class="sg-find">
 					<a href="#" class="sg-acc-handle sg-control-trigger sg-icon icon-search" id="sg-f-toggle" title="Find stuff"><span class="is-vishidden">F</span></a>
