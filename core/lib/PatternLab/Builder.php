@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Builder Class - v0.7.6
+ * Pattern Lab Builder Class - v0.7.7
  *
  * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -50,6 +50,7 @@ class Builder {
 	protected $mainPageFoot;      // the footer to be included on main pages
 	protected $addPatternHF;      // should the pattern header and footer be added
 	protected $cleanPublic;       // whether the public directory should be cleaned out or not on generate
+	protected $styleGuideExcludes;// which pattern types to exclude from the style guide
 	
 	/**
 	* When initializing the Builder class or the sub-classes make sure the base properties are configured
@@ -67,7 +68,8 @@ class Builder {
 		foreach ($config as $key => $value) {
 			
 			// if the variables are array-like make sure the properties are validated/trimmed/lowercased before saving
-			if (($key == "ie") || ($key == "id") || ($key == "patternStates")) {
+			$arrayKeys = array("ie","id","patternStates","styleGuideExcludes");
+			if (in_array($key,$arrayKeys)) {
 				$values = explode(",",$value);
 				array_walk($values,'PatternLab\Builder::trim');
 				$this->$key = $values;
@@ -886,7 +888,7 @@ class Builder {
 			$patternTypeDash = $patternTypeValues["patternTypeDash"];
 			
 			// if this has a second level of patterns check them out (means we don't process pages & templates)
-			if (isset($patternTypeValues["patternTypeItems"])) {
+			if (isset($patternTypeValues["patternTypeItems"]) && (!in_array($patternType,$this->styleGuideExcludes))) {
 				
 				$arrayReset = false;
 				
