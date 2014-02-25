@@ -3,7 +3,7 @@
  * If config.ini doesn't exist Pattern Lab will try to create a new version
  */
 
-v  = "0.7.6"
+v  = "0.7.7"
 
 // file extensions to ignore when building or watching the source dir, separate with a comma
 ie = "scss,DS_Store,less"
@@ -28,4 +28,4 @@ ishControlsHide = ""
 patternStates = "inprogress,inreview,complete"
 
 // the pattern types that shouldn't be included in the style guide
-styleGuideExcludes = "";
+styleGuideExcludes = ""
