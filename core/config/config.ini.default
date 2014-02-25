@@ -26,3 +26,6 @@ ishControlsHide = ""
 
 // the order of pattern states
 patternStates = "inprogress,inreview,complete"
+
+// the pattern types that shouldn't be included in the style guide
+styleGuideExcludes = "";
