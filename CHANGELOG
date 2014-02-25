@@ -1,5 +1,9 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.7.7
+ - ADD: can hide all of the patterns for a given pattern type from being shown on the styleguide. good for nested pages/templates
+ - FIX: the MQ menu is hidden on smaller viewports
+
 PL-v0.7.6
  - FIX: pattern search now searches the entire name of a pattern
  - FIX: the MQ menu lines up with the navigation item
