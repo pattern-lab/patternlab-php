@@ -9,9 +9,10 @@
 var annotationsViewer = {
 	
 	// set-up default sections
-	commentsActive: false,
-	targetOrigin:   (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
-	moveToOnInit:   0,
+	commentsActive:          false,
+	commentsViewAllActive:   true,
+	targetOrigin:            (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
+	moveToOnInit:            0,
 	
 	/**
 	* add the onclick handler to the annotations link in the main nav
@@ -237,6 +238,11 @@ var annotationsViewer = {
 					annotationsViewer.closeComments();
 					return false;
 				}
+			}
+		} else if (data.patternpartial !== undefined) {
+			if (annotationsViewer.commentsViewAllActive && (data.patternpartial.indexOf("viewall-") != -1)) {
+				var obj = JSON.stringify({ "commentToggle": "on" });
+				document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
 			}
 		}
 		
