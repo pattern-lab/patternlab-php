@@ -110,7 +110,9 @@ var annotationsPattern = {
 		
 		var parentEl;
 		
-		if (el.parentNode.classList.contains("sg-pattern")) {
+		if (el.classList.contains("sg-pattern")) {
+			return el;
+		} else if (el.parentNode.classList.contains("sg-pattern")) {
 			return el.parentNode;
 		} else {
 			parentEl = annotationsPattern.findParent(el.parentNode);
