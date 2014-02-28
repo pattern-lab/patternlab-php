@@ -1,5 +1,9 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.7.8
+ - ADD: can show annotations on view-all pages by default
+ - FIX: can target pattern divs and apply annotations
+
 PL-v0.7.7
  - ADD: can hide all of the patterns for a given pattern type from being shown on the styleguide. good for nested pages/templates
  - FIX: the MQ menu is hidden on smaller viewports
