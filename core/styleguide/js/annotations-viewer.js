@@ -10,7 +10,7 @@ var annotationsViewer = {
 	
 	// set-up default sections
 	commentsActive:          false,
-	commentsViewAllActive:   true,
+	commentsViewAllActive:   false,
 	targetOrigin:            (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host,
 	moveToOnInit:            0,
 	
