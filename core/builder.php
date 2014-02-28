@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Builder CLI - v0.7.2
+ * Pattern Lab Builder CLI - v0.7.8
  *
  * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
