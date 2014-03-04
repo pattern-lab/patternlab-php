@@ -611,6 +611,7 @@ $animate-quick: 0.2s;
 /* Section Pattern */
 .sg-pattern {
 	margin-bottom: $sg-doublespace;
+	position: relative; //Prevents absolutely-positioned elements from floating to the top
 	@extend .sg-cf;
 }
 
