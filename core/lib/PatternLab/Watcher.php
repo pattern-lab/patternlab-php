@@ -30,8 +30,10 @@ class Watcher extends Builder {
 	
 	/**
 	* Watch the source/ directory for any changes to existing files. Will run forever if given the chance.
+	* @param  {Boolean}       decide if the reload server should be turned on
+	* @param  {Boolean}       decide if static files like CSS and JS should be moved
 	*/
-	public function watch($reload = false) {
+	public function watch($reload = false, $moveStatic = true) {
 		
 		// automatically start the auto-refresh tool
 		if ($reload) {
@@ -155,54 +157,59 @@ class Watcher extends Builder {
 			}
 			
 			// iterate over all of the other files in the source directory and move them if their modified time has changed
-			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/"), \RecursiveIteratorIterator::SELF_FIRST);
-			
-			// make sure dots are skipped
-			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-			
-			foreach($objects as $name => $object) {
+			if ($moveStatic) {
 				
-				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-				$fileName = str_replace($this->sd.DIRECTORY_SEPARATOR,"",$name);
-				if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
+				$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/"), \RecursiveIteratorIterator::SELF_FIRST);
+				
+				// make sure dots are skipped
+				$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+				
+				foreach($objects as $name => $object) {
 					
-					// catch directories that have the ignored dir in their path
-					$ignoreDir = $this->ignoreDir($fileName);
-					
-					// check to see if it's a new directory
-					if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir($this->pd."/".$fileName)) {
-						mkdir($this->pd."/".$fileName);
-						$o->$fileName = "dir created"; // placeholder
-						print $fileName."/ directory was created...\n";
-					}
-					
-					// check to see if it's a new file or a file that has changed
-					if (file_exists($name)) {
+					// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
+					$fileName = str_replace($this->sd.DIRECTORY_SEPARATOR,"",$name);
+					if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
 						
-						$mt = $object->getMTime();
-						if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists($this->pd."/".$fileName)) {
-							$o->$fileName = $mt;
-							$this->moveStaticFile($fileName,"added");
-							if ($object->getExtension() == "css") {
-								$this->updateSite($fileName,"changed",0); // make sure the site is updated for MQ reasons
-							}
-						} else if (!$ignoreDir && $object->isFile() && isset($o->$fileName) && ($o->$fileName != $mt)) {
-							$o->$fileName = $mt;
-							$this->moveStaticFile($fileName,"changed");
-							if ($object->getExtension() == "css") {
-								$this->updateSite($fileName,"changed",0); // make sure the site is updated for MQ reasons
-							}
-						} else if (!isset($o->fileName)) {
-							$o->$fileName = $mt;
+						// catch directories that have the ignored dir in their path
+						$ignoreDir = $this->ignoreDir($fileName);
+						
+						// check to see if it's a new directory
+						if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir($this->pd."/".$fileName)) {
+							mkdir($this->pd."/".$fileName);
+							$o->$fileName = "dir created"; // placeholder
+							print $fileName."/ directory was created...\n";
 						}
 						
-					} else {
-						unset($o->$fileName);
+						// check to see if it's a new file or a file that has changed
+						if (file_exists($name)) {
+							
+							$mt = $object->getMTime();
+							if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists($this->pd."/".$fileName)) {
+								$o->$fileName = $mt;
+								$this->moveStaticFile($fileName,"added");
+								if ($object->getExtension() == "css") {
+									$this->updateSite($fileName,"changed",0); // make sure the site is updated for MQ reasons
+								}
+							} else if (!$ignoreDir && $object->isFile() && isset($o->$fileName) && ($o->$fileName != $mt)) {
+								$o->$fileName = $mt;
+								$this->moveStaticFile($fileName,"changed");
+								if ($object->getExtension() == "css") {
+									$this->updateSite($fileName,"changed",0); // make sure the site is updated for MQ reasons
+								}
+							} else if (!isset($o->fileName)) {
+								$o->$fileName = $mt;
+							}
+							
+						} else {
+							unset($o->$fileName);
+						}
+						
 					}
 					
 				}
 				
 			}
+			
 			
 			$c = true;
 			
