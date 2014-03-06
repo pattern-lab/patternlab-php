@@ -28,8 +28,9 @@ class Generator extends Builder {
 	/**
 	* Pulls together a bunch of functions from builder.lib.php in an order that makes sense
 	* @param  {Boolean}       decide if CSS should be parsed and saved. performance hog.
+	* @param  {Boolean}       decide if static files like CSS and JS should be moved
 	*/
-	public function generate($enableCSS = false) {
+	public function generate($enableCSS = false, $moveStatic = true) {
 		
 		$timePL = true; // track how long it takes to generate a PL site
 		
@@ -58,7 +59,7 @@ class Generator extends Builder {
 		$this->gatherPatternInfo();
 		
 		// clean the public directory to remove old files
-		if ($this->cleanPublic == "true") {
+		if (($this->cleanPublic == "true") && $moveStatic) {
 			$this->cleanPublic();
 		}
 		
@@ -83,29 +84,34 @@ class Generator extends Builder {
 			
 		}
 		
-		// iterate over all of the other files in the source directory
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/"), \RecursiveIteratorIterator::SELF_FIRST);
-		
-		// make sure dots are skipped
-		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-		
-		foreach($objects as $name => $object) {
+		// move all of the files unless pattern only is set
+		if ($moveStatic) {
 			
-			// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-			$fileName = str_replace($this->sd.DIRECTORY_SEPARATOR,"",$name);
-			if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
+			// iterate over all of the other files in the source directory
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/"), \RecursiveIteratorIterator::SELF_FIRST);
+			
+			// make sure dots are skipped
+			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+			
+			foreach($objects as $name => $object) {
 				
-				// catch directories that have the ignored dir in their path
-				$ignoreDir = $this->ignoreDir($fileName);
-				
-				// check to see if it's a new directory
-				if (!$ignoreDir && $object->isDir() && !is_dir($this->pd."/".$fileName)) {
-					mkdir($this->pd."/".$fileName);
-				}
-				
-				// check to see if it's a new file or a file that has changed
-				if (!$ignoreDir && $object->isFile() && (!file_exists($this->pd."/".$fileName))) {
-					$this->moveStaticFile($fileName);
+				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
+				$fileName = str_replace($this->sd.DIRECTORY_SEPARATOR,"",$name);
+				if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
+					
+					// catch directories that have the ignored dir in their path
+					$ignoreDir = $this->ignoreDir($fileName);
+					
+					// check to see if it's a new directory
+					if (!$ignoreDir && $object->isDir() && !is_dir($this->pd."/".$fileName)) {
+						mkdir($this->pd."/".$fileName);
+					}
+					
+					// check to see if it's a new file or a file that has changed
+					if (!$ignoreDir && $object->isFile() && (!file_exists($this->pd."/".$fileName))) {
+						$this->moveStaticFile($fileName);
+					}
+					
 				}
 				
 			}

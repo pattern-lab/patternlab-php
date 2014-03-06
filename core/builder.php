@@ -15,13 +15,19 @@
  * 	php builder/builder.php -gc
  * 		In addition to the -g flag features it will also generate CSS for each pattern. Resource instensive.
  * 	
+ * 	php builder.php -gp
+ * 		Generates only the patterns a site. Does NOT clean public/ when generating the site.
+ * 	
  * 	php builder.php -w
  * 		Generates the site like the -g flag and then watches for changes in the 'source' directories &
  * 		files. Will re-generate files if they've changed.
  * 	
  * 	php builder.php -wr
  * 		In addition to the -w flag features it will also automatically start the auto-reload server.
- *
+ * 	
+ * 	php builder.php -wp
+ * 		Similar to the -w flag but it only generates and then watches the patterns. Does NOT clean public/ when generating the site.
+ * 	
  * 	php builder.php -v
  * 		Prints out the current version of Pattern Lab.
  *
@@ -50,7 +56,7 @@ if (php_sapi_name() != 'cli') {
 }
 
 // grab the arguments from the command line
-$args = getopt("gwcrv");
+$args = getopt("gwcrvp");
 
 // load Pattern Lab's config, if first time set-up move files appropriately too
 $co     = new PatternLab\Configurer;
@@ -66,14 +72,22 @@ if (isset($args["v"])) {
 if (isset($args["g"]) || isset($args["w"])) {
 	
 	$g = new PatternLab\Generator($config);
-	$c = false;
+	
+	// set some default values
+	$enableCSS  = false;
+	$moveStatic = true;
 	
 	// check to see if CSS for patterns should be parsed & outputted
 	if (isset($args["c"]) && !isset($args["w"])) {
-		$c = true;
+		$enableCSS = true;
 	}
 	
-	$g->generate($c);
+	// check to see if we should just generate the patterns
+	if (isset($args["p"])) {
+		$moveStatic = false;
+	}
+	
+	$g->generate($enableCSS,$moveStatic);
 	
 	// have some fun
 	if (!isset($args["w"])) {
@@ -86,13 +100,15 @@ if (isset($args["g"]) || isset($args["w"])) {
 if (isset($args["w"])) {
 	
 	$w = new PatternLab\Watcher($config);
-	$a = false;
+	
+	// set some default values
+	$reload = false;
 	
 	if (isset($args["r"])) {
-		$a = true;
+		$reload = true;
 	}
 	
-	$w->watch($a);
+	$w->watch($reload,$moveStatic);
 	
 }
 
@@ -105,12 +121,16 @@ if (!isset($args["g"]) && !isset($args["w"]) && !isset($args["v"])) {
 	print "    Iterates over the 'source' directories & files and generates the entire site a single time.\n";
 	print "    It also cleans the 'public' directory.\n\n";
 	print "  php ".$_SERVER["PHP_SELF"]." -gc\n";
-	print "    In addition to the -g flag features it will also generate CSS for each pattern. Resource instensive.\n\n";
+	print "    In addition to the -g flag features it will also generate CSS for each pattern. Resource intensive.\n\n";
+	print "  php ".$_SERVER["PHP_SELF"]." -gp\n";
+	print "    Generates only the patterns a site. Does NOT clean public/ when generating the site.\n\n";
 	print "  php ".$_SERVER["PHP_SELF"]." -w\n";
 	print "    Generates the site like the -g flag and then watches for changes in the 'source' directories &\n";
 	print "    files. Will re-generate files if they've changed.\n\n";
 	print "  php ".$_SERVER["PHP_SELF"]." -wr\n";
 	print "    In addition to the -w flag features it will also automatically start the auto-reload server.\n\n";
+	print "  php ".$_SERVER["PHP_SELF"]." -wp\n";
+	print "    Similar to the -w flag but it only generates and then watches the patterns. Does NOT clean public/ when generating the site.\n\n";
 	print "  php ".$_SERVER["PHP_SELF"]." -v\n";
 	print "    Prints out the current version of Pattern Lab.\n\n";
 	
