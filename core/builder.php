@@ -56,7 +56,7 @@ if (php_sapi_name() != 'cli') {
 }
 
 // grab the arguments from the command line
-$args = getopt("gwcrvp");
+$args = getopt("gwcrvpn");
 
 // load Pattern Lab's config, if first time set-up move files appropriately too
 $co     = new PatternLab\Configurer;
@@ -74,8 +74,9 @@ if (isset($args["g"]) || isset($args["w"])) {
 	$g = new PatternLab\Generator($config);
 	
 	// set some default values
-	$enableCSS  = false;
-	$moveStatic = true;
+	$enableCSS     = false;
+	$moveStatic    = true;
+	$noCacheBuster = false;
 	
 	// check to see if CSS for patterns should be parsed & outputted
 	if (isset($args["c"]) && !isset($args["w"])) {
@@ -87,7 +88,12 @@ if (isset($args["g"]) || isset($args["w"])) {
 		$moveStatic = false;
 	}
 	
-	$g->generate($enableCSS,$moveStatic);
+	// check to see if we should turn off the cachebuster value
+	if (isset($args["n"])) {
+		$noCacheBuster = true;
+	}
+	
+	$g->generate($enableCSS,$moveStatic,$noCacheBuster);
 	
 	// have some fun
 	if (!isset($args["w"])) {

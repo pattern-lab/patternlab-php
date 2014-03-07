@@ -30,7 +30,7 @@ class Generator extends Builder {
 	* @param  {Boolean}       decide if CSS should be parsed and saved. performance hog.
 	* @param  {Boolean}       decide if static files like CSS and JS should be moved
 	*/
-	public function generate($enableCSS = false, $moveStatic = true) {
+	public function generate($enableCSS = false, $moveStatic = true, $noCacheBuster = false) {
 		
 		$timePL = true; // track how long it takes to generate a PL site
 		
@@ -40,6 +40,8 @@ class Generator extends Builder {
 			$mtime = $mtime[1] + $mtime[0]; 
 			$starttime = $mtime;
 		}
+		
+		$this->noCacheBuster = $noCacheBuster;
 		
 		if ($enableCSS) {
 			
