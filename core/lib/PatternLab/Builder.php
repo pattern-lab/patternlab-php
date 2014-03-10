@@ -44,6 +44,7 @@ class Builder {
 	protected $patternCSS;        // an array to hold the CSS generated for patterns
 	protected $cssRuleSaver;      // where css rule saver will be initialized
 	protected $cacheBuster;       // a timestamp used to bust the cache for static assets like CSS and JS
+	protected $noCacheBuster;     // should we turn the cache buster on or off?
 	protected $patternHead;       // the header to be included on patterns
 	protected $patternFoot;       // the footer to be included on patterns
 	protected $mainPageHead;      // the header to be included on main pages
@@ -390,7 +391,7 @@ class Builder {
 	protected function gatherData() {
 		
 		// set the cacheBuster
-		$this->cacheBuster = time();
+		$this->cacheBuster = $this->noCacheBuster ? 0 : time();
 		
 		// gather the data from the main source data.json
 		if (file_exists($this->sd."/_data/_data.json")) {
