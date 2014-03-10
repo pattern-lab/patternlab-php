@@ -9,7 +9,7 @@ v  = "0.7.8"
 ie = "scss,DS_Store,less"
 
 // directories and files to ignore when building or watching the source dir, separate with a comma
-id = "scss,.svn"
+id = "scss,.svn,.sass-cache"
 
 // choose which ports the websocket services should run on
 autoReloadPort = "8002"
