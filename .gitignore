@@ -8,3 +8,5 @@ source/*
 config.ini
 latest-change.txt
 *-ck.js
+
+/core/source/css/.sass-cache/
