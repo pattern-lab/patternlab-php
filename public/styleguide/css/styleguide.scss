@@ -76,7 +76,7 @@ $offset-top: 2em;
 $sg-bp-small : 24em;
 $sg-bp-small-2 : 30em;
 $sg-bp-med : 48em;
-$sg-bp-large : 69.5em;
+$sg-bp-large : 72em;
 $sg-bp-xl : 80em;
 
 $animate-quick: 0.2s;
@@ -299,6 +299,7 @@ $animate-quick: 0.2s;
 
 	&.active {
 		max-height: 50em;
+		overflow: auto;
 	}
 
 	&.sg-right {
@@ -311,6 +312,13 @@ $animate-quick: 0.2s;
 		position: absolute;
 		left: auto;
 	}
+
+	[class^="icon-"], [class*=" icon-"] {
+		&:before {
+			display: inline-block;
+			margin-right: 0.4em;
+		}
+	}
 }
 
 /* Controls (sizing, view mode) */
@@ -320,21 +328,9 @@ $animate-quick: 0.2s;
 	top: 0;
 	right: 0;
 	z-index: 2;
-	
-	.sg-acc-panel.active {
-		max-height: 21em;
-	}
-	
-	.sg-nav-phases .sg-acc-panel {
-	  min-width: 0;
-	  
-	  &.active {
-	  max-height: none;
-	  }
-	}
 
 	@media all and (min-width: $sg-bp-large) {
-		width: 41.5em;
+		width: 44em;
 	}
 }
 
@@ -464,7 +460,7 @@ $animate-quick: 0.2s;
 
 //Checklist dropdown lists
 .sg-checkbox {
-	@extend .icon-checkbox-unchecked;
+	@extend .icon-radio-unchecked;
 
 	&:before {
 		display: inline-block;
@@ -472,7 +468,7 @@ $animate-quick: 0.2s;
 	}
 
 	&.active {
-		@extend .icon-checkbox-checked;
+		@extend .icon-radio-checked;
 	}
 }
 
@@ -917,6 +913,7 @@ div.clear {
 
 .icon-search:before {
 	content: "\e600";
+	font-size: 85%;
 }
 .icon-cog:before {
 	content: "\e601";

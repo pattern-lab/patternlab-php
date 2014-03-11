@@ -204,7 +204,8 @@
   -o-transition: max-height 0.1s ease-out;
   transition: max-height 0.1s ease-out; }
   .sg-acc-panel.active {
-    max-height: 50em; }
+    max-height: 50em;
+    overflow: auto; }
   .sg-acc-panel.sg-right {
     position: absolute;
     left: auto;
@@ -212,6 +213,9 @@
   .sg-acc-panel.sg-left {
     position: absolute;
     left: auto; }
+  .sg-acc-panel [class^="icon-"]:before, .sg-acc-panel [class*=" icon-"]:before {
+    display: inline-block;
+    margin-right: 0.4em; }
 
 /* Controls (sizing, view mode) */
 .sg-controls {
@@ -220,22 +224,16 @@
   top: 0;
   right: 0;
   z-index: 2; }
-  .sg-controls .sg-acc-panel.active {
-    max-height: 21em; }
-  .sg-controls .sg-nav-phases .sg-acc-panel {
-    min-width: 0; }
-    .sg-controls .sg-nav-phases .sg-acc-panel.active {
-      max-height: none; }
-  @media all and (min-width: 69.5em) {
+  @media all and (min-width: 72em) {
     .sg-controls {
-      width: 41.5em; } }
+      width: 44em; } }
 
 .sg-control-trigger {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
   @media all and (min-width: 48em) {
     .sg-control-trigger {
       border: 0; } }
-  @media all and (min-width: 69.5em) {
+  @media all and (min-width: 72em) {
     .sg-control-trigger {
       float: left;
       width: 6em; } }
@@ -265,7 +263,7 @@
   .sg-current-size:hover .sg-input {
     background: #999999;
     color: #000; }
-  @media all and (min-width: 69.5em) {
+  @media all and (min-width: 72em) {
     .sg-current-size {
       float: left; } }
 
@@ -275,7 +273,7 @@
     .sg-size {
       width: auto; } }
 
-@media all and (min-width: 69.5em) {
+@media all and (min-width: 72em) {
   .sg-size-options {
     float: left;
     position: static;
@@ -651,7 +649,7 @@ div.clear {
   font-weight: normal;
   font-style: normal; }
 
-.icon-search, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-radio-checked, .icon-radio-unchecked, .icon-file, .icon-link, .icon-keyboard, .icon-qrcode, .icon-eye, .sg-checkbox {
+.icon-search, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-radio-checked, .sg-checkbox.active, .icon-radio-unchecked, .sg-checkbox, .icon-file, .icon-link, .icon-keyboard, .icon-qrcode, .icon-eye, .sg-checkbox {
   font-family: 'icomoon';
   speak: none;
   font-style: normal;
@@ -664,7 +662,8 @@ div.clear {
   -moz-osx-font-smoothing: grayscale; }
 
 .icon-search:before {
-  content: "\e600"; }
+  content: "\e600";
+  font-size: 85%; }
 
 .icon-cog:before {
   content: "\e601"; }
@@ -678,10 +677,10 @@ div.clear {
 .icon-menu:before {
   content: "\e604"; }
 
-.icon-radio-checked:before, .sg-checkbox.active:before {
+.icon-radio-checked:before, .sg-checkbox.active:before, .sg-checkbox.active:before {
   content: "\e605"; }
 
-.icon-radio-unchecked:before, .sg-checkbox:before {
+.icon-radio-unchecked:before, .sg-checkbox:before, .sg-checkbox:before {
   content: "\e606"; }
 
 .icon-file:before {
