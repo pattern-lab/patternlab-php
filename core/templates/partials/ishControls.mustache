@@ -31,7 +31,7 @@
 				{{/ ishControlsHide.mqs }}
 				{{^ ishControlsHide.find }}
 				<li class="sg-find">
-					<a href="#" class="sg-acc-handle sg-control-trigger sg-icon icon-search" id="sg-f-toggle" title="Find stuff"><span class="is-vishidden">F</span></a>
+					<a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-search" id="sg-f-toggle" title="Find stuff"><span class="is-vishidden">F</span></a>
 					<ul class="sg-view sg-acc-panel sg-right sg-checklist" id="sg-find" style="margin-top: 33px;">
 							<li><input class="typeahead" type="text" placeholder="search for a pattern..."></li>
 					</ul>
@@ -39,22 +39,22 @@
 				{{/ ishControlsHide.find }}
 				{{^ ishControlsHide.views-all }}
 				<li class="sg-view">
-					<a href="#" class="sg-acc-handle sg-control-trigger sg-icon icon-eye" id="sg-t-toggle"><span class="is-vishidden">View</span></a>
+					<a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-eye" id="sg-t-toggle"><span class="is-vishidden">View</span></a>
 					<ul class="sg-view sg-acc-panel sg-right sg-checklist" id="sg-view">
-						{{^ ishControlsHide.views-annotations }}<li><a href="#" class="sg-checkbox sg-iconitem" id="sg-t-annotations">Annotations</a></li>{{/ ishControlsHide.views-annotations }}
-						{{^ ishControlsHide.views-code }}<li><a href="#" class="sg-checkbox sg-iconitem" id="sg-t-code">Code</a></li>{{/ ishControlsHide.views-code }}
-						{{^ ishControlsHide.views-new }}<li><a href="#" target="_blank" id="sg-raw" class="sg-iconitem icon-link">Open in new window</a></li>{{/ ishControlsHide.views-new }}
+						{{^ ishControlsHide.views-annotations }}<li><a href="#" class="sg-checkbox" id="sg-t-annotations">Annotations</a></li>{{/ ishControlsHide.views-annotations }}
+						{{^ ishControlsHide.views-code }}<li><a href="#" class="sg-checkbox" id="sg-t-code">Code</a></li>{{/ ishControlsHide.views-code }}
+						{{^ ishControlsHide.views-new }}<li><a href="#" target="_blank" id="sg-raw" class="sg-icon-link">Open in new window</a></li>{{/ ishControlsHide.views-new }}
 					</ul>
 				</li>
 				{{/ ishControlsHide.views-all }}
 				{{^ ishControlsHide.tools-all }}
 				<li class="sg-tools">
-					<a href="#" class="sg-acc-handle sg-tools-toggle sg-icon icon-cog" id="sg-tools-toggle"><span class="is-vishidden">Tools</span></a>
+					<a href="#" class="sg-acc-handle sg-tools-toggle sg-icon sg-icon-cog" id="sg-tools-toggle"><span class="is-vishidden">Tools</span></a>
 					<ul class="sg-acc-panel sg-right sg-checklist">
-						{{^ ishControlsHide.tools-follow }}<li><a href="#" id="navSyncButton" class="sg-checkbox sg-iconitem sg-page-follow" data-state="off">Page Follow</a></li>{{/ ishControlsHide.tools-follow }}
-						{{^ ishControlsHide.tools-reload }}<li><a href="#" id="contentSyncButton" class="sg-checkbox sg-iconitem sg-auto-reload" data-state="off">Auto-reload</a></li>{{/ ishControlsHide.tools-reload }}
-						{{^ ishControlsHide.tools-shortcuts }}<li><a href="http://pattern-lab.info/docs/advanced-keyboard-shortcuts.html" class="icon-keyboard sg-iconitem" target="_blank">Keyboard Shortcuts</a>{{/ ishControlsHide.tools-shortcuts }}
-						{{^ ishControlsHide.tools-docs }}<li><a href="http://pattern-lab.info/docs/" class="icon-file sg-iconitem" target="_blank">Pattern Lab Docs</a>{{/ ishControlsHide.tools-docs }}
+						{{^ ishControlsHide.tools-follow }}<li><a href="#" id="navSyncButton" class="sg-checkbox sg-page-follow" data-state="off">Page Follow</a></li>{{/ ishControlsHide.tools-follow }}
+						{{^ ishControlsHide.tools-reload }}<li><a href="#" id="contentSyncButton" class="sg-checkbox sg-auto-reload" data-state="off">Auto-reload</a></li>{{/ ishControlsHide.tools-reload }}
+						{{^ ishControlsHide.tools-shortcuts }}<li><a href="http://pattern-lab.info/docs/advanced-keyboard-shortcuts.html" class="sg-icon-keyboard" target="_blank">Keyboard Shortcuts</a>{{/ ishControlsHide.tools-shortcuts }}
+						{{^ ishControlsHide.tools-docs }}<li><a href="http://pattern-lab.info/docs/" class="sg-icon-file" target="_blank">Pattern Lab Docs</a>{{/ ishControlsHide.tools-docs }}
 					</ul>
 				</li>
 				{{/ ishControlsHide.tools-all }}

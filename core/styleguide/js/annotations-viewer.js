@@ -226,7 +226,7 @@ var annotationsViewer = {
 				annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			}
 		} else if (data.annotationState !== undefined) {
-			document.getElementById("annotation-state-"+data.displayNumber).innerHTML = (data.annotationState == true) ? "" : " hidden";
+			document.getElementById("annotation-state-"+data.displayNumber).innerHTML = (data.annotationState === true) ? "" : " hidden";
 		} else if (data.displaynumber !== undefined) {
 			annotationsViewer.moveTo(data.displaynumber);
 		} else if (data.keyPress !== undefined) {

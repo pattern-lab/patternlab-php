@@ -309,7 +309,7 @@ $animate-quick: 0.2s;
 		left: auto;
 	}
 
-	[class^="icon-"], [class*=" icon-"] {
+	[class^="sg-icon-"] {
 		&:before {
 			display: inline-block;
 			margin-right: 0.4em;
@@ -452,7 +452,7 @@ $animate-quick: 0.2s;
 
 //Checklist dropdown lists
 .sg-checkbox {
-	@extend .icon-radio-unchecked;
+	@extend .sg-icon-radio-unchecked;
 
 	&:before {
 		display: inline-block;
@@ -460,7 +460,7 @@ $animate-quick: 0.2s;
 	}
 
 	&.active {
-		@extend .icon-radio-checked;
+		@extend .sg-icon-radio-checked;
 	}
 }
 
@@ -877,7 +877,6 @@ div.clear {
 }
 
 /* Pattern Lab icon fonts */
-/* Pattern Lab icon fonts */
 @font-face {
 	font-family: 'icomoon';
 	src:url('../fonts/icomoon.eot?srsv7g');
@@ -889,7 +888,7 @@ div.clear {
 	font-style: normal;
 }
 
-.icon-search, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-radio-checked, .icon-radio-unchecked, .icon-file, .icon-link, .icon-keyboard, .icon-qrcode, .icon-eye, .sg-checkbox {
+.sg-icon-search, .sg-icon-cog, .sg-icon-minus, .sg-icon-plus, .sg-icon-menu, .sg-icon-radio-checked, .sg-icon-radio-unchecked, .sg-icon-file, .sg-icon-link, .sg-icon-keyboard, .sg-icon-qrcode, .sg-icon-eye, .sg-checkbox {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
@@ -903,41 +902,41 @@ div.clear {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.icon-search:before {
+.sg-icon-search:before {
 	content: "\e600";
 	font-size: 85%;
 }
-.icon-cog:before {
+.sg-icon-cog:before {
 	content: "\e601";
 }
-.icon-minus:before {
+.sg-icon-minus:before {
 	content: "\e602";
 }
-.icon-plus:before {
+.sg-icon-plus:before {
 	content: "\e603";
 }
-.icon-menu:before {
+.sg-icon-menu:before {
 	content: "\e604";
 }
-.icon-radio-checked:before, .sg-checkbox.active:before {
+.sg-icon-radio-checked:before, .sg-checkbox.active:before {
 	content: "\e605";
 }
-.icon-radio-unchecked:before, .sg-checkbox:before {
+.sg-icon-radio-unchecked:before, .sg-checkbox:before {
 	content: "\e606";
 }
-.icon-file:before {
+.sg-icon-file:before {
 	content: "\e607";
 }
-.icon-link:before {
+.sg-icon-link:before {
 	content: "\e608";
 }
-.icon-keyboard:before {
+.sg-icon-keyboard:before {
 	content: "\e609";
 }
-.icon-qrcode:before {
+.sg-icon-qrcode:before {
 	content: "\e60a";
 }
-.icon-eye:before {
+.sg-icon-eye:before {
 	content: "\e60b";
 }
 
