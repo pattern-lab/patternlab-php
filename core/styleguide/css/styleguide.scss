@@ -407,19 +407,18 @@ $animate-quick: 0.2s;
 		max-width: none;
 
 		> li {
-			display: inline-block;
+			float: left;
 			border: 0;
 			border-left: 1px solid $sg-tint;
 		}
 	}
 }
 
-.sg-find {
+//Media Queries Dropdown
+#sg-size-mq {
 	display: none;
-}
 
-@media all and (min-width: $sg-bp-med) {
-	.sg-find {
+	@media all and (min-width: $sg-bp-med) {
 		display: block;
 	}
 }
@@ -429,6 +428,7 @@ $animate-quick: 0.2s;
 	border: 0;
 	padding: 0;
 }
+
 .sg-input {
 	margin: -2px 0 0 0;
 	padding: 0;

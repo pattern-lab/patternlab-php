@@ -10,3 +10,6 @@ latest-change.txt
 *-ck.js
 
 /core/source/css/.sass-cache/
+
+/public/styleguide/css/styleguide.css
+/public/styleguide/css/styleguide.scss
