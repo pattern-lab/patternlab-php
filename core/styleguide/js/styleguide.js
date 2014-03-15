@@ -387,18 +387,6 @@
 		
 		updateSizeReading(size);
 	}
-
-	//Detect larger screen and no touch support
-	/*
-	if('ontouchstart' in document.documentElement && window.matchMedia("(max-width: 700px)").matches) {
-		$('body').addClass('no-resize');
-		$('#sg-viewport ').width(sw);
-
-		alert('workit');
-	} else {
-		
-	}
-	*/
 	
 	$('#sg-gen-container').on('touchstart', function(event){});
 
@@ -450,7 +438,7 @@
 	
 	var testWidth = screen.width;
 	if (window.orientation !== undefined) {
-		testWidth = (window.orientation == 0) ? screen.width : screen.height;
+		testWidth = (window.orientation === 0) ? screen.width : screen.height;
 	}
 	if (($(window).width() == testWidth) && ('ontouchstart' in document.documentElement) && ($(window).width() <= 1024)) {
 		$("#sg-rightpull-container").width(0);
@@ -494,7 +482,7 @@
 		history.replaceState({ "pattern": patternName }, null, null);
 	}
 	
-	if (document.getElementById("sg-raw") != undefined) {
+	if (document.getElementById("sg-raw") !== undefined) {
 		document.getElementById("sg-raw").setAttribute("href",urlHandler.getFileName(patternName));
 	}
 	
@@ -589,7 +577,7 @@
 				}
 			} else if (data.keyPress == 'ctrl+shift+0') {
 				sizeiframe(320,true);
-			} else if (found = data.keyPress.match(/ctrl\+shift\+([1-9])/)) {
+			} else if (found == data.keyPress.match(/ctrl\+shift\+([1-9])/)) {
 				var val = mqs[(found[1]-1)];
 				var type = (val.indexOf("px") !== -1) ? "px" : "em";
 				val = val.replace(type,"");
@@ -602,7 +590,7 @@
 	window.addEventListener("message", receiveIframeMessage, false);
 	
 	$('.sg-tools').click(function() {
-		if ((qrCodeGenerator.lastGenerated == "") || (qrCodeGenerator.lastGenerated != window.location.search)) {
+		if ((qrCodeGenerator.lastGenerated === "") || (qrCodeGenerator.lastGenerated !== window.location.search)) {
 			qrCodeGenerator.getQRCode();
 			qrCodeGenerator.lastGenerated = window.location.search;
 		}
