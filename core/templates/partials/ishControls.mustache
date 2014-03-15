@@ -21,7 +21,7 @@
 				</li>
 				{{^ ishControlsHide.mqs }}
 				<li class="sg-mqs">
-					<a href="#" class="mode-link sg-acc-handle" id="sg-size-mq" title="Media query values found in stylesheet">MQ</a>
+					<a href="#" class="mode-link sg-acc-handle" id="sg-size-mq" title="Media queries in stylesheet">MQ</a>
 					<ul class="sg-acc-panel sg-left" id="sg-mq">
 						{{# mqs }}
 							<li><a href="#">{{ . }}</a></li>
@@ -31,7 +31,7 @@
 				{{/ ishControlsHide.mqs }}
 				{{^ ishControlsHide.find }}
 				<li class="sg-find">
-					<a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-search" id="sg-f-toggle" title="Find stuff"><span class="is-vishidden">F</span></a>
+					<a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-search" id="sg-f-toggle" title="Search Patterns"><span class="is-vishidden">Search Patterns</span></a>
 					<ul class="sg-view sg-acc-panel sg-right sg-checklist" id="sg-find" style="margin-top: 33px;">
 							<li><input class="typeahead" type="text" placeholder="search for a pattern..."></li>
 					</ul>
@@ -39,7 +39,7 @@
 				{{/ ishControlsHide.find }}
 				{{^ ishControlsHide.views-all }}
 				<li class="sg-view">
-					<a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-eye" id="sg-t-toggle"><span class="is-vishidden">View</span></a>
+					<a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-eye" id="sg-t-toggle" title="View"><span class="is-vishidden">View</span></a>
 					<ul class="sg-view sg-acc-panel sg-right sg-checklist" id="sg-view">
 						{{^ ishControlsHide.views-annotations }}<li><a href="#" class="sg-checkbox" id="sg-t-annotations">Annotations</a></li>{{/ ishControlsHide.views-annotations }}
 						{{^ ishControlsHide.views-code }}<li><a href="#" class="sg-checkbox" id="sg-t-code">Code</a></li>{{/ ishControlsHide.views-code }}
@@ -49,7 +49,7 @@
 				{{/ ishControlsHide.views-all }}
 				{{^ ishControlsHide.tools-all }}
 				<li class="sg-tools">
-					<a href="#" class="sg-acc-handle sg-tools-toggle sg-icon sg-icon-cog" id="sg-tools-toggle"><span class="is-vishidden">Tools</span></a>
+					<a href="#" class="sg-acc-handle sg-tools-toggle sg-icon sg-icon-cog" id="sg-tools-toggle" title="Tools"><span class="is-vishidden">Tools</span></a>
 					<ul class="sg-acc-panel sg-right sg-checklist">
 						{{^ ishControlsHide.tools-follow }}<li><a href="#" id="navSyncButton" class="sg-checkbox sg-page-follow" data-state="off">Page Follow</a></li>{{/ ishControlsHide.tools-follow }}
 						{{^ ishControlsHide.tools-reload }}<li><a href="#" id="contentSyncButton" class="sg-checkbox sg-auto-reload" data-state="off">Auto-reload</a></li>{{/ ishControlsHide.tools-reload }}
