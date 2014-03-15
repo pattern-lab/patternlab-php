@@ -159,10 +159,6 @@ $animate-quick: 0.2s;
 	z-index: 2;
 	width: 100%;
 
-	-webkit-box-shadow: inset 0 1px 0 #5f6164,inset 0 -1px 0 #2e2f2f,0 1px 3px rgba(0,0,0,0.3);
-	-moz-box-shadow: inset 0 1px 0 #5f6164,inset 0 -1px 0 #2e2f2f,0 1px 3px rgba(0,0,0,0.3);
-	box-shadow: inset 0 1px 0 #5f6164,inset 0 -1px 0 #2e2f2f,0 1px 3px rgba(0,0,0,0.3);
-
 	* {
 	  -moz-box-sizing: border-box;
 	  -webkit-box-sizing: border-box;
@@ -328,10 +324,6 @@ $animate-quick: 0.2s;
 	top: 0;
 	right: 0;
 	z-index: 2;
-
-	@media all and (min-width: $sg-bp-large) {
-		width: 44em;
-	}
 }
 
 .sg-control-trigger {
