@@ -15,3 +15,8 @@ latest-change.txt
 /public/styleguide/css/styleguide.scss
 
 /core/styleguide/css/.sass-cache/
+
+/public/styleguide/js/styleguide.js
+
+/public/styleguide/js/annotations-viewer.js
+/public/styleguide/js/code-viewer.js
