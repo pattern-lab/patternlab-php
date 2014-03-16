@@ -20,3 +20,7 @@ latest-change.txt
 
 /public/styleguide/js/annotations-viewer.js
 /public/styleguide/js/code-viewer.js
+
+/public/styleguide/css/states.css
+/public/styleguide/css/static.css
+/public/styleguide/css/static.scss

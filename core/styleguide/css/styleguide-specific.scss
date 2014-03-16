@@ -1,0 +1,141 @@
+/*------------------------------------*\
+    $PATTERN LAB-SPECIFIC STYLES
+\*------------------------------------*/
+/**
+ * This stylesheet is for styles you want to include only when the interface is being viewed within Pattern Lab.
+ * This is helpful for displaying demo styles for grids, animations, color swatches, etc
+ * It's also helpful for overriding context-specific styles like fixed or absolutely positioned elements
+ * These styles will not be your production CSS.
+ */
+ 
+
+/* Style Guide Interface Colors */ 
+$sg-primary : #222;
+$sg-secondary : #808080;
+$sg-tertiary : #ddd;
+$sg-quaternary : #fff;
+$sg-quinary : #999;
+$sg-tint : rgba(255,255,255,0.05);
+$sg-tint-2 : rgba(255,255,255,0.25);
+$sg-tone : rgba(0,0,0,0.1);
+$sg-tone-2 : rgba(0,0,0,0.3);
+
+/* Typography */
+$sg-font-size-norm : 100%;
+$sg-font-size-sm : 70%;
+$sg-font-size-large : 120%;
+
+/* Defaults */
+$sg-space : 1em;
+$sg-doublespace : $sg-space*2;
+$sg-pad : 1em;
+$sg-pad-half : $sg-pad/2;
+
+/* Dimensions */
+$offset-top: 2em;
+
+/* Breakpoints */
+$sg-bp-small : 24em;
+$sg-bp-small-2 : 30em;
+$sg-bp-med : 48em;
+$sg-bp-large : 72em;
+$sg-bp-xl : 80em;
+
+$animate-quick: 0.2s;
+
+
+// Demo to show grid system - in this stylesheet because it shouldn't be included in the production styles
+.demo {
+	overflow: hidden;
+	margin-bottom: 1rem;
+}
+
+.demo .gi, .demo .demo-block {
+	background: $sg-tertiary;
+	color: $sg-secondary;
+	text-align: center;
+	margin-bottom: $sg-pad-half;
+	padding: 1em !important;
+	
+	&:nth-of-type(2n) {
+		color: $sg-tertiary;
+		background: $sg-secondary;
+	}
+	
+	.gi {
+		background: $sg-tone;
+		color: $sg-tertiary;
+		
+		&:nth-of-type(2n) {
+			background: $sg-tone-2;
+		}
+	}
+}
+
+//Demo box for animation
+.demo-animate {
+	background: #ddd;
+	padding: $sg-pad;
+	margin-bottom: $sg-space;
+	text-align: center;
+}
+
+//Animate Demo to show 
+.animate-move {
+	position: relative;
+
+	.demo-shape {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		width: 20px;
+		background: $sg-secondary;
+	}
+
+	&:hover {
+		> .demo-shape {
+			left: 100%;
+			margin-left: -20px;
+		}
+	}
+}
+
+// Style Guide color swatches
+.sg-colors {
+	overflow: hidden;
+
+	li {
+		overflow: hidden;
+		border: 1px solid $sg-tertiary;
+		padding: 0.3em;
+		margin: 0 0.2em 0.2em 0;
+
+		@media all and (min-width: $sg-bp-small-2) {
+			float: left;
+			width: 5em;
+		}
+	}
+}
+
+.sg-swatch {
+	display: block;
+	height: 1.5em;
+	width: 50%;
+	
+	@media all and (max-width: $sg-bp-small-2) {
+		float: left;
+		margin-right: 0.3em;
+	}
+
+	@media all and (min-width: $sg-bp-small-2) {
+		width: 100%;
+		height: 4em;
+		margin-bottom: 0.2em;
+	}
+	
+}
+
+.sg-label {
+	line-height: 1;
+}

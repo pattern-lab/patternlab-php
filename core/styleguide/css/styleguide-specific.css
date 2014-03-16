@@ -1,0 +1,80 @@
+/*------------------------------------*\
+    $PATTERN LAB-SPECIFIC STYLES
+\*------------------------------------*/
+/**
+ * This stylesheet is for styles you want to include only when the interface is being viewed within Pattern Lab.
+ * This is helpful for displaying demo styles for grids, animations, color swatches, etc
+ * It's also helpful for overriding context-specific styles like fixed or absolutely positioned elements
+ * These styles will not be your production CSS.
+ */
+/* Style Guide Interface Colors */
+/* Typography */
+/* Defaults */
+/* Dimensions */
+/* Breakpoints */
+.demo {
+  overflow: hidden;
+  margin-bottom: 1rem; }
+
+.demo .gi, .demo .demo-block {
+  background: #dddddd;
+  color: gray;
+  text-align: center;
+  margin-bottom: 0.5em;
+  padding: 1em !important; }
+  .demo .gi:nth-of-type(2n), .demo .demo-block:nth-of-type(2n) {
+    color: #dddddd;
+    background: gray; }
+  .demo .gi .gi, .demo .demo-block .gi {
+    background: rgba(0, 0, 0, 0.1);
+    color: #dddddd; }
+    .demo .gi .gi:nth-of-type(2n), .demo .demo-block .gi:nth-of-type(2n) {
+      background: rgba(0, 0, 0, 0.3); }
+
+.demo-animate {
+  background: #ddd;
+  padding: 1em;
+  margin-bottom: 1em;
+  text-align: center; }
+
+.animate-move {
+  position: relative; }
+  .animate-move .demo-shape {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 20px;
+    background: gray; }
+  .animate-move:hover > .demo-shape {
+    left: 100%;
+    margin-left: -20px; }
+
+.sg-colors {
+  overflow: hidden; }
+  .sg-colors li {
+    overflow: hidden;
+    border: 1px solid #dddddd;
+    padding: 0.3em;
+    margin: 0 0.2em 0.2em 0; }
+    @media all and (min-width: 30em) {
+      .sg-colors li {
+        float: left;
+        width: 5em; } }
+
+.sg-swatch {
+  display: block;
+  height: 1.5em;
+  width: 50%; }
+  @media all and (max-width: 30em) {
+    .sg-swatch {
+      float: left;
+      margin-right: 0.3em; } }
+  @media all and (min-width: 30em) {
+    .sg-swatch {
+      width: 100%;
+      height: 4em;
+      margin-bottom: 0.2em; } }
+
+.sg-label {
+  line-height: 1; }
