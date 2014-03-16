@@ -2,7 +2,7 @@
 	{{> organisms-header }}
 	<div role="main">
 		{{# emergency }}
-			{{> molecules-alert }}
+			{{> molecules-alert:error }}
 		{{/ emergency }}
 		{{# hero }}
 			{{> molecules-block-hero }}
@@ -29,11 +29,12 @@
 					</ul>
 					<a href="#" class="text-btn">View more posts</a>
 				</section>
-			</div>
+			</div><!--end .l-main-->
 
 			<div class="l-sidebar">
 				{{> organisms-recent-tweets }}
-			</div><!--end l-sidebar-->
+			</div><!--end .l-sidebar-->
+		</div><!--end .l-two-col-->
 	</div><!--End role=main-->
 	{{> organisms-footer }}
 </div>
