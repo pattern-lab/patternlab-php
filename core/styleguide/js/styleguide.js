@@ -1,14 +1,15 @@
 (function (w) {
 	
 	var sw = document.body.clientWidth, //Viewport Width
-		sh = document.body.clientHeight, //Viewport Height
+		sh = $(document).height(), //Viewport Height
 		minViewportWidth = 240, //Minimum Size for Viewport
 		maxViewportWidth = 2600, //Maxiumum Size for Viewport
 		viewportResizeHandleWidth = 14, //Width of the viewport drag-to-resize handle
 		$sgViewport = $('#sg-viewport'), //Viewport element
 		$sizePx = $('.sg-size-px'), //Px size input element in toolbar
 		$sizeEms = $('.sg-size-em'), //Em size input element in toolbar
-		$bodySize = parseInt($('body').css('font-size')), //Body size of the document
+		$bodySize = parseInt($('body').css('font-size')), //Body size of the document,
+		$headerHeight = $('.sg-header').height(),
 		discoID = false,
 		discoMode = false,
 		hayMode = false;
@@ -16,10 +17,12 @@
 	//Update dimensions on resize
 	$(w).resize(function() {
 		sw = document.body.clientWidth;
-		sh = document.body.clientHeight;
+		sh = $(document).height();
+
+		setAccordionHeight();
 	});
 
-	/* Accordion dropdown */
+	// Accordion dropdown
 	$('.sg-acc-handle').on("click", function(e){
 		e.preventDefault();
 
@@ -36,14 +39,24 @@
 		//Activate selected panel
 		$this.toggleClass('active');
 		$panel.toggleClass('active');
+		setAccordionHeight();
 	});
+
+	//Accordion Height 
+	function setAccordionHeight() {
+		var $activeAccordion = $('.sg-acc-panel.active').first(),
+			accordionHeight = $activeAccordion.height(),
+			availableHeight = sh-$headerHeight; //Screen height minus the height of the header
+		
+		$activeAccordion.height(availableHeight); //Set height of accordion to the available height
+	}
 
 	$('.sg-nav-toggle').on("click", function(e){
 		e.preventDefault();
 		$('.sg-nav-container').toggleClass('active');
 	});
 	
-	//"View (containing clean, code, raw, etc options) Trigger
+	// "View (containing clean, code, raw, etc options) Trigger
 	$('#sg-t-toggle').on("click", function(e){
 		e.preventDefault();
 		$(this).parents('ul').toggleClass('active');
@@ -387,6 +400,18 @@
 		
 		updateSizeReading(size);
 	}
+
+	//Detect larger screen and no touch support
+	/*
+	if('ontouchstart' in document.documentElement && window.matchMedia("(max-width: 700px)").matches) {
+		$('body').addClass('no-resize');
+		$('#sg-viewport ').width(sw);
+
+		alert('workit');
+	} else {
+		
+	}
+	*/
 	
 	$('#sg-gen-container').on('touchstart', function(event){});
 
@@ -438,7 +463,7 @@
 	
 	var testWidth = screen.width;
 	if (window.orientation !== undefined) {
-		testWidth = (window.orientation === 0) ? screen.width : screen.height;
+		testWidth = (window.orientation == 0) ? screen.width : screen.height;
 	}
 	if (($(window).width() == testWidth) && ('ontouchstart' in document.documentElement) && ($(window).width() <= 1024)) {
 		$("#sg-rightpull-container").width(0);
@@ -482,7 +507,7 @@
 		history.replaceState({ "pattern": patternName }, null, null);
 	}
 	
-	if (document.getElementById("sg-raw") !== undefined) {
+	if (document.getElementById("sg-raw") != undefined) {
 		document.getElementById("sg-raw").setAttribute("href",urlHandler.getFileName(patternName));
 	}
 	
@@ -577,7 +602,7 @@
 				}
 			} else if (data.keyPress == 'ctrl+shift+0') {
 				sizeiframe(320,true);
-			} else if (found == data.keyPress.match(/ctrl\+shift\+([1-9])/)) {
+			} else if (found = data.keyPress.match(/ctrl\+shift\+([1-9])/)) {
 				var val = mqs[(found[1]-1)];
 				var type = (val.indexOf("px") !== -1) ? "px" : "em";
 				val = val.replace(type,"");
@@ -590,11 +615,10 @@
 	window.addEventListener("message", receiveIframeMessage, false);
 	
 	$('.sg-tools').click(function() {
-		if ((qrCodeGenerator.lastGenerated === "") || (qrCodeGenerator.lastGenerated !== window.location.search)) {
+		if ((qrCodeGenerator.lastGenerated == "") || (qrCodeGenerator.lastGenerated != window.location.search)) {
 			qrCodeGenerator.getQRCode();
 			qrCodeGenerator.lastGenerated = window.location.search;
 		}
 	});
 	
 })(this);
-

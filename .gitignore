@@ -13,3 +13,5 @@ latest-change.txt
 
 /public/styleguide/css/styleguide.css
 /public/styleguide/css/styleguide.scss
+
+/core/styleguide/css/.sass-cache/

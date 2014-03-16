@@ -89,10 +89,7 @@
   top: 0;
   left: 0;
   z-index: 2;
-  width: 100%;
-  -webkit-box-shadow: inset 0 1px 0 #5f6164, inset 0 -1px 0 #2e2f2f, 0 1px 3px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: inset 0 1px 0 #5f6164, inset 0 -1px 0 #2e2f2f, 0 1px 3px rgba(0, 0, 0, 0.3);
-  box-shadow: inset 0 1px 0 #5f6164, inset 0 -1px 0 #2e2f2f, 0 1px 3px rgba(0, 0, 0, 0.3); }
+  width: 100%; }
   .sg-header * {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -197,14 +194,15 @@
   overflow: hidden;
   max-height: 0;
   min-width: 10em;
-  background: #222222;
   -webkit-transition: max-height 0.1s ease-out;
   -moz-transition: max-height 0.1s ease-out;
   -ms-transition: max-height 0.1s ease-out;
   -o-transition: max-height 0.1s ease-out;
   transition: max-height 0.1s ease-out; }
+  .sg-acc-panel li {
+    background: #222222; }
   .sg-acc-panel.active {
-    max-height: 50em;
+    max-height: 120em;
     overflow: auto; }
   .sg-acc-panel.sg-right {
     position: absolute;
@@ -213,7 +211,7 @@
   .sg-acc-panel.sg-left {
     position: absolute;
     left: auto; }
-  .sg-acc-panel [class^="icon-"]:before, .sg-acc-panel [class*=" icon-"]:before {
+  .sg-acc-panel [class^="sg-icon-"]:before {
     display: inline-block;
     margin-right: 0.4em; }
 
@@ -224,9 +222,6 @@
   top: 0;
   right: 0;
   z-index: 2; }
-  @media all and (min-width: 72em) {
-    .sg-controls {
-      width: 44em; } }
 
 .sg-control-trigger {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
@@ -280,16 +275,16 @@
     max-height: none;
     max-width: none; }
     .sg-size-options > li {
-      display: inline-block;
+      float: left;
       border: 0;
       border-left: 1px solid rgba(255, 255, 255, 0.05); } }
 
-.sg-find {
+#sg-size-mq {
   display: none; }
+  @media all and (min-width: 72em) {
+    #sg-size-mq {
+      display: block; } }
 
-@media all and (min-width: 48em) {
-  .sg-find {
-    display: block; } }
 #sg-form {
   margin: 0;
   border: 0;
@@ -641,7 +636,6 @@ div.clear {
   opacity: .7; }
 
 /* Pattern Lab icon fonts */
-/* Pattern Lab icon fonts */
 @font-face {
   font-family: 'icomoon';
   src: url("../fonts/icomoon.eot?srsv7g");
@@ -649,7 +643,7 @@ div.clear {
   font-weight: normal;
   font-style: normal; }
 
-.icon-search, .icon-cog, .icon-minus, .icon-plus, .icon-menu, .icon-radio-checked, .sg-checkbox.active, .icon-radio-unchecked, .sg-checkbox, .icon-file, .icon-link, .icon-keyboard, .icon-qrcode, .icon-eye, .sg-checkbox {
+.sg-icon-search, .sg-icon-cog, .sg-icon-minus, .sg-icon-plus, .sg-icon-menu, .sg-icon-radio-checked, .sg-checkbox.active, .sg-icon-radio-unchecked, .sg-checkbox, .sg-icon-file, .sg-icon-link, .sg-icon-keyboard, .sg-icon-qrcode, .sg-icon-eye, .sg-checkbox {
   font-family: 'icomoon';
   speak: none;
   font-style: normal;
@@ -661,41 +655,41 @@ div.clear {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
 
-.icon-search:before {
+.sg-icon-search:before {
   content: "\e600";
   font-size: 85%; }
 
-.icon-cog:before {
+.sg-icon-cog:before {
   content: "\e601"; }
 
-.icon-minus:before {
+.sg-icon-minus:before {
   content: "\e602"; }
 
-.icon-plus:before {
+.sg-icon-plus:before {
   content: "\e603"; }
 
-.icon-menu:before {
+.sg-icon-menu:before {
   content: "\e604"; }
 
-.icon-radio-checked:before, .sg-checkbox.active:before, .sg-checkbox.active:before {
+.sg-icon-radio-checked:before, .sg-checkbox.active:before, .sg-checkbox.active:before {
   content: "\e605"; }
 
-.icon-radio-unchecked:before, .sg-checkbox:before, .sg-checkbox:before {
+.sg-icon-radio-unchecked:before, .sg-checkbox:before, .sg-checkbox:before {
   content: "\e606"; }
 
-.icon-file:before {
+.sg-icon-file:before {
   content: "\e607"; }
 
-.icon-link:before {
+.sg-icon-link:before {
   content: "\e608"; }
 
-.icon-keyboard:before {
+.sg-icon-keyboard:before {
   content: "\e609"; }
 
-.icon-qrcode:before {
+.sg-icon-qrcode:before {
   content: "\e60a"; }
 
-.icon-eye:before {
+.sg-icon-eye:before {
   content: "\e60b"; }
 
 /******************************************************************/

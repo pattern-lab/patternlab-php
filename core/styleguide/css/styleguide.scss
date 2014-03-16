@@ -290,11 +290,14 @@ $animate-quick: 0.2s;
 	overflow: hidden;
 	max-height: 0;
 	min-width: 10em;
-	background: $sg-primary;
 	@include sg-transition(max-height,0.1s,ease-out);
 
+	li {
+		background: $sg-primary;
+	}
+
 	&.active {
-		max-height: 50em;
+		max-height: 120em;
 		overflow: auto;
 	}
 
@@ -410,7 +413,7 @@ $animate-quick: 0.2s;
 #sg-size-mq {
 	display: none;
 
-	@media all and (min-width: $sg-bp-med) {
+	@media all and (min-width: $sg-bp-large) {
 		display: block;
 	}
 }
