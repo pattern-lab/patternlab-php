@@ -467,6 +467,56 @@ $animate-quick: 0.2s;
 	}
 }
 
+//Pattern States (active, inprogress, complete, etc)
+ 
+/* basic styling */
+.sg-pattern-state:before {
+	margin-right: 4px;
+	content: "\2022";
+	display: inline-block;
+	margin-bottom: -4px;
+	font-size: 18px;
+	vertical-align: bottom;
+}
+
+/* nav styling */
+.sg-nav .sg-pattern-state:before {
+	margin-top: -4px;
+	margin-bottom: 0;
+	margin-left: -4px;
+	height: 20px;
+	display: block;
+	float: left;
+}
+
+.sg-sub-nav .sg-pattern-state:before {
+	margin-left: -11px;
+	margin-right: 4px;
+}
+
+/* call out for pattern's pattern state */
+span.sg-pattern-state {
+	color: #999;
+}
+
+span.sg-pattern-state:before {
+	margin-bottom: -3px;
+	margin-left: 4px;
+}
+
+/* pattern states */
+.inprogress:before {
+	color: #FF4136 !important;
+}
+
+.inreview:before {
+	color: #FFCC00 !important;
+}
+
+.complete:before {
+	color: #2ECC40 !important;
+}
+
 
 
 /*------------------------------------*\
@@ -627,11 +677,6 @@ $animate-quick: 0.2s;
 	}
 }
 
-/* Clean View */
-.sg-clean .sg-main {
-	padding: 0;
-}
-
 // Style Guide color swatches
 .sg-colors {
 	overflow: hidden;
@@ -724,7 +769,7 @@ $animate-quick: 0.2s;
 	display: block;
 }
 
-//Visually emphasize annotated elements
+//Annotated elements Styles
 .has-annotation {
 	cursor: help !important;
 	box-shadow: 0 0 10px $sg-secondary;
