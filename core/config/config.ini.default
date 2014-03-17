@@ -12,14 +12,23 @@ ie = "scss,DS_Store,less"
 id = "scss,.svn,.sass-cache"
 
 // choose which ports the websocket services should run on
+autoReloadNav  = "true"
 autoReloadPort = "8002"
+pageFollowNav  = "true"
 pageFollowPort = "8003"
+
+// whether the qr code generator should be on
+qrCodeGeneratorOn = "false"
+
+// pattern lab's xip host if you have it configured
+xipHostname = "http://patternlab.*.xip.io"
 
 // whether the public directory should be cleaned when generating your site
 cleanPublic = "true"
 
-// pattern lab's xip host if you have it configured
-xipHostname = "http://patternlab.*.xip.io"
+// ishControl minimum and maximum
+ishMinimum = "240"
+ishMaximum = "2600"
 
 // which, if any, controls to hide in the nav
 ishControlsHide = "hay"
@@ -29,3 +38,6 @@ patternStates = "inprogress,inreview,complete"
 
 // the pattern types that shouldn't be included in the style guide
 styleGuideExcludes = ""
+
+// where the cache buster should be on. can be overridden via command line
+cacheBusterOn = "true"

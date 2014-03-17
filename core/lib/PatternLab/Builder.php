@@ -17,41 +17,6 @@ use \Mustache_Loader_PatternLoader as PatternLoader;
 use \Mustache_Loader_FilesystemLoader as FilesystemLoader;
 
 class Builder {
-
-	// i was lazy when i started this project & kept (mainly) to two letter vars. sorry.
-	protected $mpl;               // mustache pattern loader instance
-	protected $mfs;               // mustache file system loader instance
-	protected $mv;                // mustache vanilla instance
-	protected $d;                 // data from data.json files
-	protected $sp;                // source patterns dir
-	protected $pp;                // public patterns dir
-	protected $sd;                // source dir
-	protected $pd;                // public dir
-	protected $ie;                // extensions to ignore
-	protected $id;                // directories to ignore
-	protected $xipHostname;       // the xip address for the pattern lab site if using one
-	protected $autoReloadPort;    // for populating the websockets template partial
-	protected $pageFollowPort;    // for populating the websockets template partial
-	protected $patternTypes;      // a list of pattern types that match the directory structure
-	protected $patternPaths;      // the paths to patterns for use with mustache partials
-	protected $patternLineages;   // the list of patterns that make up a particular pattern
-	protected $patternLineagesR;  // the list of patterns where a particular pattern is used
-	protected $patternTypesRegex; // the simple regex for the pattern types. used in getPath()
-	protected $patternStates;     // the states from the config to be used in the state comparison
-	protected $navItems;          // the items for the nav. includes view all links
-	protected $viewAllPaths;      // the paths to the view all pages
-	protected $enableCSS;         // decide if we'll enable CSS parsing
-	protected $patternCSS;        // an array to hold the CSS generated for patterns
-	protected $cssRuleSaver;      // where css rule saver will be initialized
-	protected $cacheBuster;       // a timestamp used to bust the cache for static assets like CSS and JS
-	protected $noCacheBuster;     // should we turn the cache buster on or off?
-	protected $patternHead;       // the header to be included on patterns
-	protected $patternFoot;       // the footer to be included on patterns
-	protected $mainPageHead;      // the header to be included on main pages
-	protected $mainPageFoot;      // the footer to be included on main pages
-	protected $addPatternHF;      // should the pattern header and footer be added
-	protected $cleanPublic;       // whether the public directory should be cleaned out or not on generate
-	protected $styleGuideExcludes;// which pattern types to exclude from the style guide
 	
 	/**
 	* When initializing the Builder class or the sub-classes make sure the base properties are configured
@@ -82,6 +47,14 @@ class Builder {
 						$value2 = trim($value2);
 						$this->$key->$value2 = true;
 					}
+				}
+				if ($this->pageFollowNav == "false") {
+					$value = "tools-follow";
+					$this->$key->$value = true;
+				}
+				if ($this->autoReloadNav == "false") {
+					$value = "tools-reload";
+					$this->$key->$value = true;
 				}
 			} else {
 				$this->$key = $value;
@@ -203,14 +176,19 @@ class Builder {
 		}
 		
 		// render out the main pages and move them to public
-		$this->navItems['autoreloadport']  = $this->autoReloadPort;
-		$this->navItems['pagefollowport']  = $this->pageFollowPort;
-		$this->navItems['patternpaths']    = json_encode($patternPathDests);
-		$this->navItems['viewallpaths']    = json_encode($this->viewAllPaths);
-		$this->navItems['mqs']             = $this->gatherMQs();
-		$this->navItems['ipaddress']       = getHostByName(getHostName());
-		$this->navItems['xiphostname']     = $this->xipHostname;
-		$this->navItems['ishControlsHide'] = $this->ishControlsHide;
+		$this->navItems['autoreloadnav']     = $this->autoReloadNav;
+		$this->navItems['autoreloadport']    = $this->autoReloadPort;
+		$this->navItems['pagefollownav']     = $this->pageFollowNav;
+		$this->navItems['pagefollowport']    = $this->pageFollowPort;
+		$this->navItems['patternpaths']      = json_encode($patternPathDests);
+		$this->navItems['viewallpaths']      = json_encode($this->viewAllPaths);
+		$this->navItems['mqs']               = $this->gatherMQs();
+		$this->navItems['qrcodegeneratoron'] = $this->qrCodeGeneratorOn;
+		$this->navItems['ipaddress']         = getHostByName(getHostName());
+		$this->navItems['xiphostname']       = $this->xipHostname;
+		$this->navItems['ishminimum']        = $this->ishMinimum;
+		$this->navItems['ishmaximum']        = $this->ishMaximum;
+		$this->navItems['ishControlsHide']   = $this->ishControlsHide;
 		
 		// grab the partials into a data object for the style guide
 		$sd = array("partials" => array());
@@ -391,7 +369,7 @@ class Builder {
 	protected function gatherData() {
 		
 		// set the cacheBuster
-		$this->cacheBuster = $this->noCacheBuster ? 0 : time();
+		$this->cacheBuster = ($this->noCacheBuster || ($this->cacheBusterOn == "false")) ? 0 : time();
 		
 		// gather the data from the main source data.json
 		if (file_exists($this->sd."/_data/_data.json")) {
