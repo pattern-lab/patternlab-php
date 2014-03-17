@@ -2,8 +2,8 @@
 	
 	var sw = document.body.clientWidth, //Viewport Width
 		sh = $(document).height(), //Viewport Height
-		minViewportWidth = 240, //Minimum Size for Viewport
-		maxViewportWidth = 2600, //Maxiumum Size for Viewport
+		minViewportWidth = ishMinimum, //Minimum Size for Viewport
+		maxViewportWidth = ishMaximum, //Maxiumum Size for Viewport
 		viewportResizeHandleWidth = 14, //Width of the viewport drag-to-resize handle
 		$sgViewport = $('#sg-viewport'), //Viewport element
 		$sizePx = $('.sg-size-px'), //Px size input element in toolbar
@@ -614,11 +614,13 @@
 	}
 	window.addEventListener("message", receiveIframeMessage, false);
 	
-	$('.sg-tools').click(function() {
-		if ((qrCodeGenerator.lastGenerated == "") || (qrCodeGenerator.lastGenerated != window.location.search)) {
-			qrCodeGenerator.getQRCode();
-			qrCodeGenerator.lastGenerated = window.location.search;
-		}
-	});
+	if (qrCodeGeneratorOn) {
+		$('.sg-tools').click(function() {
+			if ((qrCodeGenerator.lastGenerated == "") || (qrCodeGenerator.lastGenerated != window.location.search)) {
+				qrCodeGenerator.getQRCode();
+				qrCodeGenerator.lastGenerated = window.location.search;
+			}
+		});
+	}
 	
 })(this);
