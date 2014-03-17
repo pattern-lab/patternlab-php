@@ -6,32 +6,11 @@
  * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
- * Usage:
- *
- * 	php builder.php -g
- * 		Iterates over the 'source' directories & files and generates the entire site a single time.
- * 		It also cleans the 'public' directory.
- * 	
- * 	php builder/builder.php -gc
- * 		In addition to the -g flag features it will also generate CSS for each pattern. Resource instensive.
- * 	
- * 	php builder.php -gp
- * 		Generates only the patterns a site. Does NOT clean public/ when generating the site.
- * 	
- * 	php builder.php -w
- * 		Generates the site like the -g flag and then watches for changes in the 'source' directories &
- * 		files. Will re-generate files if they've changed.
- * 	
- * 	php builder.php -wr
- * 		In addition to the -w flag features it will also automatically start the auto-reload server.
- * 	
- * 	php builder.php -wp
- * 		Similar to the -w flag but it only generates and then watches the patterns. Does NOT clean public/ when generating the site.
- * 	
- * 	php builder.php -v
- * 		Prints out the current version of Pattern Lab.
- *
  */
+
+/*******************************
+ * General Set-up
+ *******************************/
 
 // check to see if json_decode exists. might be disabled in installs of PHP 5.5
 if (!function_exists("json_decode")) {
@@ -49,95 +28,88 @@ $loader = new SplClassLoader('Mustache', __DIR__.'/lib');
 $loader->setNamespaceSeparator("_");
 $loader->register();
 
-// make sure this script is being accessed from the command line
-if (php_sapi_name() != 'cli') {
-	print "The builder script can only be run from the command line.\n";
-	exit;
-}
 
-// grab the arguments from the command line
-$args = getopt("gwcrvpn");
+/*******************************
+ * Console Set-up
+ *******************************/
 
-// load Pattern Lab's config, if first time set-up move files appropriately too
-$co     = new PatternLab\Configurer;
-$config = $co->getConfig();
+$console = new PatternLab\Console;
 
-// show the version of Pattern Lab
-if (isset($args["v"])) {
-	print "You're running v".$config["v"]." of the PHP version of Pattern Lab.\n";
-	exit;
-}
+// set-up the generate command and options
+$console->setCommand("g","generate","Generate Pattern Lab","The generate command generates an entire site a single time. By default it removes old content in public/, compiles the patterns and moves content from source/ into public/");
+$console->setCommandOption("g","p","patternsonly","Generate only the patterns. Does NOT clean public/.","To generate only the patterns:");
+$console->setCommandOption("g","n","nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:");
+$console->setCommandOption("g","c","enablecss","Generate CSS for each pattern. Resource intensive.","To run and generate the CSS for each pattern:");
 
-// generate the pattern lab site if appropriate
-if (isset($args["g"]) || isset($args["w"])) {
+// set-up an alias for the generate command
+$console->setCommand("b","build","Alias for the generate command","Alias for the generate command. Please refer to it's help for full options.");
+
+// set-up the watch command and options
+$console->setCommand("w","watch","Watch for changes and regenerate","The watch command builds Pattern Lab, watches for changes in source/ and regenerates Pattern Lab when there are any.");
+$console->setCommandOption("w","p","patternsonly","Watches only the patterns. Does NOT clean public/.","To watch and generate only the patterns:");
+$console->setCommandOption("w","r","autoreload","Turn on the auto-reload service.","To turn on auto-reload:");
+
+// set-up the version command
+$console->setCommand("v","version","Print the version number","The version command prints out the current version of Pattern Lab.");
+
+
+/*******************************
+ * Figure out what to run
+ *******************************/
+
+// get what was passed on the command line
+$console->getArguments();
+
+if ($console->findCommand("h|help") && ($command = $console->getCommand())) {
 	
-	$g = new PatternLab\Generator($config);
+	// write the usage & help for a specific command
+	$console->writeHelpCommand($command);
 	
-	// set some default values
-	$enableCSS     = false;
-	$moveStatic    = true;
-	$noCacheBuster = false;
+} else if ($command = $console->getCommand()) {
 	
-	// check to see if CSS for patterns should be parsed & outputted
-	if (isset($args["c"]) && !isset($args["w"])) {
-		$enableCSS = true;
-	}
+	// run commands
 	
-	// check to see if we should just generate the patterns
-	if (isset($args["p"])) {
-		$moveStatic = false;
-	}
+	// load Pattern Lab's config, if first time set-up move files appropriately too
+	$configurer = new PatternLab\Configurer;
+	$config     = $configurer->getConfig();
 	
-	// check to see if we should turn off the cachebuster value
-	if (isset($args["n"])) {
-		$noCacheBuster = true;
-	}
+	// set-up required vars
+	$enableCSS     = ($console->findCommandOption("c|enablecss")) ? true : false;
+	$moveStatic    = ($console->findCommandOption("p|patternsonly")) ? false : true;
+	$noCacheBuster = ($console->findCommandOption("n|nocache")) ? true : false;
+	$autoReload    = ($console->findCommandOption("r|autoreload")) ? true : false;
 	
-	$g->generate($enableCSS,$moveStatic,$noCacheBuster);
-	
-	// have some fun
-	if (!isset($args["w"])) {
+	if (($command == "g") || ($command == "b")) {
+		
+		// load the generator
+		$g = new PatternLab\Generator($config);
+		$g->generate($enableCSS,$moveStatic,$noCacheBuster);
 		$g->printSaying();
+		
+	} else if ($command == "w") {
+		
+		// CSS feature should't be used with watch
+		$enableCSS = false;
+		
+		// load the generator
+		$g = new PatternLab\Generator($config);
+		$g->generate($enableCSS,$moveStatic,$noCacheBuster);
+		
+		// load the watcher
+		$w = new PatternLab\Watcher($config);
+		$w->watch($autoReload,$moveStatic);
+		
+	} else if ($command == "v") {
+		
+		// write out the version number
+		print "You're running v".$config["v"]." of the PHP version of Pattern Lab.\n";
+		exit;
+		
 	}
 	
-}
-
-// watch the source directory and regenerate any changed files
-if (isset($args["w"])) {
+} else {
 	
-	$w = new PatternLab\Watcher($config);
-	
-	// set some default values
-	$reload = false;
-	
-	if (isset($args["r"])) {
-		$reload = true;
-	}
-	
-	$w->watch($reload,$moveStatic);
-	
-}
-
-// when in doubt write out the usage
-if (!isset($args["g"]) && !isset($args["w"]) && !isset($args["v"])) {
-	
-	print "\n";
-	print "Usage:\n\n";
-	print "  php ".$_SERVER["PHP_SELF"]." -g\n";
-	print "    Iterates over the 'source' directories & files and generates the entire site a single time.\n";
-	print "    It also cleans the 'public' directory.\n\n";
-	print "  php ".$_SERVER["PHP_SELF"]." -gc\n";
-	print "    In addition to the -g flag features it will also generate CSS for each pattern. Resource intensive.\n\n";
-	print "  php ".$_SERVER["PHP_SELF"]." -gp\n";
-	print "    Generates only the patterns a site. Does NOT clean public/ when generating the site.\n\n";
-	print "  php ".$_SERVER["PHP_SELF"]." -w\n";
-	print "    Generates the site like the -g flag and then watches for changes in the 'source' directories &\n";
-	print "    files. Will re-generate files if they've changed.\n\n";
-	print "  php ".$_SERVER["PHP_SELF"]." -wr\n";
-	print "    In addition to the -w flag features it will also automatically start the auto-reload server.\n\n";
-	print "  php ".$_SERVER["PHP_SELF"]." -wp\n";
-	print "    Similar to the -w flag but it only generates and then watches the patterns. Does NOT clean public/ when generating the site.\n\n";
-	print "  php ".$_SERVER["PHP_SELF"]." -v\n";
-	print "    Prints out the current version of Pattern Lab.\n\n";
+	// write the generic help
+	$console->writeHelp();
 	
 }
