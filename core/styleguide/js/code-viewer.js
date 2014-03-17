@@ -25,6 +25,12 @@ var codeViewer = {
 		
 		// not sure this is needed anymore...
 		$('body').addClass('code-ready');
+
+		$(window).resize(function() {
+			if(!codeViewer.codeActive) {
+				codeViewer.slideCode($('#sg-code-container').outerHeight());
+			}
+		});
 		
 		// add the onclick handler
 		$('#sg-t-code').click(function(e) {

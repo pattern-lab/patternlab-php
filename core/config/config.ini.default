@@ -22,7 +22,7 @@ cleanPublic = "true"
 xipHostname = "http://patternlab.*.xip.io"
 
 // which, if any, controls to hide in the nav
-ishControlsHide = ""
+ishControlsHide = "hay"
 
 // the order of pattern states
 patternStates = "inprogress,inreview,complete"

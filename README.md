@@ -1,14 +1,12 @@
 ## About the PHP Version of Pattern Lab
 
-The PHP version of Pattern Lab is, at its core, a static site generator. It combines platform-agnostic assets, like the [Mustache](http://mustache.github.io/)-based patterns and the JavaScript-based viewer, with a PHP-based "builder" that transforms and dynamically builds the Pattern Lab site. By making it a static site generator, the PHP version of Pattern Lab strongly separates patterns, data, and presentation from build logic. The PHP version should be seen as a reference for other developers to improve upon as they build their own Pattern Lab Builders in their language of choice.
+The PHP version of Pattern Lab is, at its core, a static site generator. It combines platform-agnostic assets, like the [Mustache](http://mustache.github.io/)-based patterns and the JavaScript-based viewer, with a PHP-based "builder" that transforms and dynamically builds the Pattern Lab site. By making it a static site generator, Pattern Lab strongly separates patterns, data, and presentation from build logic. 
 
 ## Demo
 
-You can play with a demo of the front-end of the PHP version of Pattern Lab at [demo.pattern-lab.info](http://demo.pattern-lab.info).
+You can play with a demo of the front-end of Pattern Lab at [demo.pattern-lab.info](http://demo.pattern-lab.info).
 
 ## Getting Started
-
-The PHP version of Pattern Lab should be relatively easy for anyone to get up and running. 
 
 * [Requirements](http://pattern-lab.info/docs/requirements.html)
 * [Installing the PHP Version of Pattern Lab](http://pattern-lab.info/docs/installation.html)
@@ -46,7 +44,7 @@ The PHP version of Pattern Lab utilizes Mustache as the template language for pa
 
 ## Using Pattern Lab's Advanced Features
 
-By default, the Pattern Lab assets can be manually generated and the Pattern Lab site manually refreshed but who wants to waste time doing that? Here are some ways that the PHP version of Pattern Lab can make your development workflow a little smoother:
+By default, the Pattern Lab assets can be manually generated and the Pattern Lab site manually refreshed but who wants to waste time doing that? Here are some ways that Pattern Lab can make your development workflow a little smoother:
 
 * [Watching for Changes and Auto-Regenerating Patterns](http://pattern-lab.info/docs/advanced-auto-regenerate.html)
 * [Auto-Reloading the Browser Window When Changes Are Made](http://pattern-lab.info/docs/advanced-reload-browser.html)

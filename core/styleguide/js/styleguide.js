@@ -1,14 +1,15 @@
 (function (w) {
 	
 	var sw = document.body.clientWidth, //Viewport Width
-		sh = document.body.clientHeight, //Viewport Height
+		sh = $(document).height(), //Viewport Height
 		minViewportWidth = 240, //Minimum Size for Viewport
 		maxViewportWidth = 2600, //Maxiumum Size for Viewport
 		viewportResizeHandleWidth = 14, //Width of the viewport drag-to-resize handle
 		$sgViewport = $('#sg-viewport'), //Viewport element
 		$sizePx = $('.sg-size-px'), //Px size input element in toolbar
 		$sizeEms = $('.sg-size-em'), //Em size input element in toolbar
-		$bodySize = parseInt($('body').css('font-size')), //Body size of the document
+		$bodySize = parseInt($('body').css('font-size')), //Body size of the document,
+		$headerHeight = $('.sg-header').height(),
 		discoID = false,
 		discoMode = false,
 		hayMode = false;
@@ -16,10 +17,12 @@
 	//Update dimensions on resize
 	$(w).resize(function() {
 		sw = document.body.clientWidth;
-		sh = document.body.clientHeight;
+		sh = $(document).height();
+
+		setAccordionHeight();
 	});
 
-	/* Accordion dropdown */
+	// Accordion dropdown
 	$('.sg-acc-handle').on("click", function(e){
 		e.preventDefault();
 
@@ -36,14 +39,24 @@
 		//Activate selected panel
 		$this.toggleClass('active');
 		$panel.toggleClass('active');
+		setAccordionHeight();
 	});
+
+	//Accordion Height 
+	function setAccordionHeight() {
+		var $activeAccordion = $('.sg-acc-panel.active').first(),
+			accordionHeight = $activeAccordion.height(),
+			availableHeight = sh-$headerHeight; //Screen height minus the height of the header
+		
+		$activeAccordion.height(availableHeight); //Set height of accordion to the available height
+	}
 
 	$('.sg-nav-toggle').on("click", function(e){
 		e.preventDefault();
 		$('.sg-nav-container').toggleClass('active');
 	});
 	
-	//"View (containing clean, code, raw, etc options) Trigger
+	// "View (containing clean, code, raw, etc options) Trigger
 	$('#sg-t-toggle').on("click", function(e){
 		e.preventDefault();
 		$(this).parents('ul').toggleClass('active');
@@ -609,4 +622,3 @@
 	});
 	
 })(this);
-

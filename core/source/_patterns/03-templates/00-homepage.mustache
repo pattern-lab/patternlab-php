@@ -2,7 +2,7 @@
 	{{> organisms-header }}
 	<div role="main">
 		{{# emergency }}
-			{{> molecules-alert }}
+			{{> molecules-alert:error }}
 		{{/ emergency }}
 		{{# hero }}
 			{{> molecules-block-hero }}
@@ -23,17 +23,18 @@
 				<section class="section latest-posts">
 					<h2 class="section-title">Latest Posts</h2>
 					<ul class="post-list">
-						{{# latest-posts}}
+						{{# latest-posts }}
 							<li>{{> molecules-media-block }}</li>
-						{{/ latest-posts}}
+						{{/ latest-posts }}
 					</ul>
 					<a href="#" class="text-btn">View more posts</a>
 				</section>
-			</div>
+			</div><!--end .l-main-->
 
 			<div class="l-sidebar">
 				{{> organisms-recent-tweets }}
-			</div><!--end l-sidebar-->
+			</div><!--end .l-sidebar-->
+		</div><!--end .l-two-col-->
 	</div><!--End role=main-->
 	{{> organisms-footer }}
 </div>
