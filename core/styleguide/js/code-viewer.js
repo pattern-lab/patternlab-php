@@ -27,7 +27,7 @@ var codeViewer = {
 		$('body').addClass('code-ready');
 
 		$(window).resize(function() {
-			if(!codeActive) {
+			if(!codeViewer.codeActive) {
 				codeViewer.slideCode($('#sg-code-container').outerHeight());
 			}
 		});

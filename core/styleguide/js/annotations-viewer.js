@@ -23,7 +23,7 @@ var annotationsViewer = {
 		$('body').addClass('comments-ready');
 
 		$(window).resize(function() {
-			if(!commentsActive) {
+			if(!annotationsViewer.commentsActive) {
 				annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
 			}
 		});
