@@ -220,25 +220,29 @@ class Console {
 		// write out the generic usage info
 		$this->writeLine($commandLongUC." Command Options",true);
 		$this->writeLine("Usage:");
-		$this->writeLine("  php ".$this->self." --".$commandLong." ".$optionList,true);
-		$this->writeLine("Available options:");
+		$this->writeLine("  php ".$this->self." --".$commandLong."|-".$commandShort." ".$optionList,true);
 		
-		// write out the options
-		foreach ($commandOptions as $option => $attributes) {
-			$spacer = $this->getSpacer($lengthLong,$attributes["optionLongLength"]);
-			$this->writeLine("  --".$attributes["optionLong"].$spacer."(-".$attributes["optionShort"].")    ".$attributes["optionDesc"]);
+		// write out the available options
+		if (count($commandOptions) > 0) {
+			$this->writeLine("Available options:");
+			foreach ($commandOptions as $option => $attributes) {
+				$spacer = $this->getSpacer($lengthLong,$attributes["optionLongLength"]);
+				$this->writeLine("  --".$attributes["optionLong"].$spacer."(-".$attributes["optionShort"].")    ".$attributes["optionDesc"]);
+			}
+			$this->writeLine("");
 		}
 		
-		$this->writeLine("");
 		$this->writeLine("Help:");
 		$this->writeLine("  ".$commandHelp,true);
-		$this->writeLine("  Samples:",true);
 		
 		// write out the samples
-		foreach ($commandOptions as $option => $attributes) {
-			$this->writeLine("   ".$attributes["optionSample"]);
-			$this->writeLine("     php ".$this->self." --".$commandLong." --".$attributes["optionLong"]);
-			$this->writeLine("     php ".$this->self." -".$commandShort." -".$attributes["optionShort"],true);
+		if (count($commandOptions) > 0) {
+			$this->writeLine("  Samples:",true);
+			foreach ($commandOptions as $option => $attributes) {
+				$this->writeLine("   ".$attributes["optionSample"]);
+				$this->writeLine("     php ".$this->self." --".$commandLong." --".$attributes["optionLong"]);
+				$this->writeLine("     php ".$this->self." -".$commandShort." -".$attributes["optionShort"],true);
+			}
 		}
 		
 	}
