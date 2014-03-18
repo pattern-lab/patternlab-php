@@ -33,7 +33,7 @@ class Watcher extends Builder {
 	* @param  {Boolean}       decide if the reload server should be turned on
 	* @param  {Boolean}       decide if static files like CSS and JS should be moved
 	*/
-	public function watch($reload = false, $moveStatic = true) {
+	public function watch($reload = false, $moveStatic = true, $noCacheBuster = false) {
 		
 		// automatically start the auto-refresh tool
 		if ($reload) {
@@ -41,6 +41,8 @@ class Watcher extends Builder {
 			$fp = popen("php ".$path." -s", "r"); 
 			print "starting page auto-reload...\n";
 		}
+		
+		$this->noCacheBuster = $noCacheBuster;
 		
 		$c  = false;           // track that one loop through the pattern file listing has completed
 		$o  = new \stdClass(); // create an object to hold the properties

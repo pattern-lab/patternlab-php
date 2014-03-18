@@ -47,6 +47,7 @@ $console->setCommand("b","build","Alias for the generate command","Alias for the
 // set-up the watch command and options
 $console->setCommand("w","watch","Watch for changes and regenerate","The watch command builds Pattern Lab, watches for changes in source/ and regenerates Pattern Lab when there are any.");
 $console->setCommandOption("w","p","patternsonly","Watches only the patterns. Does NOT clean public/.","To watch and generate only the patterns:");
+$console->setCommandOption("w","n","nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:");
 $console->setCommandOption("w","r","autoreload","Turn on the auto-reload service.","To turn on auto-reload:");
 
 // set-up the version command
@@ -97,7 +98,7 @@ if ($console->findCommand("h|help") && ($command = $console->getCommand())) {
 		
 		// load the watcher
 		$w = new PatternLab\Watcher($config);
-		$w->watch($autoReload,$moveStatic);
+		$w->watch($autoReload,$moveStatic,$noCacheBuster);
 		
 	} else if ($command == "v") {
 		
