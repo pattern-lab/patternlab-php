@@ -59,7 +59,6 @@ class Migrator {
 					
 					if (!is_dir($destinationPath)) {
 						mkdir($destinationPath);
-						$this->runMigration($filename, $sourcePath, $destinationPath, false);
 					}
 					
 				} else if ($checkType == "fileExists") {
@@ -69,6 +68,11 @@ class Migrator {
 					}
 					
 				} else if (($checkType == "versionDiffDir") && $diffVersion) {
+					
+					// make sure the destination path exists
+					if (!is_dir($destinationPath)) {
+						mkdir($destinationPath);
+					}
 					
 					$this->runMigration($filename, $sourcePath, $destinationPath, false);
 					

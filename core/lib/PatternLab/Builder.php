@@ -214,7 +214,12 @@ class Builder {
 		$styleGuideHead = $this->mv->render($this->mainPageHead,$sd);
 		$styleGuideFoot = $this->mv->render($this->mainPageFoot,$sd);
 		$styleGuidePage = $styleGuideHead.$this->mfs->render('viewall',$sd).$styleGuideFoot;
-		file_put_contents($this->pd."/styleguide/html/styleguide.html",$styleGuidePage);
+		
+		if (!file_exists($this->pd."/styleguide/html/styleguide.html")) {
+			print "ERROR: the main style guide wasn't written out. make sure public/styleguide exists. can copy core/styleguide\n";
+		} else {
+			file_put_contents($this->pd."/styleguide/html/styleguide.html",$styleGuidePage);
+		}
 		
 	}
 	
@@ -222,6 +227,11 @@ class Builder {
 	* Generates all of the patterns and puts them in the public directory
 	*/
 	protected function generatePatterns() {
+		
+		// make sure patterns exists
+		if (!is_dir($this->pd."/patterns")) {
+			mkdir($this->pd."/patterns");
+		}
 		
 		// make sure the pattern header & footer are added
 		$this->addPatternHF = true;
@@ -1172,21 +1182,25 @@ class Builder {
 	*/
 	protected function cleanPublic() {
 		
-		// find all of the patterns in public/. sort by the children first
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->pd."/patterns/"), \RecursiveIteratorIterator::CHILD_FIRST);
-		
-		// make sure dots are skipped
-		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-		
-		// for each file figure out what to do with it
-		foreach($objects as $name => $object) {
+		// make sure patterns exists before trying to clean it
+		if (is_dir($this->pd."/patterns")) {
 			
-			if ($object->isDir()) {
-				// if this is a directory remove it
-				rmdir($name);
-			} else if ($object->isFile() && ($object->getFilename() != "README")) {
-				// if this is a file remove it
-				unlink($name);
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->pd."/patterns/"), \RecursiveIteratorIterator::CHILD_FIRST);
+			
+			// make sure dots are skipped
+			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+			
+			// for each file figure out what to do with it
+			foreach($objects as $name => $object) {
+				
+				if ($object->isDir()) {
+					// if this is a directory remove it
+					rmdir($name);
+				} else if ($object->isFile() && ($object->getFilename() != "README")) {
+					// if this is a file remove it
+					unlink($name);
+				}
+				
 			}
 			
 		}

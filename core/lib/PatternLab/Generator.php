@@ -71,6 +71,11 @@ class Generator extends Builder {
 		// render out the index and style guide
 		$this->generateMainPages();
 		
+		// make sure data exists
+		if (!is_dir($this->pd."/data")) {
+			mkdir($this->pd."/data");
+		}
+		
 		// iterate over the data files and regenerate the entire site if they've changed
 		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/_data/"), \RecursiveIteratorIterator::SELF_FIRST);
 		
