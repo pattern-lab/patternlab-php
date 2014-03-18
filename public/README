@@ -1,0 +1,3 @@
+To populate this directory you need to generate the PHP version of Pattern Lab for the first time.
+To do so either run "php core/builder.php -g" at the command line or, if you're on a Mac, double-click
+on "core/scripts/generateSite.command".

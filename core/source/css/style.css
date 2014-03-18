@@ -1086,3 +1086,18 @@ td {
 
 .comment-text {
   margin-left: 9em; }
+
+/*------------------------------------*\
+    $MESSAGING
+\*------------------------------------*/
+.alert {
+  text-align: center;
+  padding: 1em;
+  margin-bottom: 0.5em;
+  border: 1px solid gray;
+  background: #f9f9f9; }
+
+.alert-error {
+  color: red;
+  border-color: red;
+  background: #ffbebe; }

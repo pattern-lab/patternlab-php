@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Migrator Class - v0.7.8
+ * Pattern Lab Migrator Class - v0.7.9
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -59,7 +59,6 @@ class Migrator {
 					
 					if (!is_dir($destinationPath)) {
 						mkdir($destinationPath);
-						$this->runMigration($filename, $sourcePath, $destinationPath, false);
 					}
 					
 				} else if ($checkType == "fileExists") {
@@ -69,6 +68,11 @@ class Migrator {
 					}
 					
 				} else if (($checkType == "versionDiffDir") && $diffVersion) {
+					
+					// make sure the destination path exists
+					if (!is_dir($destinationPath)) {
+						mkdir($destinationPath);
+					}
 					
 					$this->runMigration($filename, $sourcePath, $destinationPath, false);
 					

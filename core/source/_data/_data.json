@@ -75,5 +75,19 @@
 	"author" : {
 		"first-name": "Author",
 		"last-name": "Name"
-	}
+	},
+	"hero": true,
+	"emergency" : false,
+	"touts" : [
+		{ },
+		{ },
+		{ }
+	],
+	"latest-posts" : [
+		{ },
+		{ },
+		{ },
+		{ },
+		{ }
+	]
 }

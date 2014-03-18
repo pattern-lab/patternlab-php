@@ -13,12 +13,11 @@
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="styleguide/css/styleguide.css?{{ cacheBuster }}" media="all" />
+	<link rel="stylesheet" href="styleguide/css/styleguide-specific.css?{{ cacheBuster }}" media="all" />
 	<link rel="stylesheet" href="styleguide/css/vendor/typeahead.css?{{ cacheBuster }}" media="all" />
-	<link rel="stylesheet" href="styleguide/css/states.css?{{ cacheBuster }}" media="all" />
 	<link rel="stylesheet" href="styleguide/css/vendor/prism.css?{{ cacheBuster }}" media="all" />
 	
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-	<script>window.jQuery || document.write('<script src="styleguide/js/vendor/jquery.js"><\/script>')</script>
+	<script src="styleguide/js/vendor/jquery.js"></script>
 </head>
 <body  id="patternlab-body">
 	<!--Style Guide Header-->
@@ -87,7 +86,7 @@
 		<div id="sg-comments-container"></div>
 	</script>
 	
-	<!-- the mess of javascript that is included to make things work -->
+	<!-- Included JavaScript that makes everything work -->
 	<script src="styleguide/js/vendor/prism.js?{{ cacheBuster }}"></script>
 	<script src="styleguide/js/vendor/jwerty.js?{{ cacheBuster }}"></script>
 	<script src="styleguide/js/vendor/classlist-polyfill.js?{{ cacheBuster}}"></script>

@@ -21,6 +21,13 @@ var annotationsViewer = {
 		
 		// not sure this is used anymore...
 		$('body').addClass('comments-ready');
+
+		$(window).resize(function() {
+			if(!annotationsViewer.commentsActive) {
+				annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
+			}
+		});
+
 		$('#sg-t-annotations').click(function(e) {
 			
 			e.preventDefault();

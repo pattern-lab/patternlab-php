@@ -1,0 +1,5 @@
+{
+	"sourcePath": "",
+	"destinationPath": "public/styleguide",
+	"checkType": "dirExists"
+}

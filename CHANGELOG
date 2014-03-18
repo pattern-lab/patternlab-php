@@ -1,5 +1,28 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.7.9
+ - ADD: .sass-cache now ignored by default
+ - ADD: configuration options to disable loading of page follow & auto-reload
+ - ADD: configuration option to set cacheBuster to 0
+ - ADD: configuration option to enable QR code feature
+ - ADD: configuration option to set minimum & maximum widths for the viewport resizer
+ - ADD: command line flag for generating only the patterns
+ - ADD: command line flag to set cacheBuster to 0
+ - ADD: better handling of missing required directories in public/
+ - ADD: added a styleguide-specific.css to better manage classes
+ - FIX: updated the console help output
+ - FIX: removed everything in public/ except the README
+ - FIX: removed the CDN version of jQuery
+ - FIX: toolbar styles updated
+ - FIX: icon font for the toolbar is no longer influencing the icon font of the patterns
+ - FIX: updated the styles for the "find a pattern" field
+ - FIX: code/annotations views now properly hide on resizing
+ - FIX: states.css removed and those styles loaded into styleguide.css
+ - FIX: default images updated
+ - FIX: removed hay mode from the tool bar by default. can be added back in by editing config.ini
+ - FIX: general pattern clean-up and re-styling to better match pattern lab's capabilities
+ - THX: thanks to @illepic for the .sass-cache PR
+
 PL-v0.7.8
  - ADD: can show annotations on view-all pages by default
  - FIX: can target pattern divs and apply annotations

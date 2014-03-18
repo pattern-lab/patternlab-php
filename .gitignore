@@ -1,10 +1,7 @@
 .DS_Store
 public/*
 source/*
-!public/listeners/*
-!public/styleguide/*
-!public/patterns/**/*
-!public/data/*.js
 config.ini
 latest-change.txt
 *-ck.js
+*.sass-cache/
