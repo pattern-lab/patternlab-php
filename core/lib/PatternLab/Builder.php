@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Builder Class - v0.7.9
+ * Pattern Lab Builder Class - v0.7.10
  *
  * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
