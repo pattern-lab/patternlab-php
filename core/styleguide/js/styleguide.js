@@ -432,7 +432,7 @@
 		$('#sg-cover').mousemove(function(event) {
 			var viewportWidth;
 			
-			viewportWidth = (origClientX > event.clientX) ? origViewportWidth - (origClientX - event.clientX) : origViewportWidth + (event.clientX - origClientX);
+			viewportWidth = origViewportWidth + 2*(event.clientX - origClientX);
 			
 			if (viewportWidth > minViewportWidth) {
 				
