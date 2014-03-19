@@ -1,5 +1,9 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.7.10
+ - ADD: more responsive pull bar
+ - THX: thanks to @crohrer for the pull request making the pull bar more responsive
+
 PL-v0.7.9
  - ADD: .sass-cache now ignored by default
  - ADD: configuration options to disable loading of page follow & auto-reload
