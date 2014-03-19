@@ -1,9 +1,9 @@
 <?php
 
 /*!
- * Pattern Lab Migrator Class - v0.7.9
+ * Pattern Lab Migrator Class - v0.7.10
  *
- * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
+ * Copyright (c) 2014 Dave Olsen http://dmolsen.com
  * Licensed under the MIT license
  *
  * Moves any necessary files from core/ into source/ or public/
