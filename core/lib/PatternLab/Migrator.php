@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Migrator Class - v0.7.10
+ * Pattern Lab Migrator Class - v0.7.11
  *
  * Copyright (c) 2014 Dave Olsen http://dmolsen.com
  * Licensed under the MIT license
@@ -27,65 +27,69 @@ class Migrator {
 	*/
 	public function migrate($diffVersion = false) {
 		
-		$migrations = new \DirectoryIterator(__DIR__."/../../migrations/");
+		$migrations      = new \DirectoryIterator(__DIR__."/../../migrations/");
+		$migrationsValid = array();
 		
 		foreach ($migrations as $migration) {
-			
 			$filename = $migration->getFilename();
-			
 			if (!$migration->isDot() && $migration->isFile() && ($filename[0] != "_")) {
+				$migrationsValid[] = $filename;
+			}
+		}
+		
+		asort($migrationsValid);
+		
+		foreach ($migrationsValid as $filename) {
+			
+			$basePath        = __DIR__."/../../../";
+			$migrationData   = json_decode(file_get_contents(__DIR__."/../../migrations/".$filename));
+			$checkType       = $migrationData->checkType;
+			$sourcePath      = ($checkType == "fileExists") ? $basePath.$migrationData->sourcePath : $basePath.$migrationData->sourcePath.DIRECTORY_SEPARATOR;
+			$destinationPath = ($checkType == "fileExists") ? $basePath.$migrationData->destinationPath : $basePath.$migrationData->destinationPath.DIRECTORY_SEPARATOR;
+			
+			if ($checkType == "dirEmpty") {
 				
-				$basePath        = __DIR__."/../../../";
-				$migrationData   = json_decode(file_get_contents($migration->getPathname()));
-				$checkType       = $migrationData->checkType;
-				$sourcePath      = ($checkType == "fileExists") ? $basePath.$migrationData->sourcePath : $basePath.$migrationData->sourcePath.DIRECTORY_SEPARATOR;
-				$destinationPath = ($checkType == "fileExists") ? $basePath.$migrationData->destinationPath : $basePath.$migrationData->destinationPath.DIRECTORY_SEPARATOR;
-				
-				if ($checkType == "dirEmpty") {
-					
-					$emptyDir = true;
-					$objects  = new \DirectoryIterator($destinationPath);
-					foreach ($objects as $object) {
-						if (!$object->isDot() && ($object->getFilename() != "README") && ($object->getFilename() != ".DS_Store")) {
-							$emptyDir = false;
-						}
+				$emptyDir = true;
+				$objects  = new \DirectoryIterator($destinationPath);
+				foreach ($objects as $object) {
+					if (!$object->isDot() && ($object->getFilename() != "README") && ($object->getFilename() != ".DS_Store")) {
+						$emptyDir = false;
 					}
-					
-					if ($emptyDir) {
-						$this->runMigration($filename, $sourcePath, $destinationPath, false);
-					}
-					
-				} else if ($checkType == "dirExists") {
-					
-					if (!is_dir($destinationPath)) {
-						mkdir($destinationPath);
-					}
-					
-				} else if ($checkType == "fileExists") {
-					
-					if (!file_exists($destinationPath)) {
-						$this->runMigration($filename, $sourcePath, $destinationPath, true);
-					}
-					
-				} else if (($checkType == "versionDiffDir") && $diffVersion) {
-					
-					// make sure the destination path exists
-					if (!is_dir($destinationPath)) {
-						mkdir($destinationPath);
-					}
-					
-					$this->runMigration($filename, $sourcePath, $destinationPath, false);
-					
-				} else if (($checkType == "versionDiffFile") && $diffVersion) {
-					
-					$this->runMigration($filename, $sourcePath, $destinationPath, true);
-					
-				} else {
-					
-					print "Pattern Lab doesn't recognize a checkType of ".$checkType.". The migrator class is pretty thin at the moment.\n";
-					exit;
-					
 				}
+				
+				if ($emptyDir) {
+					$this->runMigration($filename, $sourcePath, $destinationPath, false);
+				}
+				
+			} else if ($checkType == "dirExists") {
+				
+				if (!is_dir($destinationPath)) {
+					mkdir($destinationPath);
+				}
+				
+			} else if ($checkType == "fileExists") {
+				
+				if (!file_exists($destinationPath)) {
+					$this->runMigration($filename, $sourcePath, $destinationPath, true);
+				}
+				
+			} else if (($checkType == "versionDiffDir") && $diffVersion) {
+				
+				// make sure the destination path exists
+				if (!is_dir($destinationPath)) {
+					mkdir($destinationPath);
+				}
+				
+				$this->runMigration($filename, $sourcePath, $destinationPath, false);
+				
+			} else if (($checkType == "versionDiffFile") && $diffVersion) {
+				
+				$this->runMigration($filename, $sourcePath, $destinationPath, true);
+				
+			} else {
+				
+				print "Pattern Lab doesn't recognize a checkType of ".$checkType.". The migrator class is pretty thin at the moment.\n";
+				exit;
 				
 			}
 			
@@ -111,10 +115,7 @@ class Migrator {
 			
 		} else {
 			
-			// iterate over all of the other files in the source directory and move them if their modified time has changed
 			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourcePath), \RecursiveIteratorIterator::SELF_FIRST);
-			
-			// make sure dots are skipped
 			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 			
 			foreach ($objects as $object) {
