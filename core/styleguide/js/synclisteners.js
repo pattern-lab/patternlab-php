@@ -1,4 +1,3 @@
-
 /*!
  * Sync Listeners, v0.1
  *
@@ -17,7 +16,7 @@ var wsn;
 var wsnConnected = false;
 var wsc;
 var wscConnected = false;
-var host = (window.location.host !== "") ? window.location.host : "127.0.0.1";
+var host = (window.location.hostname !== "") ? window.location.hostname : "127.0.0.1";
 
 // handle page updates from one browser to another
 function connectPageFollowSync() {
