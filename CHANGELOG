@@ -1,5 +1,9 @@
 THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 
+PL-v0.7.12
+ - FIX: making sure only the hostname shows up for the websocket servers. no ports.
+ - THX: thanks to @levito for the pull request
+
 PL-v0.7.11
  - FIX: migrator now orders migrations properly for ubuntu
  - THX: thanks to @krulik for reporting the issue & @paulovieira for confirming the fix
