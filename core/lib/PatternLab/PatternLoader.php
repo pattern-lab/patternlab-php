@@ -26,6 +26,34 @@ class PatternLoader {
 	}
 	
 	/**
+	* Load a new instance that of the Pattern Loader
+	*
+	* @return {Object}       an instance of the Mustache engine
+	*/
+	public function loadPatternLoaderInstance($patternEngine,$sourcePatternsPath) {
+		
+		if ($patternEngine == "twig") {
+			
+			$loader = new \SplClassLoader('Twig', __DIR__.'/../../lib');
+			$loader->setNamespaceSeparator("_");
+			$loader->register();
+			
+			$loader   = new PatternLoaders\Twig($sourcePatternsPath,array("patternPaths" => $this->patternPaths));
+			$instance = new \Twig_Environment($loader);
+			
+		} else {
+			
+			$instance = new \Mustache_Engine(array(
+							"loader" => new PatternLoaders\Mustache($sourcePatternsPath,array("patternPaths" => $this->patternPaths)),
+							"partials_loader" => new PatternLoaders\Mustache($sourcePatternsPath,array("patternPaths" => $this->patternPaths))
+			));
+			
+		}
+		
+		return $instance;
+	}
+	
+	/**
 	 * Helper function to return the pattern file name
 	 * @param  {String}     the name of the pattern
 	 *
