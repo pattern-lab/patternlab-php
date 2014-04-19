@@ -412,8 +412,10 @@ jwerty.key('ctrl+shift+c', function (e) {
 
 // when the code panel is open hijack cmd+a so that it only selects the code view
 jwerty.key('cmd+a/ctrl+a', function (e) {
-	codeViewer.selectCode();
-	return false;
+	if (codeViewer.codeActive) {
+		codeViewer.selectCode();
+		return false;
+	}
 });
 
 // open the mustache panel

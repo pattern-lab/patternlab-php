@@ -91,9 +91,11 @@ jwerty.key('ctrl+shift+c', function (e) {
 
 // when the code panel is open hijack cmd+a so that it only selects the code view
 jwerty.key('cmd+a/ctrl+a', function (e) {
-	var obj = JSON.stringify({ "keyPress": "cmd+a" });
-	parent.postMessage(obj,codePattern.targetOrigin);
-	return false;
+	if (codePattern.codeOverlayActive) {
+		var obj = JSON.stringify({ "keyPress": "cmd+a" });
+		parent.postMessage(obj,codePattern.targetOrigin);
+		return false;
+	}
 });
 
 // open the mustache panel
