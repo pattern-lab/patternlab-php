@@ -14,7 +14,6 @@ namespace PatternLab;
 
 class PatternLoader {
 	
-	private $extension    = '.mustache';
 	private $patternPaths = array();
 	
 	/**
