@@ -103,7 +103,12 @@ class PatternLoader {
 		if (strpos($partial, ":") !== false) {
 			$partialBits      = explode(":",$partial,2);
 			$partial          = $partialBits[0];
-			$styleModifier    = array("styleModifier" => $partialBits[1]);
+			$styleModifier    = $partialBits[1];
+			if (strpos($styleModifier, "|") !== false) {
+				$styleModifierBits = explode("|",$styleModifier);
+				$styleModifier     = join(" ",$styleModifierBits);
+			}
+			$styleModifier    = array("styleModifier" => $styleModifier);
 		}
 		
 		return array($partial,$styleModifier,$parameters);
