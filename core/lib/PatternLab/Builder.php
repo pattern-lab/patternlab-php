@@ -75,11 +75,17 @@ class Builder {
 	*
 	* @return {Object}       an instance of the Mustache engine
 	*/
-	protected function loadMustachePatternLoaderInstance() {
-		$this->mpl = new \Mustache_Engine(array(
-						"loader" => new PatternLoaders\Mustache(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths)),
-						"partials_loader" => new PatternLoaders\Mustache(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths))
-		));
+	protected function loadPatternLoaderInstance() {
+		
+		if ($config["patternEngine"] == "twig") {
+			
+		} else {
+			$this->pl = new \Mustache_Engine(array(
+							"loader" => new PatternLoaders\Mustache(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths)),
+							"partials_loader" => new PatternLoaders\Mustache(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths))
+			));
+		}
+		
 	}
 	
 	/**
@@ -138,7 +144,7 @@ class Builder {
 			
 		}
 		
-		$pattern = $this->mpl->render($f,$d);
+		$pattern = $this->pl->render($f,$d);
 		$escaped = htmlentities($pattern);
 		
 		if ($this->addPatternHF) {
@@ -233,7 +239,7 @@ class Builder {
 		$this->addPatternHF = true;
 		
 		// make sure $this->mpl & $this->mv are refreshed
-		$this->loadMustachePatternLoaderInstance();
+		$this->loadPatternLoaderInstance();
 		$this->loadMustacheVanillaInstance();
 		
 		// loop over the pattern paths to generate patterns for each
@@ -867,7 +873,7 @@ class Builder {
 		array_walk_recursive($this->d,'PatternLab\Builder::compareReplace');
 		
 		// make sure $this->mpl is refreshed
-		$this->loadMustachePatternLoaderInstance();
+		$this->loadPatternLoaderInstance();
 		
 		// run through the nav items and generate pattern partials and the view all pages
 		foreach ($this->navItems["patternTypes"] as $patternTypeKey => $patternTypeValues) {
