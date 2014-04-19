@@ -867,6 +867,9 @@ class Builder {
 			}
 		}
 		
+		// walk across the data and update links
+		array_walk_recursive($this->d,'PatternLab\Builder::compareReplace');
+		
 		// make sure $this->mpl is refreshed
 		$this->loadMustachePatternLoaderInstance();
 		
@@ -1339,6 +1342,23 @@ class Builder {
 	*/
 	public function printData() {
 		print_r($this->d);
+	}
+	
+	/**
+	* Go through data and replace any values that match items from the link.array
+	* @param  {String}       an entry from one of the list-based config entries
+	*
+	* @return {String}       trimmed version of the given $v var
+	*/
+	public function compareReplace(&$value) {
+		if (is_string($value)) {
+			$valueCheck = strtolower($value);
+			$valueThin  = str_replace("link.","",$valueCheck);
+			if ((strpos($valueCheck, 'link.') !== false) && array_key_exists($valueThin,$this->d["link"])) {
+				$value = $this->d["link"][$valueThin];
+			}
+		}
+		
 	}
 	
 	/**
