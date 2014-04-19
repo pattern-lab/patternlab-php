@@ -13,7 +13,6 @@
 namespace PatternLab;
 
 use \Mustache_Engine as Engine;
-use \Mustache_Loader_PatternLoader as PatternLoader;
 use \Mustache_Loader_FilesystemLoader as FilesystemLoader;
 
 class Builder {
@@ -81,8 +80,8 @@ class Builder {
 	*/
 	protected function loadMustachePatternLoaderInstance() {
 		$this->mpl = new Engine(array(
-						"loader" => new PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths)),
-						"partials_loader" => new PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths))
+						"loader" => new PatternLoaders\Mustache(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths)),
+						"partials_loader" => new PatternLoaders\Mustache(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths))
 		));
 	}
 	
