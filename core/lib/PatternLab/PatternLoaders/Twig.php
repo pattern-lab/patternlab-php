@@ -18,9 +18,10 @@ class Twig implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface {
 	/** Identifier of the main namespace. */
 	const MAIN_NAMESPACE = '__main__';
 	
-	protected $paths = array();
+	protected $paths        = array();
+	protected $cache        = array();
 	protected $patternPaths = array();
-	protected $cache = array();
+	protected $extension      = '.twig';
 	
 	/**
 	 * Constructor.
@@ -162,7 +163,9 @@ class Twig implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface {
 	
 	protected function findTemplate($name) {
 		
-		$name = $this->patternLoader->getFileName($name);
+		list($partialName,$styleModifier,$parameters) = $this->patternLoader->getPartialInfo($name);
+		
+		$name = $this->getFileName($partialName);
 		
 		$name = $this->normalizeName($name);
 		
@@ -193,7 +196,8 @@ class Twig implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface {
 			}
 		}
 		
-		throw new \Twig_Error_Loader(sprintf('Unable to find template "%s" (looked into: %s).', $name."f", implode(', ', $this->paths[$namespace])));
+		
+		throw new \Twig_Error_Loader(sprintf('Unable to find template "%s" (looked into: %s).', $name, implode(', ', $this->paths[$namespace])));
 	}
 	
 	protected function normalizeName($name) {
@@ -223,4 +227,33 @@ class Twig implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface {
 		
 	}
 	
+	/**
+	 * Helper function for getting a Mustache template file name.
+	 * @param  {String}    the pattern type for the pattern
+	 * @param  {String}    the pattern sub-type
+	 *
+	 * @return {Array}     an array of rendered partials that match the given path
+	 */
+	protected function getFileName($name) {
+		
+		$fileName = "";
+		$dirSep   = DIRECTORY_SEPARATOR;
+		
+		// test to see what kind of path was supplied
+		$posDash  = strpos($name,"-");
+		$posSlash = strpos($name,$dirSep);
+		
+		if (($posSlash === false) && ($posDash !== false)) {
+			$fileName = $this->patternLoader->getPatternFileName($name);
+		} else {
+			$fileName = $name;
+		}
+		
+		if (substr($fileName, 0 - strlen($this->extension)) !== $this->extension) {
+			$fileName .= $this->extension;
+		}
+		
+		return $fileName;
+		
+	}
 }
