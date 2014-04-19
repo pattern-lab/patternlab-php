@@ -68,25 +68,12 @@ class Builder {
 		$this->enableCSS    = false;
 		$this->patternCSS   = array();
 		
+		// find the pattern extension
+		$this->patternExtension = $this->patternEngine;
+		
 	}
 	
-	/**
-	* Load a new Mustache instance that uses the Pattern Loader
-	*
-	* @return {Object}       an instance of the Mustache engine
-	*/
-	protected function loadPatternLoaderInstance() {
-		
-		if ($config["patternEngine"] == "twig") {
-			
-		} else {
-			$this->pl = new \Mustache_Engine(array(
-							"loader" => new PatternLoaders\Mustache(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths)),
-							"partials_loader" => new PatternLoaders\Mustache(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths))
-			));
-		}
-		
-	}
+
 	
 	/**
 	* Load a new Mustache instance that uses the File System Loader
@@ -238,8 +225,9 @@ class Builder {
 		// make sure the pattern header & footer are added
 		$this->addPatternHF = true;
 		
-		// make sure $this->mpl & $this->mv are refreshed
-		$this->loadPatternLoaderInstance();
+		// make sure $this->pl & $this->mv are refreshed
+		$patternLoader = new PatternLoader($this->patternPaths);
+		$this->pl = $patternLoader->loadPatternLoaderInstance($this->patternEngine,__DIR__.$this->sp);
 		$this->loadMustacheVanillaInstance();
 		
 		// loop over the pattern paths to generate patterns for each
@@ -251,7 +239,7 @@ class Builder {
 				if ($pathInfo["render"]) {
 					
 					// get the rendered, escaped, and mustache pattern
-					$this->generatePatternFile($pathInfo["patternSrcPath"].".mustache",$pathInfo["patternPartial"],$pathInfo["patternDestPath"],$pathInfo["patternState"]);
+					$this->generatePatternFile($pathInfo["patternSrcPath"].".".$this->patternExtension,$pathInfo["patternPartial"],$pathInfo["patternDestPath"],$pathInfo["patternState"]);
 					
 				}
 				
@@ -294,7 +282,7 @@ class Builder {
 		// write out the various pattern files
 		file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$rf);
 		file_put_contents(__DIR__.$this->pp.$path."/".$path.".escaped.html",$e);
-		file_put_contents(__DIR__.$this->pp.$path."/".$path.".mustache",$m);
+		file_put_contents(__DIR__.$this->pp.$path."/".$path.".".$this->patternExtension,$m);
 		if ($this->enableCSS && isset($this->patternCSS[$p])) {
 			file_put_contents(__DIR__.$this->pp.$path."/".$path.".css",htmlentities($this->patternCSS[$p]));
 		}
@@ -427,7 +415,7 @@ class Builder {
 				$filename       = $patternInfo["patternSrcPath"];
 				
 				// if a file doesn't exist it assumes it's a pseudo-pattern and will use the last lineage found
-				if (file_exists(__DIR__.$this->sp.$filename.".mustache")) {
+				if (file_exists(__DIR__.$this->sp.$filename.".".$this->patternExtension)) {
 					$foundLineages = array_unique($this->getLineage($filename));
 				}
 				
@@ -530,6 +518,7 @@ class Builder {
 		$patternSubtypeSet  = false;
 		$dirSep             = DIRECTORY_SEPARATOR;
 		
+		
 		// initialize various arrays
 		$this->navItems                 = array();
 		$this->navItems["patternTypes"] = array();
@@ -608,7 +597,7 @@ class Builder {
 				// starting a new set of pattern types. it might not have any pattern subtypes
 				$patternSubtypeSet = true;
 				
-			} else if ($object->isFile() && ($object->getExtension() == "mustache")) {
+			} else if ($object->isFile() && ($object->getExtension() == $this->patternExtension)) {
 				
 				/*************************************
 				 * This section is for:
@@ -616,7 +605,7 @@ class Builder {
 				 *************************************/
 				
 				$patternFull  = $object->getFilename();                                        // 00-colors.mustache
-				$pattern      = str_replace(".mustache","",$patternFull);                      // 00-colors
+				$pattern      = str_replace(".".$this->patternExtension,"",$patternFull);      // 00-colors
 				
 				// check for pattern state
 				$patternState = "";
@@ -674,7 +663,7 @@ class Builder {
 				}
 				
 				// add all patterns to patternPaths
-				$patternSrcPath  = str_replace(__DIR__.$this->sp,"",str_replace(".mustache","",$object->getPathname()));
+				$patternSrcPath  = str_replace(__DIR__.$this->sp,"",str_replace(".".$this->patternExtension,"",$object->getPathname()));
 				$patternDestPath = $patternPathDash;
 				$this->patternPaths[$patternTypeDash][$patternDash] = array("patternSrcPath"  => $patternSrcPath,
 																			"patternDestPath" => $patternDestPath,
@@ -706,7 +695,7 @@ class Builder {
 					// set-up the names
 					// $patternFull is defined above                                                     00-colors.mustache
 					$patternBits     = explode("~",$patternFull);
-					$patternBase     = $patternBits[0].".mustache";                                   // 00-homepage.mustache
+					$patternBase     = $patternBits[0].".".$this->patternExtension;                   // 00-homepage.mustache
 					$patternBaseDash = $this->getPatternName($patternBits[0],false);                  // homepage
 					$patternBaseJSON = $patternBits[0].".json";                                       // 00-homepage.json
 					$stripJSON       = str_replace(".json","",$patternBits[1]);
@@ -738,7 +727,7 @@ class Builder {
 					
 					// set-up the info for the nav
 					$patternInfo = array("patternPath"    => $patternPathDash."/".$patternPathDash.".html",
-										 "patternSrcPath" => str_replace(__DIR__.$this->sp,"",preg_replace("/\~(.*)\.json/",".mustache",$object->getPathname())),
+										 "patternSrcPath" => str_replace(__DIR__.$this->sp,"",preg_replace("/\~(.*)\.json/",".".$this->patternExtension,$object->getPathname())),
 										 "patternName"    => ucwords($patternClean),
 										 "patternState"   => $patternState,
 										 "patternPartial" => $patternPartial);
@@ -873,7 +862,8 @@ class Builder {
 		array_walk_recursive($this->d,'PatternLab\Builder::compareReplace');
 		
 		// make sure $this->mpl is refreshed
-		$this->loadPatternLoaderInstance();
+		$patternLoader = new PatternLoader($this->patternPaths);
+		$this->pl = $patternLoader->loadPatternLoaderInstance($this->patternEngine,__DIR__.$this->sp);
 		
 		// run through the nav items and generate pattern partials and the view all pages
 		foreach ($this->navItems["patternTypes"] as $patternTypeKey => $patternTypeValues) {
@@ -997,7 +987,7 @@ class Builder {
 	* @return {Array}        a list of patterns
 	*/
 	protected function getLineage($filename) {
-		$data = file_get_contents(__DIR__.$this->sp.$filename.".mustache");
+		$data = file_get_contents(__DIR__.$this->sp.$filename.".".$this->patternExtension);
 		//$data = file_get_contents($filename);
 		if (preg_match_all('/{{>([ ]+)?([A-Za-z0-9-]+)(?:\:[A-Za-z0-9-]+)?(?:(| )\(.*)?([ ]+)}}/',$data,$matches)) {
 			return $matches[2];
@@ -1059,7 +1049,7 @@ class Builder {
 	* @return {String}       the directory for the pattern
 	*/
 	protected function getPath($filepath,$type = "m") {
-		$file = ($type == 'm') ? '\.mustache' : '\.json';
+		$file = ($type == 'm') ? '\.'.$this->patternExtension : '\.json';
 		if (preg_match('/\/('.$this->patternTypesRegex.'\/(([A-z0-9-]{1,})\/|)([A-z0-9-]{1,}))'.$file.'$/',$filepath,$matches)) {
 			return $matches[1];
 		}
