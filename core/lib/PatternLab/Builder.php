@@ -12,10 +12,6 @@
 
 namespace PatternLab;
 
-use \Mustache_Engine as Engine;
-use \Mustache_Loader_PatternLoader as PatternLoader;
-use \Mustache_Loader_FilesystemLoader as FilesystemLoader;
-
 class Builder {
 	
 	/**
@@ -80,9 +76,9 @@ class Builder {
 	* @return {Object}       an instance of the Mustache engine
 	*/
 	protected function loadMustachePatternLoaderInstance() {
-		$this->mpl = new Engine(array(
-						"loader" => new PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths)),
-						"partials_loader" => new PatternLoader(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths))
+		$this->mpl = new \Mustache_Engine(array(
+						"loader" => new PatternLoaders\Mustache(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths)),
+						"partials_loader" => new PatternLoaders\Mustache(__DIR__.$this->sp,array("patternPaths" => $this->patternPaths))
 		));
 	}
 	
@@ -92,9 +88,9 @@ class Builder {
 	* @return {Object}       an instance of the Mustache engine
 	*/
 	protected function loadMustacheFileSystemLoaderInstance() {
-		$this->mfs = new Engine(array(
-						"loader" => new FilesystemLoader(__DIR__."/../../templates/"),
-						"partials_loader" => new FilesystemLoader(__DIR__."/../../templates/partials/")
+		$this->mfs = new \Mustache_Engine(array(
+						"loader" => new \Mustache_Loader_FilesystemLoader(__DIR__."/../../templates/"),
+						"partials_loader" => new \Mustache_Loader_FilesystemLoader(__DIR__."/../../templates/partials/")
 		));
 	}
 	
@@ -104,7 +100,7 @@ class Builder {
 	* @return {Object}       an instance of the Mustache engine
 	*/
 	protected function loadMustacheVanillaInstance() {
-		$this->mv  = new Engine;
+		$this->mv  = new \Mustache_Engine;
 	}
 	
 	/**
