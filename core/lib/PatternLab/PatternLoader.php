@@ -124,7 +124,17 @@ class PatternLoader {
 	 */
 	public function findReplaceParameters($fileData, $parameters) {
 		foreach ($parameters as $k => $v) {
-			if ($v == "true") {
+			if (is_array($v)) {
+				if (preg_match('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k.'[\s]*)}}/s',$fileData,$matches)) {
+					if (isset($matches[2])) {
+						$partialData = "";
+						foreach ($v as $v2) {
+							$partialData .= $this->findReplaceParameters($matches[2], $v2);
+						}
+						$fileData = preg_replace('/{{\#([\s]*'.$k .'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s',$partialData,$fileData);
+					}
+				}
+			} else if ($v == "true") {
 				$fileData = preg_replace('/{{\#([\s]*'.$k .'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','$2',$fileData); // {{# asdf }}STUFF{{/ asdf}}
 				$fileData = preg_replace('/{{\^([\s]*'.$k .'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','',$fileData);   // {{^ asdf }}STUFF{{/ asdf}}
 			} else if ($v == "false") {
@@ -146,15 +156,20 @@ class PatternLoader {
 	 */
 	private function parseParameters($string) {
 		
-		$parameters     = array();
-		$betweenSQuotes = false;
-		$betweenDQuotes = false;
-		$inKey          = true;
-		$inValue        = false;
-		$char           = "";
-		$buffer         = "";
-		$keyBuffer      = "";
-		$strLength      = strlen($string);
+		$parameters      = array();
+		$arrayParameters = array();
+		$arrayOptions    = array();
+		$betweenSQuotes  = false;
+		$betweenDQuotes  = false;
+		$inKey           = true;
+		$inValue         = false;
+		$inArray         = false;
+		$inOption        = false;
+		$char            = "";
+		$buffer          = "";
+		$keyBuffer       = "";
+		$arrayKeyBuffer  = "";
+		$strLength       = strlen($string);
 		
 		for ($i = 0; $i < $strLength; $i++) {
 			
@@ -186,6 +201,25 @@ class PatternLoader {
 			} else if (!$inKey && !$inValue && ($char == ":")) {
 				// if inKey is false, inValue false, and a colon set inValue true
 				$inValue   = true;
+			} else if ($inValue && !$inArray && !$betweenDQuotes && !$betweenSQuotes && ($char == "[")) {
+				// if inValue, outside quotes, and find a bracket set inArray to true and add to array buffer
+				$inArray        = true;
+				$inValue        = false;
+				$arrayKeyBuffer = trim($keyBuffer);
+			} else if ($inArray && !$betweenDQuotes && !$betweenSQuotes && ($char == "]")) {
+				// if inValue, outside quotes, and find a bracket set inArray to true and add to array buffer
+				$inArray                     = false;
+				$parameters[$arrayKeyBuffer] = $arrayParameters;
+				$arrayParameters = array();
+			} else if ($inArray && !$inOption && !$betweenDQuotes && !$betweenSQuotes && ($char == "{")) {
+				$inOption = true;
+				$inKey    = true;
+			} else if ($inArray && $inOption && !$betweenDQuotes && !$betweenSQuotes && ($char == "}")) {
+				$inOption = false;
+				$inValue  = false;
+				$inKey    = false;
+				$arrayParameters[] = $arrayOptions;
+				$arrayOptions = array();
 			} else if ($inValue && !$betweenDQuotes && !$betweenSQuotes && (($char == "\"") || ($char == "'"))) {
 				// if inValue, a quote, and betweenQuote is false set betweenQuotes to true and empty buffer to kill spaces
 				($char == "\"") ? ($betweenDQuotes = true) : ($betweenSQuotes = true);
@@ -196,27 +230,44 @@ class PatternLoader {
 				// if inValue, a quote, betweenQuotes is true set betweenQuotes to false, save to parameters array, empty buffer, set inValue false
 				$buffer    = str_replace("\\\"","\"",$buffer);
 				$buffer    = str_replace('\\\'','\'',$buffer);
-				$parameters[trim($keyBuffer)] = trim($buffer);
-				$buffer    = "";
-				$inValue   = false;
+				if ($inArray) {
+					$arrayOptions[trim($keyBuffer)] = trim($buffer);
+				} else {
+					$parameters[trim($keyBuffer)] = trim($buffer);
+				}
+				$buffer         = "";
+				$inValue        = false;
 				$betweenSQuotes = false;
 				$betweenDQuotes = false;
 			} else if ($inValue && !$betweenDQuotes && !$betweenSQuotes && ($char == ",")) {
 				// if inValue, a comman, betweenQuotes is false, save to parameters array, empty buffer, set inValue false, set inKey true
-				$parameters[trim($keyBuffer)] = trim($buffer);
+				if ($inArray) {
+					$arrayOptions[trim($keyBuffer)] = trim($buffer);
+				} else {
+					$parameters[trim($keyBuffer)] = trim($buffer);
+				}
 				$buffer    = "";
 				$inValue   = false;
 				$inKey     = true;
 			} else if ($inValue && (($i + 1) == $strLength)) {
 				// if inValue and end of the string add to buffer, save to parameters array
 				$buffer   .= $char;
-				$parameters[trim($keyBuffer)] = trim($buffer);
+				if ($inArray) {
+					$arrayOptions[trim($keyBuffer)] = trim($buffer);
+				} else {
+					$parameters[trim($keyBuffer)] = trim($buffer);
+				}
 			} else if ($inValue) {
 				// if inValue add to buffer
 				$buffer   .= $char;
 			} else if (!$inValue && !$inKey && ($char == ",")) {
 				// if inValue is false, inKey false, and a comma set inKey true
-				$inKey = true;
+				if ($inArray && !$inOption) { 
+					// don't do anything
+				} else {
+					$inKey = true;
+				}
+				
 			}
 		}
 		
