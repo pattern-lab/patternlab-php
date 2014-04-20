@@ -158,18 +158,18 @@ class PatternLoader {
 						foreach ($v as $v2) {
 							$partialData .= $this->findReplaceParameters($matches[2], $v2);
 						}
-						$fileData = preg_replace('/{{\#([\s]*'.$k .'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s',$partialData,$fileData);
+						$fileData = preg_replace('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s',$partialData,$fileData);
 					}
 				}
 			} else if ($v == "true") {
-				$fileData = preg_replace('/{{\#([\s]*'.$k .'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','$2',$fileData); // {{# asdf }}STUFF{{/ asdf}}
-				$fileData = preg_replace('/{{\^([\s]*'.$k .'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','',$fileData);   // {{^ asdf }}STUFF{{/ asdf}}
+				$fileData = preg_replace('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','$2',$fileData); // {{# asdf }}STUFF{{/ asdf}}
+				$fileData = preg_replace('/{{\^([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','',$fileData);   // {{^ asdf }}STUFF{{/ asdf}}
 			} else if ($v == "false") {
-				$fileData = preg_replace('/{{\^([\s]*'.$k .'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','$2',$fileData); // {{# asdf }}STUFF{{/ asdf}}
-				$fileData = preg_replace('/{{\#([\s]*'.$k .'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','',$fileData);   // {{^ asdf }}STUFF{{/ asdf}}
+				$fileData = preg_replace('/{{\^([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','$2',$fileData); // {{# asdf }}STUFF{{/ asdf}}
+				$fileData = preg_replace('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','',$fileData);   // {{^ asdf }}STUFF{{/ asdf}}
 			} else {
-				$fileData = preg_replace('/{{{([\s]*'.$k .'[\s]*)}}}/', $v, $fileData);                 // {{{ asdf }}}
-				$fileData = preg_replace('/{{([\s]*'.$k .'[\s]*)}}/', htmlspecialchars($v), $fileData); // escaped {{ asdf }}
+				$fileData = preg_replace('/{{{([\s]*'.$k.'[\s]*)}}}/', $v, $fileData);                 // {{{ asdf }}}
+				$fileData = preg_replace('/{{([\s]*'.$k.'[\s]*)}}/', htmlspecialchars($v), $fileData); // escaped {{ asdf }}
 			}
 		}
 		return $fileData;
