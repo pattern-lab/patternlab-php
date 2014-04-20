@@ -167,6 +167,9 @@ class PatternLoader {
 			} else if ($v == "false") {
 				$fileData = preg_replace('/{{\^([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','$2',$fileData); // {{# asdf }}STUFF{{/ asdf}}
 				$fileData = preg_replace('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','',$fileData);   // {{^ asdf }}STUFF{{/ asdf}}
+			} else if ($k == "listItems") {
+				$fileData = preg_replace('/{{\#([\s]*listItems\.[A-z]{3,10}[\s]*)}}/s','{{# listItems.'.$v.' }}',$fileData);
+				$fileData = preg_replace('/{{\/([\s]*listItems\.[A-z]{3,10}[\s]*)}}/s','{{/ listItems.'.$v.' }}',$fileData);
 			} else {
 				$fileData = preg_replace('/{{{([\s]*'.$k.'[\s]*)}}}/', $v, $fileData);                 // {{{ asdf }}}
 				$fileData = preg_replace('/{{([\s]*'.$k.'[\s]*)}}/', htmlspecialchars($v), $fileData); // escaped {{ asdf }}
