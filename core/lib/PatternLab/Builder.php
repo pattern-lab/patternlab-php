@@ -373,20 +373,24 @@ class Builder {
 		
 		// gather the data from the main source data.json
 		if (file_exists($this->sd."/_data/_data.json")) {
-			$this->d = json_decode(file_get_contents($this->sd."/_data/_data.json"),true);
-			$this->jsonLastErrorMsg("_data/_data.json");
+			$data    = file_get_contents($this->sd."/_data/_data.json");
+			$this->d = json_decode($data,true);
+			if ($jsonErrorMessage = $this->jsonHasError()) {
+				$this->jsonLastErrorMsg("_data/_data.json",$jsonErrorMessage,$data);
+			}
 		} else {
 			print "Missing a required file, source/_data/_data.json. Aborting.\n";
 			exit;
 		}
 		
-		$reservedKeys = array("listItems","cacheBuster","link","patternSpecific");
-		foreach ($reservedKeys as $reservedKey) {
-			if (array_key_exists($reservedKey,$this->d)) {
-				print "\"".$reservedKey."\" is a reserved key in Pattern Lab. The data using that key in _data.json will be overwritten. Please choose a new key.\n";
+		if (is_array($this->d)) {
+			$reservedKeys = array("listItems","cacheBuster","link","patternSpecific");
+			foreach ($reservedKeys as $reservedKey) {
+				if (array_key_exists($reservedKey,$this->d)) {
+					print "\"".$reservedKey."\" is a reserved key in Pattern Lab. The data using that key in _data.json will be overwritten. Please choose a new key.\n";
+				}
 			}
 		}
-		
 		
 		$this->d["listItems"]       = $this->getListItems($this->sd."/_data/_listitems.json");
 		$this->d["cacheBuster"]     = $this->cacheBuster;
@@ -745,13 +749,19 @@ class Builder {
 					// get the base data
 					$patternDataBase = array();
 					if (file_exists($object->getPath()."/".$patternBaseJSON)) {
-						$patternDataBase = json_decode(file_get_contents($object->getPath()."/".$patternBaseJSON),true);
-						$this->jsonLastErrorMsg($patternBaseJSON);
+						$data = file_get_contents($object->getPath()."/".$patternBaseJSON);
+						$patternDataBase = json_decode($data,true);
+						if ($jsonErrorMessage = $this->jsonHasError()) {
+							$this->jsonLastErrorMsg($patternBaseJSON,$jsonErrorMessage,$data);
+						}
 					}
 					
 					// get the special pattern data
-					$patternData = (array) json_decode(file_get_contents($object->getPathname()));
-					$this->jsonLastErrorMsg($object->getFilename());
+					$data        = file_get_contents($object->getPathname());
+					$patternData = (array) json_decode($data);
+					if ($jsonErrorMessage = $this->jsonHasError()) {
+						$this->jsonLastErrorMsg($object->getFilename(),$jsonErrorMessage,$data);
+					}
 					
 					// merge them for the file
 					if (!isset($this->d["patternSpecific"][$patternPartial])) {
@@ -789,8 +799,11 @@ class Builder {
 						$patternData = $this->getListItems($object->getPathname());
 						$this->d["patternSpecific"][$patternPartial]["listItems"] = $patternData;
 					} else {
-						$patternData = json_decode(file_get_contents($object->getPathname()),true);
-						$this->jsonLastErrorMsg($patternFull);
+						$data = file_get_contents($object->getPathname());
+						$patternData = json_decode($data,true);
+						if ($jsonErrorMessage = $this->jsonHasError()) {
+							$this->jsonLastErrorMsg($object->getFilename(),$jsonErrorMessage,$data);
+						}
 						$this->d["patternSpecific"][$patternPartial]["data"] = $patternData;
 					}
 					
@@ -1008,8 +1021,11 @@ class Builder {
 		// add list item data, makes 'listItems' a reserved word
 		if (file_exists($filepath)) {
 			
-			$listItemsJSON = json_decode(file_get_contents($filepath), true);
-			$this->jsonLastErrorMsg(str_replace($this->sd."/","",$filepath));
+			$data          = file_get_contents($filepath);
+			$listItemsJSON = json_decode($data, true);
+			if ($jsonErrorMessage = $this->jsonHasError()) {
+				$this->jsonLastErrorMsg(str_replace($this->sd."/","",$filepath),$jsonErrorMessage,$data);
+			}
 			
 			$numbers = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
 			
@@ -1311,9 +1327,9 @@ class Builder {
 	* Returns the last error message when building a JSON file. Mimics json_last_error_msg() from PHP 5.5
 	* @param  {String}       the file that generated the error
 	*/
-	protected function jsonLastErrorMsg($file) {
+	protected function jsonHasError() {
 		$errors = array(
-			JSON_ERROR_NONE             => null,
+			JSON_ERROR_NONE             => false,
 			JSON_ERROR_DEPTH            => 'Maximum stack depth exceeded',
 			JSON_ERROR_STATE_MISMATCH   => 'Underflow or the modes mismatch',
 			JSON_ERROR_CTRL_CHAR        => 'Unexpected control character found',
@@ -1322,8 +1338,21 @@ class Builder {
 		);
 		$error        = json_last_error();
 		$errorMessage = array_key_exists($error, $errors) ? $errors[$error] : "Unknown error ({$error})";
-		if ($errorMessage != null) {
-			print "The JSON file, ".$file.", wasn't loaded. The error: ".$errorMessage."\n";
+		return $errorMessage;
+	}
+	
+	/**
+	* Returns the last error message when building a JSON file. Mimics json_last_error_msg() from PHP 5.5
+	* @param  {String}       the file that generated the error
+	*/
+	protected function jsonLastErrorMsg($file,$message,$data) {
+		print "\nThe JSON file, ".$file.", wasn't loaded. The error: ".$message."\n";
+		if ($message == "Syntax error, malformed JSON") {
+			print "\n";
+			$parser = new \Seld\JsonLint\JsonParser();
+			$error  = $parser->lint($data);
+			print $error->getMessage();
+			print "\n\n";
 		}
 	}
 	
