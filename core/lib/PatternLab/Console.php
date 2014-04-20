@@ -15,8 +15,8 @@ namespace PatternLab;
 
 class Console {
 	
-	private $optionsShort = "h";
-	private $optionsLong  = array("help");
+	private $optionsShort = "";
+	private $optionsLong  = array();
 	private $options      = array();
 	private $commands     = array();
 	private $self;

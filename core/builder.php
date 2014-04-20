@@ -55,6 +55,9 @@ $console->setCommandOption("w","r","autoreload","Turn on the auto-reload service
 // set-up the version command
 $console->setCommand("v","version","Print the version number","The version command prints out the current version of Pattern Lab.");
 
+// set-up the help command
+$console->setCommand("h","help","Print the help for a given command","The help command prints out the help for a given flag. Just use -h with another command and it will tell you all of the options.");
+
 
 /*******************************
  * Figure out what to run
