@@ -1111,6 +1111,11 @@ class Builder {
 		return ($clean) ? (str_replace("-"," ",$patternName)) : $patternName;
 	}
 	
+	/**
+	* Sets the pattern state on other patterns based on the pattern state for a given partial
+	* @param  {String}       the pattern state
+	* @param  {String}       the pattern partial
+	*/
 	protected function setPatternState($patternState, $patternPartial) {
 		
 		// set-up some defaults
