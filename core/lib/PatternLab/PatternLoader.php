@@ -150,6 +150,7 @@ class PatternLoader {
 	 * @return {String}    the modified file contents
 	 */
 	public function findReplaceParameters($fileData, $parameters) {
+		$numbers = array("zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
 		foreach ($parameters as $k => $v) {
 			if (is_array($v)) {
 				if (preg_match('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k.'[\s]*)}}/s',$fileData,$matches)) {
@@ -168,8 +169,11 @@ class PatternLoader {
 				$fileData = preg_replace('/{{\^([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','$2',$fileData); // {{# asdf }}STUFF{{/ asdf}}
 				$fileData = preg_replace('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','',$fileData);   // {{^ asdf }}STUFF{{/ asdf}}
 			} else if ($k == "listItems") {
-				$fileData = preg_replace('/{{\#([\s]*listItems\.[A-z]{3,10}[\s]*)}}/s','{{# listItems.'.$v.' }}',$fileData);
-				$fileData = preg_replace('/{{\/([\s]*listItems\.[A-z]{3,10}[\s]*)}}/s','{{/ listItems.'.$v.' }}',$fileData);
+				$v = ((int)$v != 0) && ((int)$v < 13) ? $numbers[$v] : $v;
+				if (($v != "zero") && in_array($v,$numbers)) {
+					$fileData = preg_replace('/{{\#([\s]*listItems\.[A-z]{3,10}[\s]*)}}/s','{{# listItems.'.$v.' }}',$fileData);
+					$fileData = preg_replace('/{{\/([\s]*listItems\.[A-z]{3,10}[\s]*)}}/s','{{/ listItems.'.$v.' }}',$fileData);
+				}
 			} else {
 				$fileData = preg_replace('/{{{([\s]*'.$k.'[\s]*)}}}/', $v, $fileData);                 // {{{ asdf }}}
 				$fileData = preg_replace('/{{([\s]*'.$k.'[\s]*)}}/', htmlspecialchars($v), $fileData); // escaped {{ asdf }}
