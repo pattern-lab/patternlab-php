@@ -28,7 +28,7 @@ $loader = new SplClassLoader('Mustache', __DIR__.'/lib');
 $loader->setNamespaceSeparator("_");
 $loader->register();
 
-$loader = new SplClassLoader('Seld', __DIR__.'/lib');
+$loader = new SplClassLoader('Seld\JsonLint', __DIR__.'/lib');
 $loader->register();
 
 /*******************************
