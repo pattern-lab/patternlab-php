@@ -503,7 +503,8 @@ class Builder {
 			}	
 		}
 		
-		sort($mqs);
+		usort($mqs, "strnatcmp");
+		
 		return $mqs;
 		
 	}
