@@ -1003,7 +1003,7 @@ class Builder {
 	protected function getLineage($filename) {
 		$data = file_get_contents(__DIR__.$this->sp.$filename.".".$this->patternExtension);
 		//$data = file_get_contents($filename);
-		if (preg_match_all('/{{>([ ]+)?([A-Za-z0-9-]+)(?:\:[A-Za-z0-9-]+)?(?:(| )\(.*)?([ ]+)}}/',$data,$matches)) {
+		if (preg_match_all('/{{>([ ]+)?([A-Za-z0-9-_]+)(?:\:[A-Za-z0-9-]+)?(?:(| )\(.*)?([ ]+)}}/',$data,$matches)) {
 			return $matches[2];
 		}
 		return array();
