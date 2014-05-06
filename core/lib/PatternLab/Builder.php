@@ -26,6 +26,12 @@ class Builder {
 			exit;
 		}
 		
+		// set-up the source & public dirs
+		$this->sp = "/../../../".$config["sourceDir"]."/_patterns".DIRECTORY_SEPARATOR;
+		$this->pp = "/../../../".$config["publicDir"]."/patterns".DIRECTORY_SEPARATOR;
+		$this->sd = __DIR__."/../../../".$config["sourceDir"];
+		$this->pd = __DIR__."/../../../".$config["publicDir"];
+		
 		// populate some standard variables out of the config
 		foreach ($config as $key => $value) {
 			
@@ -63,12 +69,6 @@ class Builder {
 			}
 			
 		}
-		
-		// set-up the source & public dirs
-		$this->sp = "/../../../source/_patterns".DIRECTORY_SEPARATOR;
-		$this->pp = "/../../../public/patterns".DIRECTORY_SEPARATOR;
-		$this->sd = __DIR__."/../../../source";
-		$this->pd = __DIR__."/../../../public";
 		
 		// provide the default for enable CSS. performance hog so it should be run infrequently
 		$this->enableCSS    = false;
@@ -281,8 +281,9 @@ class Builder {
 	protected function generateViewAllPages() {
 		
 		// make sure $this->mfs & $this->mv are refreshed on each generation of view all
-		$this->loadMustacheFileSystemLoaderInstance();
-		$this->loadMustacheVanillaInstance();
+		$templateLoader = new TemplateLoader();
+		$this->mfs      = $templateLoader->fileSystem();
+		$this->mv       = $templateLoader->vanilla();
 		
 		// add view all to each list
 		$i = 0; $k = 0;
