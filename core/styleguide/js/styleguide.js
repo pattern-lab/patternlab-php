@@ -522,7 +522,7 @@
 
 	// update the iframe with the source from clicked element in pull down menu. also close the menu
 	// having it outside fixes an auto-close bug i ran into
-	$('.sg-nav a').not('.sg-acc-handle').on("click", function(e){
+	$('a[data-patternpartial]').on("click", function(e){
 		e.preventDefault();
 		// update the iframe via the history api handler
 		var obj = JSON.stringify({ "path": urlHandler.getFileName($(this).attr("data-patternpartial")) });
