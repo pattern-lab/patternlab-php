@@ -91,7 +91,7 @@ function receiveIframeMessage(event) {
 		if (patternPartial !== "") {
 			
 			// handle patterns and the view all page
-			var re = /patterns\/(.*)$/;
+			var re = /(patterns|snapshots)\/(.*)$/;
 			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace(re,'')+data.path+'?'+Date.now();
 			window.location.replace(path);
 			
