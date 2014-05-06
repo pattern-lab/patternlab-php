@@ -19,6 +19,7 @@ class Snapshot {
 	*/
 	public function __construct($config) {
 		$this->publicDir     = __DIR__."/../../../".$config["publicDir"];
+		$this->sourceDir     = "/../../../".$config["sourceDir"]."/_patterns".DIRECTORY_SEPARATOR;
 		$this->snapshotsBase = $this->publicDir."/snapshots/";
 	}
 	
@@ -114,9 +115,20 @@ class Snapshot {
 			$html .= "<li> <a href=\"".$scanDir."/\" target=\"_parent\">".$scanDir."</a></li>\n";
 		}
 		
+		$d = array("html" => $html);
+		
 		$templateLoader = new TemplateLoader();
+		$templateHelper = new TemplateHelper($this->sourceDir);
+		
+		// render the viewall template
+		$v = $templateLoader->vanilla();
+		$h = $v->render($templateHelper->mainPageHead);
+		$f = $v->render($templateHelper->mainPageFoot);
+		
+		// render the snapshot page
 		$m = $templateLoader->fileSystem();
-		$r = $m->render('snapshot', array("html" => $html));
+		$r = $m->render('snapshot', $d);
+		$r = $h.$r.$f;
 		
 		file_put_contents($this->snapshotsBase."index.html",$r);
 		
