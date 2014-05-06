@@ -114,8 +114,8 @@ class Builder {
 			
 		}
 		
-		$pattern = $this->pl->render($f,$d);
-		$escaped = htmlentities($pattern);
+		$pattern       = $this->pl->render($f,$d);
+		$escaped       = htmlentities($pattern);
 		
 		if ($this->addPatternHF) {
 			$patternHead = $this->mv->render($this->patternHead,$d);
@@ -962,22 +962,12 @@ class Builder {
 			
 		}
 		
-		// load pattern-lab's resources
-		$htmlHead           = file_get_contents(__DIR__."/../../templates/pattern-header-footer/header.html");
-		$htmlFoot           = file_get_contents(__DIR__."/../../templates/pattern-header-footer/footer.html");
-		$extraFoot          = file_get_contents(__DIR__."/../../templates/pattern-header-footer/footer-pattern.html");
-		
-		// gather the user-defined header and footer information
-		$patternHeadPath    = __DIR__.$this->sp."00-atoms/00-meta/_00-head.mustache";
-		$patternFootPath    = __DIR__.$this->sp."00-atoms/00-meta/_01-foot.mustache";
-		$patternHead        = (file_exists($patternHeadPath)) ? file_get_contents($patternHeadPath) : "";
-		$patternFoot        = (file_exists($patternFootPath)) ? file_get_contents($patternFootPath) : "";
-		
 		// add pattern lab's resource to the user-defined files
-		$this->patternHead  = str_replace("{% pattern-lab-head %}",$htmlHead,$patternHead);
-		$this->patternFoot  = str_replace("{% pattern-lab-foot %}",$extraFoot.$htmlFoot,$patternFoot);
-		$this->mainPageHead = $this->patternHead;
-		$this->mainPageFoot = str_replace("{% pattern-lab-foot %}",$htmlFoot,$patternFoot);
+		$templateHelper = new TemplateHelper($this->sp);
+		$this->patternHead  = $templateHelper->patternHead;
+		$this->patternFoot  = $templateHelper->patternFoot;
+		$this->mainPageHead = $templateHelper->mainPageHead;
+		$this->mainPageFoot = $templateHelper->mainPageFoot;
 		
 	}
 	
