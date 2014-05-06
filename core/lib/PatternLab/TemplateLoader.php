@@ -13,7 +13,7 @@
 namespace PatternLab;
 
 class TemplateLoader {
-
+	
 	/**
 	* Load a new Mustache instance that uses the File System Loader
 	*
@@ -25,7 +25,7 @@ class TemplateLoader {
 						"partials_loader" => new \Mustache_Loader_FilesystemLoader(__DIR__."/../../templates/partials/")
 		));
 	}
-
+	
 	/**
 	* Load a new Mustache instance that is just a vanilla Mustache rendering engine
 	*
