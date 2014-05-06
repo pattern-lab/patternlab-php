@@ -92,7 +92,7 @@ class Console {
 		$args = explode("|",$args);
 		foreach ($args as $arg) {
 			if (isset($this->options[$arg])) {
-				return true;
+				return empty($this->options[$arg]) ? true : $this->options[$arg];
 			}
 		}
 		return false;
