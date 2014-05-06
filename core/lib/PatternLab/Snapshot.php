@@ -111,6 +111,8 @@ class Snapshot {
 		$key = array_search('index.html', $scannedDirs);
 		unset($scannedDirs[$key]);
 		
+		usort($scannedDirs, "strnatcmp");
+		
 		foreach ($scannedDirs as $scanDir) {
 			$html .= "<li> <a href=\"".$scanDir."/\" target=\"_parent\">".$scanDir."</a></li>\n";
 		}
