@@ -84,10 +84,10 @@ if ($console->findCommand("h|help") && ($command = $console->getCommand())) {
 	$config     = $configurer->getConfig();
 	
 	// set-up required vars
-	$enableCSS     = ($console->findCommandOption("c|enablecss")) ? true : false;
+	$enableCSS     = $console->findCommandOption("c|enablecss");
 	$moveStatic    = ($console->findCommandOption("p|patternsonly")) ? false : true;
-	$noCacheBuster = ($console->findCommandOption("n|nocache")) ? true : false;
-	$autoReload    = ($console->findCommandOption("r|autoreload")) ? true : false;
+	$noCacheBuster = $console->findCommandOption("n|nocache");
+	$autoReload    = $console->findCommandOption("r|autoreload");
 	$snapshotDir   = $console->findCommandOption("d|dir");
 	
 	if (($command == "g") || ($command == "b")) {
