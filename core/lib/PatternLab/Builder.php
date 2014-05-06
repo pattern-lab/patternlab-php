@@ -79,29 +79,6 @@ class Builder {
 		
 	}
 	
-
-	
-	/**
-	* Load a new Mustache instance that uses the File System Loader
-	*
-	* @return {Object}       an instance of the Mustache engine
-	*/
-	protected function loadMustacheFileSystemLoaderInstance() {
-		$this->mfs = new \Mustache_Engine(array(
-						"loader" => new \Mustache_Loader_FilesystemLoader(__DIR__."/../../templates/"),
-						"partials_loader" => new \Mustache_Loader_FilesystemLoader(__DIR__."/../../templates/partials/")
-		));
-	}
-	
-	/**
-	* Load a new Mustache instance that uses the File System Loader
-	*
-	* @return {Object}       an instance of the Mustache engine
-	*/
-	protected function loadMustacheVanillaInstance() {
-		$this->mv  = new \Mustache_Engine;
-	}
-	
 	/**
 	* Renders a given pattern file using Mustache and incorporating the provided data
 	* @param  {String}       the filename of the file to be rendered
@@ -156,8 +133,9 @@ class Builder {
 	protected function generateMainPages() {
 		
 		// make sure $this->mfs & $this->mv are refreshed
-		$this->loadMustacheFileSystemLoaderInstance();
-		$this->loadMustacheVanillaInstance();
+		$templateLoader = new TemplateLoader();
+		$this->mfs      = $templateLoader->fileSystem();
+		$this->mv       = $templateLoader->vanilla();
 		
 		// get the source pattern paths
 		$patternPathDests = array();
@@ -232,9 +210,11 @@ class Builder {
 		$this->addPatternHF = true;
 		
 		// make sure $this->pl & $this->mv are refreshed
-		$patternLoader = new PatternLoader($this->patternPaths);
-		$this->pl = $patternLoader->loadPatternLoaderInstance($this->patternEngine,__DIR__.$this->sp);
-		$this->loadMustacheVanillaInstance();
+		$patternLoader  = new PatternLoader($this->patternPaths);
+		$this->pl       = $patternLoader->loadPatternLoaderInstance($this->patternEngine,__DIR__.$this->sp);
+		
+		$templateLoader = new TemplateLoader();
+		$this->mv       = $templateLoader->vanilla();
 		
 		// loop over the pattern paths to generate patterns for each
 		foreach($this->patternPaths as $patternType) {
