@@ -52,6 +52,12 @@ class Builder {
 					$value = "tools-reload";
 					$this->$key->$value = true;
 				}
+				$toolssnapshot = "tools-snapshot"; // i was an idgit and used dashes
+				if (!isset($this->$key->$toolssnapshot)) {
+					if (!is_dir($this->pd."/snapshots")) {
+						$this->$key->$toolssnapshot = true;
+					}
+				}
 			} else {
 				$this->$key = $value;
 			}
@@ -1227,7 +1233,7 @@ class Builder {
 		$publicDirs = glob($this->pd."/*",GLOB_ONLYDIR);
 		
 		// make sure some directories aren't deleted
-		$ignoreDirs = array("styleguide");
+		$ignoreDirs = array("styleguide","snapshots");
 		foreach ($ignoreDirs as $ignoreDir) {
 			$key = array_search($this->pd."/".$ignoreDir,$publicDirs);
 			if ($key !== false){
