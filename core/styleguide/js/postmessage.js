@@ -30,10 +30,16 @@ if (self != top) {
 	var aTags = document.getElementsByTagName('a');
 	for (var i = 0; i < aTags.length; i++) {
 		aTags[i].onclick = function(e) {
-			e.preventDefault();
-			var href = this.getAttribute("href");
-			if (href != "#") {
+			var href   = this.getAttribute("href");
+			var target = this.getAttribute("target");
+			if ((target != undefined) && ((target == "_parent") || (target == "_blank"))) {
+				// just do normal stuff
+			} else if (href != "#") {
+				e.preventDefault();
 				window.location.replace(href);
+			} else {
+				e.preventDefault();
+				return false;
 			}
 		};
 	}
@@ -91,7 +97,7 @@ function receiveIframeMessage(event) {
 		if (patternPartial !== "") {
 			
 			// handle patterns and the view all page
-			var re = /patterns\/(.*)$/;
+			var re = /(patterns|snapshots)\/(.*)$/;
 			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace(re,'')+data.path+'?'+Date.now();
 			window.location.replace(path);
 			

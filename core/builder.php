@@ -52,6 +52,10 @@ $console->setCommandOption("w","p","patternsonly","Watches only the patterns. Do
 $console->setCommandOption("w","n","nocache","Set the cacheBuster value to 0.","To turn off the cacheBuster:");
 $console->setCommandOption("w","r","autoreload","Turn on the auto-reload service.","To turn on auto-reload:");
 
+// set-up the snapshot command and options
+$console->setCommand("s","snapshot","Watch for changes and regenerate","The watch command builds Pattern Lab, watches for changes in source/ and regenerates Pattern Lab when there are any.");
+$console->setCommandOption("s","d:","dir:","Optional directory path","To add an optional directory path instead of the defaul v*/ path:");
+
 // set-up the version command
 $console->setCommand("v","version","Print the version number","The version command prints out the current version of Pattern Lab.");
 
@@ -80,10 +84,11 @@ if ($console->findCommand("h|help") && ($command = $console->getCommand())) {
 	$config     = $configurer->getConfig();
 	
 	// set-up required vars
-	$enableCSS     = ($console->findCommandOption("c|enablecss")) ? true : false;
+	$enableCSS     = $console->findCommandOption("c|enablecss");
 	$moveStatic    = ($console->findCommandOption("p|patternsonly")) ? false : true;
-	$noCacheBuster = ($console->findCommandOption("n|nocache")) ? true : false;
-	$autoReload    = ($console->findCommandOption("r|autoreload")) ? true : false;
+	$noCacheBuster = $console->findCommandOption("n|nocache");
+	$autoReload    = $console->findCommandOption("r|autoreload");
+	$snapshotDir   = $console->findCommandOption("d|dir");
 	
 	if (($command == "g") || ($command == "b")) {
 		
@@ -104,6 +109,12 @@ if ($console->findCommand("h|help") && ($command = $console->getCommand())) {
 		// load the watcher
 		$w = new PatternLab\Watcher($config);
 		$w->watch($autoReload,$moveStatic,$noCacheBuster);
+		
+	} else if ($command == "s") {
+		
+		// run the snapshot command
+		$s = new PatternLab\Snapshot($config);
+		$s->takeSnapshot($snapshotDir);
 		
 	} else if ($command == "v") {
 		

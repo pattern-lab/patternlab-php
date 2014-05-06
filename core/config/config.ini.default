@@ -44,3 +44,9 @@ cacheBusterOn = "true"
 
 // the pattern rending engine
 patternEngine = "mustache"
+
+// the public directory
+publicDir = "public"
+
+// the source directory
+sourceDir = "source"

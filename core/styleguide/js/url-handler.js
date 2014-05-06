@@ -33,6 +33,8 @@ var urlHandler = {
 		
 		if (name == "all") {
 			return "styleguide/html/styleguide.html";
+		} else if (name == "snapshots") {
+			return "snapshots/index.html";
 		}
 		
 		var paths = (name.indexOf("viewall-") != -1) ? viewAllPaths : patternPaths;

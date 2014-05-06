@@ -26,6 +26,12 @@ class Builder {
 			exit;
 		}
 		
+		// set-up the source & public dirs
+		$this->sp = "/../../../".$config["sourceDir"]."/_patterns".DIRECTORY_SEPARATOR;
+		$this->pp = "/../../../".$config["publicDir"]."/patterns".DIRECTORY_SEPARATOR;
+		$this->sd = __DIR__."/../../../".$config["sourceDir"];
+		$this->pd = __DIR__."/../../../".$config["publicDir"];
+		
 		// populate some standard variables out of the config
 		foreach ($config as $key => $value) {
 			
@@ -52,17 +58,17 @@ class Builder {
 					$value = "tools-reload";
 					$this->$key->$value = true;
 				}
+				$toolssnapshot = "tools-snapshot"; // i was an idgit and used dashes
+				if (!isset($this->$key->$toolssnapshot)) {
+					if (!is_dir($this->pd."/snapshots")) {
+						$this->$key->$toolssnapshot = true;
+					}
+				}
 			} else {
 				$this->$key = $value;
 			}
 			
 		}
-		
-		// set-up the source & public dirs
-		$this->sp = "/../../../source/_patterns".DIRECTORY_SEPARATOR;
-		$this->pp = "/../../../public/patterns".DIRECTORY_SEPARATOR;
-		$this->sd = __DIR__."/../../../source";
-		$this->pd = __DIR__."/../../../public";
 		
 		// provide the default for enable CSS. performance hog so it should be run infrequently
 		$this->enableCSS    = false;
@@ -71,29 +77,6 @@ class Builder {
 		// find the pattern extension
 		$this->patternExtension = $this->patternEngine;
 		
-	}
-	
-
-	
-	/**
-	* Load a new Mustache instance that uses the File System Loader
-	*
-	* @return {Object}       an instance of the Mustache engine
-	*/
-	protected function loadMustacheFileSystemLoaderInstance() {
-		$this->mfs = new \Mustache_Engine(array(
-						"loader" => new \Mustache_Loader_FilesystemLoader(__DIR__."/../../templates/"),
-						"partials_loader" => new \Mustache_Loader_FilesystemLoader(__DIR__."/../../templates/partials/")
-		));
-	}
-	
-	/**
-	* Load a new Mustache instance that uses the File System Loader
-	*
-	* @return {Object}       an instance of the Mustache engine
-	*/
-	protected function loadMustacheVanillaInstance() {
-		$this->mv  = new \Mustache_Engine;
 	}
 	
 	/**
@@ -131,8 +114,8 @@ class Builder {
 			
 		}
 		
-		$pattern = $this->pl->render($f,$d);
-		$escaped = htmlentities($pattern);
+		$pattern       = $this->pl->render($f,$d);
+		$escaped       = htmlentities($pattern);
 		
 		if ($this->addPatternHF) {
 			$patternHead = $this->mv->render($this->patternHead,$d);
@@ -150,8 +133,9 @@ class Builder {
 	protected function generateMainPages() {
 		
 		// make sure $this->mfs & $this->mv are refreshed
-		$this->loadMustacheFileSystemLoaderInstance();
-		$this->loadMustacheVanillaInstance();
+		$templateLoader = new TemplateLoader();
+		$this->mfs      = $templateLoader->fileSystem();
+		$this->mv       = $templateLoader->vanilla();
 		
 		// get the source pattern paths
 		$patternPathDests = array();
@@ -226,9 +210,11 @@ class Builder {
 		$this->addPatternHF = true;
 		
 		// make sure $this->pl & $this->mv are refreshed
-		$patternLoader = new PatternLoader($this->patternPaths);
-		$this->pl = $patternLoader->loadPatternLoaderInstance($this->patternEngine,__DIR__.$this->sp);
-		$this->loadMustacheVanillaInstance();
+		$patternLoader  = new PatternLoader($this->patternPaths);
+		$this->pl       = $patternLoader->loadPatternLoaderInstance($this->patternEngine,__DIR__.$this->sp);
+		
+		$templateLoader = new TemplateLoader();
+		$this->mv       = $templateLoader->vanilla();
 		
 		// loop over the pattern paths to generate patterns for each
 		foreach($this->patternPaths as $patternType) {
@@ -295,8 +281,9 @@ class Builder {
 	protected function generateViewAllPages() {
 		
 		// make sure $this->mfs & $this->mv are refreshed on each generation of view all
-		$this->loadMustacheFileSystemLoaderInstance();
-		$this->loadMustacheVanillaInstance();
+		$templateLoader = new TemplateLoader();
+		$this->mfs      = $templateLoader->fileSystem();
+		$this->mv       = $templateLoader->vanilla();
 		
 		// add view all to each list
 		$i = 0; $k = 0;
@@ -975,22 +962,12 @@ class Builder {
 			
 		}
 		
-		// load pattern-lab's resources
-		$htmlHead           = file_get_contents(__DIR__."/../../templates/pattern-header-footer/header.html");
-		$htmlFoot           = file_get_contents(__DIR__."/../../templates/pattern-header-footer/footer.html");
-		$extraFoot          = file_get_contents(__DIR__."/../../templates/pattern-header-footer/footer-pattern.html");
-		
-		// gather the user-defined header and footer information
-		$patternHeadPath    = __DIR__.$this->sp."00-atoms/00-meta/_00-head.mustache";
-		$patternFootPath    = __DIR__.$this->sp."00-atoms/00-meta/_01-foot.mustache";
-		$patternHead        = (file_exists($patternHeadPath)) ? file_get_contents($patternHeadPath) : "";
-		$patternFoot        = (file_exists($patternFootPath)) ? file_get_contents($patternFootPath) : "";
-		
 		// add pattern lab's resource to the user-defined files
-		$this->patternHead  = str_replace("{% pattern-lab-head %}",$htmlHead,$patternHead);
-		$this->patternFoot  = str_replace("{% pattern-lab-foot %}",$extraFoot.$htmlFoot,$patternFoot);
-		$this->mainPageHead = $this->patternHead;
-		$this->mainPageFoot = str_replace("{% pattern-lab-foot %}",$htmlFoot,$patternFoot);
+		$templateHelper = new TemplateHelper($this->sp);
+		$this->patternHead  = $templateHelper->patternHead;
+		$this->patternFoot  = $templateHelper->patternFoot;
+		$this->mainPageHead = $templateHelper->mainPageHead;
+		$this->mainPageFoot = $templateHelper->mainPageFoot;
 		
 	}
 	
@@ -1227,7 +1204,7 @@ class Builder {
 		$publicDirs = glob($this->pd."/*",GLOB_ONLYDIR);
 		
 		// make sure some directories aren't deleted
-		$ignoreDirs = array("styleguide");
+		$ignoreDirs = array("styleguide","snapshots");
 		foreach ($ignoreDirs as $ignoreDir) {
 			$key = array_search($this->pd."/".$ignoreDir,$publicDirs);
 			if ($key !== false){
