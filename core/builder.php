@@ -56,6 +56,10 @@ $console->setCommandOption("w","r","autoreload","Turn on the auto-reload service
 $console->setCommand("s","snapshot","Watch for changes and regenerate","The watch command builds Pattern Lab, watches for changes in source/ and regenerates Pattern Lab when there are any.");
 $console->setCommandOption("s","d:","dir:","Optional directory path","To add an optional directory path instead of the defaul v*/ path:");
 
+// set-up the fetch command and options
+$console->setCommand("s","snapshot","Watch for changes and regenerate","The watch command builds Pattern Lab, watches for changes in source/ and regenerates Pattern Lab when there are any.");
+$console->setCommandOption("s","d:","dir:","Optional directory path","To add an optional directory path instead of the defaul v*/ path:");
+
 // set-up the version command
 $console->setCommand("v","version","Print the version number","The version command prints out the current version of Pattern Lab.");
 
