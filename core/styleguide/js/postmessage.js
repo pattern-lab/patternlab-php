@@ -32,7 +32,7 @@ if (self != top) {
 		aTags[i].onclick = function(e) {
 			e.preventDefault();
 			var href = this.getAttribute("href");
-			if (href != "#") {
+			if (href.length && href !== "#") {
 				window.location.replace(href);
 			}
 		};
