@@ -19,17 +19,7 @@ if (!function_exists("json_decode")) {
 }
 
 // auto-load classes
-require(__DIR__."/lib/SplClassLoader.php");
-
-$loader = new SplClassLoader('PatternLab', __DIR__.'/lib');
-$loader->register();
-
-$loader = new SplClassLoader('Mustache', __DIR__.'/lib');
-$loader->setNamespaceSeparator("_");
-$loader->register();
-
-$loader = new SplClassLoader('Seld\JsonLint', __DIR__.'/lib');
-$loader->register();
+require(__DIR__.'/lib/autoload.php');
 
 /*******************************
  * Console Set-up
