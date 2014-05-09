@@ -43,11 +43,13 @@ $console->setCommandOption("w","n","nocache","Set the cacheBuster value to 0.","
 $console->setCommandOption("w","r","autoreload","Turn on the auto-reload service.","To turn on auto-reload:");
 
 // set-up the snapshot command and options
-$console->setCommandOption("s","d:","dir:","Optional directory path","To add an optional directory path instead of the defaul v*/ path:");
 $console->setCommand("s","snapshot","Take a snapshot of public/","The snapshot command copies the current state of public/ and puts it in snapshots/v*/.");
+$console->setCommandOption("s","d:","dir:","Optional directory path","To add an optional directory path instead of the defaul v*/ path:","example-path/");
 
 // set-up the fetch command and options
 $console->setCommand("f:","fetch:","Fetch a starter kit","The fetch command grabs a starter kit from GitHub and puts it into source/.");
+$console->setCommandExample("f","Install starter kit:","pattern-lab/starter-kit-demo");
+$console->setCommandExample("f","Install a tagged version of a starter kit:","pattern-lab/starter-kit-demo#v1.0.0");
 
 // set-up the version command
 $console->setCommand("v","version","Print the version number","The version command prints out the current version of Pattern Lab.");

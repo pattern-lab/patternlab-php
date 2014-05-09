@@ -95,7 +95,19 @@ class Console {
 	public function setCommand($short,$long,$desc,$help) {
 		$this->optionsShort .= $short;
 		$this->optionsLong[] = $long;
-		$this->commands[$short[0]] = array("commandShort" => $short, "commandLong" => $long, "commandLongLength" => strlen($long), "commandDesc" => $desc, "commandHelp" => $help, "commandOptions" => array());
+		$short = str_replace(":","",$short);
+		$long  = str_replace(":","",$long);
+		$this->commands[$short] = array("commandShort" => $short, "commandLong" => $long, "commandLongLength" => strlen($long), "commandDesc" => $desc, "commandHelp" => $help, "commandOptions" => array(), "commandExamples" => array());
+	}
+	
+	/**
+	* Set-up an option for a given command so it can be used from the command line
+	* @param  {String}       the single character of the command that this option is related to
+	* @param  {String}       the sample to be used in the "sample" section of writeHelpCommand()
+	* @param  {String}       the extra info to be used in the example command for the "sample" section of writeHelpCommand()
+	*/
+	public function setCommandExample($command,$sample,$extra) {
+		$this->commands[$command]["commandExamples"][] = array("exampleSample" => $sample, "exampleExtra" => $extra);
 	}
 	
 	/**
@@ -137,15 +149,18 @@ class Console {
 	* @param  {String}       the long version of the option
 	* @param  {String}       the description to be used in the "available options" section of writeHelpCommand()
 	* @param  {String}       the sample to be used in the "sample" section of writeHelpCommand()
+	* @param  {String}       the extra info to be used in the example command for the "sample" section of writeHelpCommand()
 	*/
-	public function setCommandOption($command,$short,$long,$desc,$sample) {
+	public function setCommandOption($command,$short,$long,$desc,$sample,$extra = "") {
 		if (strpos($this->optionsShort,$short) === false) {
 			$this->optionsShort .= $short;
 		}
 		if (!in_array($long,$this->optionsLong)) {
 			$this->optionsLong[] = $long;
 		}
-		$this->commands[$command]["commandOptions"][$short] = array("optionShort" => $short, "optionLong" => $long, "optionLongLength" => strlen($long), "optionDesc" => $desc, "optionSample" => $sample);
+		$short = str_replace(":","",$short);
+		$long  = str_replace(":","",$long);
+		$this->commands[$command]["commandOptions"][$short] = array("optionShort" => $short, "optionLong" => $long, "optionLongLength" => strlen($long), "optionDesc" => $desc, "optionSample" => $sample, "optionExtra" => $extra);
 	}
 	
 	/**
@@ -237,7 +252,9 @@ class Console {
 		$commandShort      = $this->commands[$command]["commandShort"];
 		$commandLong       = $this->commands[$command]["commandLong"];
 		$commandHelp       = $this->commands[$command]["commandHelp"];
+		$commandExtra      = isset($this->commands[$command]["commandExtra"]) ? $this->commands[$command]["commandExtra"] : "";
 		$commandOptions    = $this->commands[$command]["commandOptions"];
+		$commandExamples   = $this->commands[$command]["commandExamples"];
 		
 		$commandLongUC = ucfirst($commandLong);
 		
@@ -268,12 +285,23 @@ class Console {
 		$this->writeLine("  ".$commandHelp,true);
 		
 		// write out the samples
-		if (count($commandOptions) > 0) {
+		if ((count($commandOptions) > 0) || (count($commandExamples) > 0)) {
 			$this->writeLine("  Samples:",true);
+		}
+		
+		if (count($commandExamples) > 0) {
+			foreach ($commandExamples as $example => $attributes) {
+				$this->writeLine("   ".$attributes["exampleSample"]);
+				$this->writeLine("     php ".$this->self." --".$commandLong." ".$attributes["exampleExtra"]);
+				$this->writeLine("     php ".$this->self." -".$commandShort." ".$attributes["exampleExtra"],true);
+			}
+		}
+		
+		if (count($commandOptions) > 0) {
 			foreach ($commandOptions as $option => $attributes) {
 				$this->writeLine("   ".$attributes["optionSample"]);
-				$this->writeLine("     php ".$this->self." --".$commandLong." --".$attributes["optionLong"]);
-				$this->writeLine("     php ".$this->self." -".$commandShort." -".$attributes["optionShort"],true);
+				$this->writeLine("     php ".$this->self." --".$commandLong." --".$attributes["optionLong"]." ".$attributes["optionExtra"]);
+				$this->writeLine("     php ".$this->self." -".$commandShort." -".$attributes["optionShort"]." ".$attributes["optionExtra"],true);
 			}
 		}
 		
