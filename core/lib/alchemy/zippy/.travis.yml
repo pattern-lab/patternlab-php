@@ -1,0 +1,24 @@
+language: php
+
+before_script:
+  - sudo apt-get install bsdtar zip
+  - composer install --dev --prefer-source
+
+env:
+  - ZIPPY_ADAPTER=ZipAdapter
+  - ZIPPY_ADAPTER=ZipExtensionAdapter
+  - ZIPPY_ADAPTER=GNUTar\\TarGNUTarAdapter
+  - ZIPPY_ADAPTER=GNUTar\\TarGzGNUTarAdapter
+  - ZIPPY_ADAPTER=GNUTar\\TarBz2GNUTarAdapter
+  - ZIPPY_ADAPTER=BSDTar\\TarBSDTarAdapter
+  - ZIPPY_ADAPTER=BSDTar\\TarGzBSDTarAdapter
+  - ZIPPY_ADAPTER=BSDTar\\TarBz2BSDTarAdapter
+
+php:
+  - 5.3.3
+  - 5.4
+  - 5.5
+
+script:
+  - phpunit -v
+  - phpunit -v -c phpunit-functional.xml.dist
