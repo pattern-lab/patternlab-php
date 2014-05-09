@@ -40,7 +40,7 @@ class Console {
 	}
 	
 	/**
-	* See if a particular command was passed to the script via the command line. Can either be the short or long version
+	* See if a particular command was passed to the script via the command line and return a boolean. Can either be the short or long version
 	* @param  {String}       list of arguments to check
 	*
 	* @return {Boolean}      if the command has been passed to the script via the command line
@@ -49,7 +49,23 @@ class Console {
 		$args = explode("|",$args);
 		foreach ($args as $arg) {
 			if (isset($this->options[$arg])) {
-				return true;
+				return empty($this->options[$arg]) ? true : $this->options[$arg];
+			}
+		}
+		return false;
+	}
+	
+	/**
+	* See if a particular command was passed to the script via the command line and return a value. Can either be the short or long version
+	* @param  {String}       list of arguments to check
+	*
+	* @return {String}       the value that was passed via the command line
+	*/
+	public function findCommandValue($args) {
+		$args = explode("|",$args);
+		foreach ($args as $arg) {
+			if (isset($this->options[$arg])) {
+				return $this->options[$arg];
 			}
 		}
 		return false;
@@ -79,11 +95,11 @@ class Console {
 	public function setCommand($short,$long,$desc,$help) {
 		$this->optionsShort .= $short;
 		$this->optionsLong[] = $long;
-		$this->commands[$short] = array("commandShort" => $short, "commandLong" => $long, "commandLongLength" => strlen($long), "commandDesc" => $desc, "commandHelp" => $help, "commandOptions" => array());
+		$this->commands[$short[0]] = array("commandShort" => $short, "commandLong" => $long, "commandLongLength" => strlen($long), "commandDesc" => $desc, "commandHelp" => $help, "commandOptions" => array());
 	}
 	
 	/**
-	* See if a particular option was passed to the script via the command line. Can either be the short or long version
+	* See if a particular option was passed to the script via the command line and return a boolean. Can either be the short or long version
 	* @param  {String}      list of arguments to check
 	*
 	* @return {Boolean}      if the command has been passed to the script via the command line
@@ -92,7 +108,23 @@ class Console {
 		$args = explode("|",$args);
 		foreach ($args as $arg) {
 			if (isset($this->options[$arg])) {
-				return empty($this->options[$arg]) ? true : $this->options[$arg];
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	* See if a particular option was passed to the script via the command line and return a value. Can either be the short or long version
+	* @param  {String}      list of arguments to check
+	*
+	* @return {String}      the value that was passed via the command line
+	*/
+	public function findCommandOptionValue($args) {
+		$args = explode("|",$args);
+		foreach ($args as $arg) {
+			if (isset($this->options[$arg])) {
+				return $this->options[$arg];
 			}
 		}
 		return false;
