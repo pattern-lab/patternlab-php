@@ -19,17 +19,7 @@ if (!function_exists("json_decode")) {
 }
 
 // auto-load classes
-require(__DIR__."/lib/SplClassLoader.php");
-
-$loader = new SplClassLoader('PatternLab', __DIR__.'/lib');
-$loader->register();
-
-$loader = new SplClassLoader('Mustache', __DIR__.'/lib');
-$loader->setNamespaceSeparator("_");
-$loader->register();
-
-$loader = new SplClassLoader('Seld\JsonLint', __DIR__.'/lib');
-$loader->register();
+require(__DIR__.'/lib/autoload.php');
 
 /*******************************
  * Console Set-up
@@ -56,12 +46,14 @@ $console->setCommandOption("w","r","autoreload","Turn on the auto-reload service
 $console->setCommand("s","snapshot","Watch for changes and regenerate","The watch command builds Pattern Lab, watches for changes in source/ and regenerates Pattern Lab when there are any.");
 $console->setCommandOption("s","d:","dir:","Optional directory path","To add an optional directory path instead of the defaul v*/ path:");
 
+// set-up the fetch command and options
+$console->setCommand("f:","fetch:","Watch for changes and regenerate","The watch command builds Pattern Lab, watches for changes in source/ and regenerates Pattern Lab when there are any.");
+
 // set-up the version command
 $console->setCommand("v","version","Print the version number","The version command prints out the current version of Pattern Lab.");
 
 // set-up the help command
 $console->setCommand("h","help","Print the help for a given command","The help command prints out the help for a given flag. Just use -h with another command and it will tell you all of the options.");
-
 
 /*******************************
  * Figure out what to run
@@ -88,7 +80,6 @@ if ($console->findCommand("h|help") && ($command = $console->getCommand())) {
 	$moveStatic    = ($console->findCommandOption("p|patternsonly")) ? false : true;
 	$noCacheBuster = $console->findCommandOption("n|nocache");
 	$autoReload    = $console->findCommandOption("r|autoreload");
-	$snapshotDir   = $console->findCommandOption("d|dir");
 	
 	if (($command == "g") || ($command == "b")) {
 		
@@ -113,8 +104,16 @@ if ($console->findCommand("h|help") && ($command = $console->getCommand())) {
 	} else if ($command == "s") {
 		
 		// run the snapshot command
+		$snapshotDir = $console->findCommandOptionValue("d|dir");
 		$s = new PatternLab\Snapshot($config);
 		$s->takeSnapshot($snapshotDir);
+		
+	} else if ($command == "f") {
+		
+		// run the snapshot command
+		$starterKit = $console->findCommandValue("f|fetch");
+		$sk = new PatternLab\StarterKit($config);
+		$sk->fetch($starterKit);
 		
 	} else if ($command == "v") {
 		
