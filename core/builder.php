@@ -82,7 +82,6 @@ if ($console->findCommand("h|help") && ($command = $console->getCommand())) {
 	$moveStatic    = ($console->findCommandOption("p|patternsonly")) ? false : true;
 	$noCacheBuster = $console->findCommandOption("n|nocache");
 	$autoReload    = $console->findCommandOption("r|autoreload");
-	$snapshotDir   = $console->findCommandOption("d|dir");
 	
 	if (($command == "g") || ($command == "b")) {
 		
@@ -107,6 +106,7 @@ if ($console->findCommand("h|help") && ($command = $console->getCommand())) {
 	} else if ($command == "s") {
 		
 		// run the snapshot command
+		$snapshotDir = $console->findCommandOptionValue("d|dir");
 		$s = new PatternLab\Snapshot($config);
 		$s->takeSnapshot($snapshotDir);
 		
