@@ -102,12 +102,12 @@ class Console {
 	}
 	
 	/**
-	* Set-up an option for a given command so it can be used from the command line
+	* Set a sample for a specific command
 	* @param  {String}       the single character of the command that this option is related to
 	* @param  {String}       the sample to be used in the "sample" section of writeHelpCommand()
 	* @param  {String}       the extra info to be used in the example command for the "sample" section of writeHelpCommand()
 	*/
-	public function setCommandExample($command,$sample,$extra) {
+	public function setCommandSample($command,$sample,$extra) {
 		$this->commands[$command]["commandExamples"][] = array("exampleSample" => $sample, "exampleExtra" => $extra);
 	}
 	
