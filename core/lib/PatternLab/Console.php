@@ -73,6 +73,21 @@ class Console {
 	}
 	
 	/**
+	* Find the short command for a given long gommand
+	* @param  {String}       long command to search for
+	*
+	* @return {String}       the search command
+	*/
+	public function findCommandShort($arg) {
+		foreach ($this->commands as $command => $commandOptions) {
+			if ($commandOptions["commandLong"] == $arg) {
+				return $command;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	* Return the command that was given in the command line arguments
 	*
 	* @return {String}      the command. passes false if no command was found
