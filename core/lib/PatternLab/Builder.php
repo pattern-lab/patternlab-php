@@ -188,7 +188,7 @@ class Builder {
 		$styleGuideFoot = $this->mv->render($this->mainPageFoot,$sd);
 		$styleGuidePage = $styleGuideHead.$this->mfs->render('viewall',$sd).$styleGuideFoot;
 		
-		if (!file_exists($this->pd."/styleguide/html/styleguide.html")) {
+		if (!is_dir($this->pd."/styleguide/html/")) {
 			print "ERROR: the main style guide wasn't written out. make sure public/styleguide exists. can copy core/styleguide\n";
 		} else {
 			file_put_contents($this->pd."/styleguide/html/styleguide.html",$styleGuidePage);
