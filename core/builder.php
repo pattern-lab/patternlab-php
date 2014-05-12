@@ -55,7 +55,7 @@ $console->setCommandSample("f","Install a tagged version of a starter kit:","git
 $console->setCommand("v","version","Print the version number","The version command prints out the current version of Pattern Lab.");
 
 // set-up the help command
-$console->setCommand("h","help","Print the help for a given command","The help command prints out the help for a given flag. Just use -h with another command and it will tell you all of the options.");
+$console->setCommand("h:","help:","Print the help for a given command","The help command prints out the help for a given flag. Just use -h with another command and it will tell you all of the options.");
 
 /*******************************
  * Figure out what to run
@@ -64,10 +64,13 @@ $console->setCommand("h","help","Print the help for a given command","The help c
 // get what was passed on the command line
 $console->getArguments();
 
-if ($console->findCommand("h|help") && ($command = $console->getCommand())) {
+if ($console->findCommand("h|help")) {
 	
-	// write the usage & help for a specific command
-	$console->writeHelpCommand($command);
+	$helpCommand = $console->findCommandValue("h|help");
+	$helpCommand = str_replace("-","",$helpCommand);
+	$helpCommand = (strlen($helpCommand) == 1) ? $helpCommand : $console->findCommandShort($helpCommand);
+	
+	$helpCommand ? $console->writeHelpCommand($helpCommand) : $console->writeHelp();
 	
 } else if ($command = $console->getCommand()) {
 	
