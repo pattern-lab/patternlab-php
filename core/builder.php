@@ -48,8 +48,8 @@ $console->setCommandOption("s","d:","dir:","Optional directory path","To add an 
 
 // set-up the fetch command and options
 $console->setCommand("f:","fetch:","Fetch a starter kit","The fetch command grabs a starter kit from GitHub and puts it into source/.");
-$console->setCommandExample("f","Install starter kit:","pattern-lab/starter-kit-demo");
-$console->setCommandExample("f","Install a tagged version of a starter kit:","pattern-lab/starter-kit-demo#v1.0.0");
+$console->setCommandSample("f","Install a starter kit:","github-org/github-repo");
+$console->setCommandSample("f","Install a tagged version of a starter kit:","github-org/github-repo#tag");
 
 // set-up the version command
 $console->setCommand("v","version","Print the version number","The version command prints out the current version of Pattern Lab.");
