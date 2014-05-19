@@ -102,7 +102,7 @@ class Mustache implements \Mustache_Loader {
 		
 		// throw error if path is not found
 		if (!file_exists($fileName)) {
-			throw new \Mustache_Exception_UnknownTemplateException($name);
+			throw new \Mustache_Exception_UnknownTemplateException($fileName);
 		}
 		
 		// get the file data
