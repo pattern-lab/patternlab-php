@@ -70,7 +70,7 @@ class Watcher extends Builder {
 				$fileName      = str_replace($this->sd."/_patterns".DIRECTORY_SEPARATOR,"",$name);
 				$fileNameClean = str_replace(DIRECTORY_SEPARATOR."_",DIRECTORY_SEPARATOR,$fileName);
 				
-				if ($object->isFile() && (($object->getExtension() == "mustache") || ($object->getExtension() == "json"))) {
+				if ($object->isFile() && (($object->getExtension() == "mustache") || ($object->getExtension() == "json") || ($object->getExtension() == "md"))) {
 					
 					// make sure this isn't a hidden pattern
 					$patternParts = explode(DIRECTORY_SEPARATOR,$fileName);
