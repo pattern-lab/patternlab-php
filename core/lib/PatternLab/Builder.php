@@ -362,8 +362,8 @@ class Builder {
 		if (file_exists($this->sd."/_data/_data.json")) {
 			$data    = file_get_contents($this->sd."/_data/_data.json");
 			$this->d = json_decode($data,true);
-			if ($jsonErrorMessage = $this->jsonHasError()) {
-				$this->jsonLastErrorMsg("_data/_data.json",$jsonErrorMessage,$data);
+			if ($jsonErrorMessage = JSON::hasError()) {
+				JSON::lastErrorMsg("_data/_data.json",$jsonErrorMessage,$data);
 			}
 		} else {
 			print "Missing a required file, source/_data/_data.json. Aborting.\n";
@@ -504,302 +504,18 @@ class Builder {
 		// make sure the pattern header & footer aren't added
 		$this->addPatternHF = false;
 		
-		// set-up the defaults
-		$patternType        = "";
-		$patternSubtype     = "";
-		$patternSubtypeSet  = false;
-		$dirSep             = DIRECTORY_SEPARATOR;
-		
+		// gather pattern info based on the supported rules
+		$options = array("patternSourceDir" => __DIR__.$this->sp, "patternExtension" => $this->patternExtension);
+		PatternInfo::loadRules($options);
+		PatternInfo::gather($options);
 		
 		// initialize various arrays
-		$this->navItems                 = array();
-		$this->navItems["patternTypes"] = array();
-		$this->patternPaths             = array();
-		$this->patternTypes             = array();
-		$this->patternLineages          = array();
-		$this->patternPartials          = array();
-		$this->viewAllPaths             = array();
-		
-		// iterate over the patterns & related data and regenerate the entire site if they've changed
-		$patternObjects  = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(__DIR__.$this->sp), \RecursiveIteratorIterator::SELF_FIRST);
-		$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
-		
-		$patternObjects = iterator_to_array($patternObjects);
-		ksort($patternObjects);
-		
-		foreach($patternObjects as $name => $object) {
-			
-			$name  = str_replace(__DIR__.$this->sp,"",$name);
-			$depth = substr_count($name,$dirSep);
-			
-			// track old types and subtypes for increment purposes
-			
-			if ($object->isDir() && ($depth == 0)) {
-				
-				/*************************************
-				 * This section is for:
-				 *    The pattern type directory
-				 *************************************/
-				
-				// is this the first bucket to be set?
-				$bi = (count($this->navItems["patternTypes"]) == 0) ? 0 : $bi + 1;
-				
-				// set-up the names
-				$patternType      = $name;                                 // 00-atoms
-				$patternTypeDash  = $this->getPatternName($name,false);    // atoms
-				$patternTypeClean = str_replace("-"," ",$patternTypeDash); // atoms (dashes replaced with spaces)
-				
-				// add to pattern types & pattern paths
-				$this->patternTypes[]                 = $patternType;
-				$this->patternPaths[$patternTypeDash] = array();
-				
-				// add a new patternType to the nav
-				$this->navItems["patternTypes"][$bi] = array("patternTypeLC"   => strtolower($patternTypeClean),
-															 "patternTypeUC"   => ucwords($patternTypeClean),
-															 "patternType"     => $patternType,
-															 "patternTypeDash" => $patternTypeDash);
-				
-				// starting a new set of pattern types. it might not have any pattern subtypes
-				$patternSubtypeSet = false;
-				
-			} else if ($object->isDir() && ($depth == 1)) {
-				
-				/*************************************
-				 * This section is for:
-				 *    The pattern sub-type directory
-				 *************************************/
-				
-				// is this the first bucket to be set?
-				$ni = (!$patternSubtypeSet) ? 0 : $ni + 1;
-				
-				// set-up the names
-				$patternSubtype      = $object->getFilename();                              // 02-blocks
-				$patternSubtypeDash  = $this->getPatternName($object->getFilename(),false); // blocks
-				$patternSubtypeClean = str_replace("-"," ",$patternSubtypeDash);            // blocks (dashes replaced with spaces)
-				
-				// add to patternPartials
-				$this->patternPartials[$patternTypeDash."-".$patternSubtypeDash] = array();
-				
-				// add a new patternSubtype to the nav
-				$this->navItems["patternTypes"][$bi]["patternTypeItems"][$ni] = array("patternSubtypeLC"   => strtolower($patternSubtypeClean),
-																					  "patternSubtypeUC"   => ucwords($patternSubtypeClean),
-																					  "patternSubtype"     => $patternSubtype,
-																					  "patternSubtypeDash" => $patternSubtypeDash);
-				
-				// starting a new set of pattern types. it might not have any pattern subtypes
-				$patternSubtypeSet = true;
-				
-			} else if ($object->isFile() && ($object->getExtension() == $this->patternExtension)) {
-				
-				/*************************************
-				 * This section is for:
-				 *    Mustache patterns
-				 *************************************/
-				
-				$patternFull  = $object->getFilename();                                        // 00-colors.mustache
-				$pattern      = str_replace(".".$this->patternExtension,"",$patternFull);      // 00-colors
-				
-				// check for pattern state
-				$patternState = "";
-				if (strpos($pattern,"@") !== false) {
-					$patternBits  = explode("@",$pattern,2);
-					$pattern      = $patternBits[0];
-					$patternState = $patternBits[1];
-				}
-				
-				if ($patternSubtypeSet) {
-					$patternPath     = $patternType.$dirSep.$patternSubtype.$dirSep.$pattern; // 00-atoms/01-global/00-colors
-					$patternPathDash = str_replace($dirSep,"-",$patternPath);                 // 00-atoms-01-global-00-colors (file path)
-				} else {
-					$patternPath     = $patternType.$dirSep.$pattern;                         // 00-atoms/00-colors
-					$patternPathDash = str_replace($dirSep,"-",$patternPath);                 // 00-atoms-00-colors (file path)
-				}
-				
-				// track to see if this pattern should get rendered
-				$render = false;
-				
-				// make sure the pattern isn't hidden
-				if ($patternFull[0] != "_") {
-					
-					// set-up the names
-					$patternDash    = $this->getPatternName($pattern,false);                  // colors
-					$patternClean   = str_replace("-"," ",$patternDash);                      // colors (dashes replaced with spaces)
-					$patternPartial = $patternTypeDash."-".$patternDash;                      // atoms-colors
-					
-					// set-up the info for the nav
-					$patternInfo = array("patternPath"    => $patternPathDash."/".$patternPathDash.".html",
-										 "patternSrcPath" => str_replace(__DIR__.$this->sp,"",$object->getPathname()),
-										 "patternName"    => ucwords($patternClean),
-										 "patternState"   => $patternState,
-										 "patternPartial" => $patternPartial);
-					
-					// add to the nav
-					if ($depth == 1) {
-						$this->navItems["patternTypes"][$bi]["patternItems"][] = $patternInfo;
-					} else {
-						$this->navItems["patternTypes"][$bi]["patternTypeItems"][$ni]["patternSubtypeItems"][] = $patternInfo;
-					}
-					
-					// add to the link var for inclusion in patterns
-					$this->d["link"][$patternPartial] = "../../patterns/".$patternPathDash."/".$patternPathDash.".html";
-					
-					// yup, this pattern should get rendered
-					$render = true;
-					
-				} else {
-					
-					// replace the underscore to generate a good file pattern name
-					$patternDash    = $this->getPatternName(str_replace("_","",$pattern),false); // colors
-					$patternPartial = $patternTypeDash."-".$patternDash;                         // atoms-colors
-					
-				}
-				
-				// add all patterns to patternPaths
-				$patternSrcPath  = str_replace(__DIR__.$this->sp,"",str_replace(".".$this->patternExtension,"",$object->getPathname()));
-				$patternDestPath = $patternPathDash;
-				$this->patternPaths[$patternTypeDash][$patternDash] = array("patternSrcPath"  => $patternSrcPath,
-																			"patternDestPath" => $patternDestPath,
-																			"patternPartial"  => $patternPartial,
-																			"patternState"    => $patternState,
-																			"patternType"     => $patternTypeDash,
-																			"render"          => $render);
-				
-			} else if ($object->isFile() && ($object->getExtension() == "json") && (strpos($object->getFilename(),"~") !== false)) {
-				
-				/*************************************
-				 * This section is for:
-				 *    JSON psuedo-patterns
-				 *************************************/
-				
-				$patternSubtypeInclude = ($patternSubtypeSet) ? $patternSubtype."-" : "";
-				$patternFull = $object->getFilename();
-				
-				if ($patternFull[0] != "_") {
-					
-					// check for a pattern state
-					$patternState = "";
-					$patternBits  = explode("@",$patternFull,2);
-					if (isset($patternBits[1])) {
-						$patternState = str_replace(".json","",$patternBits[1]);
-						$patternFull  = preg_replace("/@(.*?)\./",".",$patternFull);
-					}
-					
-					// set-up the names
-					// $patternFull is defined above                                                     00-colors.mustache
-					$patternBits     = explode("~",$patternFull);
-					$patternBase     = $patternBits[0].".".$this->patternExtension;                   // 00-homepage.mustache
-					$patternBaseDash = $this->getPatternName($patternBits[0],false);                  // homepage
-					$patternBaseJSON = $patternBits[0].".json";                                       // 00-homepage.json
-					$stripJSON       = str_replace(".json","",$patternBits[1]);
-					$patternBitClean = preg_replace("/@(.*?)/","",$patternBits[0]);
-					$pattern         = $patternBitClean."-".$stripJSON;                               // 00-homepage-00-emergency
-					$patternInt      = $patternBitClean."-".$this->getPatternName($stripJSON, false); // 00-homepage-emergency
-					$patternDash     = $this->getPatternName($patternInt,false);                      // homepage-emergency
-					$patternClean    = str_replace("-"," ",$patternDash);                             // homepage emergency
-					$patternPartial  = $patternTypeDash."-".$patternDash;                             // pages-homepage-emergency
-					
-					// add to patternPaths
-					if ($patternSubtypeSet) {
-						$patternPath     = $patternType.$dirSep.$patternSubtype.$dirSep.$pattern;    // 00-atoms/01-global/00-colors
-						$patternPathDash = str_replace($dirSep,"-",$patternPath);                    // 00-atoms-01-global-00-colors (file path)
-					} else {
-						$patternPath     = $patternType.$dirSep.$pattern;                            // 00-atoms/00-colors
-						$patternPathDash = str_replace($dirSep,"-",$patternPath);                    // 00-atoms-00-colors (file path)
-					}
-					
-					// add all patterns to patternPaths
-					$patternSrcPath  = $this->patternPaths[$patternTypeDash][$patternBaseDash]["patternSrcPath"];
-					$patternDestPath = $patternPathDash;
-					$this->patternPaths[$patternTypeDash][$patternDash] = array("patternSrcPath"  => $patternSrcPath,
-																				"patternDestPath" => $patternDestPath,
-																				"patternPartial"  => $patternPartial,
-																				"patternState"    => $patternState,
-																				"patternType"     => $patternTypeDash,
-																				"render"          => true);
-					
-					// set-up the info for the nav
-					$patternInfo = array("patternPath"    => $patternPathDash."/".$patternPathDash.".html",
-										 "patternSrcPath" => str_replace(__DIR__.$this->sp,"",preg_replace("/\~(.*)\.json/",".".$this->patternExtension,$object->getPathname())),
-										 "patternName"    => ucwords($patternClean),
-										 "patternState"   => $patternState,
-										 "patternPartial" => $patternPartial);
-					
-					// add to the nav
-					if ($depth == 1) {
-						$this->navItems["patternTypes"][$bi]["patternItems"][] = $patternInfo;
-					} else {
-						$this->navItems["patternTypes"][$bi]["patternTypeItems"][$ni]["patternSubtypeItems"][] = $patternInfo;
-					}
-					
-					// add to the link var for inclusion in patterns
-					$this->d["link"][$patternPartial] = "../../patterns/".$patternPathDash."/".$patternPathDash.".html";
-					
-					// get the base data
-					$patternDataBase = array();
-					if (file_exists($object->getPath()."/".$patternBaseJSON)) {
-						$data = file_get_contents($object->getPath()."/".$patternBaseJSON);
-						$patternDataBase = json_decode($data,true);
-						if ($jsonErrorMessage = $this->jsonHasError()) {
-							$this->jsonLastErrorMsg($patternBaseJSON,$jsonErrorMessage,$data);
-						}
-					}
-					
-					// get the special pattern data
-					$data        = file_get_contents($object->getPathname());
-					$patternData = (array) json_decode($data);
-					if ($jsonErrorMessage = $this->jsonHasError()) {
-						$this->jsonLastErrorMsg($object->getFilename(),$jsonErrorMessage,$data);
-					}
-					
-					// merge them for the file
-					if (!isset($this->d["patternSpecific"][$patternPartial])) {
-						$this->d["patternSpecific"][$patternPartial]              = array();
-						$this->d["patternSpecific"][$patternPartial]["data"]      = array();
-						$this->d["patternSpecific"][$patternPartial]["listItems"] = array();
-					}
-					
-					if (is_array($patternDataBase) && is_array($patternData)) {
-						$this->d["patternSpecific"][$patternPartial]["data"] = array_merge($patternDataBase, $patternData);
-					}
-					
-				}
-						
-			} else if ($object->isFile() && ($object->getExtension() == "json")) {
-					
-				/*************************************
-				 * This section is for:
-				 *    JSON data
-				 *************************************/
-				$patternFull    = $object->getFilename();                                            // 00-colors.mustache
-				$pattern        = str_replace(".listitems","",str_replace(".json","",$patternFull)); // 00-colors
-				$patternDash    = $this->getPatternName($pattern,false);                             // colors
-				$patternPartial = $patternTypeDash."-".$patternDash;                                 // atoms-colors
-				
-				if ($patternFull[0] != "_") {
-					
-					if (!isset($this->d["patternSpecific"][$patternPartial])) {
-						$this->d["patternSpecific"][$patternPartial]              = array();
-						$this->d["patternSpecific"][$patternPartial]["data"]      = array();
-						$this->d["patternSpecific"][$patternPartial]["listItems"] = array();
-					}
-					
-					if (strpos($object->getFilename(),".listitems.json") !== false) {
-						$patternData = $this->getListItems($object->getPathname());
-						$this->d["patternSpecific"][$patternPartial]["listItems"] = $patternData;
-					} else {
-						$data = file_get_contents($object->getPathname());
-						$patternData = json_decode($data,true);
-						if ($jsonErrorMessage = $this->jsonHasError()) {
-							$this->jsonLastErrorMsg($object->getFilename(),$jsonErrorMessage,$data);
-						}
-						$this->d["patternSpecific"][$patternPartial]["data"] = $patternData;
-					}
-					
-				}
-				
-			}
-			
-		}
+		$this->navItems        = PatternInfo::$navItems;
+		$this->patternPaths    = PatternInfo::$patternPaths;
+		$this->patternTypes    = PatternInfo::$patternTypes;
+		$this->patternLineages = array();
+		$this->patternPartials = array();
+		$this->viewAllPaths    = array();
 		
 		// get all of the lineages
 		$this->gatherLineages();
@@ -873,14 +589,14 @@ class Builder {
 			$patternTypeDash = $patternTypeValues["patternTypeDash"];
 			
 			// if this has a second level of patterns check them out (means we don't process pages & templates)
-			if (isset($patternTypeValues["patternTypeItems"]) && (!in_array($patternType,$this->styleGuideExcludes))) {
+			if ((count($patternTypeValues["patternTypeItems"]) != 0) && (!in_array($patternType,$this->styleGuideExcludes))) {
 				
 				$arrayReset = false;
 				
 				foreach ($patternTypeValues["patternTypeItems"] as $patternSubtypeKey => $patternSubtypeValues) {
 					
 					// if there are no sub-items in a section remove it, else do a bunch of other stuff
-					if (!isset($patternSubtypeValues["patternSubtypeItems"])) {
+					if (count($patternSubtypeValues["patternSubtypeItems"]) == 0) {
 						
 						unset($this->navItems["patternTypes"][$patternTypeKey]["patternTypeItems"][$patternSubtypeKey]);
 						$arrayReset = true;
@@ -902,14 +618,26 @@ class Builder {
 						// add to the view all paths
 						$this->viewAllPaths[$patternTypeDash][$patternSubtypeDash] = $patternType."-".$patternSubtype;
 						
+						// add the subtype info
+						$patternSubtypeData = array("patternName" => $patternSubtypeValues["patternSubtypeUC"], "patternSectionSubtype" => true);
+						if (isset($patternSubtypeValues["patternSubtypeDesc"])) {
+							$patternSubtypeData["patternDesc"] = $patternSubtypeValues["patternSubtypeDesc"];
+						}
+						if (isset($patternSubtypeValues["patternSubtypeMeta"])) {
+							$patternSubtypeData["patternDesc"] = $patternSubtypeValues["patternSubtypeDesc"];
+						}
+						$this->patternPartials[$patternTypeDash."-".$patternSubtypeDash][] = $patternSubtypeData;
+						
 						// add patterns to $this->patternPartials
 						foreach ($patternSubtypeValues["patternSubtypeItems"] as $patternSubtypeItemKey => $patternSubtypeItem) {
 							
-							$patternCode          = $this->renderPattern($patternSubtypeItem["patternSrcPath"],$patternSubtypeItem["patternPartial"]);
-							$patternCodeRaw       = $patternCode[0];
-							$patternCodeEncoded   = $patternCode[1];
-							$patternLineageExists = (count($this->patternLineages[$patternSubtypeItem["patternPartial"]]) > 0) ? true : false;
-							$patternLineages      = $this->patternLineages[$patternSubtypeItem["patternPartial"]];
+							$patternCode           = $this->renderPattern($patternSubtypeItem["patternSrcPath"],$patternSubtypeItem["patternPartial"]);
+							$patternCodeRaw        = $patternCode[0];
+							$patternCodeEncoded    = $patternCode[1];
+							$patternLineageExists  = (count($this->patternLineages[$patternSubtypeItem["patternPartial"]]) > 0) ? true : false;
+							$patternLineages       = $this->patternLineages[$patternSubtypeItem["patternPartial"]];
+							$patternLineageRExists = (count($this->patternLineagesR[$patternSubtypeItem["patternPartial"]]) > 0) ? true : false;
+							$patternLineagesR      = $this->patternLineagesR[$patternSubtypeItem["patternPartial"]];
 							
 							// set-up the mark-up for CSS Rule Saver so it can figure out which rules to save
 							$patternCSSExists     = $this->enableCSS;
@@ -920,16 +648,29 @@ class Builder {
 								$this->patternCSS[$patternSubtypeItem["patternPartial"]] = $patternCSS;
 							}
 							
-							$this->patternPartials[$patternTypeDash."-".$patternSubtypeDash][] = array("patternName"          => $patternSubtypeItem["patternName"], 
-																									   "patternLink"          => $patternSubtypeItem["patternPath"], 
-																									   "patternPartial"       => $patternSubtypeItem["patternPartial"], 
-																									   "patternPartialCode"   => $patternCodeRaw,
-																									   "patternPartialCodeE"  => $patternCodeEncoded,
-																									   "patternCSSExists"     => $patternCSSExists,
-																									   "patternCSS"           => $patternCSS,
-																									   "patternLineageExists" => $patternLineageExists,
-																									   "patternLineages"      => $patternLineages
-																									  );
+							$patternPartialData = array("patternSectionVanilla" => true,
+														"patternName"           => $patternSubtypeItem["patternName"],
+														"patternLink"           => $patternSubtypeItem["patternPath"],
+														"patternPartial"        => $patternSubtypeItem["patternPartial"],
+														"patternPartialCode"    => $patternCodeRaw,
+														"patternPartialCodeE"   => $patternCodeEncoded,
+														"patternCSSExists"      => $patternCSSExists,
+														"patternCSS"            => $patternCSS,
+														"patternLineageExists"  => $patternLineageExists,
+														"patternLineages"       => $patternLineages,
+														"patternLineageRExists" => $patternLineageRExists,
+														"patternLineagesR"      => $patternLineagesR
+														);
+							
+							if (isset($patternSubtypeItem["patternDesc"])) {
+								$patternPartialData["patternDesc"] = $patternSubtypeItem["patternDesc"];
+							}
+							
+							if (isset($patternSubtypeItem["patternMeta"])) {
+								$patternPartialData["patternMeta"] = $patternSubtypeItem["patternMeta"];
+							}
+							
+							$this->patternPartials[$patternTypeDash."-".$patternSubtypeDash][] = $patternPartialData;
 							
 							// set the pattern state
 							$patternBits = $this->getPatternInfo($patternSubtypeItem["patternPartial"]);
@@ -1001,8 +742,8 @@ class Builder {
 			
 			$data          = file_get_contents($filepath);
 			$listItemsJSON = json_decode($data, true);
-			if ($jsonErrorMessage = $this->jsonHasError()) {
-				$this->jsonLastErrorMsg(str_replace($this->sd."/","",$filepath),$jsonErrorMessage,$data);
+			if ($jsonErrorMessage = JSON::hasError()) {
+				JSON::lastErrorMsg(str_replace($this->sd."/","",$filepath),$jsonErrorMessage,$data);
 			}
 			
 			$numbers = array("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
@@ -1304,39 +1045,6 @@ class Builder {
 			$this->cssRuleSaver->loadCSS($filename);
 		}
 		
-	}
-	
-	/**
-	* Returns the last error message when building a JSON file. Mimics json_last_error_msg() from PHP 5.5
-	* @param  {String}       the file that generated the error
-	*/
-	protected function jsonHasError() {
-		$errors = array(
-			JSON_ERROR_NONE             => false,
-			JSON_ERROR_DEPTH            => 'Maximum stack depth exceeded',
-			JSON_ERROR_STATE_MISMATCH   => 'Underflow or the modes mismatch',
-			JSON_ERROR_CTRL_CHAR        => 'Unexpected control character found',
-			JSON_ERROR_SYNTAX           => 'Syntax error, malformed JSON',
-			JSON_ERROR_UTF8             => 'Malformed UTF-8 characters, possibly incorrectly encoded'
-		);
-		$error        = json_last_error();
-		$errorMessage = array_key_exists($error, $errors) ? $errors[$error] : "Unknown error ({$error})";
-		return $errorMessage;
-	}
-	
-	/**
-	* Returns the last error message when building a JSON file. Mimics json_last_error_msg() from PHP 5.5
-	* @param  {String}       the file that generated the error
-	*/
-	protected function jsonLastErrorMsg($file,$message,$data) {
-		print "\nThe JSON file, ".$file.", wasn't loaded. The error: ".$message."\n";
-		if ($message == "Syntax error, malformed JSON") {
-			print "\n";
-			$parser = new \Seld\JsonLint\JsonParser();
-			$error  = $parser->lint($data);
-			print $error->getMessage();
-			print "\n\n";
-		}
 	}
 	
 	/**
