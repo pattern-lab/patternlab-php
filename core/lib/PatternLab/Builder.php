@@ -86,7 +86,7 @@ class Builder {
 	*
 	* @return {String}       the mark-up as rendered by Mustache
 	*/
-	protected function renderPattern($f,$p) {
+	protected function renderPattern($f,$p,$k = array()) {
 		
 		// if there is pattern-specific data make sure to override the default in $this->d
 		$d = $this->d;
@@ -114,8 +114,12 @@ class Builder {
 			
 		}
 		
-		$pattern       = $this->pl->render($f,$d);
-		$escaped       = htmlentities($pattern);
+		if (count($k) > 0) {
+			$d = array_merge($d, $k);
+		}
+		
+		$pattern = $this->pl->render($f,$d);
+		$escaped = htmlentities($pattern);
 		
 		if ($this->addPatternHF) {
 			$patternHead = $this->mv->render($this->patternHead,$d);
@@ -509,6 +513,8 @@ class Builder {
 		PatternInfo::loadRules($options);
 		PatternInfo::gather($options);
 		
+		$kss = KSSParser::parse($this->sd);
+		
 		// initialize various arrays
 		$this->navItems        = PatternInfo::$navItems;
 		$this->patternPaths    = PatternInfo::$patternPaths;
@@ -631,6 +637,16 @@ class Builder {
 						// add patterns to $this->patternPartials
 						foreach ($patternSubtypeValues["patternSubtypeItems"] as $patternSubtypeItemKey => $patternSubtypeItem) {
 							
+							$patternSectionVanilla = true;
+							$patternSectionKSS     = false;
+							
+							// see if this is in KSS
+							$kssSection = $kss->getSection($patternSubtypeItem["patternPartial"]);
+							if ($kssSection) {
+								$patternSectionVanilla = false;
+								$patternSectionKSS     = true;
+							}
+							
 							$patternCode           = $this->renderPattern($patternSubtypeItem["patternSrcPath"],$patternSubtypeItem["patternPartial"]);
 							$patternCodeRaw        = $patternCode[0];
 							$patternCodeEncoded    = $patternCode[1];
@@ -638,6 +654,7 @@ class Builder {
 							$patternLineages       = $this->patternLineages[$patternSubtypeItem["patternPartial"]];
 							$patternLineageRExists = (count($this->patternLineagesR[$patternSubtypeItem["patternPartial"]]) > 0) ? true : false;
 							$patternLineagesR      = $this->patternLineagesR[$patternSubtypeItem["patternPartial"]];
+							$patternLineageEExists = ($patternLineageExists || $patternLineageRExists) ? true : false;
 							
 							// set-up the mark-up for CSS Rule Saver so it can figure out which rules to save
 							$patternCSSExists     = $this->enableCSS;
@@ -648,7 +665,8 @@ class Builder {
 								$this->patternCSS[$patternSubtypeItem["patternPartial"]] = $patternCSS;
 							}
 							
-							$patternPartialData = array("patternSectionVanilla" => true,
+							$patternPartialData = array("patternSectionVanilla" => $patternSectionVanilla,
+														"patternSectionKSS"     => $patternSectionKSS,
 														"patternName"           => $patternSubtypeItem["patternName"],
 														"patternLink"           => $patternSubtypeItem["patternPath"],
 														"patternPartial"        => $patternSubtypeItem["patternPartial"],
@@ -659,8 +677,8 @@ class Builder {
 														"patternLineageExists"  => $patternLineageExists,
 														"patternLineages"       => $patternLineages,
 														"patternLineageRExists" => $patternLineageRExists,
-														"patternLineagesR"      => $patternLineagesR
-														);
+														"patternLineagesR"      => $patternLineagesR,
+														"patternLineageEExists" => $patternLineageEExists);
 							
 							if (isset($patternSubtypeItem["patternDesc"])) {
 								$patternPartialData["patternDesc"] = $patternSubtypeItem["patternDesc"];
@@ -669,6 +687,33 @@ class Builder {
 							if (isset($patternSubtypeItem["patternMeta"])) {
 								$patternPartialData["patternMeta"] = $patternSubtypeItem["patternMeta"];
 							}
+							
+							if ($kssSection) {
+								$patternPartialData["patternName"] = $kssSection->getTitle();
+								$patternPartialData["patternDesc"] = $kssSection->getDescription();
+								$modifiers = $kssSection->getModifiers();
+								if (count($modifiers) > 0) {
+									$patternPartialData["patternModifiersExist"] = true;
+									$patternPartialData["patternModifiers"]      = array();
+									foreach ($modifiers as $modifier) {
+										$name  = $modifier->getName();
+										$class = $modifier->getClassName();
+										$desc  = $modifier->getDescription();
+										$code  = "";
+										$patternModifierCodeExists = false;
+										if ($name[0] != ":") {
+											list($code,$orig) = $this->renderPattern($patternSubtypeItem["patternSrcPath"],$patternSubtypeItem["patternPartial"],array("styleModifier" => $class));
+											$patternModifierCodeExists = true;
+										}
+										$patternPartialData["patternModifiers"][] = array("patternModifierName"       => $name,
+																						  "patternModifierDesc"       => $desc,
+																						  "patternModifierCode"       => $code,
+																						  "patternModifierCodeExists" => $patternModifierCodeExists);
+									}
+								}
+							}
+							
+							$patternPartialData["patternDescExists"] = isset($patternPartialData["patternDesc"]);
 							
 							$this->patternPartials[$patternTypeDash."-".$patternSubtypeDash][] = $patternPartialData;
 							
