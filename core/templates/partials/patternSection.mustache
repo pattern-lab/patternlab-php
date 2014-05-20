@@ -1,0 +1,91 @@
+<div id="{{ patternPartial }}" class="sg-pattern">
+	<div class="sg-pattern-head">
+		<h3><a href="../../patterns/{{ patternLink }}" class="patternLink" data-patternpartial="{{ patternPartial }}">{{ patternName }}</a></h3>
+		<div class="sg-pattern-head-actions">
+			Pattern header options
+		</div>
+	</div>
+	{{# patternDescExists }}
+		<div class="sg-pattern-desc">
+			{{{ patternDesc }}}
+			{{# patternModifiersExist }}
+				<ul>
+					{{# patternModifiers }}
+						<li> <strong>{{ patternModifierName }}:</strong> {{ patternModifierDesc }}</li>
+					{{/ patternModifiers }}
+				</ul>
+			{{/ patternModifiersExist }}
+		</div>
+	{{/ patternDescExists }}
+	<div class="sg-pattern-example">
+		{{{ patternPartialCode }}}
+	</div>
+	{{# patternModifiersExist }}
+		{{# patternModifiers }}
+			{{# patternModifierCodeExists }}
+			<div class="sg-pattern-example sg-pattern-example-modifier">
+				<span class="sg-pattern-example-modifier-name">{{ patternModifierName }}</span>
+				{{{ patternModifierCode }}}
+			</div>
+			{{/ patternModifierCodeExists }}
+		{{/ patternModifiers }}
+	{{/ patternModifiersExist }}
+	<div class="sg-pattern-extra">
+		<div class="sg-pattern-extra-annotations" style="display: none">
+			<span class="sg-pattern-extra-name">Annotations</span>
+			<div id="sg-pattern-extra-annotations-container">
+			</div>
+		</div>
+		<div class="sg-pattern-extra-html" style="display: none">
+			<span class="sg-pattern-extra-name">HTML</span>
+			<pre>
+				<code id="sg-pattern-extra-html-container">
+					{{{ patternPartialCodeE }}}
+				</code>
+			</pre>
+		</div>
+		<div class="sg-pattern-extra-engine" style="display: none">
+			<span class="sg-pattern-extra-name">{{ patternEngineName }}</span>
+			<pre>
+				<code id="sg-pattern-extra-engine-container">
+				</code>
+			</pre>
+		</div>
+		<div class="sg-pattern-extra-lineage" style="display: none">
+			<span class="sg-pattern-extra-name">Lineages</span>
+			{{# patternLineageExists }}
+				<div class="sg-pattern-extra-lineage">
+					The <span class="sg-pattern-extra-lineage-name">{{ patternPartial }}</span> pattern contains the following pattern(s): 
+					<ul>
+					{{# patternLineages }}
+						<li> <a href="{{ lineagePath }}" class="{{# lineageState }}sg-pattern-state {{.}} {{/ lineageState }}" data-patternpartial="{{ lineagePattern }}">{{ lineagePattern }}</a></li>
+					{{/ patternLineages }}
+					</ul>
+				</div>
+			{{/ patternLineageExists }}
+			{{# patternLineageRExists }}
+				<div class="sg-pattern-extra-lineage">
+					The <span class="sg-pattern-extra-lineage-name">{{ patternPartial }}</span> pattern is included in the following pattern(s): 
+					<ul>
+					{{# patternLineagesR }}
+						<li> <a href="{{ lineagePath }}" class="{{# lineageState }}sg-pattern-state {{.}} {{/ lineageState }}" data-patternpartial="{{ lineagePattern }}">{{ lineagePattern }}</a></li>
+					{{/ patternLineagesR }}
+					</ul>
+				</div>
+			{{/ patternLineageRExists }}
+			{{^ patternLineageEExists }}
+				The <span class="sg-pattern-extra-lineage-name">{{ patternPartial }}</span> pattern doesn't have any lineage information.
+			{{/ patternLineageEExists }}
+		</div>
+		{{# patternCSSExists }}
+			<div class="sg-pattern-extra-css" style="display: none">
+				<span class="sg-pattern-extra-name">{{ patternEngineName }}</span>
+				<pre>
+					<code id="sg-pattern-extra-engine-container">
+						{{ patternCSS }}
+					</code>
+				</pre>
+			</div>
+		{{/ patternCSSExists }}
+	</div>
+</div>
