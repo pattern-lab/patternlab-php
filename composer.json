@@ -10,6 +10,7 @@
 	"require": {
 		"alchemy/zippy": "0.2.0",
 		"michelf/php-markdown": "1.4",
-		"symfony/yaml": "2.4.4"
+		"symfony/yaml": "2.4.4",
+		"scan/kss-php": "v0.6.0"
 	}
 }

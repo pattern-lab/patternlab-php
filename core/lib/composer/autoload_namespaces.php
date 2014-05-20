@@ -8,8 +8,10 @@ $baseDir = dirname(dirname($vendorDir));
 return array(
     'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
     'Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
+    'Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
     'Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),
     'Symfony\\Component\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher'),
+    'Scan\\Kss' => array($vendorDir . '/scan/kss-php/lib'),
     'Pimple' => array($vendorDir . '/pimple/pimple/lib'),
     'Michelf' => array($vendorDir . '/michelf/php-markdown'),
     'Guzzle\\Tests' => array($vendorDir . '/guzzle/guzzle/tests'),
