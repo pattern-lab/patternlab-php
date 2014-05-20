@@ -246,20 +246,22 @@ class Builder {
 	* @param  {String}       path where the files need to be written too
 	* @param  {String}       pattern state
 	*/
-	private function generatePatternFile($f,$p,$path,$state) {
-		
-		// render the pattern and return it as well as the encoded version
-		list($rf,$e) = $this->renderPattern($f,$p);
+	private function generatePatternFile($f,$p,$path,$options) {
 		
 		// the core footer isn't rendered as mustache but we have some variables there any way. find & replace.
-		$rf = str_replace("{% patternPartial %}",$p,$rf);
-		$rf = str_replace("{% lineage %}",json_encode($this->patternLineages[$p]),$rf);
-		$rf = str_replace("{% lineageR %}",json_encode($this->patternLineagesR[$p]),$rf);
-		$rf = str_replace("{% patternState %}",$state,$rf);
+		$patternFooterData = array("patternFooterData" => array());
+		$patternFooterData["patternFooterData"]["cssEnabled"]        = ($this->enableCSS && isset($this->patternCSS[$p])) ? "true" : "false";
+		$patternFooterData["patternFooterData"]["lineage"]           = json_encode($this->patternLineages[$p]);
+		$patternFooterData["patternFooterData"]["lineageR"]          = json_encode($this->patternLineagesR[$p]);
+		$patternFooterData["patternFooterData"]["patternBreadcrumb"] = $options["patternBreadcrumb"];
+		$patternFooterData["patternFooterData"]["patternDesc"]       = $options["patternDesc"];
+		$patternFooterData["patternFooterData"]["patternEngine"]     = $options["patternEngine"];
+		$patternFooterData["patternFooterData"]["patternName"]       = $options["patternName"];
+		$patternFooterData["patternFooterData"]["patternPartial"]    = $p;
+		$patternFooterData["patternFooterData"]["patternState"]      = $options["state"];
 		
-		// figure out what to put in the css section
-		$c  = $this->enableCSS && isset($this->patternCSS[$p]) ? "true" : "false";
-		$rf = str_replace("{% cssEnabled %}",$c,$rf);
+		// render the pattern and return it as well as the encoded version
+		list($rf,$e) = $this->renderPattern($f,$p,$patternFooterData);
 		
 		// get the original mustache template
 		$m = htmlentities(file_get_contents(__DIR__.$this->sp.$f));
@@ -375,7 +377,7 @@ class Builder {
 		}
 		
 		if (is_array($this->d)) {
-			$reservedKeys = array("listItems","cacheBuster","link","patternSpecific");
+			$reservedKeys = array("listItems","cacheBuster","link","patternSpecific","patternFooterData");
 			foreach ($reservedKeys as $reservedKey) {
 				if (array_key_exists($reservedKey,$this->d)) {
 					print "\"".$reservedKey."\" is a reserved key in Pattern Lab. The data using that key in _data.json will be overwritten. Please choose a new key.\n";
@@ -749,7 +751,7 @@ class Builder {
 		}
 		
 		// add pattern lab's resource to the user-defined files
-		$templateHelper = new TemplateHelper($this->sp);
+		$templateHelper     = new TemplateHelper($this->sp);
 		$this->patternHead  = $templateHelper->patternHead;
 		$this->patternFoot  = $templateHelper->patternFoot;
 		$this->mainPageHead = $templateHelper->mainPageHead;
