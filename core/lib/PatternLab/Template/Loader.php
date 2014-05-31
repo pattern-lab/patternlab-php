@@ -1,18 +1,18 @@
 <?php
 
 /*!
- * Pattern Lab Mustache Class - v0.7.12
+ * Template Loader Class
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
- * Provides generic access to loading Mustache instances
+ * Provides the hooks to the Mustache engine to generate generic templates
  *
  */
 
-namespace PatternLab;
+namespace PatternLab\Template;
 
-class TemplateLoader {
+class Loader {
 	
 	/**
 	* Load a new Mustache instance that uses the File System Loader
@@ -21,8 +21,8 @@ class TemplateLoader {
 	*/
 	public static function fileSystem() {
 		return new \Mustache_Engine(array(
-						"loader" => new \Mustache_Loader_FilesystemLoader(__DIR__."/../../templates/"),
-						"partials_loader" => new \Mustache_Loader_FilesystemLoader(__DIR__."/../../templates/partials/")
+						"loader" => new \Mustache_Loader_FilesystemLoader(__DIR__."/../../../templates/"),
+						"partials_loader" => new \Mustache_Loader_FilesystemLoader(__DIR__."/../../../templates/partials/")
 		));
 	}
 	
