@@ -12,6 +12,15 @@
 
 namespace PatternLab;
 
+use \PatternLab\Config;
+use \PatternLab\Data;
+use \PatternLab\PatternData\Exporters\NavItemsExporter;
+use \PatternLab\PatternData\Exporters\PatternPartialsExporter;
+use \PatternLab\PatternData\Exporters\PatternPathDestsExporter;
+use \PatternLab\PatternData\Exporters\ViewAllPathsExporter;
+use \PatternLab\Render;
+use \PatternLab\Template\Helper;
+
 class Builder {
 	
 	/**
