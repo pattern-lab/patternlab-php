@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab StartKit Class - v0.7.12
+ * StarterKit Class
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -12,14 +12,16 @@
 
 namespace PatternLab;
 
+use \Alchemy\Zippy\Zippy;
+use \PatternLab\Config;
+
 class StarterKit {
 	
 	/**
 	* Set-up a default var
 	*/
-	public function __construct($config) {
-		$this->sourceDir     = __DIR__."/../../../".$config["sourceDir"];
-		if (!is_dir($this->sourceDir)) {
+	public function __construct() {
+		if (!is_dir(Config::$options["sourceDir"])) {
 			print "Check to make sure your source directory is configured properly...\n";
 			exit;
 		}
@@ -60,7 +62,7 @@ class StarterKit {
 		
 		// see if the source directory is empty
 		$emptyDir = true;
-		$objects  = new \DirectoryIterator($this->sourceDir);
+		$objects  = new \DirectoryIterator(Config::$options["sourceDir"]);
 		foreach ($objects as $object) {
 			if (!$object->isDot() && ($object->getFilename() != "README") && ($object->getFilename() != ".DS_Store")) {
 				$emptyDir = false;
@@ -79,7 +81,7 @@ class StarterKit {
 				
 				print "nuking everything in source/...\n";
 				
-				$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sourceDir), \RecursiveIteratorIterator::CHILD_FIRST);
+				$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]), \RecursiveIteratorIterator::CHILD_FIRST);
 				
 				// make sure dots are skipped
 				$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
@@ -103,10 +105,10 @@ class StarterKit {
 		}
 		
 		// extract
-		$zippy      = \Alchemy\Zippy\Zippy::load();
+		$zippy      = Zippy::load();
 		$zipAdapter = $zippy->getAdapterFor('tar.gz');
 		$archiveZip = $zipAdapter->open($tempFile);
-		$archiveZip = $archiveZip->extract($this->sourceDir);
+		$archiveZip = $archiveZip->extract(Config::$options["sourceDir"]);
 		
 		// remove the temp file
 		unlink($tempFile);
