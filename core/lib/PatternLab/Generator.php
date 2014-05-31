@@ -47,7 +47,9 @@ class Generator extends Builder {
 			$starttime = $mtime;
 		}
 		
-		$this->noCacheBuster = $noCacheBuster;
+		if ($noCacheBuster) {
+			Config::$options["cacheBuster"] = 0;
+		}
 		
 		if ($enableCSS) {
 			
@@ -61,38 +63,40 @@ class Generator extends Builder {
 		}
 		
 		// gather up all of the data to be used in patterns
-		$this->gatherData();
+		Data::gather();
 		
 		// gather all of the various pattern info
-		$this->gatherPatternInfo();
+		PatternData::gather();
 		
 		// clean the public directory to remove old files
-		if (($this->cleanPublic == "true") && $moveStatic) {
-			$this->cleanPublic();
+		if ((Config::$options["cleanPublic"] == "true") && $moveStatic) {
+			Util::cleanPublic();
 		}
+		
+		// render out the index and style guide
+		$this->generateIndex();
+		$this->generateStyleguide();
+		$this->generateViewAllPages();
 		
 		// render out the patterns and move them to public/patterns
 		$this->generatePatterns();
 		
-		// render out the index and style guide
-		$this->generateMainPages();
-		
 		// make sure data exists
-		if (!is_dir($this->pd."/data")) {
-			mkdir($this->pd."/data");
+		if (!is_dir(__DIR__.Config::$options["patternPublicDir"]."/data")) {
+			mkdir(__DIR__.Config::$options["patternPublicDir"]."/data");
 		}
 		
 		// iterate over the data files and regenerate the entire site if they've changed
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/_data/"), \RecursiveIteratorIterator::SELF_FIRST);
+		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_data/"), \RecursiveIteratorIterator::SELF_FIRST);
 		
 		// make sure dots are skipped
 		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 		
 		foreach($objects as $name => $object) {
 			
-			$fileName = str_replace($this->sd."/_data".DIRECTORY_SEPARATOR,"",$name);
+			$fileName = str_replace(Config::$options["sourceDir"]."/_data".DIRECTORY_SEPARATOR,"",$name);
 			if (($fileName[0] != "_") && $object->isFile()) {
-				$this->moveStaticFile("_data/".$fileName,"","_data","data");
+				FileUtil::moveStaticFile("_data/".$fileName,"","_data","data");
 			}
 			
 		}
@@ -101,7 +105,7 @@ class Generator extends Builder {
 		if ($moveStatic) {
 			
 			// iterate over all of the other files in the source directory
-			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/"), \RecursiveIteratorIterator::SELF_FIRST);
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/"), \RecursiveIteratorIterator::SELF_FIRST);
 			
 			// make sure dots are skipped
 			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
@@ -109,20 +113,20 @@ class Generator extends Builder {
 			foreach($objects as $name => $object) {
 				
 				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-				$fileName = str_replace($this->sd.DIRECTORY_SEPARATOR,"",$name);
-				if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
+				$fileName = str_replace(Config::$options["sourceDir"].DIRECTORY_SEPARATOR,"",$name);
+				if (($fileName[0] != "_") && (!in_array($object->getExtension(),Config::$options["ie"])) && (!in_array($object->getFilename(),Config::$options["id"]))) {
 					
 					// catch directories that have the ignored dir in their path
-					$ignoreDir = $this->ignoreDir($fileName);
+					$ignoreDir = FileUtil::ignoreDir($fileName);
 					
 					// check to see if it's a new directory
-					if (!$ignoreDir && $object->isDir() && !is_dir($this->pd."/".$fileName)) {
-						mkdir($this->pd."/".$fileName);
+					if (!$ignoreDir && $object->isDir() && !is_dir(__DIR__.Config::$options["patternPublicDir"]."/".$fileName)) {
+						mkdir(__DIR__.Config::$options["patternPublicDir"]."/".$fileName);
 					}
 					
 					// check to see if it's a new file or a file that has changed
-					if (!$ignoreDir && $object->isFile() && (!file_exists($this->pd."/".$fileName))) {
-						$this->moveStaticFile($fileName);
+					if (!$ignoreDir && $object->isFile() && (!file_exists(__DIR__.Config::$options["patternPublicDir"]."/".$fileName))) {
+						FileUtil::moveStaticFile($fileName);
 					}
 					
 				}
@@ -132,7 +136,7 @@ class Generator extends Builder {
 		}
 		
 		// update the change time so the auto-reload will fire (doesn't work for the index and style guide)
-		$this->updateChangeTime();
+		Util::updateChangeTime();
 		
 		print "your site has been generated...\n";
 		
