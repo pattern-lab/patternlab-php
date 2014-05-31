@@ -12,6 +12,10 @@
 
 namespace PatternLab;
 
+use \PatternLab\Config;
+use \PatternLab\Snapshot\FilterIterator;
+use \PatternLab\Template\Helper;
+
 class Snapshot {
 	
 	/**
