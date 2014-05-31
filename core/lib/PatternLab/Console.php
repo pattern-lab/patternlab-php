@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Console Class - v0.7.12
+ * Console Class
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license

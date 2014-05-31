@@ -1,10 +1,15 @@
 	
 	<script>
 		// handle injection of items from builder
-		var patternPartial = "{% patternPartial %}";
-		var lineage        = {% lineage %};
-		var lineageR       = {% lineageR %};
-		var patternState   = "{% patternState %}";
-		var cssEnabled     = {% cssEnabled %};
+		var patternBreadcrumb = "{{ patternFooterData.patternBreadcrumb }}";
+		var patternDesc       = "{{ patternFooterData.patternDesc }}";
+		var patternEngine     = "{{ patternFooterData.patternEngine }}";
+		var patternModifiers  = {{{ patternFooterData.patternModifiers }}};
+		var patternName       = "{{ patternFooterData.patternName }}";
+		var patternPartial    = "{{ patternFooterData.patternPartial }}";
+		var lineage           = {{{ patternFooterData.lineage }}};
+		var lineageR          = {{{ patternFooterData.lineageR }}};
+		var patternState      = "{{ patternFooterData.patternState }}";
+		var cssEnabled        = false;
 	</script>
 	

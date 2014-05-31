@@ -77,8 +77,7 @@ if ($console->findCommand("h|help")) {
 	// run commands
 	
 	// load Pattern Lab's config, if first time set-up move files appropriately too
-	$configurer = new PatternLab\Configurer;
-	$config     = $configurer->getConfig();
+	PatternLab\Config::loadOptions();
 	
 	// set-up required vars
 	$enableCSS     = $console->findCommandOption("c|enablecss");
@@ -89,7 +88,7 @@ if ($console->findCommand("h|help")) {
 	if (($command == "g") || ($command == "b")) {
 		
 		// load the generator
-		$g = new PatternLab\Generator($config);
+		$g = new PatternLab\Generator();
 		$g->generate($enableCSS,$moveStatic,$noCacheBuster);
 		$g->printSaying();
 		
@@ -99,31 +98,31 @@ if ($console->findCommand("h|help")) {
 		$enableCSS = false;
 		
 		// load the generator
-		$g = new PatternLab\Generator($config);
+		$g = new PatternLab\Generator();
 		$g->generate($enableCSS,$moveStatic,$noCacheBuster);
 		
 		// load the watcher
-		$w = new PatternLab\Watcher($config);
+		$w = new PatternLab\Watcher();
 		$w->watch($autoReload,$moveStatic,$noCacheBuster);
 		
 	} else if ($command == "s") {
 		
 		// run the snapshot command
 		$snapshotDir = $console->findCommandOptionValue("d|dir");
-		$s = new PatternLab\Snapshot($config);
+		$s = new PatternLab\Snapshot();
 		$s->takeSnapshot($snapshotDir);
 		
 	} else if ($command == "f") {
 		
 		// run the snapshot command
 		$starterKit = $console->findCommandValue("f|fetch");
-		$sk = new PatternLab\StarterKit($config);
+		$sk = new PatternLab\StarterKit();
 		$sk->fetch($starterKit);
 		
 	} else if ($command == "v") {
 		
 		// write out the version number
-		print "You're running v".$config["v"]." of the PHP version of Pattern Lab.\n";
+		print "You're running v".PatternLab\Config::$options["v"]." of the PHP version of Pattern Lab.\n";
 		exit;
 		
 	}

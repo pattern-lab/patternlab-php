@@ -43,7 +43,7 @@ styleGuideExcludes = ""
 cacheBusterOn = "true"
 
 // the pattern rending engine
-patternEngine = "mustache"
+patternExtension = "mustache"
 
 // the public directory
 publicDir = "public"

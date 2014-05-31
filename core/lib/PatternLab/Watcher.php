@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Watcher Class - v0.7.12
+ * Watcher Class
  *
  * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -15,6 +15,13 @@
  */
 
 namespace PatternLab;
+
+use \PatternLab\Builder;
+use \PatternLab\Config;
+use \PatternLab\Data;
+use \PatternLab\FileUtil;
+use \PatternLab\PatternData;
+use \PatternLab\Util;
 
 class Watcher extends Builder {
 	
@@ -42,7 +49,9 @@ class Watcher extends Builder {
 			print "starting page auto-reload...\n";
 		}
 		
-		$this->noCacheBuster = $noCacheBuster;
+		if ($noCacheBuster) {
+			Config::$options["cacheBuster"] = 0;
+		}
 		
 		$c  = false;           // track that one loop through the pattern file listing has completed
 		$o  = new \stdClass(); // create an object to hold the properties
@@ -59,7 +68,7 @@ class Watcher extends Builder {
 			$cp = clone $o->patterns;
 			
 			// iterate over the patterns & related data and regenerate the entire site if they've changed
-			$patternObjects  = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/_patterns/"), \RecursiveIteratorIterator::SELF_FIRST);
+			$patternObjects  = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_patterns/"), \RecursiveIteratorIterator::SELF_FIRST);
 			
 			// make sure dots are skipped
 			$patternObjects->setFlags(\FilesystemIterator::SKIP_DOTS);
@@ -67,10 +76,10 @@ class Watcher extends Builder {
 			foreach($patternObjects as $name => $object) {
 					
 				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-				$fileName      = str_replace($this->sd."/_patterns".DIRECTORY_SEPARATOR,"",$name);
+				$fileName      = str_replace(Config::$options["sourceDir"]."/_patterns".DIRECTORY_SEPARATOR,"",$name);
 				$fileNameClean = str_replace(DIRECTORY_SEPARATOR."_",DIRECTORY_SEPARATOR,$fileName);
 				
-				if ($object->isFile() && (($object->getExtension() == "mustache") || ($object->getExtension() == "json"))) {
+				if ($object->isFile() && (($object->getExtension() == "mustache") || ($object->getExtension() == "json") || ($object->getExtension() == "md"))) {
 					
 					// make sure this isn't a hidden pattern
 					$patternParts = explode(DIRECTORY_SEPARATOR,$fileName);
@@ -133,26 +142,26 @@ class Watcher extends Builder {
 			}
 			
 			// iterate over the data files and regenerate the entire site if they've changed
-			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/_data/"), \RecursiveIteratorIterator::SELF_FIRST);
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_data/"), \RecursiveIteratorIterator::SELF_FIRST);
 			
 			// make sure dots are skipped
 			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 			
 			foreach($objects as $name => $object) {
 				
-				$fileName = str_replace($this->sd."/_data".DIRECTORY_SEPARATOR,"",$name);
+				$fileName = str_replace(Config::$options["sourceDir"]."/_data".DIRECTORY_SEPARATOR,"",$name);
 				$mt = $object->getMTime();
 				
 				if (!isset($o->$fileName)) {
 					$o->$fileName = $mt;
 					if (($fileName[0] != "_") && $object->isFile()) {
-						$this->moveStaticFile("_data/".$fileName,"","_data","data");
+						FileUtil::moveStaticFile("_data/".$fileName,"","_data","data");
 					}
 				} else if ($o->$fileName != $mt) {
 					$o->$fileName = $mt;
 					$this->updateSite($fileName,"changed");
 					if (($fileName[0] != "_") && $object->isFile()) {
-						$this->moveStaticFile("_data/".$fileName,"","_data","data");
+						FileUtil::moveStaticFile("_data/".$fileName,"","_data","data");
 					}
 				}
 				
@@ -161,7 +170,7 @@ class Watcher extends Builder {
 			// iterate over all of the other files in the source directory and move them if their modified time has changed
 			if ($moveStatic) {
 				
-				$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->sd."/"), \RecursiveIteratorIterator::SELF_FIRST);
+				$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/"), \RecursiveIteratorIterator::SELF_FIRST);
 				
 				// make sure dots are skipped
 				$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
@@ -169,15 +178,15 @@ class Watcher extends Builder {
 				foreach($objects as $name => $object) {
 					
 					// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
-					$fileName = str_replace($this->sd.DIRECTORY_SEPARATOR,"",$name);
+					$fileName = str_replace(Config::$options["sourceDir"].DIRECTORY_SEPARATOR,"",$name);
 					if (($fileName[0] != "_") && (!in_array($object->getExtension(),$this->ie)) && (!in_array($object->getFilename(),$this->id))) {
 						
 						// catch directories that have the ignored dir in their path
 						$ignoreDir = $this->ignoreDir($fileName);
 						
 						// check to see if it's a new directory
-						if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir($this->pd."/".$fileName)) {
-							mkdir($this->pd."/".$fileName);
+						if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir(Config::$options["patternPublicDir"]."/".$fileName)) {
+							mkdir(Config::$options["patternPublicDir"]."/".$fileName);
 							$o->$fileName = "dir created"; // placeholder
 							print $fileName."/ directory was created...\n";
 						}
@@ -186,15 +195,15 @@ class Watcher extends Builder {
 						if (file_exists($name)) {
 							
 							$mt = $object->getMTime();
-							if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists($this->pd."/".$fileName)) {
+							if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists(Config::$options["patternPublicDir"]."/".$fileName)) {
 								$o->$fileName = $mt;
-								$this->moveStaticFile($fileName,"added");
+								FileUtil::moveStaticFile($fileName,"added");
 								if ($object->getExtension() == "css") {
 									$this->updateSite($fileName,"changed",0); // make sure the site is updated for MQ reasons
 								}
 							} else if (!$ignoreDir && $object->isFile() && isset($o->$fileName) && ($o->$fileName != $mt)) {
 								$o->$fileName = $mt;
-								$this->moveStaticFile($fileName,"changed");
+								FileUtil::moveStaticFile($fileName,"changed");
 								if ($object->getExtension() == "css") {
 									$this->updateSite($fileName,"changed",0); // make sure the site is updated for MQ reasons
 								}
@@ -245,12 +254,17 @@ class Watcher extends Builder {
 	* @return {String}       the final message
 	*/
 	private function updateSite($fileName,$message,$verbose = true) {
-		$this->gatherData();
-		$this->gatherPatternInfo();
-		$this->generatePatterns();
+		
+		Data::gather();
+		PatternData::gather();
+		
+		$this->generateIndex();
+		$this->generateStyleguide();
 		$this->generateViewAllPages();
-		$this->updateChangeTime();
-		$this->generateMainPages();
+		$this->generatePatterns();
+		
+		Util::updateChangeTime();
+		
 		if ($verbose) {
 			if ($message == "added") {
 				print $fileName." was added to Pattern Lab. Reload the website to see this change in the navigation...\n";

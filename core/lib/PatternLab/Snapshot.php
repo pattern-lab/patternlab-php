@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Snapshot Class - v0.7.12
+ * Snapshot Class
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -12,19 +12,24 @@
 
 namespace PatternLab;
 
+use \PatternLab\Config;
+use \PatternLab\Snapshot\FilterIterator;
+use \PatternLab\Template\Helper;
+
 class Snapshot {
 	
 	/**
-	* Set-up a default var
+	* Set-up default vars
 	*/
 	public function __construct($config) {
-		$this->publicDir     = __DIR__."/../../../".$config["publicDir"];
-		$this->sourceDir     = "/../../../".$config["sourceDir"]."/_patterns".DIRECTORY_SEPARATOR;
+		$this->publicDir     = __DIR__."/../../../".Config::$options["sourceDir"];
+		$this->sourceDir     = "/../../../".Config::$options["sourceDir"]."/_patterns".DIRECTORY_SEPARATOR;
 		$this->snapshotsBase = $this->publicDir."/snapshots/";
 	}
 	
 	/**
-	* Get the arguments that have been passed to the script via the commmand line
+	* Take a snap shot of the public dir
+	* @param  {String}     the directory where we wil be writing the snapshot
 	*/
 	public function takeSnapshot($dir) {
 		
@@ -76,7 +81,7 @@ class Snapshot {
 		
 		// iterate over all of the other files in the source directory
 		$directoryIterator = new \RecursiveDirectoryIterator($this->publicDir);
-		$filteredIterator  = new SnapshotFilterIterator($directoryIterator);
+		$filteredIterator  = new FilterIterator($directoryIterator);
 		$objects           = new \RecursiveIteratorIterator($filteredIterator, \RecursiveIteratorIterator::SELF_FIRST);
 		
 		// make sure dots are skipped
@@ -119,17 +124,14 @@ class Snapshot {
 		
 		$d = array("html" => $html);
 		
-		$templateLoader = new TemplateLoader();
-		$templateHelper = new TemplateHelper($this->sourceDir);
+		TemplateHelper::setup();
 		
 		// render the viewall template
-		$v = $templateLoader->vanilla();
-		$h = $v->render($templateHelper->mainPageHead);
-		$f = $v->render($templateHelper->mainPageFoot);
+		$h = Helper::$htmlLoader->render(Helper::$mainPageHead);
+		$f = Helper::$htmlLoader->render(Helper::$mainPageFoot);
 		
 		// render the snapshot page
-		$m = $templateLoader->fileSystem();
-		$r = $m->render('snapshot', $d);
+		$r = Helper::$filesystemLoader->render("snapshot", $d);
 		$r = $h.$r.$f;
 		
 		file_put_contents($this->snapshotsBase."index.html",$r);
