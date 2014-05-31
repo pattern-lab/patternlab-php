@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Mustache Pattern Loader Class - v0.7.12
+ * Pattern Engine Mustache Loader Class
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -11,9 +11,11 @@
  *
  */
 
-namespace PatternLab\PatternLoaders;
+namespace PatternLab\PatternEngine\Loaders;
 
-class Mustache implements \Mustache_Loader {
+use \PatternLab\PatternEngine\Loader;
+
+class MustacheLoader implements \Mustache_Loader {
 	
 	private $baseDir;
 	private $extension    = '.mustache';
@@ -55,7 +57,7 @@ class Mustache implements \Mustache_Loader {
 			$this->patternPaths = $options['patternPaths'];
 		}
 		
-		$this->patternLoader = new \PatternLab\PatternLoader($this->patternPaths);
+		$this->patternLoader = new \PatternLab\PatternEngine\Loader($options);
 		
 	}
 	
@@ -98,7 +100,7 @@ class Mustache implements \Mustache_Loader {
 		list($partialName,$styleModifier,$parameters) = $this->patternLoader->getPartialInfo($name);
 		
 		// get the real file path for the pattern
-		$fileName = $this->getFileName($partialName);
+		$fileName = $this->baseDir."/".$this->patternLoader->getFileName($partialName,$this->extension);
 		
 		// throw error if path is not found
 		if (!file_exists($fileName)) {

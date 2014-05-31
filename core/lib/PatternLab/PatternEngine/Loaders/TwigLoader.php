@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Twig Pattern Loader Class - v0.7.12
+ * Pattern Engine Twig Loader Class
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -11,9 +11,11 @@
  *
  */
 
-namespace PatternLab\PatternLoaders;
+namespace PatternLab\PatternEngine\Loaders;
 
-class Twig implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface {
+use \PatternLab\PatternEngine\Loader;
+
+class TwigLoader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface {
 	
 	/** Identifier of the main namespace. */
 	const MAIN_NAMESPACE = '__main__';
@@ -33,7 +35,7 @@ class Twig implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface {
 			$this->setPaths($paths);
 		}
 		$this->patternPaths = $patternPaths['patternPaths'];
-		$this->patternLoader = new \PatternLab\PatternLoader($this->patternPaths);
+		$this->patternLoader = new Loader($this->patternPaths);
 	}
 	
 	/**
@@ -165,7 +167,7 @@ class Twig implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface {
 		
 		list($partialName,$styleModifier,$parameters) = $this->patternLoader->getPartialInfo($name);
 		
-		$name = $this->getFileName($partialName);
+		$name = $this->patternLoader->getFileName($partialName,$this->extension);
 		
 		$name = $this->normalizeName($name);
 		
@@ -227,33 +229,4 @@ class Twig implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface {
 		
 	}
 	
-	/**
-	 * Helper function for getting a Mustache template file name.
-	 * @param  {String}    the pattern type for the pattern
-	 * @param  {String}    the pattern sub-type
-	 *
-	 * @return {Array}     an array of rendered partials that match the given path
-	 */
-	protected function getFileName($name) {
-		
-		$fileName = "";
-		$dirSep   = DIRECTORY_SEPARATOR;
-		
-		// test to see what kind of path was supplied
-		$posDash  = strpos($name,"-");
-		$posSlash = strpos($name,$dirSep);
-		
-		if (($posSlash === false) && ($posDash !== false)) {
-			$fileName = $this->patternLoader->getPatternFileName($name);
-		} else {
-			$fileName = $name;
-		}
-		
-		if (substr($fileName, 0 - strlen($this->extension)) !== $this->extension) {
-			$fileName .= $this->extension;
-		}
-		
-		return $fileName;
-		
-	}
 }

@@ -1,56 +1,100 @@
 <?php
 
 /*!
- * Pattern Lab Builder Class - v0.7.12
+ * Pattern Engine Loader Class
  *
- * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
+ * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
- * Does the vast majority of heavy lifting for the Generator and Watch classes
+ * Shared functions that are meant to be used across all loader types
  *
  */
 
-namespace PatternLab;
+namespace PatternLab\PatternEngine;
 
-class PatternLoader {
+class Loader {
 	
-	private $patternPaths = array();
+	protected $patternEngine = "";
+	protected $patternPaths  = array();
+	protected $rules         = array();
 	
 	/**
 	* Set-up the pattern paths var
 	*/
-	public function __construct($patternPaths) {
+	public function __construct($options) {
 		
-		$this->patternPaths = $patternPaths;
+		$this->patternPaths = $options["patternPaths"];
 		
 	}
 	
 	/**
-	* Load a new instance that of the Pattern Loader
-	*
-	* @return {Object}       an instance of the Mustache engine
-	*/
-	public function loadPatternLoaderInstance($patternEngine,$sourcePatternsPath) {
+	 * Helper function to find and replace the given parameters in a particular partial before handing it back to Mustache
+	 * @param  {String}    the file contents
+	 * @param  {Array}     an array of paramters to match
+	 *
+	 * @return {String}    the modified file contents
+	 */
+	public function findReplaceParameters($fileData, $parameters) {
+		$numbers = array("zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
+		foreach ($parameters as $k => $v) {
+			if (is_array($v)) {
+				if (preg_match('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k.'[\s]*)}}/s',$fileData,$matches)) {
+					if (isset($matches[2])) {
+						$partialData = "";
+						foreach ($v as $v2) {
+							$partialData .= $this->findReplaceParameters($matches[2], $v2);
+						}
+						$fileData = preg_replace('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s',$partialData,$fileData);
+					}
+				}
+			} else if ($v == "true") {
+				$fileData = preg_replace('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','$2',$fileData); // {{# asdf }}STUFF{{/ asdf}}
+				$fileData = preg_replace('/{{\^([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','',$fileData);   // {{^ asdf }}STUFF{{/ asdf}}
+			} else if ($v == "false") {
+				$fileData = preg_replace('/{{\^([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','$2',$fileData); // {{# asdf }}STUFF{{/ asdf}}
+				$fileData = preg_replace('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','',$fileData);   // {{^ asdf }}STUFF{{/ asdf}}
+			} else if ($k == "listItems") {
+				$v = ((int)$v != 0) && ((int)$v < 13) ? $numbers[$v] : $v;
+				if (($v != "zero") && in_array($v,$numbers)) {
+					$fileData = preg_replace('/{{\#([\s]*listItems\.[A-z]{3,10}[\s]*)}}/s','{{# listItems.'.$v.' }}',$fileData);
+					$fileData = preg_replace('/{{\/([\s]*listItems\.[A-z]{3,10}[\s]*)}}/s','{{/ listItems.'.$v.' }}',$fileData);
+				}
+			} else {
+				$fileData = preg_replace('/{{{([\s]*'.$k.'[\s]*)}}}/', $v, $fileData);                 // {{{ asdf }}}
+				$fileData = preg_replace('/{{([\s]*'.$k.'[\s]*)}}/', htmlspecialchars($v), $fileData); // escaped {{ asdf }}
+			}
+		}
+		return $fileData;
+	}
+	
+	/**
+	 * Helper function for getting a Mustache template file name.
+	 * @param  {String}    the pattern type for the pattern
+	 * @param  {String}    the pattern sub-type
+	 *
+	 * @return {Array}     an array of rendered partials that match the given path
+	 */
+	public function getFileName($name,$ext) {
 		
-		if ($patternEngine == "twig") {
-			
-			$loader = new \SplClassLoader('Twig', __DIR__.'/../../lib');
-			$loader->setNamespaceSeparator("_");
-			$loader->register();
-			
-			$loader   = new PatternLoaders\Twig($sourcePatternsPath,array("patternPaths" => $this->patternPaths));
-			$instance = new \Twig_Environment($loader);
-			
+		$fileName = "";
+		$dirSep   = DIRECTORY_SEPARATOR;
+		
+		// test to see what kind of path was supplied
+		$posDash  = strpos($name,"-");
+		$posSlash = strpos($name,$dirSep);
+		
+		if (($posSlash === false) && ($posDash !== false)) {
+			$fileName = $this->getPatternFileName($name);
 		} else {
-			
-			$instance = new \Mustache_Engine(array(
-							"loader" => new PatternLoaders\Mustache($sourcePatternsPath,array("patternPaths" => $this->patternPaths)),
-							"partials_loader" => new PatternLoaders\Mustache($sourcePatternsPath,array("patternPaths" => $this->patternPaths))
-			));
-			
+			$fileName = $name;
 		}
 		
-		return $instance;
+		if (substr($fileName, 0 - strlen($ext)) !== $ext) {
+			$fileName .= $ext;
+		}
+		
+		return $fileName;
+		
 	}
 	
 	/**
@@ -67,12 +111,12 @@ class PatternLoader {
 		
 		// see if the pattern is an exact match for patternPaths. if not iterate over patternPaths to find a likely match
 		if (isset($this->patternPaths[$patternType][$pattern])) {
-			$patternFileName = $this->patternPaths[$patternType][$pattern]["patternSrcPath"];
+			$patternFileName = $this->patternPaths[$patternType][$pattern];
 		} else if (isset($this->patternPaths[$patternType])) {
 			foreach($this->patternPaths[$patternType] as $patternMatchKey=>$patternMatchValue) {
 				$pos = strpos($patternMatchKey,$pattern);
 				if ($pos !== false) {
-					$patternFileName = $patternMatchValue["patternSrcPath"];
+					$patternFileName = $patternMatchValue;
 					break;
 				}
 			}
@@ -140,46 +184,6 @@ class PatternLoader {
 		
 		return array($partial,$styleModifier,$parameters);
 		
-	}
-	
-	/**
-	 * Helper function to find and replace the given parameters in a particular partial before handing it back to Mustache
-	 * @param  {String}    the file contents
-	 * @param  {Array}     an array of paramters to match
-	 *
-	 * @return {String}    the modified file contents
-	 */
-	public function findReplaceParameters($fileData, $parameters) {
-		$numbers = array("zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve");
-		foreach ($parameters as $k => $v) {
-			if (is_array($v)) {
-				if (preg_match('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k.'[\s]*)}}/s',$fileData,$matches)) {
-					if (isset($matches[2])) {
-						$partialData = "";
-						foreach ($v as $v2) {
-							$partialData .= $this->findReplaceParameters($matches[2], $v2);
-						}
-						$fileData = preg_replace('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s',$partialData,$fileData);
-					}
-				}
-			} else if ($v == "true") {
-				$fileData = preg_replace('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','$2',$fileData); // {{# asdf }}STUFF{{/ asdf}}
-				$fileData = preg_replace('/{{\^([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','',$fileData);   // {{^ asdf }}STUFF{{/ asdf}}
-			} else if ($v == "false") {
-				$fileData = preg_replace('/{{\^([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','$2',$fileData); // {{# asdf }}STUFF{{/ asdf}}
-				$fileData = preg_replace('/{{\#([\s]*'.$k.'[\s]*)}}(.*?){{\/([\s]*'.$k .'[\s]*)}}/s','',$fileData);   // {{^ asdf }}STUFF{{/ asdf}}
-			} else if ($k == "listItems") {
-				$v = ((int)$v != 0) && ((int)$v < 13) ? $numbers[$v] : $v;
-				if (($v != "zero") && in_array($v,$numbers)) {
-					$fileData = preg_replace('/{{\#([\s]*listItems\.[A-z]{3,10}[\s]*)}}/s','{{# listItems.'.$v.' }}',$fileData);
-					$fileData = preg_replace('/{{\/([\s]*listItems\.[A-z]{3,10}[\s]*)}}/s','{{/ listItems.'.$v.' }}',$fileData);
-				}
-			} else {
-				$fileData = preg_replace('/{{{([\s]*'.$k.'[\s]*)}}}/', $v, $fileData);                 // {{{ asdf }}}
-				$fileData = preg_replace('/{{([\s]*'.$k.'[\s]*)}}/', htmlspecialchars($v), $fileData); // escaped {{ asdf }}
-			}
-		}
-		return $fileData;
 	}
 	
 	/**
@@ -309,4 +313,5 @@ class PatternLoader {
 		
 	}
 	
+
 }
