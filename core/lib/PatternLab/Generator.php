@@ -12,6 +12,13 @@
 
 namespace PatternLab;
 
+use \PatternLab\Builder;
+use \PatternLab\Config;
+use \PatternLab\Data;
+use \PatternLab\FileUtil;
+use \PatternLab\PatternData;
+use \PatternLab\Util;
+
 class Generator extends Builder {
 	
 	/**
