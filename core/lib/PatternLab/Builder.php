@@ -1,12 +1,12 @@
 <?php
 
 /*!
- * Pattern Lab Builder Class - v0.7.12
+ * Builder Class
  *
  * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  *
- * Does the vast majority of heavy lifting for the Generator and Watch classes
+ * Holds most of the "generate" functions used in the the Generator and Watcher class
  *
  */
 
