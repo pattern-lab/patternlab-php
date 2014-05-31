@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Pattern Lab Snapshot Filter Iterator - v0.7.12
+ * Snapshot Filter Iterator
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -10,9 +10,9 @@
  *
  */
 
-namespace PatternLab;
+namespace PatternLab\Snapshot;
 
-class SnapshotFilterIterator extends \RecursiveFilterIterator {
+class FilterIterator extends \RecursiveFilterIterator {
 	
 	public static $FILTERS = array(
 		'snapshots',
