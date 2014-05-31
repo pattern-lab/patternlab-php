@@ -1,10 +1,12 @@
 <?php
 
 /*!
- * Pattern Lab Pattern JSON Class - v0.7.12
+ * JSON Class
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
+ *
+ * Handles checking for any errors that might have been encountered when loading JSON data
  *
  */
 
