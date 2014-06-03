@@ -44,14 +44,27 @@ class Builder {
 		
 		$mqs = array();
 		
-		foreach(glob(Config::$options["sourceDir"]."/css/*.css") as $filename) {
-			$data = file_get_contents($filename);
-			preg_match_all("/(min|max)-width:([ ]+)?(([0-9]{1,5})(\.[0-9]{1,20}|)(px|em))/",$data,$matches);
-			foreach ($matches[3] as $match) {
-				if (!in_array($match,$mqs)) {
-					$mqs[] = $match;
+		// iterate over all of the other files in the source directory
+		$directoryIterator = new \RecursiveDirectoryIterator(Config::$options["sourceDir"]);
+		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
+		
+		// make sure dots are skipped
+		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+		
+		foreach ($objects as $name => $object) {
+			
+			if ($object->isFile() && ($object->getExtension() == "css")) {
+				
+				$data = file_get_contents($object->getPathname());
+				preg_match_all("/(min|max)-width:([ ]+)?(([0-9]{1,5})(\.[0-9]{1,20}|)(px|em))/",$data,$matches);
+				foreach ($matches[3] as $match) {
+					if (!in_array($match,$mqs)) {
+						$mqs[] = $match;
+					}
 				}
-			}	
+				
+			}
+			
 		}
 		
 		usort($mqs, "strnatcmp");
