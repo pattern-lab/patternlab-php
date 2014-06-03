@@ -116,10 +116,6 @@ class Data {
 		self::$store["link"]            = array();
 		self::$store["patternSpecific"] = array();
 		
-		unset(self::$store["listItems"]);
-		print_r(self::$store);
-		exit;
-		
 	}
 	
 	/**
