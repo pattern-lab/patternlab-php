@@ -142,27 +142,22 @@ class Watcher extends Builder {
 			}
 			
 			// iterate over the data files and regenerate the entire site if they've changed
-			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_data/"), \RecursiveIteratorIterator::SELF_FIRST);
+			$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_annotations/"), \RecursiveIteratorIterator::SELF_FIRST);
 			
 			// make sure dots are skipped
 			$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
 			
 			foreach($objects as $name => $object) {
 				
-				$fileName = str_replace(Config::$options["sourceDir"]."/_data".DIRECTORY_SEPARATOR,"",$name);
+				$fileName = str_replace(Config::$options["sourceDir"]."/_annotations".DIRECTORY_SEPARATOR,"",$name);
 				$mt = $object->getMTime();
 				
 				if (!isset($o->$fileName)) {
 					$o->$fileName = $mt;
-					if (($fileName[0] != "_") && $object->isFile()) {
-						FileUtil::moveStaticFile("_data/".$fileName,"","_data","data");
-					}
+					$this->updateSite($fileName,"added");
 				} else if ($o->$fileName != $mt) {
 					$o->$fileName = $mt;
 					$this->updateSite($fileName,"changed");
-					if (($fileName[0] != "_") && $object->isFile()) {
-						FileUtil::moveStaticFile("_data/".$fileName,"","_data","data");
-					}
 				}
 				
 			}
