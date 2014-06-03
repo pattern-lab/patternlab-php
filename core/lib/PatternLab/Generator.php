@@ -114,18 +114,19 @@ class Generator extends Builder {
 				
 				// clean-up the file name and make sure it's not one of the pattern lab files or to be ignored
 				$fileName = str_replace(Config::$options["sourceDir"].DIRECTORY_SEPARATOR,"",$name);
+				
 				if (($fileName[0] != "_") && (!in_array($object->getExtension(),Config::$options["ie"])) && (!in_array($object->getFilename(),Config::$options["id"]))) {
 					
 					// catch directories that have the ignored dir in their path
 					$ignoreDir = FileUtil::ignoreDir($fileName);
 					
 					// check to see if it's a new directory
-					if (!$ignoreDir && $object->isDir() && !is_dir(__DIR__.Config::$options["patternPublicDir"]."/".$fileName)) {
-						mkdir(__DIR__.Config::$options["patternPublicDir"]."/".$fileName);
+					if (!$ignoreDir && $object->isDir() && !is_dir(Config::$options["publicDir"]."/".$fileName)) {
+						mkdir(Config::$options["publicDir"]."/".$fileName);
 					}
 					
 					// check to see if it's a new file or a file that has changed
-					if (!$ignoreDir && $object->isFile() && (!file_exists(__DIR__.Config::$options["patternPublicDir"]."/".$fileName))) {
+					if (!$ignoreDir && $object->isFile() && (!file_exists(Config::$options["publicDir"]."/".$fileName))) {
 						FileUtil::moveStaticFile($fileName);
 					}
 					

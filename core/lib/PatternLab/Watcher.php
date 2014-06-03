@@ -185,8 +185,8 @@ class Watcher extends Builder {
 						$ignoreDir = $this->ignoreDir($fileName);
 						
 						// check to see if it's a new directory
-						if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir(Config::$options["patternPublicDir"]."/".$fileName)) {
-							mkdir(Config::$options["patternPublicDir"]."/".$fileName);
+						if (!$ignoreDir && $object->isDir() && !isset($o->$fileName) && !is_dir(Config::$options["publicDir"]."/".$fileName)) {
+							mkdir(Config::$options["publicDir"]."/".$fileName);
 							$o->$fileName = "dir created"; // placeholder
 							print $fileName."/ directory was created...\n";
 						}
@@ -195,7 +195,7 @@ class Watcher extends Builder {
 						if (file_exists($name)) {
 							
 							$mt = $object->getMTime();
-							if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists(Config::$options["patternPublicDir"]."/".$fileName)) {
+							if (!$ignoreDir && $object->isFile() && !isset($o->$fileName) && !file_exists(Config::$options["publicDir"]."/".$fileName)) {
 								$o->$fileName = $mt;
 								FileUtil::moveStaticFile($fileName,"added");
 								if ($object->getExtension() == "css") {
@@ -225,9 +225,6 @@ class Watcher extends Builder {
 			$c = true;
 			
 			// taking out the garbage. basically killing mustache after each run.
-			unset($this->pl);
-			unset($this->msf);
-			unset($this->mv);
 			if (gc_enabled()) gc_collect_cycles();
 			
 			// output anything the reload server might send our way

@@ -24,7 +24,7 @@ class FileUtil {
 	*/
 	protected static function moveFile($s,$p) {
 		if (file_exists(Config::$options["sourceDir"]."/".$s)) {
-			copy(Config::$options["sourceDir"]."/".$s,__DIR__.Config::$options["patternPublicDir"]."/".$p);
+			copy(Config::$options["sourceDir"]."/".$s,Config::$options["publicDir"]."/".$p);
 		}
 	}
 
