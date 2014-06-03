@@ -34,7 +34,7 @@ if (self != top) {
 			var target = this.getAttribute("target");
 			if ((target != undefined) && ((target == "_parent") || (target == "_blank"))) {
 				// just do normal stuff
-			} else if (href != "#") {
+			} else if (href.length && href !== "#") {
 				e.preventDefault();
 				window.location.replace(href);
 			} else {
