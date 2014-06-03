@@ -173,6 +173,9 @@ class Builder {
 	*/
 	protected function generateViewAllPages() {
 		
+		$viewAllHead = Helper::$htmlLoader->render(Helper::$mainPageHead,Data::$store);
+		$viewAllFoot = Helper::$htmlLoader->render(Helper::$mainPageFoot,Data::$store);
+		
 		// add view all to each list
 		foreach (PatternData::$store as $patternStoreKey => $patternStoreData) {
 			
