@@ -41,8 +41,8 @@ class PatternCodeHelper extends \PatternLab\PatternData\Helper {
 				
 				$patternFooterData = array("patternFooterData" => array());
 				//$patternFooterData["patternFooterData"]["cssEnabled"]      = (Config::$options["enableCSS"] && isset($this->patternCSS[$p])) ? "true" : "false";
-				$patternFooterData["patternFooterData"]["lineage"]           = isset($patternStoreData["lineages"])  ? json_encode($patternStoreData["lineages"]) : "";
-				$patternFooterData["patternFooterData"]["lineageR"]          = isset($patternStoreData["lineagesR"]) ? json_encode($patternStoreData["lineagesR"]) : "";
+				$patternFooterData["patternFooterData"]["lineage"]           = isset($patternStoreData["lineages"])  ? json_encode($patternStoreData["lineages"]) : "[]";
+				$patternFooterData["patternFooterData"]["lineageR"]          = isset($patternStoreData["lineagesR"]) ? json_encode($patternStoreData["lineagesR"]) : "[]";
 				$patternFooterData["patternFooterData"]["patternBreadcrumb"] = $patternStoreData["breadcrumb"];
 				$patternFooterData["patternFooterData"]["patternDesc"]       = (isset($patternStoreData["desc"])) ? $patternStoreData["desc"] : "";
 				$patternFooterData["patternFooterData"]["patternExtension"]  = Config::$options["patternExtension"];
