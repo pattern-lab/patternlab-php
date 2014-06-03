@@ -81,6 +81,8 @@ class Generator extends Builder {
 		// render out the patterns and move them to public/patterns
 		$this->generatePatterns();
 		
+		// render the annotations as a js file
+		$this->generateAnnotations();
 		
 		// move all of the files unless pattern only is set
 		if ($moveStatic) {
