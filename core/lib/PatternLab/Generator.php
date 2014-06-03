@@ -81,25 +81,6 @@ class Generator extends Builder {
 		// render out the patterns and move them to public/patterns
 		$this->generatePatterns();
 		
-		// make sure data exists
-		if (!is_dir(__DIR__.Config::$options["patternPublicDir"]."/data")) {
-			mkdir(__DIR__.Config::$options["patternPublicDir"]."/data");
-		}
-		
-		// iterate over the data files and regenerate the entire site if they've changed
-		$objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_data/"), \RecursiveIteratorIterator::SELF_FIRST);
-		
-		// make sure dots are skipped
-		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
-		
-		foreach($objects as $name => $object) {
-			
-			$fileName = str_replace(Config::$options["sourceDir"]."/_data".DIRECTORY_SEPARATOR,"",$name);
-			if (($fileName[0] != "_") && $object->isFile()) {
-				FileUtil::moveStaticFile("_data/".$fileName,"","_data","data");
-			}
-			
-		}
 		
 		// move all of the files unless pattern only is set
 		if ($moveStatic) {
