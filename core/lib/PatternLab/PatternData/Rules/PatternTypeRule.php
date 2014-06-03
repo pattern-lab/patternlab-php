@@ -31,13 +31,19 @@ class PatternTypeRule extends \PatternLab\PatternData\Rule {
 	
 	public function run($depth, $ext, $path, $pathName, $name) {
 		
+		// load default vars
+		$dirSep                 = PatternData::$dirSep;
+		
 		// set-up the names
-		$patternType      = $name;                                 // 00-atoms
-		$patternTypeDash  = $this->getPatternName($name,false);    // atoms
-		$patternTypeClean = str_replace("-"," ",$patternTypeDash); // atoms (dashes replaced with spaces)
+		$patternType         = $name;                                        // 00-atoms
+		$patternTypeDash     = $this->getPatternName($name,false);           // atoms
+		$patternTypeClean    = str_replace("-"," ",$patternTypeDash);        // atoms (dashes replaced with spaces)
+		
+		$patternTypePath     = $pathName;                                    // 00-atoms/02-blocks
+		$patternTypePathDash = str_replace($dirSep,"-",$patternTypePath); // 00-atoms-02-blocks (file path)
 		
 		// create a key for the data store
-		$patternStoreKey  = $patternTypeDash."-pltype";
+		$patternStoreKey     = $patternTypeDash."-pltype";
 		
 		// add a new patternType to the nav
 		PatternData::$store[$patternStoreKey] = array("category"  => "patternType",
@@ -47,8 +53,9 @@ class PatternTypeRule extends \PatternLab\PatternData\Rule {
 													  "depth"     => $depth,
 													  "ext"       => $ext,
 													  "path"      => $path,
-													  "pathName"  => $pathName,
-													  "isDir"     => $this->isDirProp ,
+													  "pathName"  => $patternTypePath,
+													  "pathDash"  => $patternTypePathDash,
+													  "isDir"     => $this->isDirProp,
 													  "isFile"    => $this->isFileProp);
 		
 		// starting a new set of pattern types. it might not have any pattern subtypes
