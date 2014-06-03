@@ -30,7 +30,7 @@ class Data {
 	}
 	
 	/**
-	* Gather data from source/_data/_data.json, source/_data/_listitems.json, and pattern-specific json files
+	* Gather data from any JSON and YAML files in source/_data
 	*
 	* Reserved attributes:
 	*    - Data::$store["listItems"] : listItems from listitems.json, duplicated into separate arrays for Data::$store["listItems"]["one"], Data::$store["listItems"]["two"]... etc.
@@ -49,29 +49,60 @@ class Data {
 		$listItemsJSON = array();
 		$listItemsYAML = array();
 		
-		// gather the data from the main source data.json
-		if (file_exists(Config::$options["sourceDir"]."/_data/_data.json")) {
-			$file     = file_get_contents(Config::$options["sourceDir"]."/_data/_data.json");
-			$dataJSON = json_decode($file,true);
-			if ($jsonErrorMessage = JSON::hasError()) {
-				JSON::lastErrorMsg("_data/_data.json",$jsonErrorMessage,$data);
+		// iterate over all of the other files in the source directory
+		$directoryIterator = new \RecursiveDirectoryIterator(Config::$options["sourceDir"]."/_data/");
+		$objects           = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
+		
+		// make sure dots are skipped
+		$objects->setFlags(\FilesystemIterator::SKIP_DOTS);
+		
+		foreach ($objects as $name => $object) {
+			
+			$ext           = $object->getExtension();
+			$data          = array();
+			$fileName      = $object->getFilename();
+			$hidden        = ($fileName[0] == "_");
+			$isFile        = $object->isFile();
+			$isListItems   = strpos("listitems",$fileName);
+			$pathName      = $object->getPathname();
+			$pathNameClean = str_replace(Config::$options["sourceDir"]."/","",$pathName);
+			
+			if ($isFile && !$hidden && (($ext == "json") || ($ext == "yaml"))) {
+				
+				if ($isListItems === false) {
+					
+					if ($ext == "json") {
+						
+						$file = file_get_contents($pathName);
+						$data = json_decode($file,true);
+						if ($jsonErrorMessage = JSON::hasError()) {
+							JSON::lastErrorMsg($pathNameClean,$jsonErrorMessage,$data);
+						}
+						
+					} else if ($ext == "yaml") {
+						
+						$file = file_get_contents($pathName);
+						$data = Yaml::parse($file);
+						
+					}
+					
+					self::$store = array_replace_recursive(self::$store,$data);
+					
+				} else if ($isListItems !== false) {
+					
+					$data = ($ext == "json") ? self::getListItems("data/listitems.json") : self::getListItems("data/listitems.yaml","yaml");
+					
+					if (!isset(self::$store["listItems"])) {
+						self::$store["listItems"] = array();
+					}
+					
+					self::$store["listItems"] = array_replace_recursive(self::$store["listItems"],$data);
+					
+				}
+				
 			}
-			$found = true;
+			
 		}
-		
-		// gather the data from the main source data.yaml
-		if (file_exists(Config::$options["sourceDir"]."/_data/_data.yaml")) {
-			$file     = file_get_contents(Config::$options["sourceDir"]."/_data/_data.yaml");
-			$dataYAML = Yaml::parse($file);
-			$found = true;
-		} 
-		
-		if (!$found) {
-			print "Missing a required file, source/_data/_data.json. Aborting.\n";
-			exit;
-		}
-		
-		self::$store = array_replace_recursive($dataJSON,$dataYAML);
 		
 		if (is_array(self::$store)) {
 			foreach (self::$reservedKeys as $reservedKey) {
@@ -81,13 +112,13 @@ class Data {
 			}
 		}
 		
-		$listItemsJSON = self::getListItems("data/_listitems.json");
-		$listItemsYAML = self::getListItems("data/_listitems.yaml","yaml");
-		
-		self::$store["listItems"]       = array_replace_recursive($listItemsJSON,$listItemsYAML);
 		self::$store["cacheBuster"]     = Config::$options["cacheBuster"];
 		self::$store["link"]            = array();
 		self::$store["patternSpecific"] = array();
+		
+		unset(self::$store["listItems"]);
+		print_r(self::$store);
+		exit;
 		
 	}
 	
