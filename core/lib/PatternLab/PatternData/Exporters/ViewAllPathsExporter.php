@@ -53,6 +53,12 @@ class ViewAllPathsExporter extends \PatternLab\PatternData\Exporter {
 						
 					}
 					
+					if (strpos($patternSubtypeItemValues["patternPartial"],"viewall-") !== false) {
+						
+						$viewAllPaths[$patternTypeDash]["all"] = $patternType;
+						
+					}
+					
 				}
 				
 			}

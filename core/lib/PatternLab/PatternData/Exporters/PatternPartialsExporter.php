@@ -40,7 +40,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 			
 			if (($patternStoreData["category"] == "pattern") && (!$patternStoreData["hidden"]) && ($patternStoreData["depth"] == 2) && (!in_array($patternStoreData["type"],Config::$options["styleGuideExcludes"]))) {
 				
-				if ((empty($type) && empty($subtype)) || (($patternStoreData["type"] == $type) && ($patternStoreData["subtype"] == $subtype))) {
+				if ((($patternStoreData["type"] == $type) && empty($subtype)) || (empty($type) && empty($subtype)) || (($patternStoreData["type"] == $type) && ($patternStoreData["subtype"] == $subtype))) {
 					
 					$patternPartialData                           = array();
 					$patternPartialData["patternName"]            = ucwords($patternStoreData["nameClean"]);

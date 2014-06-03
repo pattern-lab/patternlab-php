@@ -189,8 +189,29 @@ class Builder {
 					
 					$partials["patternPartial"] = "viewall-".$patternStoreData["typeDash"]."-".$patternStoreData["nameDash"];
 					
-					$viewAllHead = Helper::$htmlLoader->render(Helper::$mainPageHead,Data::$store);
-					$viewAllFoot = Helper::$htmlLoader->render(Helper::$mainPageFoot,Data::$store);
+					$viewAllPage = $viewAllHead.Helper::$filesystemLoader->render("viewall",$partials).$viewAllFoot;
+					
+					// if the pattern directory doesn't exist create it
+					$patternPath = $patternStoreData["pathDash"];
+					if (!is_dir(__DIR__.Config::$options["patternPublicDir"].$patternPath)) {
+						mkdir(__DIR__.Config::$options["patternPublicDir"].$patternPath);
+						file_put_contents(__DIR__.Config::$options["patternPublicDir"].$patternPath."/index.html",$viewAllPage);
+					} else {
+						file_put_contents(__DIR__.Config::$options["patternPublicDir"].$patternPath."/index.html",$viewAllPage);
+					}
+					
+				}
+				
+			} else if (($patternStoreData["category"] == "patternType") && PatternData::hasPatternSubtype($patternStoreData["nameDash"])) {
+				
+				// grab the partials into a data object for the style guide
+				$ppExporter  = new PatternPartialsExporter();
+				$partials    = $ppExporter->run($patternStoreData["name"]);
+				
+				if (!empty($partials["partials"])) {
+					
+					$partials["patternPartial"] = "viewall-".$patternStoreData["nameDash"]."-all";
+					
 					$viewAllPage = $viewAllHead.Helper::$filesystemLoader->render("viewall",$partials).$viewAllFoot;
 					
 					// if the pattern directory doesn't exist create it
