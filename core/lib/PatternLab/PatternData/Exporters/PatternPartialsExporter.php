@@ -57,7 +57,7 @@ class PatternPartialsExporter extends \PatternLab\PatternData\Exporter {
 					$patternPartialData["patternDescExists"]      = isset($patternStoreData["desc"]);
 					$patternPartialData["patternDesc"]            = isset($patternStoreData["desc"]) ? $patternStoreData["desc"] : "";
 					
-					$patternPartialData["patternModifiersExists"] = isset($patternStoreData["modifiers"]);
+					$patternPartialData["patternModifiersExist"]  = isset($patternStoreData["modifiers"]);
 					$patternPartialData["patternModifiers"]       = isset($patternStoreData["modifiers"]) ? $patternStoreData["modifiers"] : array();
 					
 					$patternPartialData["patternCSSExists"]       = Config::$options["enableCSS"];

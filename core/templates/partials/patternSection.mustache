@@ -11,7 +11,7 @@
 			{{# patternModifiersExist }}
 				<ul>
 					{{# patternModifiers }}
-						<li> <strong>{{ patternModifierName }}:</strong> {{ patternModifierDesc }}</li>
+						<li> <strong>{{ modifierName }}:</strong> {{ modifierDesc }}</li>
 					{{/ patternModifiers }}
 				</ul>
 			{{/ patternModifiersExist }}
@@ -22,12 +22,12 @@
 	</div>
 	{{# patternModifiersExist }}
 		{{# patternModifiers }}
-			{{# patternModifierCodeExists }}
+			{{# modifierCodeExists }}
 			<div class="sg-pattern-example sg-pattern-example-modifier">
-				<span class="sg-pattern-example-modifier-name">{{ patternModifierName }}</span>
-				{{{ patternModifierCode }}}
+				<span class="sg-pattern-example-modifier-name">{{ modifierName }}</span>
+				{{{ modifierCode }}}
 			</div>
-			{{/ patternModifierCodeExists }}
+			{{/ modifierCodeExists }}
 		{{/ patternModifiers }}
 	{{/ patternModifiersExist }}
 	<div class="sg-pattern-extra">
