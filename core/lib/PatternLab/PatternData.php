@@ -38,6 +38,21 @@ class PatternData {
 	public static $dirSep              = DIRECTORY_SEPARATOR;
 	
 	/**
+	* Check to see if the given pattern type has a pattern subtype associated with it
+	* @param  {String}        the name of the pattern
+	*
+	* @return {Boolean}       if it was found or not
+	*/
+	public static function hasPatternSubtype($patternType) {
+		foreach (self::$store as $patternStoreKey => $patternStoreData) {
+			if (($patternStoreData["category"] == "patternSubtype") && ($patternStoreData["typeDash"] == $patternType)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	* Gather all of the information related to the patterns
 	*/
 	public static function gather($options = array()) {
