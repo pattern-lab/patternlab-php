@@ -254,6 +254,7 @@ class Watcher extends Builder {
 		$this->generateStyleguide();
 		$this->generateViewAllPages();
 		$this->generatePatterns();
+		$this->generateAnnotations();
 		
 		Util::updateChangeTime();
 		
