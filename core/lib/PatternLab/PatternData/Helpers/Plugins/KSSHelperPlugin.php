@@ -63,7 +63,7 @@ class KSSHelperPlugin extends \PatternLab\PatternData\Helper {
 							
 							if ($name[0] != ":") {
 								
-								$data    = Data::getPatternSpecificData($patternStoreKey,$patternFooterData);
+								$data    = Data::getPatternSpecificData($patternStoreKey);
 								$data    = array_merge($data,array("styleModifier" => $class));
 								$srcPath = (isset($patternStoreData["pseudo"])) ? PatternData::$store[$patternStoreData["original"]]["pathName"] : $patternStoreData["pathName"];
 								$code    = Render::Pattern($srcPath,$patternStoreKey,$data);
