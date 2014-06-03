@@ -13,9 +13,11 @@
 namespace PatternLab\PatternData\Helpers\Plugins;
 
 use \PatternLab\Config;
+use \PatternLab\Data;
 use \PatternLab\Parsers\Plugins\KSS;
 use \PatternLab\PatternData;
 use \PatternLab\PatternEngine;
+use \PatternLab\Render;
 
 class KSSHelperPlugin extends \PatternLab\PatternData\Helper {
 	
