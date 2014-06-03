@@ -70,6 +70,7 @@ class KSSHelperPlugin extends \PatternLab\PatternData\Helper {
 								$code    = Render::Pattern($srcPath,$data);
 								
 								$modifierCodeExists    = true;
+								
 							}
 							
 							$patternModifiers[] = array("modifierName"       => $name,
