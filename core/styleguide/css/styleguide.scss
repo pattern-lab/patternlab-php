@@ -2,24 +2,24 @@
     $PATTERN LAB STYLES
 \*------------------------------------*/
 /**
- * NOTE: These styles are specific to Pattern Lab and should not be modified. 
+ * NOTE: These styles are specific to Pattern Lab and should not be modified.
  * Edit all project styles in /source/css/
- * 
- * Second note: Any important declarations are to prevent brand styles from overriding style guide 
+ *
+ * Second note: Any important declarations are to prevent brand styles from overriding style guide
  */
- 
- 
+
+
 /*------------------------------------*\
     $CONTENTS
 \*------------------------------------*/
 /**
- * STYLE GUIDE VARIABLES------------------Declarations of Sass variables 
+ * STYLE GUIDE VARIABLES------------------Declarations of Sass variables
  * -----Font
  * -----Colors
  * -----Typography
  * -----Defaults
  * -----Breakpoints
- * MIXINS---------------------------------Sass mixins 
+ * MIXINS---------------------------------Sass mixins
  * GLOBAL ELEMENTS------------------------Establish global styles
  * -----Main
  * -----Headings
@@ -42,12 +42,12 @@
 
 
 /*------------------------------------*\
-    $PATTERN LAB VARIABLES 
+    $PATTERN LAB VARIABLES
 \*------------------------------------*/
 /*Fonts*/
 $sg-font : "HelveticaNeue", "Helvetica", "Arial", sans-serif;
 
-/* Style Guide Interface Colors */ 
+/* Style Guide Interface Colors */
 $sg-primary : #222;
 $sg-secondary : #808080;
 $sg-tertiary : #ddd;
@@ -86,7 +86,7 @@ $animate-quick: 0.2s;
 
 
 /*------------------------------------*\
-    $PATTERN LAB MIXINS 
+    $PATTERN LAB MIXINS
 \*------------------------------------*/
 @mixin sg-transition($transition-property, $transition-time, $method) {
 	-webkit-transition: $transition-property $transition-time $method;
@@ -102,7 +102,7 @@ $animate-quick: 0.2s;
 
 
 /*------------------------------------*\
-    $PATTERN LAB INTERFACE 
+    $PATTERN LAB INTERFACE
 \*------------------------------------*/
 
 #patternlab-html, #patternlab-body {
@@ -124,7 +124,7 @@ $animate-quick: 0.2s;
   height: 1px;
   padding: 0;
   border: 0;
-  clip: rect(1px, 1px, 1px, 1px); 
+  clip: rect(1px, 1px, 1px, 1px);
 }
 
 
@@ -145,7 +145,7 @@ $animate-quick: 0.2s;
 
 
 /*------------------------------------*\
-    $PATTERN LAB HEADER 
+    $PATTERN LAB HEADER
 \*------------------------------------*/
 /* Header */
 .sg-header {
@@ -164,7 +164,7 @@ $animate-quick: 0.2s;
 	  -webkit-box-sizing: border-box;
 	  box-sizing: border-box;
 	}
-	
+
 	ul, ol {
 		padding: 0;
 		margin: 0;
@@ -177,14 +177,14 @@ $animate-quick: 0.2s;
 
 	a {
 		font-size: $sg-font-size-sm;
-		color: $sg-secondary;
+		color: $sg-tertiary;
 		text-decoration: none;
 		display: block;
 		line-height: 1;
 		padding: $sg-pad;
 		@include sg-transition(background,0.15s,ease-out);
 		@include sg-transition(color,0.15s,ease-out);
-		
+
 		&:hover, &:focus, &.active {
 			color: $sg-quaternary;
 			background: $sg-tint;
@@ -207,7 +207,7 @@ $animate-quick: 0.2s;
 	position: relative;
 	text-transform: uppercase;
 	z-index: 2;
-	
+
 	span {
 		display: inline-block;
 		padding-right: 0.2em;
@@ -223,7 +223,7 @@ $animate-quick: 0.2s;
 		overflow: hidden;
 		max-height: 0;
 		@include sg-transition(max-height,0.1s,ease-out);
-		
+
 		&.active {
 			max-height: 50em;
 		}
@@ -235,7 +235,7 @@ $animate-quick: 0.2s;
 	margin: 0;
 	padding: 0;
 	list-style: none;
-	
+
 	> li {
 		cursor: pointer;
 
@@ -244,13 +244,13 @@ $animate-quick: 0.2s;
 			border-right: 1px solid $sg-tint;
 			float: left;
 			position: relative;
-			
+
 			> ol {
 				position: absolute;
 				top: $offset-top;
 				left: 0;
 			}
-			
+
 		}
 	}
 }
@@ -261,12 +261,12 @@ $animate-quick: 0.2s;
 		content: ' +';
 		float: right;
 		font-size: $sg-font-size-sm;
-		
+
 		@media all and (min-width: $sg-bp-med) {
 			float: none;
 		}
 	}
-	
+
 	&.active {
 		color: $sg-quaternary;
 		background: $sg-tint;
@@ -306,7 +306,7 @@ $animate-quick: 0.2s;
 		left: auto;
 		right: 0;
 	}
-	
+
 	&.sg-left {
 		position: absolute;
 		left: auto;
@@ -331,11 +331,11 @@ $animate-quick: 0.2s;
 
 .sg-control-trigger {
 	border-bottom: 1px solid $sg-tint;
-	
+
 	@media all and (min-width: $sg-bp-med) {
 		border: 0;
 	}
-	
+
 	@media all and (min-width: $sg-bp-large) {
 		float: left;
 		width: 6em;
@@ -351,7 +351,7 @@ $animate-quick: 0.2s;
 			border-left: 1px solid $sg-tint;
 		}
 	}
-	
+
 	.sg-input {
 		padding: 0.1em;
 		-webkit-transition: all $animate-quick ease-out;
@@ -574,22 +574,22 @@ span.sg-pattern-state:before {
 	#sg-viewport {
 		overflow: hidden !important;
 	}
-	
+
 }
 
 #sg-cover {
-	width: 100%; 
-	height: 100%; 
-	display: none; 
-	position: absolute; 
-	z-index: 20; 
+	width: 100%;
+	height: 100%;
+	display: none;
+	position: absolute;
+	z-index: 20;
 	cursor: col-resize;
 }
 
 #sg-gen-container {
 	height: 100%;
 	position: relative;
-	text-align: center; 
+	text-align: center;
 	margin: 0 auto;
 	-webkit-overflow-scrolling: touch;
 	overflow-y: auto;
@@ -605,17 +605,17 @@ span.sg-pattern-state:before {
 }
 
 #sg-rightpull-container {
-	width: 14px; 
-	float: right; 
-	margin: 0; 
-	height: 100%; 
+	width: 14px;
+	float: right;
+	margin: 0;
+	height: 100%;
 	cursor: col-resize;
 }
 
 #sg-rightpull {
-	margin: 0; 
-	width: 100%; 
-	height: 100%; 
+	margin: 0;
+	width: 100%;
+	height: 100%;
 	background: #999;
 	-webkit-transition: background $animate-quick ease-out;
     -moz-transition: background $animate-quick ease-out;
@@ -646,7 +646,7 @@ span.sg-pattern-state:before {
 
 
 /*------------------------------------*\
-    $PATTERN LAB CONTENT 
+    $PATTERN LAB CONTENT
 \*------------------------------------*/
 
 /* Section Pattern */
@@ -670,7 +670,7 @@ span.sg-pattern-state:before {
 		color: $sg-secondary;
 		text-decoration: none;
 		cursor: pointer;
-		
+
 		&:hover {
 			color: $sg-primary;
 		}
@@ -710,7 +710,7 @@ span.sg-pattern-state:before {
 		-webkit-transition: bottom 0.3s ease-out;
 		-moz-transition: bottom 0.3s ease-out;
 	  	-webkit-transition: bottom 0.3s ease-out;
-	  	-ms-transition: bottom 0.3s ease-out; 
+	  	-ms-transition: bottom 0.3s ease-out;
 	  	-o-transition: bottom 0.3s ease-out;
 	  	transition:  bottom 0.3s ease-out;
 	}
@@ -746,7 +746,7 @@ span.sg-pattern-state:before {
 	&.active {
 		box-shadow: inset 0 0 20px $sg-secondary;
 	}
-	
+
 }
 
 .annotation-tip {
@@ -801,7 +801,7 @@ span.sg-pattern-state:before {
 		white-space: -moz-pre-line;
 		white-space: -pre-line;
 		white-space: -o-pre-line;
-		word-wrap: break-word; 
+		word-wrap: break-word;
 		white-space: pre-line;
 		border: 1px solid $sg-tone;
 		padding: $sg-pad-half;
@@ -858,7 +858,7 @@ div.clear {
 }
 
 .sg-code-patternname {
-	color: #aaa; 
+	color: #aaa;
 }
 
 #sg-code-loader {
@@ -871,7 +871,7 @@ div.clear {
 	text-align: center;
 	border-radius: 10px;
 	background-color: #000;
-	z-index: 100; 
+	z-index: 100;
 }
 
 .spinner {
