@@ -11,6 +11,7 @@
 		$bodySize = parseInt($('body').css('font-size')), //Body size of the document,
 		$headerHeight = $('.sg-header').height(),
 		discoID = false,
+		fullMode = true,
 		discoMode = false,
 		hayMode = false;
 	
@@ -20,6 +21,10 @@
 		sh = $(document).height();
 
 		setAccordionHeight();
+
+		if(fullMode == true) {
+			sizeiframe(sw, false);
+		}
 	});
 
 	// Accordion dropdown
@@ -73,6 +78,7 @@
 		e.preventDefault();
 		killDisco();
 		killHay();
+		fullMode = false;		
 		
 		var val = $(this).attr('data-size');
 		
@@ -90,6 +96,7 @@
 	function goSmall() {
 		killDisco();
 		killHay();
+		fullMode = false;
 		sizeiframe(getRandom(minViewportWidth,500));
 	}
 	
@@ -107,6 +114,7 @@
 	function goMedium() {
 		killDisco();
 		killHay();
+		fullMode = false;
 		sizeiframe(getRandom(500,800));
 	}
 	
@@ -124,6 +132,7 @@
 	function goLarge() {
 		killDisco();
 		killHay();
+		fullMode = false;
 		sizeiframe(getRandom(800,1200));
 	}
 	
@@ -142,6 +151,7 @@
 		e.preventDefault();
 		killDisco();
 		killHay();
+		fullMode = true;
 		sizeiframe(sw);
 	});
 	
@@ -150,6 +160,7 @@
 		e.preventDefault();
 		killDisco();
 		killHay();
+		fullMode = false;
 		sizeiframe(getRandom(minViewportWidth,sw));
 	});
 	
@@ -157,6 +168,7 @@
 	$('#sg-size-disco').on("click", function(e){
 		e.preventDefault();
 		killHay();
+		fullMode = false;
 
 		if (discoMode) {
 			killDisco();
@@ -424,6 +436,8 @@
 		// capture default data
 		var origClientX = event.clientX;
 		var origViewportWidth = $sgViewport.width();
+
+		fullMode = false;
 		
 		// show the cover
 		$("#sg-cover").css("display","block");
