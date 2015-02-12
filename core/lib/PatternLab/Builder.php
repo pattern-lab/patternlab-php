@@ -972,8 +972,12 @@ class Builder {
 		$extraFoot          = file_get_contents(__DIR__."/../../templates/pattern-header-footer/footer-pattern.html");
 		
 		// gather the user-defined header and footer information
-		$patternHeadPath    = __DIR__.$this->sp."00-atoms/00-meta/_00-head.mustache";
-		$patternFootPath    = __DIR__.$this->sp."00-atoms/00-meta/_01-foot.mustache";
+		$metaFolderPath = "00-atoms/00-meta/";
+		if(!empty($this->metaPath)) {
+			$metaFolderPath = ($this->metaPath == "" ? "00-atoms/00-meta/" : $this->metaPath);
+		}
+		$patternHeadPath    = __DIR__.$this->sp.$metaFolderPath."_00-head.mustache";
+		$patternFootPath    = __DIR__.$this->sp.$metaFolderPath."_01-foot.mustache";
 		$patternHead        = (file_exists($patternHeadPath)) ? file_get_contents($patternHeadPath) : "";
 		$patternFoot        = (file_exists($patternFootPath)) ? file_get_contents($patternFootPath) : "";
 		
