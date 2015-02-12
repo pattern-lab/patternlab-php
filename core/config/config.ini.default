@@ -41,3 +41,7 @@ styleGuideExcludes = ""
 
 // should the cache buster be on, set to false to set the cacheBuster value to 0
 cacheBusterOn = "true"
+
+// location of 00-meta folder, i.e. head and foot. Leave blank for default
+// needs trailing slash
+metaPath = ""
