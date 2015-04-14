@@ -31,8 +31,8 @@ class AutoReloadApplication extends Application {
 		
 		$this->newlines = $newlines;
 		
-		if (file_exists(__DIR__."/../../../../public/latest-change.txt")) {
-			$this->savedTimestamp = file_get_contents(__DIR__."/../../../../public/latest-change.txt");
+		if (file_exists(__DIR__."/../../../../".$config['publicDir']."/latest-change.txt")) {
+			$this->savedTimestamp = file_get_contents(__DIR__."/../../../../".$config['publicDir']."/latest-change.txt");
 		} else {
 			$this->savedTimestamp = time();
 		}
@@ -67,8 +67,8 @@ class AutoReloadApplication extends Application {
 	*/
 	public function onUpdate() {
 		
-		if (file_exists(__DIR__."/../../../../public/latest-change.txt")) {
-			$readTimestamp = file_get_contents(__DIR__."/../../../../public/latest-change.txt");
+		if (file_exists(__DIR__."/../../../../".$config['publicDir']."/latest-change.txt")) {
+			$readTimestamp = file_get_contents(__DIR__."/../../../../".$config['publicDir']."/latest-change.txt");
 			if ($readTimestamp != $this->savedTimestamp) {
 				print "pattern lab updated. alerting connected browsers...\n";
 				foreach ($this->clients as $sendto) {
