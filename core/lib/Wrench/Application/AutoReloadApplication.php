@@ -23,16 +23,18 @@ class AutoReloadApplication extends Application {
 	protected $clients          = array();
 	protected $savedTimestamp   = null;
 	protected $c                = false;
+	protected $filename         = "";
 	
 	/**
 	* Set the saved timestamp. If the latest-change file doesn't exist simply use the current time as the saved time
 	*/
-	public function __construct($newlines) {
+	public function __construct($newlines, $config) {
 		
 		$this->newlines = $newlines;
-		
-		if (file_exists(__DIR__."/../../../../".$config['publicDir']."/latest-change.txt")) {
-			$this->savedTimestamp = file_get_contents(__DIR__."/../../../../".$config['publicDir']."/latest-change.txt");
+		$this->filename = __DIR__."/../../../../".$config['publicDir']."/latest-change.txt";
+
+		if (file_exists($this->filename)) {
+			$this->savedTimestamp = file_get_contents($this->filename);
 		} else {
 			$this->savedTimestamp = time();
 		}
@@ -67,8 +69,8 @@ class AutoReloadApplication extends Application {
 	*/
 	public function onUpdate() {
 		
-		if (file_exists(__DIR__."/../../../../".$config['publicDir']."/latest-change.txt")) {
-			$readTimestamp = file_get_contents(__DIR__."/../../../../".$config['publicDir']."/latest-change.txt");
+		if (file_exists($this->filename)) {
+			$readTimestamp = file_get_contents($this->filename);
 			if ($readTimestamp != $this->savedTimestamp) {
 				print "pattern lab updated. alerting connected browsers...\n";
 				foreach ($this->clients as $sendto) {

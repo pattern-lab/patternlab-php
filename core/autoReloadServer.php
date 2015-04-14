@@ -33,7 +33,7 @@ $newlines = (isset($args["s"])) ? true : false;
 $server   = new \Wrench\Server('ws://0.0.0.0:'.$port.'/', array());
 
 // register the application
-$server->registerApplication('autoreload', new \Wrench\Application\AutoReloadApplication($newlines));
+$server->registerApplication('autoreload', new \Wrench\Application\AutoReloadApplication($newlines, $config));
 
 if (!isset($args["s"])) {
 	print "\n";
