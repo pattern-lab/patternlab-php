@@ -61,8 +61,6 @@ class Builder {
 			}
 			
 		}
-		print "\nSource dir: ".$this->sourceDir;
-		print "\nPublic dir: ".$this->publicDir."\n";
 		// set-up the source & public dirs
 		$this->sp = "/../../../".$this->sourceDir."/_patterns".DIRECTORY_SEPARATOR;
 		$this->pp = "/../../../".$this->publicDir."/patterns".DIRECTORY_SEPARATOR;

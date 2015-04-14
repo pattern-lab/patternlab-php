@@ -51,7 +51,9 @@ class Configurer {
 		$defaultConfig = $config;
 		
 		// check to see if the user config exists, if not create it
-		print "configuring pattern lab...\n";
+		print "configuring pattern lab...";
+		print "\nsource dir: ".$config['sourceDir'];
+		print "\npublic dir: ".$config['publicDir']."\n\n";
 		if (!file_exists($this->userConfigPath)) {
 			$migrate = true;
 		} else {
