@@ -73,7 +73,7 @@ class Migrator {
 			} else if ($checkType == "dirExists") {
 				
 				if (!is_dir($destinationPath)) {
-					mkdir($destinationPath);
+					mkdir($destinationPath, 0777, true);
 				}
 				
 			} else if ($checkType == "fileExists") {
