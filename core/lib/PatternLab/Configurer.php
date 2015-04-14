@@ -66,7 +66,7 @@ class Configurer {
 			print "upgrading your version of pattern lab...\n";
 			print "checking for migrations...\n";
 			$m = new Migrator;
-			$m->migrate(true);
+			$m->migrate(true, $config);
 			if ($migrate) {
 				if (!@copy($this->plConfigPath, $this->userConfigPath)) {
 					print "Please make sure that Pattern Lab can write a new config to config/.\n";

@@ -1,5 +1,5 @@
 {
 	"sourcePath": "",
-	"destinationPath": "public/data",
+	"destinationPath": "{publicDir}/data",
 	"checkType": "dirExists"
 }

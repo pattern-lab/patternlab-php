@@ -61,12 +61,13 @@ class Builder {
 			}
 			
 		}
-		
+		print "\nSource dir: ".$this->sourceDir;
+		print "\nPublic dir: ".$this->publicDir."\n";
 		// set-up the source & public dirs
-		$this->sp = "/../../../source/_patterns".DIRECTORY_SEPARATOR;
-		$this->pp = "/../../../public/patterns".DIRECTORY_SEPARATOR;
-		$this->sd = __DIR__."/../../../source";
-		$this->pd = __DIR__."/../../../public";
+		$this->sp = "/../../../".$this->sourceDir."/_patterns".DIRECTORY_SEPARATOR;
+		$this->pp = "/../../../".$this->publicDir."/patterns".DIRECTORY_SEPARATOR;
+		$this->sd = __DIR__."/../../../".$this->sourceDir;
+		$this->pd = __DIR__."/../../../".$this->publicDir;
 		
 		// provide the default for enable CSS. performance hog so it should be run infrequently
 		$this->enableCSS    = false;
