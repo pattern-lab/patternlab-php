@@ -1,3 +1,17 @@
+## Difference with the main branch 
+In the original [patternlab-php](https://github.com/pattern-lab/patternlab-php) (as for release 0.7.12) `/source` and `/public` directories were hard-coded in different places (php, json etc). So the difference here is that the source and the output paths were made configurable via `config.ini`. By default both paths are the same as in the original version, but you can change them by tweaking `core/config/config.ini.default` before starting the generator for the first time.
+
+NOTES:
+* paths should be related to the PatterLab root folder (where `/config`, `/core` and `/extras` folders are placed).
+* if a path doesn't exists, all levels will be fully created during the first run
+* since paths are now configurable and created automatically, the original `/source` and `/public` folders were removed from the project root
+
+So, for example, these are now quite possible settings in `config.ini.default` for paths:
+`sourceDir = "some/long/path/to/source"`
+`publicDir = "../../../path/could/go/even/outside/patterlab/directory"` (yes, both directories could be even outside the PatternLab root folder)
+
+P.S. Yes, I noticed that in the original `dev` branch some major changes have been done to make these paths configurable, but the last commits were made about a year ago and this work doesn't seemed to be finished. That's why I decided to implement this functionality in a pretty simple way, without huge refactoring of the code. Hope this will allow the community to use PatternLab in a much more flexible way. And of course many thanks to Dave Olsen and all other contributors for this wonderful tool :))
+
 ## About Pattern Lab
 - [Pattern Lab Website](http://patternlab.io/)
 - [About Pattern Lab](http://patternlab.io/about.html)
