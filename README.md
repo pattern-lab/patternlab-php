@@ -7,7 +7,9 @@ NOTES:
 * since paths are now configurable and created automatically, the original `/source` and `/public` folders were removed from the project root
 
 So, for example, these are now quite possible settings in `config.ini.default` for paths:
+
 `sourceDir = "some/long/path/to/source"`
+
 `publicDir = "../../../path/could/go/even/outside/patterlab/directory"` (yes, both directories could be even outside the PatternLab root folder)
 
 P.S. Yes, I noticed that in the original `dev` branch some major changes have been done to make these paths configurable, but the last commits were made about a year ago and this work doesn't seemed to be finished. That's why I decided to implement this functionality in a pretty simple way, without huge refactoring of the code. Hope this will allow the community to use PatternLab in a much more flexible way. And of course many thanks to Dave Olsen and all other contributors for this wonderful tool :))
