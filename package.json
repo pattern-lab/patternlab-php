@@ -1,0 +1,14 @@
+{
+  "name": "patternlab-vd",
+  "version": "0.0.0",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-autoprefixer": "^3.0.0",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-sass": "^0.9.2",
+    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-gh-pages": "^0.10.0",
+    "grunt-shell": "^1.1.2"
+  }
+}
