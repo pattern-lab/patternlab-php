@@ -20,8 +20,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-shell');
 
   // Default task(s).
-  grunt.registerTask('default', ['shell:patternlab']);
+  grunt.registerTask('default', 'build Pattern Lab', ['shell:patternlab']);
 
   // Init Pattern Lab
-  grunt.registerTask('init', ['shell:patternlab-public', 'shell:patternlab-styleguide'])
+  grunt.registerTask('init', 'Init Pattern lab',['shell:patternlab-public', 'shell:patternlab-styleguide'])
 };
