@@ -4,9 +4,15 @@ module.exports = function(grunt) {
   grunt.initConfig({
     // Build Pattern Lab
     shell: {
-      patternlab: {
+      'patternlab': {
         command: "php core/builder.php -g"
       },
+      'patternlab-public': {
+        command: "mkdir public"
+      },
+      'patternlab-styleguide': {
+        command: "cp -rf core/styleguide public/styleguide"
+      }
     },
   });
 
@@ -14,6 +20,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-shell');
 
   // Default task(s).
-  grunt.registerTask('default', ['shell']);
+  grunt.registerTask('default', ['shell:patternlab']);
 
+  // Init Pattern Lab
+  grunt.registerTask('init', ['shell:patternlab-public', 'shell:patternlab-styleguide'])
 };
