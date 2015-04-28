@@ -63,6 +63,15 @@ module.exports = function(grunt) {
 
 
 
+    jshint: {
+      beforeconcat: ['Gruntfile.js', 'source/_js/**/*.js'],
+      afterconcat: ['source/js/**/*.js']
+    },
+
+
+
+
+
     uglify: {
       scripts: {
         files: {
@@ -109,6 +118,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-gh-pages');
 
