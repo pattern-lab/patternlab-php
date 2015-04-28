@@ -39,6 +39,29 @@ module.exports = function(grunt) {
 
 
 
+    autoprefixer: {
+      options: {
+        browsers: ['last 2 version', '> 5% in CH', 'IE >= 8', 'Firefox >= 31', 'Firefox ESR'],
+        map: true
+      },
+      /**
+       * Autoprefix the CSS
+       */
+      css: {
+        src: 'source/css/style.css',
+        dest: 'source/css/style.css'
+      },
+      'css-min': {
+        src: 'source/css/style.min.css',
+        dest: 'source/css/style.min.css'
+      },
+
+    },
+
+
+
+
+
     shell: {
       'patternlab': {
         command: "php core/builder.php -g"
@@ -67,6 +90,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-gh-pages');
 
   // Init Pattern Lab
@@ -76,6 +100,7 @@ module.exports = function(grunt) {
   grunt.registerTask('css', 'Build stylesheets', function() {
     grunt.task.run('clean:css');
     grunt.task.run('sass');
+    grunt.task.run('autoprefixer');
   });
 
   // Default task(s).
