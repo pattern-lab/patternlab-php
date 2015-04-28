@@ -9,6 +9,7 @@ module.exports = function(grunt) {
 
     clean: {
       css: ['source/css/'],
+      js: ['source/js/'],
     },
 
 
@@ -62,6 +63,23 @@ module.exports = function(grunt) {
 
 
 
+    uglify: {
+      scripts: {
+        files: {
+        'source/js/script.min.js': [
+          'source/_js/fitvids.js',
+          'source/_js/init.js',
+          'source/_js/jquery-2.0.0b2.js',
+          'source/_js/modernizr.js'
+          ]
+      }
+      }
+    },
+
+
+
+
+
     shell: {
       'patternlab': {
         command: "php core/builder.php -g"
@@ -91,6 +109,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-gh-pages');
 
   // Init Pattern Lab
@@ -101,6 +120,13 @@ module.exports = function(grunt) {
     grunt.task.run('clean:css');
     grunt.task.run('sass');
     grunt.task.run('autoprefixer');
+  });
+
+  // Build stylesheets
+  grunt.registerTask('js', 'Build javascripts', function() {
+    grunt.task.run('clean:js');
+    grunt.task.run('uglify');
+    //grunt.task.run('autoprefixer');
   });
 
   // Default task(s).
