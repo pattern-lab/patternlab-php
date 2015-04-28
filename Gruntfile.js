@@ -14,14 +14,24 @@ module.exports = function(grunt) {
         command: "cp -rf core/styleguide public/styleguide"
       }
     },
+    'gh-pages': {
+      options: {
+        base: 'public'
+      },
+      src: ['**']
+    }
   });
 
-  // Load the plugin that provides the "uglify" task.
+  // Load the plugins
   grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-gh-pages');
 
   // Default task(s).
   grunt.registerTask('default', 'build Pattern Lab', ['shell:patternlab']);
 
   // Init Pattern Lab
   grunt.registerTask('init', 'Init Pattern lab',['shell:patternlab-public', 'shell:patternlab-styleguide'])
+
+  // Init Pattern Lab
+  grunt.registerTask('deploy', 'Deploy Pattern Lab on gh-pages',['gh-pages'])
 };
