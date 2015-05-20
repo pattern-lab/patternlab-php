@@ -13,6 +13,7 @@
 namespace PatternLab;
 
 use \Mustache_Engine as Engine;
+use \Mustache_LambdaHelper as LambdaHelper;
 use \Mustache_Loader_PatternLoader as PatternLoader;
 use \Mustache_Loader_FilesystemLoader as FilesystemLoader;
 
@@ -390,6 +391,19 @@ class Builder {
 			exit;
 		}
 		
+		//gather lambda functions if available, file should be in source/_data/_lambda.php
+		$lambdaIncludePath=$this->sd."/_data/_lambda.php";
+		if(file_exists($lambdaIncludePath)){
+			$lambdaInclude=include($lambdaIncludePath);
+			if(is_array($lambdaInclude)){
+				foreach($lambdaInclude as $name=>$lambda){
+					$this->d[$name]=function($text, LambdaHelper $helper) use ($lambda){
+						return $lambda($helper->render($text));
+					};
+				}
+			}
+		}
+
 		$reservedKeys = array("listItems","cacheBuster","link","patternSpecific");
 		foreach ($reservedKeys as $reservedKey) {
 			if (array_key_exists($reservedKey,$this->d)) {
