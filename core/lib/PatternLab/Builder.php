@@ -15,6 +15,7 @@ namespace PatternLab;
 use \Mustache_Engine as Engine;
 use \Mustache_Loader_PatternLoader as PatternLoader;
 use \Mustache_Loader_FilesystemLoader as FilesystemLoader;
+use \JsonLint\JsonParser as JsonParser;
 
 class Builder {
 	
@@ -383,6 +384,7 @@ class Builder {
 		
 		// gather the data from the main source data.json
 		if (file_exists($this->sd."/_data/_data.json")) {
+			$this->jsonLint($this->sd."/_data/_data.json");
 			$this->d = json_decode(file_get_contents($this->sd."/_data/_data.json"),true);
 			$this->jsonLastErrorMsg("_data/_data.json");
 		} else {
@@ -754,11 +756,13 @@ class Builder {
 					// get the base data
 					$patternDataBase = array();
 					if (file_exists($object->getPath()."/".$patternBaseJSON)) {
+						$this->jsonLint($object->getPath()."/".$patternBaseJSON);
 						$patternDataBase = json_decode(file_get_contents($object->getPath()."/".$patternBaseJSON),true);
 						$this->jsonLastErrorMsg($patternBaseJSON);
 					}
 					
 					// get the special pattern data
+					$this->jsonLint($object->getPathname());
 					$patternData = (array) json_decode(file_get_contents($object->getPathname()));
 					$this->jsonLastErrorMsg($object->getFilename());
 					
@@ -798,6 +802,7 @@ class Builder {
 						$patternData = $this->getListItems($object->getPathname());
 						$this->d["patternSpecific"][$patternPartial]["listItems"] = $patternData;
 					} else {
+						$this->jsonLint($object->getPathname());
 						$patternData = json_decode(file_get_contents($object->getPathname()),true);
 						$this->jsonLastErrorMsg($patternFull);
 						$this->d["patternSpecific"][$patternPartial]["data"] = $patternData;
@@ -1013,6 +1018,7 @@ class Builder {
 		// add list item data, makes 'listItems' a reserved word
 		if (file_exists($filepath)) {
 			
+			$this->jsonLint($filepath);
 			$listItemsJSON = json_decode(file_get_contents($filepath), true);
 			$this->jsonLastErrorMsg(str_replace($this->sd."/","",$filepath));
 			
@@ -1312,6 +1318,21 @@ class Builder {
 		
 	}
 	
+	/**
+	* Parses the JSON using JSONLint: https://github.com/Seldaek/jsonlint
+	* Prints an error message, including line number, if a parse error occurs
+	* @param  {String}       file to parse
+	*/
+	protected function jsonLint($file) {
+		$parser = new JsonParser();
+		// returns null if it's valid json, or a ParsingException object.
+		$result = $parser->lint(file_get_contents($file), true);
+		if($result !== null) {
+			$path = basename(dirname($file)).DIRECTORY_SEPARATOR.basename($file);
+			print "JSON error in ".$path.": ".$result->getMessage()."\n";
+		}
+	}
+
 	/**
 	* Returns the last error message when building a JSON file. Mimics json_last_error_msg() from PHP 5.5
 	* @param  {String}       the file that generated the error
