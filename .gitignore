@@ -4,3 +4,4 @@ config.ini
 latest-change.txt
 *-ck.js
 *.sass-cache/
+source/config.rb
