@@ -1,6 +1,5 @@
 .DS_Store
 public/*
-source/*
 config.ini
 latest-change.txt
 *-ck.js
