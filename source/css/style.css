@@ -208,13 +208,21 @@ header, footer, nav, section, article, hgroup, figure {
 
 /* line 100, scss/base/_global-classes.scss */
 .font-secondary {
+<<<<<<< HEAD
   font-family: Arial, Verdana, sans-serif;
+=======
+  font-family: Georgia, Times, "Times New Roman", serif;
+>>>>>>> atoms_color
 }
 
 /* line 1, scss/base/_main.scss */
 body {
   background: #fff;
+<<<<<<< HEAD
   font: 100%/1.5 Arial, Verdana, sans-serif;
+=======
+  font: 100%/1.5 "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+>>>>>>> atoms_color
   -webkit-text-size-adjust: 100%;
   color: #333;
 }
@@ -251,7 +259,11 @@ h3, .gamma {
 /* Subheadings */
 /* line 28, scss/base/_headings.scss */
 .subheading {
+<<<<<<< HEAD
   font-family: Arial, Verdana, sans-serif;
+=======
+  font-family: Georgia, Times, "Times New Roman", serif;
+>>>>>>> atoms_color
   font-weight: normal;
 }
 
@@ -969,7 +981,11 @@ td {
 
 /* line 8, scss/objects/_text.scss */
 .pullquote {
+<<<<<<< HEAD
   font-family: Arial, Verdana, sans-serif;
+=======
+  font-family: Georgia, Times, "Times New Roman", serif;
+>>>>>>> atoms_color
   font-size: 1.4375em;
 }
 
@@ -1481,7 +1497,11 @@ td {
 .acc-handle {
   background: #131313;
   color: #fff;
+<<<<<<< HEAD
   font-family: Arial, Verdana, sans-serif;
+=======
+  font-family: Georgia, Times, "Times New Roman", serif;
+>>>>>>> atoms_color
   font-weight: bold;
   display: block;
   position: relative;
