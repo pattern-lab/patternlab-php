@@ -1,0 +1,1640 @@
+/*                                                                                                                                         
+                                                ,,            ,,                          ,,                                             
+ .M"""bgd mm                                    db          `7MM        mm         mm   `7MM                                    OO OO OO 
+,MI    "Y MM                                                  MM        MM         MM     MM                                    88 88 88 
+`MMb.   mmMMmm ,pW"Wq.`7MMpdMAo.     `7Mb,od8 `7MM  .P"Ybmmm  MMpMMMb.mmMMmm     mmMMmm   MMpMMMb.  .gP"Ya `7Mb,od8 .gP"Ya      || || || 
+  `YMMNq. MM  6W'   `Wb MM   `Wb       MM' "'   MM :MI  I8    MM    MM  MM         MM     MM    MM ,M'   Yb  MM' "',M'   Yb     || || || 
+.     `MM MM  8M     M8 MM    M8       MM       MM  WmmmP"    MM    MM  MM         MM     MM    MM 8M""""""  MM    8M""""""     `' `' `' 
+Mb     dM MM  YA.   ,A9 MM   ,AP       MM       MM 8M         MM    MM  MM         MM     MM    MM YM.    ,  MM    YM.    ,     ,, ,, ,, 
+P"Ybmmd"  `Mbmo`Ybmd9'  MMbmmd'      .JMML.   .JMML.YMMMMMb .JMML  JMML.`Mbmo      `Mbmo.JMML  JMML.`Mbmmd'.JMML.   `Mbmmd'     db db db 
+                        MM                         6'     dP                                                                             
+                      .JMML.                       Ybmmmd'                                                                               
+
+Pattern Lab doesn't have any CSS requirements, which means you can write your styles however you want. Hooray!
+You can use Sass, Less, vanilla CSS, or some other crazy thing I haven't heard of yet.
+So please don't use these styles. They're just here to put together the demo, and nothing more.
+They're intentionally gray, boring, and crappy because you're supposed to do this stuff yourself.
+
+Atomic design is philosophically complimentary with these CSS approaches:
+
+* SMACSS by Jonathan Snook http://smacss.com/
+* OOCSS by Nicole Sullivan http://oocss.org/
+* BEM CSS Methology : http://bem.info/method/
+* CSS Guidelines by Harry Roberts : https://github.com/csswizardry/CSS-Guidelines
+
+So feel free to use any of these approaches. Or don't. It's totally up to you.
+
+*/
+/*------------------------------------*\
+    $TABLE OF CONTENTS 
+    based generally on Harry Roberts excellent CSS Guidelines https://github.com/csswizardry/CSS-Guidelines
+\*------------------------------------*/
+/**
+ * VARIABLES..............................Declarations of Sass variables 
+ * .....Colors
+ * .....Typography
+ * .....Layout
+ * .....Defaults
+ * .....Breakpoints
+ * MIXINS.................................Sass mixins 
+ * RESET..................................Set reset defaults
+ * GLOBAL CLASSES.........................Set reset defaults
+ * GLOBAL ELEMENTS........................Establish global styles
+ * .....Main
+ * .....Headings
+ * .....Text-related elements (p, blockquote, lists)
+ * .....Defaults
+ * .....Breakpoints
+ * TYPOGRAPHY------------------------------
+ * MEDIA------------------------------
+ * LAYOUT------------------------------
+ * NAVIGATION------------------------------
+ * TOC To Be Continued
+ */
+/*------------------------------------*\
+    $VARIABLES
+\*------------------------------------*/
+/*------------------------------------*\
+    $MIXINS
+\*------------------------------------*/
+/* CSS Transition
+	Usage: @include transition(width,0.3s,ease-out);
+ */
+/* Rem Unit font sizes with relative fallback http:/seesparkbox.com/foundry/scss_rem_mixin_now_with_a_better_fallback  
+	Usage: @include font-size(1, large);
+*/
+/*------------------------------------*\
+    $RESET
+\*------------------------------------*/
+/* Border-Box http:/paulirish.com/2012/box-sizing-border-box-ftw/ */
+/* line 6, scss/generic/_reset.scss */
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* line 11, scss/generic/_reset.scss */
+html, body, div, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, ol, ul, li, form, legend, label, table, header, footer, nav, section, figure {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 15, scss/generic/_reset.scss */
+header, footer, nav, section, article, hgroup, figure {
+  display: block;
+}
+
+/*------------------------------------*\
+    $GLOBAL ELEMENTS
+\*------------------------------------*/
+/*------------------------------------*\
+    $GLOBAL CLASSES
+\*------------------------------------*/
+/* Clearfix */
+/* line 6, scss/base/_global-classes.scss */
+.cf, .l-two-col, [role=main] {
+  *zoom: 1;
+}
+
+/* line 9, scss/base/_global-classes.scss */
+.cf:before, .l-two-col:before, [role=main]:before, .cf:after, .l-two-col:after, [role=main]:after {
+  content: " ";
+  /* 1 */
+  display: table;
+  /* 2 */
+}
+
+/* line 14, scss/base/_global-classes.scss */
+.cf:after, .l-two-col:after, [role=main]:after {
+  clear: both;
+}
+
+/* Completely remove from the flow and screen readers. */
+/* line 19, scss/base/_global-classes.scss */
+.is-hidden {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Completely remove from the flow but leave available to screen readers. */
+/* line 25, scss/base/_global-classes.scss */
+.is-vishidden {
+  position: absolute !important;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+/* Floats */
+/* line 36, scss/base/_global-classes.scss */
+.right {
+  float: right;
+  padding: 0 0 1em 1em;
+}
+
+/* line 41, scss/base/_global-classes.scss */
+.right-search {
+  float: right;
+  padding: 0 0 1em 0;
+}
+
+/* line 46, scss/base/_global-classes.scss */
+.left {
+  float: left;
+  padding: 0 1em 1em 0;
+}
+
+/* Text-Align */
+/* line 52, scss/base/_global-classes.scss */
+.align-right {
+  text-align: right;
+}
+
+/* line 56, scss/base/_global-classes.scss */
+.align-center {
+  text-align: center;
+}
+
+/* line 60, scss/base/_global-classes.scss */
+.align-left {
+  text-align: left;
+}
+
+/* Display Classes */
+@media all and (max-width: 46.8em) {
+  /* line 65, scss/base/_global-classes.scss */
+  .hide-small {
+    display: none;
+  }
+}
+
+@media all and (min-width: 46.8em) and (max-width: 50em) {
+  /* line 71, scss/base/_global-classes.scss */
+  .hide-med {
+    display: none;
+  }
+}
+
+@media all and (min-width: 50em) {
+  /* line 77, scss/base/_global-classes.scss */
+  .hide-large {
+    display: none;
+  }
+}
+
+/* line 84, scss/base/_global-classes.scss */
+.valid {
+  color: #089e00;
+}
+
+/* line 88, scss/base/_global-classes.scss */
+.error {
+  color: #f00;
+}
+
+/* line 92, scss/base/_global-classes.scss */
+.warning {
+  color: #fff664;
+}
+
+/* line 96, scss/base/_global-classes.scss */
+.information {
+  color: #000db5;
+}
+
+/* line 100, scss/base/_global-classes.scss */
+.font-secondary {
+  font-family: Arial, Verdana, sans-serif;
+}
+
+/* line 1, scss/base/_main.scss */
+body {
+  background: #fff;
+  font: 100%/1.5 Arial, Verdana, sans-serif;
+  -webkit-text-size-adjust: 100%;
+  color: #333;
+}
+
+/* Links */
+/* line 2, scss/base/_links.scss */
+a {
+  color: #333;
+  text-decoration: none;
+  outline: 0;
+}
+/* line 7, scss/base/_links.scss */
+a:hover, a:focus {
+  color: #808080;
+}
+
+/* Headings */
+/*Further Reading: http:/csswizardry.com/2012/02/pragmatic-practical-font-sizing-in-css/ */
+/* line 3, scss/base/_headings.scss */
+h1, .alpha {
+  line-height: 1.2;
+}
+
+/* line 7, scss/base/_headings.scss */
+h2, .beta {
+  line-height: 1.2;
+}
+
+/* line 11, scss/base/_headings.scss */
+h3, .gamma {
+  line-height: 1.2;
+}
+
+/* Subheadings */
+/* line 28, scss/base/_headings.scss */
+.subheading {
+  font-family: Arial, Verdana, sans-serif;
+  font-weight: normal;
+}
+
+/* Text-Related Elements */
+/* line 2, scss/base/_text.scss */
+p {
+  margin-bottom: 1em;
+}
+
+/* Blockquote */
+/* line 7, scss/base/_text.scss */
+blockquote {
+  font-style: italic;
+  border-left: 1px solid #808080;
+  color: #808080;
+  padding-left: 1em;
+  margin-bottom: 1em;
+}
+
+/* Horizontal Rule */
+/* line 16, scss/base/_text.scss */
+hr {
+  border: 0;
+  height: 2px;
+  background: #eee;
+  margin: 2em 0;
+}
+
+/* line 23, scss/base/_text.scss */
+abbr {
+  border-bottom: 1px dotted #808080;
+  cursor: help;
+}
+
+/* line 1, scss/base/_lists.scss */
+ol, ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Definition Lists */
+/* line 8, scss/base/_lists.scss */
+dl {
+  overflow: hidden;
+  margin: 0 0 1em;
+}
+
+/* line 13, scss/base/_lists.scss */
+dt {
+  font-weight: bold;
+}
+
+/* line 17, scss/base/_lists.scss */
+dd {
+  margin-left: 0;
+}
+
+/*------------------------------------*\
+    $MEDIA ELEMENTS
+\*------------------------------------*/
+/* Flexible Media */
+/* line 6, scss/base/_media.scss */
+img, video, object {
+  max-width: 100%;
+  height: auto;
+}
+
+/* line 11, scss/base/_media.scss */
+iframe {
+  margin-bottom: 1em;
+}
+
+/* line 15, scss/base/_media.scss */
+figure {
+  margin-bottom: 1em;
+}
+/* line 17, scss/base/_media.scss */
+figure img {
+  margin-bottom: 0.5em;
+}
+
+/* line 21, scss/base/_media.scss */
+figcaption {
+  font-style: italic;
+}
+
+/*------------------------------------*\
+    $FORMS
+\*------------------------------------*/
+/* line 4, scss/base/_forms.scss */
+form ol, form ul {
+  list-style: none;
+  margin-left: 0;
+}
+
+/* line 9, scss/base/_forms.scss */
+fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* line 15, scss/base/_forms.scss */
+label {
+  display: block;
+  padding-bottom: 0.5em;
+}
+
+/* line 20, scss/base/_forms.scss */
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  margin: 0 1px 0;
+}
+
+/* line 26, scss/base/_forms.scss */
+input, textarea {
+  width: 100%;
+  border: 1px solid #808080;
+  padding: 0.5em 0.65rem;
+}
+
+/* line 32, scss/base/_forms.scss */
+input[type=text], input[type=search], input[type=url], input[type=number], textarea {
+  -webkit-appearance: none;
+}
+
+/* line 36, scss/base/_forms.scss */
+button, input[type="submit"] {
+  padding: 0.5em;
+  background: #333;
+  border: 1px solid #808080;
+  cursor: pointer;
+}
+
+/* line 43, scss/base/_forms.scss */
+input[type="checkbox"],
+input[type="radio"] {
+  width: auto;
+  margin-right: 0.3em;
+}
+
+/* line 49, scss/base/_forms.scss */
+input[type="search"] {
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+/* line 54, scss/base/_forms.scss */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/* line 60, scss/base/_forms.scss */
+.field-container {
+  margin-bottom: 1em;
+}
+
+/* line 65, scss/base/_forms.scss */
+.inline-form fieldset, .inline-form .inline-container {
+  position: relative;
+}
+/* line 69, scss/base/_forms.scss */
+.inline-form input[type=submit], .inline-form button, .inline-form .btn {
+  font-size: 0.875em;
+  padding: 0.65rem 1.3rem;
+  background: #333;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  width: auto;
+}
+/* line 79, scss/base/_forms.scss */
+.inline-form input[type=submit]:hover, .inline-form input[type=submit]:focus, .inline-form button:hover, .inline-form button:focus, .inline-form .btn:hover, .inline-form .btn:focus {
+  background: #808080;
+  color: #fff;
+}
+
+/* Validation */
+/* line 87, scss/base/_forms.scss */
+.has-error {
+  border-color: #f00;
+}
+
+/* line 90, scss/base/_forms.scss */
+.is-valid {
+  border-color: #089e00;
+}
+
+/*------------------------------------*\
+    $SPECIFIC FORMS
+\*------------------------------------*/
+/* Search Form */
+/* line 102, scss/base/_forms.scss */
+.search-field {
+  padding-right: 3em;
+}
+
+/* line 105, scss/base/_forms.scss */
+.inline-form .search-submit {
+  background: none;
+  padding: 0.78em 1em;
+  border: 0;
+  border-left: 1px solid #808080;
+  color: #808080;
+}
+
+/*------------------------------------*\
+    $Table
+\*------------------------------------*/
+/* line 4, scss/base/_tables.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #808080;
+  width: 100%;
+}
+
+/* line 10, scss/base/_tables.scss */
+th {
+  text-align: left;
+  border: 1px solid #808080;
+  padding: 0.2em;
+}
+
+/* line 15, scss/base/_tables.scss */
+td {
+  border: 1px solid #808080;
+  padding: 0.2em;
+}
+
+/* line 1, scss/base/_animation.scss */
+.animate-fade {
+  -webkit-transition: opacity 0.3s ease-out;
+  -moz-transition: opacity 0.3s ease-out;
+  -ms-transition: opacity 0.3s ease-out;
+  -o-transition: opacity 0.3s ease-out;
+  transition: opacity 0.3s ease-out;
+}
+/* line 4, scss/base/_animation.scss */
+.animate-fade:hover {
+  opacity: 0;
+}
+
+/* line 10, scss/base/_animation.scss */
+.animate-move > .demo-shape {
+  -webkit-transition: all 0.8s ease-in-out;
+  -moz-transition: all 0.8s ease-in-out;
+  -ms-transition: all 0.8s ease-in-out;
+  -o-transition: all 0.8s ease-in-out;
+  transition: all 0.8s ease-in-out;
+}
+
+/*------------------------------------*\
+    $LAYOUT
+\*------------------------------------*/
+/*------------------------------------*\
+    $LAYOUT
+\*------------------------------------*/
+/* Layout Container */
+/* line 6, scss/objects/_layout.scss */
+.lc, .header, [role=main] {
+  max-width: 72em;
+  margin: 0 auto;
+  padding: 0.5em;
+}
+
+/*------------------------------------*\
+    $TEMPLATES
+\*------------------------------------*/
+/* Two Column Layout */
+@media all and (min-width: 50em) {
+  /* line 20, scss/objects/_layout.scss */
+  .l-two-col .l-main {
+    float: left;
+    width: 70%;
+    padding-right: 1em;
+  }
+}
+@media all and (max-width: 50em) {
+  /* line 28, scss/objects/_layout.scss */
+  .l-two-col .l-sidebar {
+    clear: both;
+  }
+}
+@media all and (min-width: 50em) {
+  /* line 28, scss/objects/_layout.scss */
+  .l-two-col .l-sidebar {
+    float: left;
+    width: 30%;
+    padding: 0 0 0 1em;
+  }
+}
+
+/*------------------------------------*\
+    $GRIDS
+\*------------------------------------*/
+/* Grid Container */
+/* line 47, scss/objects/_layout.scss */
+.g {
+  overflow: hidden;
+  margin: 0 -0.5em;
+}
+
+/* Grid Item */
+/* line 53, scss/objects/_layout.scss */
+.gi {
+  padding: 0.5em;
+}
+/* line 56, scss/objects/_layout.scss */
+.gi img {
+  display: block;
+}
+@media all and (min-width: 46.8em) {
+  /* line 53, scss/objects/_layout.scss */
+  .gi {
+    float: left;
+  }
+}
+
+/* Grid 1up */
+/* line 67, scss/objects/_layout.scss */
+.g-1up .gi {
+  width: 100%;
+}
+
+/* Grid 2up */
+@media all and (min-width: 46.8em) {
+  /* line 75, scss/objects/_layout.scss */
+  .g-2up > .gi {
+    float: left;
+    width: 50%;
+  }
+  /* line 79, scss/objects/_layout.scss */
+  .g-2up > .gi:nth-of-type(odd) {
+    clear: left;
+  }
+}
+
+/* Grid Half (Always displayed side by side) */
+/* line 88, scss/objects/_layout.scss */
+.g-half > .gi {
+  float: left;
+  width: 50%;
+}
+/* line 92, scss/objects/_layout.scss */
+.g-half > .gi:nth-of-type(odd) {
+  clear: left;
+}
+
+/* Grid 3up */
+@media all and (min-width: 46.8em) {
+  /* line 101, scss/objects/_layout.scss */
+  .g-3up > .gi {
+    float: left;
+    width: 50%;
+  }
+  /* line 105, scss/objects/_layout.scss */
+  .g-3up > .gi:nth-of-type(2n+1) {
+    clear: left;
+  }
+}
+@media all and (min-width: 50em) {
+  /* line 112, scss/objects/_layout.scss */
+  .g-3up > .gi {
+    width: 33.3333333%;
+  }
+  /* line 115, scss/objects/_layout.scss */
+  .g-3up > .gi:nth-of-type(2n+1) {
+    clear: none;
+  }
+  /* line 119, scss/objects/_layout.scss */
+  .g-3up > .gi:nth-of-type(3n+1) {
+    clear: left;
+  }
+}
+
+/* Grid 4up */
+@media all and (min-width: 46.8em) {
+  /* line 129, scss/objects/_layout.scss */
+  .g-4up > .gi {
+    float: left;
+    width: 50%;
+  }
+  /* line 133, scss/objects/_layout.scss */
+  .g-4up > .gi:nth-of-type(2n+1) {
+    clear: both;
+  }
+}
+@media all and (min-width: 50em) {
+  /* line 140, scss/objects/_layout.scss */
+  .g-4up > .gi {
+    width: 25%;
+  }
+  /* line 143, scss/objects/_layout.scss */
+  .g-4up > .gi:nth-of-type(2n+1) {
+    clear: none;
+  }
+  /* line 147, scss/objects/_layout.scss */
+  .g-4up > .gi:nth-of-type(4n+1) {
+    clear: left;
+  }
+}
+
+/* Grid Quarter (Always displayed side by side) */
+/* line 156, scss/objects/_layout.scss */
+.g-quarter > .gi {
+  float: left;
+  width: 24%;
+}
+/* line 160, scss/objects/_layout.scss */
+.g-quarter > .gi:nth-of-type(4n+1) {
+  clear: left;
+}
+
+@media all and (min-width: 29.75em) {
+  /* line 169, scss/objects/_layout.scss */
+  .g-max4 > .gi {
+    float: left;
+    width: 50%;
+  }
+  /* line 173, scss/objects/_layout.scss */
+  .g-max4 > .gi:nth-of-type(2n+1) {
+    clear: both;
+  }
+}
+@media all and (min-width: 39.8em) {
+  /* line 180, scss/objects/_layout.scss */
+  .g-max4 > .gi {
+    width: 33.3333333%;
+  }
+  /* line 183, scss/objects/_layout.scss */
+  .g-max4 > .gi:nth-of-type(2n+1) {
+    clear: none;
+  }
+  /* line 187, scss/objects/_layout.scss */
+  .g-max4 > .gi:nth-of-type(3n+1) {
+    clear: left;
+  }
+}
+@media all and (min-width: 50em) {
+  /* line 194, scss/objects/_layout.scss */
+  .g-max4 > .gi {
+    width: 25%;
+  }
+  /* line 197, scss/objects/_layout.scss */
+  .g-max4 > .gi:nth-of-type(3n+1) {
+    clear: none;
+  }
+  /* line 201, scss/objects/_layout.scss */
+  .g-max4 > .gi:nth-of-type(4n+1) {
+    clear: left;
+  }
+}
+
+/* Grid 5up */
+/* line 211, scss/objects/_layout.scss */
+.g-max5 > .gi {
+  float: left;
+  width: 50%;
+}
+/* line 215, scss/objects/_layout.scss */
+.g-max5 > .gi:nth-of-type(2n+1) {
+  clear: both;
+}
+@media all and (min-width: 39.8em) {
+  /* line 221, scss/objects/_layout.scss */
+  .g-max5 > .gi {
+    width: 33.3333333%;
+  }
+  /* line 224, scss/objects/_layout.scss */
+  .g-max5 > .gi:nth-of-type(2n+1) {
+    clear: none;
+  }
+  /* line 228, scss/objects/_layout.scss */
+  .g-max5 > .gi:nth-of-type(3n+1) {
+    clear: left;
+  }
+}
+@media all and (min-width: 46.8em) {
+  /* line 235, scss/objects/_layout.scss */
+  .g-max5 > .gi {
+    width: 25%;
+  }
+  /* line 238, scss/objects/_layout.scss */
+  .g-max5 > .gi:nth-of-type(3n+1) {
+    clear: none;
+  }
+  /* line 242, scss/objects/_layout.scss */
+  .g-max5 > .gi:nth-of-type(4n+1) {
+    clear: left;
+  }
+}
+@media all and (min-width: 48em) {
+  /* line 249, scss/objects/_layout.scss */
+  .g-max5 > .gi {
+    width: 20%;
+  }
+  /* line 252, scss/objects/_layout.scss */
+  .g-max5 > .gi:nth-of-type(4n+1) {
+    clear: none;
+  }
+  /* line 256, scss/objects/_layout.scss */
+  .g-max5 > .gi:nth-of-type(5n+1) {
+    clear: left;
+  }
+}
+
+/* Grid 2/3 */
+@media all and (min-width: 46.8em) {
+  /* line 264, scss/objects/_layout.scss */
+  .gi-2-3 {
+    float: left;
+    width: 66.666666%;
+  }
+}
+
+@media all and (min-width: 46.8em) {
+  /* line 271, scss/objects/_layout.scss */
+  .gi-1-3 {
+    float: left;
+    width: 33.333333%;
+  }
+}
+
+/* Grid 4up block */
+/* line 280, scss/objects/_layout.scss */
+.g-opposites .gi {
+  float: left;
+}
+/* line 283, scss/objects/_layout.scss */
+.g-opposites .gi:last-child {
+  float: right;
+  text-align: right;
+}
+
+/*------------------------------------*\
+    $PAGE STRUCTURE
+\*------------------------------------*/
+/* line 1, scss/objects/_header.scss */
+.header {
+  background: #fff;
+  padding: 0;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+/* line 8, scss/objects/_header.scss */
+.logo {
+  float: left;
+  max-width: 8rem;
+  margin: 0.4rem;
+}
+@media all and (min-width: 46.8em) {
+  /* line 8, scss/objects/_header.scss */
+  .logo {
+    max-width: 9rem;
+  }
+}
+
+/* line 18, scss/objects/_header.scss */
+.nav-toggle {
+  float: right;
+  display: block;
+  padding: 0.9rem 1rem 0.7rem;
+  font-size: 1.3rem;
+  line-height: 1;
+  border-left: 1px solid #dbdbdb;
+}
+@media all and (min-width: 46.8em) {
+  /* line 18, scss/objects/_header.scss */
+  .nav-toggle {
+    display: none;
+  }
+}
+@media all and (max-width: 17em) {
+  /* line 18, scss/objects/_header.scss */
+  .nav-toggle {
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+  }
+}
+
+/* line 36, scss/objects/_header.scss */
+.search-form {
+  overflow: hidden;
+  max-height: 0;
+}
+@media all and (min-width: 46.8em) {
+  /* line 36, scss/objects/_header.scss */
+  .search-form {
+    float: right;
+    max-height: none;
+    margin: 0.65em 0.5em 0 0;
+  }
+}
+
+/*------------------------------------*\
+    $NAVIGATION
+\*------------------------------------*/
+/* line 5, scss/objects/_nav.scss */
+.nav {
+  clear: both;
+  overflow: hidden;
+  max-height: 0;
+}
+/* line 10, scss/objects/_nav.scss */
+.nav a {
+  display: block;
+  padding: 1em;
+  border-top: 1px solid #eee;
+}
+/* line 16, scss/objects/_nav.scss */
+.nav.active {
+  max-height: 40em;
+}
+@media all and (min-width: 46.8em) {
+  /* line 5, scss/objects/_nav.scss */
+  .nav {
+    max-height: none;
+    float: right;
+    clear: none;
+  }
+  /* line 25, scss/objects/_nav.scss */
+  .nav li {
+    float: left;
+  }
+  /* line 29, scss/objects/_nav.scss */
+  .nav a {
+    border: 0;
+  }
+}
+
+/* line 37, scss/objects/_nav.scss */
+.pagination {
+  overflow: hidden;
+}
+/* line 40, scss/objects/_nav.scss */
+.pagination li {
+  float: left;
+  border-right: 1px solid #eee;
+}
+/* line 44, scss/objects/_nav.scss */
+.pagination li:last-child {
+  border: 0;
+}
+/* line 49, scss/objects/_nav.scss */
+.pagination a {
+  padding: 1em;
+}
+
+/*------------------------------------*\
+    $MAIN CONTENT AREA
+\*------------------------------------*/
+/* line 4, scss/objects/_main.scss */
+[role=main] {
+  padding: 0.5em 0.5em 2em;
+  overflow: hidden;
+}
+
+/*------------------------------------*\
+    $FOOTER
+\*------------------------------------*/
+/* line 4, scss/objects/_footer.scss */
+.footer {
+  clear: both;
+  overflow: hidden;
+  background: #131313;
+  color: #fff;
+  line-height: 1.2;
+}
+/* line 11, scss/objects/_footer.scss */
+.footer a {
+  color: #f9f9f9;
+}
+
+/* line 17, scss/objects/_footer.scss */
+.nav-footer {
+  margin: -1em -1em 1em;
+}
+/* line 20, scss/objects/_footer.scss */
+.nav-footer li {
+  border-bottom: 1px solid #333;
+}
+@media all and (min-width: 46.8em) {
+  /* line 20, scss/objects/_footer.scss */
+  .nav-footer li {
+    border: 0;
+    float: left;
+  }
+}
+/* line 29, scss/objects/_footer.scss */
+.nav-footer a {
+  display: block;
+  padding: 1em;
+}
+
+@media all and (min-width: 46.8em) {
+  /* line 35, scss/objects/_footer.scss */
+  .copyright {
+    float: right;
+  }
+}
+
+/*------------------------------------*\
+    $TEXT Styles
+\*------------------------------------*/
+/* line 2, scss/objects/_text.scss */
+.intro {
+  font-size: 1.0625em;
+  font-weight: bold;
+}
+
+/* line 8, scss/objects/_text.scss */
+.pullquote {
+  font-family: Arial, Verdana, sans-serif;
+  font-size: 1.4375em;
+}
+
+/* line 14, scss/objects/_text.scss */
+.caption {
+  font-style: italic;
+}
+
+/* line 20, scss/objects/_text.scss */
+.text a {
+  text-decoration: underline;
+}
+/* line 24, scss/objects/_text.scss */
+.text ul {
+  list-style: disc;
+  margin: 0 0 1em 1.2em;
+}
+/* line 28, scss/objects/_text.scss */
+.text ul ul {
+  margin-bottom: 0;
+}
+/* line 33, scss/objects/_text.scss */
+.text ol {
+  list-style: decimal;
+  margin: 0 0 1em 1.5em;
+}
+/* line 37, scss/objects/_text.scss */
+.text ol ol {
+  margin-bottom: 0;
+}
+
+/*------------------------------------*\
+    $COMPONENTS
+\*------------------------------------*/
+/* Icon Font */
+@font-face {
+  font-family: 'icons';
+  src: url("../fonts/icons.eot");
+  src: url("../fonts/icons.eot?#iefix") format("embedded-opentype"), url("../fonts/icons.woff") format("woff"), url("../fonts/icons.ttf") format("truetype"), url("../fonts/icons.svg#icons") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+/* line 15, scss/objects/_icons.scss */
+[data-icon]:before {
+  font-family: 'icons';
+  content: attr(data-icon);
+  speak: none;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* line 24, scss/objects/_icons.scss */
+.icon-twitter:before, .icon-stumbleupon:before, .icon-pinterest:before, .icon-linkedin:before, .icon-google-plus:before, .icon-search:before, .icon-play:before, .icon-menu:before, .icon-arrow-left:before, .icon-arrow-right:before, .icon-bubble:before, .icon-facebook:before, .icon-feed:before, .icon-youtube:before, .icon-tag:before, .icon-tumblr:before, .icon-instagram, .icon-podcast, .icon-apple, .icon-android, .icon-arrow:after, .icon-envelope:before {
+  font-family: 'icons';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* line 34, scss/objects/_icons.scss */
+.icon-twitter:before {
+  content: "\74";
+}
+
+/* line 37, scss/objects/_icons.scss */
+.icon-stumbleupon:before {
+  content: "\75";
+}
+
+/* line 40, scss/objects/_icons.scss */
+.icon-pinterest:before {
+  content: "\70";
+}
+
+/* line 43, scss/objects/_icons.scss */
+.icon-linkedin:before {
+  content: "\69";
+}
+
+/* line 46, scss/objects/_icons.scss */
+.icon-google-plus:before {
+  content: "\67";
+}
+
+/* line 49, scss/objects/_icons.scss */
+.icon-search:before {
+  content: "\73";
+}
+
+/* line 52, scss/objects/_icons.scss */
+.icon-play:before {
+  content: "\61";
+}
+
+/* line 55, scss/objects/_icons.scss */
+.icon-menu:before {
+  content: "\21";
+}
+
+/* line 58, scss/objects/_icons.scss */
+.icon-arrow-left:before {
+  content: "\23";
+}
+
+/* line 61, scss/objects/_icons.scss */
+.icon-arrow-right:before {
+  content: "\24";
+}
+
+/* line 64, scss/objects/_icons.scss */
+.icon-bubble:before {
+  content: "\25";
+}
+
+/* line 67, scss/objects/_icons.scss */
+.icon-facebook:before {
+  content: "\66";
+}
+
+/* line 70, scss/objects/_icons.scss */
+.icon-feed:before {
+  content: "\27";
+}
+
+/* line 73, scss/objects/_icons.scss */
+.icon-youtube:before {
+  content: "\79";
+}
+
+/* line 76, scss/objects/_icons.scss */
+.icon-tag:before {
+  content: "\28";
+}
+
+/* line 79, scss/objects/_icons.scss */
+.icon-tumblr:before {
+  content: "\6d";
+}
+
+/* line 82, scss/objects/_icons.scss */
+.icon-instagram:before {
+  content: "\22";
+}
+
+/* line 85, scss/objects/_icons.scss */
+.icon-podcast:before {
+  content: "\26";
+}
+
+/* line 88, scss/objects/_icons.scss */
+.icon-android:before {
+  content: "\29";
+}
+
+/* line 91, scss/objects/_icons.scss */
+.icon-apple:before {
+  content: "\2a";
+}
+
+/* line 94, scss/objects/_icons.scss */
+.icon-envelope:before {
+  content: "\2b";
+}
+
+/* line 99, scss/objects/_icons.scss */
+.icon-arrow:after {
+  content: "\61";
+  display: inline-block;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+/* line 109, scss/objects/_icons.scss */
+.icon-play:before {
+  font-size: 0.7rem;
+  padding-left: 0.2em;
+}
+
+/* line 114, scss/objects/_icons.scss */
+.icon-play-box {
+  display: block;
+  margin-left: 2em;
+}
+
+/* line 119, scss/objects/_icons.scss */
+.icon-play-box:before {
+  padding: 0.25em;
+  background: #808080;
+  color: #fff;
+  margin-left: -1.7rem;
+  margin-right: 0.5em;
+}
+
+/*------------------------------------*\
+    $BUTTONS
+\*------------------------------------*/
+/* line 4, scss/objects/_buttons.scss */
+.btn {
+  display: inline-block;
+  background: #333;
+  color: #fff;
+  line-height: 1;
+  font-weight: bold;
+  padding: 1em;
+  border: 0;
+  text-align: center;
+}
+/* line 14, scss/objects/_buttons.scss */
+.btn:hover, .btn:focus {
+  background: #808080;
+  color: #fff;
+}
+/* line 19, scss/objects/_buttons.scss */
+.btn.disabled {
+  background: #eee;
+  color: #808080;
+}
+
+/* line 25, scss/objects/_buttons.scss */
+.btn-small {
+  padding: 0.5em;
+}
+
+/* line 29, scss/objects/_buttons.scss */
+.btn-large {
+  padding: 0.5em;
+  text-transform: uppercase;
+  background: #808080;
+  font-size: 1.4rem;
+  font-weight: normal;
+}
+
+/* line 38, scss/objects/_buttons.scss */
+.text-btn {
+  font-style: italic;
+}
+
+/* Generic Placeholder Brick: REMOVE FOR PRODUCTION */
+/* line 2, scss/objects/_blocks.scss */
+.brick {
+  background: #dcdddc;
+  padding: 2em;
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 1px solid #eee;
+}
+
+/* Block */
+/* line 11, scss/objects/_blocks.scss */
+.block {
+  overflow: hidden;
+}
+/* line 14, scss/objects/_blocks.scss */
+.block p:last-child {
+  margin-bottom: 0;
+}
+
+/* line 19, scss/objects/_blocks.scss */
+.headline {
+  line-height: 1.2;
+}
+
+/* Hero Block */
+/* line 24, scss/objects/_blocks.scss */
+.block-hero {
+  margin-bottom: 0.5em;
+}
+/* line 28, scss/objects/_blocks.scss */
+.block-hero .b-thumb img {
+  display: block;
+}
+@media all and (min-width: 50em) {
+  /* line 24, scss/objects/_blocks.scss */
+  .block-hero {
+    position: relative;
+  }
+  /* line 36, scss/objects/_blocks.scss */
+  .block-hero .b-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 1.5em;
+  }
+}
+
+/* Block Thumbnail with Headline */
+/* line 49, scss/objects/_blocks.scss */
+.block-thumb {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+/* line 54, scss/objects/_blocks.scss */
+.block-thumb .b-inner {
+  display: table-row;
+  vertical-align: top;
+  overflow: hidden;
+}
+@media all and (min-width: 29.75em) {
+  /* line 60, scss/objects/_blocks.scss */
+  .block-thumb .b-thumb {
+    display: table-cell;
+    vertical-align: top;
+    width: 30%;
+    max-width: 10em;
+  }
+  /* line 67, scss/objects/_blocks.scss */
+  .block-thumb .b-thumb img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+@media all and (min-width: 29.75em) {
+  /* line 75, scss/objects/_blocks.scss */
+  .block-thumb .b-text {
+    display: table-cell;
+    width: 70%;
+    padding: 0 1em;
+  }
+}
+
+/* Block Headline Summary */
+/* line 87, scss/objects/_blocks.scss */
+.block-headline-summary a {
+  display: block;
+  padding: 0.5em;
+}
+
+/* Block Inset */
+/* line 94, scss/objects/_blocks.scss */
+.block-inset {
+  position: relative;
+}
+/* line 97, scss/objects/_blocks.scss */
+.block-inset .b-thumb {
+  position: relative;
+  z-index: 0;
+}
+/* line 101, scss/objects/_blocks.scss */
+.block-inset .b-thumb img {
+  display: block;
+}
+
+/* Hero Block */
+/* line 108, scss/objects/_blocks.scss */
+.block-inset {
+  margin-bottom: 0.5em;
+  position: relative;
+}
+/* line 112, scss/objects/_blocks.scss */
+.block-inset .headline {
+  font-size: 1.1em;
+}
+/* line 116, scss/objects/_blocks.scss */
+.block-inset .b-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 0.5em;
+}
+
+/* Block Thumb with Summary */
+/* line 129, scss/objects/_blocks.scss */
+.block-thumb-summary .b-thumb {
+  float: left;
+  width: 50%;
+}
+/* line 134, scss/objects/_blocks.scss */
+.block-thumb-summary .b-text {
+  margin-left: 50%;
+  padding: 0.5em;
+}
+
+/* line 2, scss/objects/_lists.scss */
+.inline-list li {
+  display: inline-block;
+}
+
+/* Social List */
+/* line 9, scss/objects/_lists.scss */
+.social-list li {
+  margin: 0 0.4rem 1em 0;
+}
+/* line 13, scss/objects/_lists.scss */
+.social-list a {
+  font-size: 1.6em;
+}
+
+/* Headline List */
+/* line 20, scss/objects/_lists.scss */
+.headline-list {
+  margin-bottom: 1em;
+}
+/* line 23, scss/objects/_lists.scss */
+.headline-list.flush {
+  margin: 0;
+}
+/* line 27, scss/objects/_lists.scss */
+.headline-list h4 {
+  font-weight: normal;
+}
+/* line 31, scss/objects/_lists.scss */
+.headline-list li {
+  padding: 0.25em 0;
+  border-top: 1px solid #ddd;
+}
+
+/* Post List */
+/* line 39, scss/objects/_lists.scss */
+.post-list li {
+  margin-bottom: 1em;
+}
+
+/* Bullet List */
+/* line 45, scss/objects/_lists.scss */
+.bullet-list {
+  list-style: square;
+  margin: 0 0 1em 1.2em;
+  line-height: 1.3;
+}
+/* line 50, scss/objects/_lists.scss */
+.bullet-list li {
+  margin-bottom: 1em;
+}
+
+/* Text List */
+/* line 56, scss/objects/_lists.scss */
+.text-list {
+  margin: 0 0 1em;
+  line-height: 1.3;
+}
+/* line 60, scss/objects/_lists.scss */
+.text-list li {
+  margin-bottom: 1em;
+}
+
+/* line 1, scss/objects/_tooltip.scss */
+.tooltip-container {
+  display: inline-block;
+  position: relative;
+}
+/* line 6, scss/objects/_tooltip.scss */
+.tooltip-container:hover .tooltip {
+  display: block;
+}
+
+/* line 12, scss/objects/_tooltip.scss */
+.tooltip-link {
+  background: #f9f9f9;
+}
+
+/* line 16, scss/objects/_tooltip.scss */
+.tooltip {
+  display: none;
+  position: absolute;
+  top: 1.5em;
+  left: 0;
+  width: 18em;
+  padding: 1em;
+  background: #fff;
+  border: 1px solid #808080;
+  box-shadow: 0.3em 0.3em 1em 0 rgba(0, 0, 0, 0.2);
+}
+/* line 27, scss/objects/_tooltip.scss */
+.tooltip h2 {
+  margin-top: 0;
+}
+@media all and (min-width: 24em) {
+  /* line 16, scss/objects/_tooltip.scss */
+  .tooltip {
+    width: 22em;
+  }
+}
+@media all and (min-width: 29.75em) {
+  /* line 16, scss/objects/_tooltip.scss */
+  .tooltip {
+    width: 27em;
+  }
+}
+@media all and (min-width: 39.8em) {
+  /* line 16, scss/objects/_tooltip.scss */
+  .tooltip {
+    width: 30em;
+  }
+}
+
+/* line 1, scss/objects/_accordion.scss */
+.accordion {
+  margin-bottom: 1em;
+}
+
+/* line 5, scss/objects/_accordion.scss */
+.acc-handle {
+  background: #131313;
+  color: #fff;
+  font-family: Arial, Verdana, sans-serif;
+  font-weight: bold;
+  display: block;
+  position: relative;
+  padding: 0.5em;
+  border-bottom: 1px solid #ddd;
+}
+/* line 15, scss/objects/_accordion.scss */
+.acc-handle:after {
+  content: "+";
+  float: right;
+}
+/* line 20, scss/objects/_accordion.scss */
+.acc-handle:hover {
+  color: #fff;
+  background: #333;
+}
+/* line 26, scss/objects/_accordion.scss */
+.acc-handle.active {
+  background: #333;
+}
+/* line 29, scss/objects/_accordion.scss */
+.acc-handle.active:after {
+  content: "-";
+}
+
+/* line 1, scss/objects/_tabs.scss */
+.tabs {
+  overflow: hidden;
+}
+/* line 4, scss/objects/_tabs.scss */
+.tabs ul {
+  display: table;
+  width: 100%;
+}
+/* line 9, scss/objects/_tabs.scss */
+.tabs li {
+  display: table-cell;
+  text-align: center;
+  border-right: 1px solid #ddd;
+}
+/* line 14, scss/objects/_tabs.scss */
+.tabs li:last-child {
+  border-right: 0;
+}
+/* line 19, scss/objects/_tabs.scss */
+.tabs a {
+  display: block;
+  padding: 0.5em;
+  background: #808080;
+}
+/* line 24, scss/objects/_tabs.scss */
+.tabs a:hover, .tabs a:focus {
+  background: #ddd;
+}
+/* line 28, scss/objects/_tabs.scss */
+.tabs a.active {
+  background: #333;
+  color: #fff;
+}
+
+/* line 1, scss/objects/_sections.scss */
+.section {
+  margin: 0 0 1em;
+}
+
+/* line 5, scss/objects/_sections.scss */
+.section-title {
+  margin-bottom: 0.5em;
+}
+
+/* line 3, scss/objects/_article.scss */
+.article-header h1 {
+  font-size: 2.5em;
+}
+
+/* line 8, scss/objects/_article.scss */
+.byline {
+  font-size: 0.875em;
+  font-style: italic;
+  margin-bottom: 0.5em;
+}
+
+/* line 15, scss/objects/_article.scss */
+.social-share {
+  overflow: hidden;
+  margin-bottom: 1em;
+}
+/* line 19, scss/objects/_article.scss */
+.social-share li {
+  float: left;
+  margin-right: 0.5em;
+}
+/* line 24, scss/objects/_article.scss */
+.social-share a {
+  background: #333;
+  color: #fff;
+  display: block;
+  padding: 0.5em;
+}
+/* line 30, scss/objects/_article.scss */
+.social-share a:hover {
+  background: #808080;
+}
+
+/* line 2, scss/objects/_comments.scss */
+.comments li {
+  margin-bottom: 1em;
+}
+
+/* line 7, scss/objects/_comments.scss */
+.comment-container {
+  overflow: hidden;
+  margin-bottom: 1em;
+  list-style: none;
+}
+
+/* line 13, scss/objects/_comments.scss */
+.comment-meta {
+  float: left;
+  width: 6.5em;
+}
+/* line 17, scss/objects/_comments.scss */
+.comment-meta img {
+  display: block;
+  border: 1px solid #eee;
+  margin-bottom: 0.5em;
+}
+
+/* line 24, scss/objects/_comments.scss */
+.comment-name {
+  font-size: 0.75em;
+}
+
+/* line 28, scss/objects/_comments.scss */
+.comment-text {
+  margin-left: 9em;
+}
+
+/*------------------------------------*\
+    $MESSAGING
+\*------------------------------------*/
+/* line 6, scss/objects/_messaging.scss */
+.alert {
+  text-align: center;
+  padding: 1em;
+  margin-bottom: 0.5em;
+  border: 1px solid #808080;
+  background: #f9f9f9;
+}
+
+/* line 14, scss/objects/_messaging.scss */
+.alert-error {
+  color: #f00;
+  border-color: #f00;
+  background: #ffbebe;
+}

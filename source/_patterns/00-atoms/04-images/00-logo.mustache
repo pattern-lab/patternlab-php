@@ -1,0 +1,1 @@
+<a href="{{ url }}"><img src="../../images/logo.png" class="logo" alt="Logo Alt Text" /></a>
