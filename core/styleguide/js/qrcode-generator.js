@@ -39,7 +39,7 @@ var qrCodeGenerator = {
 				var br                = document.createElement("br");
 				var a                 = document.createElement("a");
 				a.href                = qrCodeGenerator.createURL();
-				a.innerHTML           = "[link]"
+				a.innerHTML           = "[link]";
 				a.style.textTransform = "lowercase";
 				
 				var li                = document.createElement("li");
@@ -60,7 +60,7 @@ var qrCodeGenerator = {
 				
 				var a                 = document.createElement("a");
 				a.href                = "#";
-				a.innerHTML           = "the mini qr service is unavailable"
+				a.innerHTML           = "the mini qr service is unavailable";
 				a.style.textTransform = "lowercase";
 				
 				var li                = document.createElement("li");
@@ -86,7 +86,8 @@ var qrCodeGenerator = {
 	createURL: function() {
 		var path = window.location.pathname;
 		var search = window.location.search;
-		var url = (xipHostname != "") ? xipHostname.replace("*", ipAddress)+path+search : window.location.toString();
+		var patternUrl = (qrCodeGeneratorRaw) ? '/' + document.getElementById("sg-raw").getAttribute("href") : path+search;
+		var url = (xipHostname !== "") ? xipHostname.replace("*", ipAddress)+patternUrl : window.location.protocol + '//' + window.location.host + patternUrl;
 		return url;
 	}
 	

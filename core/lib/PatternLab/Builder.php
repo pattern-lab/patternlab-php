@@ -184,6 +184,7 @@ class Builder {
 		$this->navItems['viewallpaths']      = json_encode($this->viewAllPaths);
 		$this->navItems['mqs']               = $this->gatherMQs();
 		$this->navItems['qrcodegeneratoron'] = $this->qrCodeGeneratorOn;
+		$this->navItems['qrcodegeneratorraw'] = $this->qrCodeGeneratorRaw;
 		$this->navItems['ipaddress']         = getHostByName(getHostName());
 		$this->navItems['xiphostname']       = $this->xipHostname;
 		$this->navItems['ishminimum']        = $this->ishMinimum;

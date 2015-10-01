@@ -19,6 +19,8 @@ pageFollowPort = "8003"
 
 // whether the qr code generator should be loaded automatically in the nav
 qrCodeGeneratorOn = "false"
+// use the raw pattern URL in the QR code
+qrCodeGeneratorRaw = "true"
 
 // pattern lab's xip host if you have it configured, to be used with the QR code generator
 xipHostname = "http://patternlab.*.xip.io"
