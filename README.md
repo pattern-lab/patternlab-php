@@ -60,3 +60,14 @@ By default, the Pattern Lab assets can be manually generated and the Pattern Lab
 * [Modifying the Pattern Lab Nav](http://patternlab.io/docs/advanced-pattern-lab-nav.html)
 * [Editing the config.ini Options](http://patternlab.io/docs/advanced-config-options.html)
 * [Integration with Compass](http://patternlab.io/docs/advanced-integration-with-compass.html)
+
+tradução para o Português
+
+## Sobre Pattern Lab
+- [Site Pattern Lab](http://patternlab.io/)
+- [Sobre Pattern Lab](http://patternlab.io/about.html)
+- [Documentation](http://patternlab.io/docs/index.html)
+- [Demo](http://demo.patternlab.io/)
+
+
+A versão de PHP Pattern Lab é , em sua essência, um gerador de site estático . Ele combina ativos independentes de plataforma , como os [ Mustache] ( http://mustache.github.io/ ) baseados em padrões e o visualizador baseado em JavaScript , com um " construtor " baseado em PHP que transforma e constroi dinamicamente o Pattern Lab Base. Ao torná-lo um gerador de site estático , Pattern Lab separa fortemente padrões , dados e apresentação da lógica de construção.
