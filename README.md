@@ -61,7 +61,15 @@ By default, the Pattern Lab assets can be manually generated and the Pattern Lab
 * [Editing the config.ini Options](http://patternlab.io/docs/advanced-config-options.html)
 * [Integration with Compass](http://patternlab.io/docs/advanced-integration-with-compass.html)
 
-tradução para o Português
+
+
+-------------------
+
+## Translations of this document
+- [Portuguese](https://github.com/pattern-lab/patternlab-php#sobre-pattern-lab)
+
+-------------------
+
 
 ## Sobre Pattern Lab
 - [Site Pattern Lab](http://patternlab.io/)
