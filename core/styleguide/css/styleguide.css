@@ -583,7 +583,6 @@ span.sg-pattern-state:before {
   .sg-code-contains code {
     padding: 0.2em;
     background: rgba(0, 0, 0, 0.3);
-    color: #999999;
     position: relative;
     top: -2px; }
 
