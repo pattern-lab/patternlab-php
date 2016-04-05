@@ -290,9 +290,9 @@ class Builder {
 		}
 		
 		// write out the various pattern files
-		file_put_contents(__DIR__.$this->pp.$path."/".$path.".html",$rf);
-		file_put_contents(__DIR__.$this->pp.$path."/".$path.".escaped.html",$e);
-		file_put_contents(__DIR__.$this->pp.$path."/".$path.".mustache",$m);
+		file_put_contents(__DIR__.$this->pp.$path.DIRECTORY_SEPARATOR.$path.".html",$rf);
+		file_put_contents(__DIR__.$this->pp.$path.DIRECTORY_SEPARATOR.$path.".escaped.html",$e);
+		file_put_contents(__DIR__.$this->pp.$path.DIRECTORY_SEPARATOR.$path.".mustache",$m);
 		if ($this->enableCSS && isset($this->patternCSS[$p])) {
 			file_put_contents(__DIR__.$this->pp.$path."/".$path.".css",htmlentities($this->patternCSS[$p]));
 		}
