@@ -685,7 +685,7 @@ class Builder {
 				
 				/*************************************
 				 * This section is for:
-				 *    JSON psuedo-patterns
+				 *    JSON pseudo-patterns
 				 *************************************/
 				
 				$patternSubtypeInclude = ($patternSubtypeSet) ? $patternSubtype."-" : "";
@@ -759,7 +759,7 @@ class Builder {
 					}
 					
 					// get the special pattern data
-					$patternData = (array) json_decode(file_get_contents($object->getPathname()));
+					$patternData = (array) json_decode(file_get_contents($object->getPathname()),true);
 					$this->jsonLastErrorMsg($object->getFilename());
 					
 					// merge them for the file
@@ -768,11 +768,9 @@ class Builder {
 						$this->d["patternSpecific"][$patternPartial]["data"]      = array();
 						$this->d["patternSpecific"][$patternPartial]["listItems"] = array();
 					}
-					
 					if (is_array($patternDataBase) && is_array($patternData)) {
-						$this->d["patternSpecific"][$patternPartial]["data"] = array_merge($patternDataBase, $patternData);
+						$this->d["patternSpecific"][$patternPartial]["data"] = array_replace_recursive($patternDataBase, $patternData);
 					}
-					
 				}
 						
 			} else if ($object->isFile() && ($object->getExtension() == "json")) {
