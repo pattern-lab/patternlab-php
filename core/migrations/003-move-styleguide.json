@@ -1,5 +1,5 @@
 {
 	"sourcePath": "core/styleguide",
-	"destinationPath": "public/styleguide",
+	"destinationPath": "{publicDir}/styleguide",
 	"checkType": "versionDiffDir"
 }

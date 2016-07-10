@@ -51,7 +51,9 @@ class Configurer {
 		$defaultConfig = $config;
 		
 		// check to see if the user config exists, if not create it
-		print "configuring pattern lab...\n";
+		print "configuring pattern lab...";
+		print "\nsource dir: ".$config['sourceDir'];
+		print "\npublic dir: ".$config['publicDir']."\n\n";
 		if (!file_exists($this->userConfigPath)) {
 			$migrate = true;
 		} else {
@@ -66,7 +68,7 @@ class Configurer {
 			print "upgrading your version of pattern lab...\n";
 			print "checking for migrations...\n";
 			$m = new Migrator;
-			$m->migrate(true);
+			$m->migrate(true, $config);
 			if ($migrate) {
 				if (!@copy($this->plConfigPath, $this->userConfigPath)) {
 					print "Please make sure that Pattern Lab can write a new config to config/.\n";

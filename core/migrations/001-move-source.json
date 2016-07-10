@@ -1,5 +1,5 @@
 {
 	"sourcePath": "core/source",
-	"destinationPath": "source",
+	"destinationPath": "{sourceDir}",
 	"checkType": "dirEmpty"
 }

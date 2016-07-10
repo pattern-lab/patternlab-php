@@ -25,7 +25,7 @@ class Migrator {
 	* Read through the migrations and move files as needed
 	* @param  {Boolean}      is this a different version
 	*/
-	public function migrate($diffVersion = false) {
+	public function migrate($diffVersion = false, $config) {
 		
 		$migrations      = new \DirectoryIterator(__DIR__."/../../migrations/");
 		$migrationsValid = array();
@@ -38,15 +38,24 @@ class Migrator {
 		}
 		
 		asort($migrationsValid);
-		
+
 		foreach ($migrationsValid as $filename) {
 			
 			$basePath        = __DIR__."/../../../";
 			$migrationData   = json_decode(file_get_contents(__DIR__."/../../migrations/".$filename));
 			$checkType       = $migrationData->checkType;
 			$sourcePath      = ($checkType == "fileExists") ? $basePath.$migrationData->sourcePath : $basePath.$migrationData->sourcePath.DIRECTORY_SEPARATOR;
-			$destinationPath = ($checkType == "fileExists") ? $basePath.$migrationData->destinationPath : $basePath.$migrationData->destinationPath.DIRECTORY_SEPARATOR;
-			
+
+			$destinationPath = preg_replace_callback( 
+				// replace in migration's paths {valueName} with valueName setting from config.ini
+				'/(\{.*\})/', 
+				function($matches)use($config) {
+					return  $config[ trim($matches[0], "{}") ];
+				},
+				$basePath.$migrationData->destinationPath
+			);
+			$destinationPath .= ($checkType == "fileExists") ? '' : DIRECTORY_SEPARATOR;
+
 			if ($checkType == "dirEmpty") {
 				
 				$emptyDir = true;
@@ -64,7 +73,7 @@ class Migrator {
 			} else if ($checkType == "dirExists") {
 				
 				if (!is_dir($destinationPath)) {
-					mkdir($destinationPath);
+					mkdir($destinationPath, 0777, true);
 				}
 				
 			} else if ($checkType == "fileExists") {
