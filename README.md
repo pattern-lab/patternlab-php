@@ -52,7 +52,7 @@ After installing do the following to start and view Pattern Lab:
 
 You should now be able to open [http://localhost:8080](http://localhost:8080) to see your generated site. Any changes you make in `./source/` will automatically rebuild your site and reload your browser.
 
-As you get more comfortable with Pattern Lab you can [integrate it with a Gulp or Grunt workflow](http://patternlab.io/docs/advanced-integration-with-grunt.html) and drop some of the native Pattern Lab features like automatic browser reload.
+As you get more comfortable with Pattern Lab you can [integrate it with a Gulp or Grunt workflow](http://patternlab.io/docs/advanced-integration-with-grunt.html) and drop some of the native Pattern Lab features like automatic browser reload. You can also check out [the list of plugins](http://patternlab.io/download.html).
 
 ## More Documentation
 
@@ -60,7 +60,7 @@ Obviously Pattern Lab is deeper than the install process. [Check out the documen
 
 ## Migrating from Pattern Lab 1 to Pattern Lab 2
 
-Pattern Lab 2 was a complete rewrite and reorganization of Pattern Lab 1. After installing the Standard Edition for Mustache do the following to migrate from Pattern Lab 1 to Pattern Lab 2:
+Pattern Lab 2 was a complete rewrite and reorganization of Pattern Lab 1. [Learn about the changes](http://patternlab.io/docs/changes-1-to-2.html). After installing the Standard Edition for Mustache do the following to migrate from Pattern Lab 1 to Pattern Lab 2:
 
 1. Copy `./source` from your old project to your new install
 2. Copy `./source/_patterns/00-atoms/00-meta/_00-head.mustache` to `./source/_meta/_00-head.mustache`
