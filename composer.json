@@ -35,6 +35,7 @@
     "generate": "php core/console --generate",
     "watch": "php core/console --watch",
     "start": "php core/console --server --with-watch",
+    "install-demo": "php core/console --starterkit --install pattern-lab/starterkit-mustache-demo",
     "post-install-cmd": [
       "PatternLab\\Installer::postInstallCmd"
     ],
