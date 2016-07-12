@@ -3,7 +3,7 @@
 
 # Pattern Lab Standard Edition for Mustache
 
-The Pattern Lab Standard Edition for Mustache is the evolution of Pattern Lab 1. Pattern Lab is still, at its core, a prototyping tool focused on encouraging communication between content creators, designers, devs, and clients. It combines platform-agnostic assets, like the [Mustache](http://mustache.github.io/)-based patterns, with a PHP-based "builder". Pattern Lab 2 introduces [the beginnings of an ecosystem](http://patternlab.io/docs/advanced-ecosystem-overview.html) that will allow teams to mix, match and extend Pattern Lab to meet their specific needs. It will also make it easier for the Pattern Lab team to push out new features. Pattern Lab Standard Edition for Mustache is just [one of four PHP-based Editions currently available](http://patternlab.io/docs/installation.html).
+The Pattern Lab Standard Edition for Mustache is the evolution of Pattern Lab 1. Pattern Lab is still, at its core, a prototyping tool focused on encouraging communication between content creators, designers, devs, and clients. It combines platform-agnostic assets, like the [Mustache](http://mustache.github.io/)-based patterns, with a PHP-based "builder." Pattern Lab 2 introduces [the beginnings of an ecosystem](http://patternlab.io/docs/advanced-ecosystem-overview.html) that will allow teams to mix, match and extend Pattern Lab to meet their specific needs. It will also make it easier for the Pattern Lab team to push out new features. Pattern Lab Standard Edition for Mustache is just [one of the four PHP-based Editions currently available](http://patternlab.io/docs/installation.html).
 
 ## Demo
 
@@ -26,8 +26,6 @@ There are two methods for downloading and installing the Standard Edition for Mu
 
 The fastest way to get started with Pattern Lab's Standard Edition for Mustache is to download the latest pre-built version from the [releases page](https://github.com/pattern-lab/patternlab-php/releases/latest).
 
-**Note:** You'll need to install [Composer](https://getcomposer.org/) in the future if you want to [upgrade Pattern Lab](http://patternlab.io/docs/upgrading.html).
-
 ### Use Composer to create a project
 
 Pattern Lab uses [Composer](https://getcomposer.org/) to manage project dependencies.
@@ -47,7 +45,7 @@ This will install the Standard Edition for Mustache into a directory called `you
 
 ## Get Up and Running
 
-After installing do the following start Pattern Lab:
+After installing do the following to start and view Pattern Lab:
 
 1. In a terminal window navigate to the root of your project if you aren't there already
 2. Type `php core/console --server --with-watch`
@@ -58,7 +56,7 @@ As you get more comfortable with Pattern Lab you can [integrate it with a Gulp o
 
 ## More Documentation
 
-Obviously the reason to install Pattern Lab is more than the install process. [Check out the documentation](https://patternlab.io/docs/) to learn about how to use patterns, how to modify the data used to populate your patterns, and about some advanced features.
+Obviously Pattern Lab is deeper than the install process. [Check out the documentation](https://patternlab.io/docs/) to learn about how to use patterns, how to modify the data used to populate those patterns, and about some advanced features.
 
 ## Migrating from Pattern Lab 1 to Pattern Lab 2
 
