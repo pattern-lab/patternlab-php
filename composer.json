@@ -27,7 +27,8 @@
     "php": ">=5.3.6",
     "pattern-lab/core": "^2.0.0",
     "pattern-lab/patternengine-mustache": "^2.0.0",
-    "pattern-lab/styleguidekit-mustache-default": "^3.0.0"
+    "pattern-lab/styleguidekit-mustache-default": "^3.0.0",
+    "pattern-lab/plugin-reload": "^2.0.0"
   },
   "scripts": {
     "server": "php core/console --server",

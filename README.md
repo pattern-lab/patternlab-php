@@ -9,16 +9,11 @@ The Pattern Lab Standard Edition for Mustache is the evolution of Pattern Lab 1.
 
 You can play with a demo of the front-end of Pattern Lab at [demo.patternlab.io](http://demo.patternlab.io).
 
-## Getting Started
+## Requirements
 
-* [Requirements](http://patternlab.io/docs/requirements.html)
-* [Installing](#installing)
-* [Generating](http://patternlab.io/docs/first-run.html)
-* [Viewing](http://patternlab.io/docs/viewing-patterns.html)
-* [Editing](http://patternlab.io/docs/editing-source-files.html)
-* [Using commands](http://patternlab.io/docs/command-line.html)
-* [Upgrading](http://patternlab.io/docs/upgrading.html)
-* [More documentation](http://patternlab.io/docs/)
+To use the basic features of Pattern Lab to compile patterns, you must have **PHP 5.4+** installed. On Mac OS X Pattern Lab should work "out of the box." If you're on Windows you can [download PHP from PHP.net](http://windows.php.net/download/). Pattern Lab comes with its own built-in web server.
+
+Pattern Lab uses [Composer](https://getcomposer.org/) to manage project dependencies. It's required if you want to install Pattern Lab using Composer's `create-project` command or if you want to upgrade Pattern Lab in the future.
 
 ## Installing
 
@@ -48,7 +43,22 @@ Use Composer's [`create-project` command](https://getcomposer.org/doc/03-cli.md#
 1. In a terminal window navigate to the root of your project
 2. Type `composer create-project pattern-lab/edition-mustache-webdesignday your-project-name && cd $_`
 
-This will install the Standard Edition for Mustache into a directory called `your-project-name` in `install/location/`. You will be automatically dropped into the project directory after the process is finished.
+This will install the Standard Edition for Mustache into a directory called `your-project-name` in `install/location/`. When prompted choose the "demo" StarterKit. You will be automatically dropped into the project directory after the process is finished.
+
+## Get Up and Running
+
+After installing do the following start Pattern Lab:
+
+1. In a terminal window navigate to the root of your project if you aren't there already
+2. Type `php core/console --server --with-watch`
+
+You should now be able to open [http://localhost:8080](http://localhost:8080) to see your generated site. Any changes you make in `./source/` will automatically rebuild your site and reload your browser.
+
+As you get more comfortable with Pattern Lab you can [integrate it with a Gulp or Grunt workflow](http://patternlab.io/docs/advanced-integration-with-grunt.html) and drop some of the native Pattern Lab features like automatic browser reload.
+
+## More Documentation
+
+Obviously the reason to install Pattern Lab is more than the install process. [Check out the documentation](https://patternlab.io/docs/) to learn about how to use patterns, how to modify the data used to populate your patterns, and about some advanced features.
 
 ## Migrating from Pattern Lab 1 to Pattern Lab 2
 
@@ -71,10 +81,11 @@ The Standard Edition for Mustache installs the following components:
 
 * `pattern-lab/core`: [GitHub](https://github.com/pattern-lab/patternlab-php-core), [Packagist](https://packagist.org/packages/pattern-lab/core)
 * `pattern-lab/patternengine-mustache`: [documentation](https://github.com/pattern-lab/patternengine-php-mustache#mustache-patternengine-for-pattern-lab-php), [GitHub](https://github.com/pattern-lab/patternengine-php-mustache), [Packagist](https://packagist.org/packages/pattern-lab/patternengine-mustache)
+* `pattern-lab/plugin-reload`: [GitHub](https://github.com/pattern-lab/plugin-php-reload), [Packagist](https://packagist.org/packages/pattern-lab/plugin-reload)
 * `pattern-lab/styleguidekit-assets-default`: [GitHub](https://github.com/pattern-lab/styleguidekit-assets-default), [Packagist](https://packagist.org/packages/pattern-lab/styleguidekit-assets-default)
 * `pattern-lab/styleguidekit-mustache-default`: [GitHub](https://github.com/pattern-lab/styleguidekit-mustache-default), [Packagist](https://packagist.org/packages/pattern-lab/styleguidekit-mustache-default)
 
-## List the Available Commands and Their Options
+## List All of the Available Commands and Their Options
 
 To list all available commands type:
 
