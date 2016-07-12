@@ -1,7 +1,5 @@
 .DS_Store
+export/*
 public/*
-source/*
-config.ini
-latest-change.txt
-*-ck.js
-*.sass-cache/
+source/styleguide/*
+vendor/*
