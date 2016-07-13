@@ -1,0 +1,68 @@
+{
+  "name":             "pattern-lab/edition-mustache-standard",
+  "description":      "The Standard Edition of Pattern Lab for Mustache. Installs all Mustache-related dependencies.",
+  "keywords":         ["pattern lab", "mustache"],
+  "homepage":         "http://patternlab.io",
+  "license":          "MIT",
+  "type":             "project",
+  "authors": [
+    {
+      "name":         "Dave Olsen",
+      "email":        "dmolsen@gmail.com",
+      "homepage":     "http://dmolsen.com",
+      "role":         "Lead Developer"
+    }
+  ],
+  "support": {
+    "issues":         "https://github.com/pattern-lab/patternlab-php/issues",
+    "wiki":           "http://patternlab.io/docs/",
+    "source":         "https://github.com/pattern-lab/patternlab-php/releases"
+  },
+  "autoload": {
+    "psr-0": {
+      "PatternLab":   "core/src/"
+    }
+  },
+  "require": {
+    "php": ">=5.4",
+    "pattern-lab/core": "^2.0.0",
+    "pattern-lab/patternengine-mustache": "^2.0.0",
+    "pattern-lab/styleguidekit-mustache-default": "^3.0.0",
+    "pattern-lab/plugin-reload": "^2.0.0"
+  },
+  "scripts": {
+    "server": "php core/console --server",
+    "generate": "php core/console --generate",
+    "watch": "php core/console --watch",
+    "start": "php core/console --server --with-watch",
+    "install-demo": "php core/console --starterkit --install pattern-lab/starterkit-mustache-demo",
+    "post-install-cmd": [
+      "PatternLab\\Installer::postInstallCmd"
+    ],
+    "post-update-cmd": [
+      "PatternLab\\Installer::postUpdateCmd"
+    ],
+    "post-root-package-install": [
+      "PatternLab\\Installer::setProjectInstall",
+      "PatternLab\\Installer::getSuggestedStarterKits",
+      "PatternLab\\Installer::getConfigOverrides"
+    ],
+    "post-package-install": [
+      "PatternLab\\Installer::postPackageInstall"
+    ],
+    "post-package-update": [
+      "PatternLab\\Installer::postPackageUpdate"
+    ],
+    "pre-package-uninstall": [
+      "PatternLab\\Installer::prePackageUninstall"
+    ]
+  },
+  "extra": {
+    "patternlab": {
+      "starterKitSuggestions": [
+        "pattern-lab/starterkit-mustache-demo",
+        "pattern-lab/starterkit-mustache-base"
+      ]
+    }
+  }
+}
