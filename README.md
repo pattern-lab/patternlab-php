@@ -40,8 +40,9 @@ Use Composer's [`create-project` command](https://getcomposer.org/doc/03-cli.md#
 
 1. In a terminal window navigate to where you want to install Pattern Lab
 2. Type `composer create-project pattern-lab/edition-mustache-standard patternlab2-example && cd $_`
+3. When prompted, type `1` to install the demo StarterKit
 
-This will install the Standard Edition for Mustache into a directory called `patternlab2-example` in your install location. When prompted choose the "demo" StarterKit. You will be automatically dropped into the project directory after the process is finished.
+This will install the Standard Edition for Mustache along with the demo StarterKit into a directory called `patternlab2-example`. You will be automatically dropped into `patternlab2-example/` when the install is finished.
 
 **Note:** If you clone or download this repository and use `composer install` to install the project dependencies you'll need to type the following to install the demo StarterKit:
 
